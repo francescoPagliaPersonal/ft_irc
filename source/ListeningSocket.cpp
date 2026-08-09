@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:55:20 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/09 21:41:35 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/09 21:42:59 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 // CUSTOM CTOR & DTOR
 // -------------------------------------------------------------------------- //
 
-ListeningSocket::ListeningSocket(int port)
+ListeningSocket::ListeningSocket(unsigned short port)
 	: fd_(-1)
 {
 	(void) port;

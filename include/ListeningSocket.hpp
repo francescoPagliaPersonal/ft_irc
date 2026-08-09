@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 16:19:04 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/09 16:24:58 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/09 19:59:33 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ class ListeningSocket
 {
 	public:
 		// ----
-		ListeningSocket(int);
+		ListeningSocket(unsigned short);
 		~ListeningSocket();
 		// ----
 		// ----

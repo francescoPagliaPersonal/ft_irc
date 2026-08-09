@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:32:56 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/09 17:00:02 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/09 19:59:47 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ class Server
 	private:
 		// ----
 		bool					isAlive_;	// server state, for clean shutdown
-		int						port_;		// own listening port
+		unsigned short			port_;		// own listening port
 		int						nextClient_;// next available Client ID
 		std::string				pw_;		// connection password
 		ListeningSocket			socket_;	// server's own listening socket
