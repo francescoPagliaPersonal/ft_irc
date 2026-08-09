@@ -16,7 +16,7 @@ INC_PATHS		:= include/
 NORM_HEADERS	:= include/$(PROG_NAME).hpp
 
 # Give File names relative to SRC_ROOT directory (.c and/or .cpp; mixed OK)
-SRC_MAN		:= main.cpp
+SRC_MAN		:= main.cpp Server.cpp
 SRC_BON		:= 
 
 # Pattern for source files in subdirectories. WITH DIR SLASH

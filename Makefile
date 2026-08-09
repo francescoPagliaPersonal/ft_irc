@@ -45,9 +45,9 @@ LFT_ROOT		:= lib/libft/
 
 # ----------------------------------------------------------------------------
 # arguments for executing the program in the various modes
-RUN_ARGS_reg	:= 
-RUN_ARGS_asan	:= 
-RUN_ARGS_val	:= 
+RUN_ARGS_reg	:= 6667 fortytwo
+RUN_ARGS_asan	:= 6667 fortytwo
+RUN_ARGS_val	:= 6667 fortytwo
 # ----------------------------------------------------------------------------
 VALGRIND_FLAGS	:=	--leak-check=full \
 					--show-leak-kinds=all --errors-for-leak-kinds=all\

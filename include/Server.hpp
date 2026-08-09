@@ -1,0 +1,75 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Server.hpp                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/09 14:32:56 by mweghofe          #+#    #+#             */
+/*   Updated: 2026/08/09 17:00:02 by mweghofe         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef SERVER_HPP
+# define SERVER_HPP
+
+// -------------------------------------------------------------------------- //
+
+# include <string>
+# include <map>
+# include "ft_irc.hpp"
+# include "ListeningSocket.hpp"
+# include "Client.hpp"
+# include "CommandRegistry.hpp"
+# include "Epoll.hpp"
+
+// -------------------------------------------------------------------------- //
+
+class Server
+{
+	public:
+		// ----
+		Server(int, std::string);
+		~Server();
+		// ----
+		void run();
+	private:
+		// ----
+		bool					isAlive_;	// server state, for clean shutdown
+		int						port_;		// own listening port
+		int						nextClient_;// next available Client ID
+		std::string				pw_;		// connection password
+		ListeningSocket			socket_;	// server's own listening socket
+		std::map<int, Client*>	clients_;	// map of all Clients, sorted by FD
+		Epoll					epoll_;		// isolated kernel epoll wrapper
+		CommandRegistry			cmdReg_;	// command orchestrator
+		// ----
+		// ----
+		Server();
+		Server(const Server&);
+		Server operator=(const Server&);
+};
+
+// -------------------------------------------------------------------------- //
+
+/*
+	FROM FIRST DESIGN PLANNING STAGE
+
+-map<string, IPRecord*> ipRecords
+-map<int, Client*> clients
+-map<string, Channel*> channels
+-vector<string> banned
+
++isBanned(...) : bool
++registerClient(...) : bool
++deleteClient(...) : bool
++addChannel(...) : bool
++removeChannel(...) : bool
++findClientByNick(...) : bool
++findClientByID(...) : bool
++sendToClient(...) : boo
+
+*/
+
+
+#endif
