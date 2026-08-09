@@ -17,7 +17,7 @@ NORM_HEADERS	:= include/$(PROG_NAME).hpp
 
 # Give File names relative to SRC_ROOT directory (.c and/or .cpp; mixed OK)
 SRC_MAN		:= main.cpp arg2password.cpp arg2port.cpp\
-				Server.cpp ServerHandlers.cpp\
+				Server.cpp Server-Init.cpp Server-Handlers.cpp\
 				Client.cpp Command.cpp CommandRegistry.cpp \
 				Epoll.cpp ListeningSocket.cpp 
 SRC_BON		:= 
