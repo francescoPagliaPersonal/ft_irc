@@ -3,24 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   arg2port.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com      +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 12:25:05 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/04 12:25:30 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/09 21:13:16 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "args.hpp"
 
-int	arg2port(const char *port_str)
+unsigned short	arg2port(const char *port_str)
 {
-	std::stringstream	stream(port_str);
-	int					port;
-	stream >> port;
-
-	if ( stream.fail() || !stream.eof() )
-		throw std::runtime_error("port input is incorrect.");
-	if ( port < 1024 || port > 65535 )
-		throw std::runtime_error("port input is not in range 1024 - 65535.");
-	return port;
+	std::istringstream	stream(port_str);
+	int					num;
+	
+	stream >> num;
+	if (stream.fail() == true) // ie. >> fails if there is no number
+		throw std::invalid_argument("Port input data is invalid.");
+	std::string leftover;
+	stream >> leftover;
+	if (stream.fail() == false) // ie. >> succeeds if garbage remains
+		throw std::invalid_argument("Port input data is invalid.");
+	if (num < 1024 || num > 65535)
+		throw std::out_of_range("Port number must be between 1024 and 65535.");
+	return (static_cast<unsigned short>(num));
 }
