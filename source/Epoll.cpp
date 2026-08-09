@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:58:17 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/09 22:07:01 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/09 23:38:32 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,14 @@ int epoll_ctl(fd, EPOLL_CTL_ADD, target, &ev)
 	ev.events		which event(s) to listen for, as bit flags
 */
 
+// Registers a new FD with epoll(). This is for the ListeningSocket.
 void Epoll::add(int fd, eventflags eventFlags) const
+{
+	add(fd, eventFlags, NULL);
+}
+
+// Registers a new FD with epoll(). Can take a client* as DATA.
+void Epoll::add(int fd, eventflags eventFlags, void* data) const
 {
 	struct epoll_event ev;
 
@@ -56,6 +63,8 @@ void Epoll::add(int fd, eventflags eventFlags) const
 	std::memset(&ev, 0, sizeof(ev));
 	ev.events = eventFlags;
 	ev.data.fd = fd;
+	if (data)
+		ev.data.ptr = data;
 	// 2) add new FD to epoll watchlist
 	if (::epoll_ctl(fd_, EPOLL_CTL_ADD, fd, &ev) < 0)
 		throw std::runtime_error(std::string("Error on epoll_ctl(ADD): ")
@@ -65,8 +74,10 @@ void Epoll::add(int fd, eventflags eventFlags) const
 void Epoll::mod()
 {}
 
-void Epoll::del()
-{}
+void Epoll::del(int fd) const
+{
+	::epoll_ctl(fd_, EPOLL_CTL_DEL, fd, NULL);
+}
 
 int Epoll::wait(struct epoll_event* ev, int maxEvents, int timeoutMS)
 {

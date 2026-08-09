@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:55:20 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/09 21:49:41 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/10 00:09:30 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,14 @@ ListeningSocket::ListeningSocket(unsigned short port)
 	// 1) open a new socket
 	fd_ = socket(AF_INET, SOCK_STREAM, 0);
 	if (fd_ < 0)
-		throw std::runtime_error(std::string("Error on socket(): ") + std::strerror(errno));
+		throw std::runtime_error(
+			std::string("Error on socket(): ") + std::strerror(errno));
 	
 	// 2) set operations on the socket
 	int optval = 1;
 	if (::setsockopt(fd_, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval)) < 0)
-		throw std::runtime_error(std::string("Error on setsockopt(): ") + std::strerror(errno));
+		throw std::runtime_error(
+			std::string("Error on setsockopt(): ") + std::strerror(errno));
 	
 	// 3) bind the new socket to any network adress
 	struct sockaddr_in ipAddr;
@@ -48,15 +50,19 @@ ListeningSocket::ListeningSocket(unsigned short port)
 	ipAddr.sin_port = htons(port);
 	ipAddr.sin_addr.s_addr = htonl(INADDR_ANY);
 	if (::bind(fd_, reinterpret_cast<struct sockaddr*>(&ipAddr), sizeof(ipAddr)) < 0)
+		throw std::runtime_error(
+			std::string("Error on bind(): ") + std::strerror(errno));
 	
 	// 4) set the socket to active listening
 	if (::listen(fd_, BACKLOG) < 0)
-		throw std::runtime_error(std::string("Error on listen(): ") + std::strerror(errno));
+		throw std::runtime_error(
+			std::string("Error on listen(): ") + std::strerror(errno));
 	
 	// 5) configure socketfd as non-blocking
 	int flags = ::fcntl(fd_, F_GETFL, 0);
 	if (flags < 0 || ::fcntl(fd_, F_SETFL, flags | O_NONBLOCK) < 0)
-		throw std::runtime_error(std::string("Error on fcntl(): ") + std::strerror(errno));
+		throw std::runtime_error(
+			std::string("Error on fcntl(): ") + std::strerror(errno));
 	// TODO do we need SO_KEEPALIVE?
 }
 
@@ -73,6 +79,32 @@ ListeningSocket::~ListeningSocket()
 int ListeningSocket::getFD() const
 {
 	return (fd_);
+}
+
+int ListeningSocket::acceptConnection(struct sockaddr_in& ipAddr)
+{
+	socklen_t len;
+	int newFD;
+	
+	len = sizeof(ipAddr);
+	std::memset(&ipAddr, 0, len);
+	// 1) accept the incoming connection
+	newFD = accept(fd_, reinterpret_cast<struct sockaddr*>(&ipAddr), &len);
+	if (newFD < 0)
+	{
+		// EAGAIN and EWOULDBLOCK signal the queue is drained, this is OKAY
+		if (errno == EAGAIN || errno == EWOULDBLOCK)
+			return (-1);
+		// anything else is not
+		throw std::runtime_error(
+			std::string("Error on accept(): ") + std::strerror(errno));
+	}
+	// 2) make the FD non-blocking
+	int flags = ::fcntl(newFD, F_GETFL, 0);
+	if (flags < 0 || ::fcntl(newFD, F_SETFL, flags | O_NONBLOCK) < 0)
+		throw std::runtime_error(
+			std::string("Error on fcntl(): ") + std::strerror(errno));
+	return (newFD);
 }
 
 // -------------------------------------------------------------------------- //
