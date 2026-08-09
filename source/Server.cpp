@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:42:26 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/09 16:49:38 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/09 21:39:28 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ Server::Server(int port, std::string pw)
 	, pw_(pw)
 	, socket_(port)
 	, clients_()
+	, epoll_()
+	, cmdReg_()
 {
 	if (port_ < 1024 || 65535 < port_)  // TODO  perhaps put this in a parser? due to socket_(port) also needs this check
 		throw std::out_of_range("Port number must be between 1024 and 65554.");
@@ -60,6 +62,8 @@ Server::Server()
 	, pw_("")
 	, socket_(-1)
 	, clients_()
+	, epoll_()
+	, cmdReg_()
 {}
 
 Server::Server(const Server& other)
@@ -68,6 +72,8 @@ Server::Server(const Server& other)
 	, pw_("")
 	, socket_(-1)
 	, clients_()
+	, epoll_()
+	, cmdReg_()
 {
 	(void) other;
 }
