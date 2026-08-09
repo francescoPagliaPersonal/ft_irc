@@ -6,11 +6,12 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:42:26 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/09 21:42:41 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/09 22:20:01 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
+#include <cstring>
 
 // -------------------------------------------------------------------------- //
 // CUSTOM CTOR & DTOR
@@ -25,7 +26,7 @@ Server::Server(int port, std::string pw)
 	, epoll_()
 	, cmdReg_()
 {
-	// what needs to be set up
+	epoll_.add(socket_.getFD(), EPOLLIN);
 	// Client class
 	// CommandDispatch class
 }
@@ -39,14 +40,35 @@ Server::~Server()
 
 void Server::run()
 {
+	struct epoll_event ev[MAX_EVENTS]; // TODO do we need to zero that one?
+
 	while (isAlive_)
 	{
+		int ready = epoll_.wait(ev, MAX_EVENTS, TIMEOUT);
 		// epoll() stuff
-		// dispatch
+		for (int i = 0; i < ready; i++)
+		{
+			const int fd = ev[i].data.fd;
+			// 1) servers's own listening port
+			if (fd == socket_.getFD())
+			{
+				handleListenEvent();
+				continue ;
+			}
+			// 2) normal client (also deals with dispatch)
+			handleClientEvent();
+		}
 		// housekeeping (signal, timeout, sth else?)
-		return ;
 	}
 }
+
+void Server::handleListenEvent()
+{
+	std::cout << __FUNCTION__ << " was triggered.\n";
+}
+
+void Server::handleClientEvent()
+{}
 
 // -------------------------------------------------------------------------- //
 // OCF

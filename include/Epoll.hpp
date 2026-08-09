@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 16:56:53 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/09 16:59:42 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/09 21:59:15 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,11 @@
 
 // -------------------------------------------------------------------------- //
 
+# include <sys/epoll.h>
+
 // -------------------------------------------------------------------------- //
+
+typedef uint32_t eventflags;
 
 class Epoll
 {
@@ -25,10 +29,10 @@ class Epoll
 		~Epoll();
 		// ----
 		// ----
-		void add();
+		void add(int, eventflags) const;
 		void mod();
 		void del();
-		int wait();
+		int wait(struct epoll_event*, int, int);
 	private:
 		// ----
 		int		fd_;
