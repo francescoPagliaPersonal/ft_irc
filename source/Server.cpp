@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:42:26 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/10 00:06:09 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/10 00:42:22 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,33 @@
 #include <cstring>
 
 // -------------------------------------------------------------------------- //
+// SIGNALS
+// -------------------------------------------------------------------------- //
+
+volatile std::sig_atomic_t Server::isAlive_ = true;
+
+void Server::signalHandler(int)
+{
+	isAlive_ = false;
+}
+
+void Server::captureSignals()
+{
+	struct sigaction sa;
+	std::memset(&sa, 0, sizeof(sa));
+	sa.sa_handler = signalHandler;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = 0;
+	sigaction(SIGINT, &sa, NULL);
+	sigaction(SIGTERM, &sa, NULL);
+}
+
+// -------------------------------------------------------------------------- //
 // CUSTOM CTOR & DTOR
 // -------------------------------------------------------------------------- //
 
 Server::Server(int port, std::string pw)
-	: isAlive_(true)
-	, port_(port)
+	: port_(port)
 	, pw_(pw)
 	, listener_(port)
 	, clients_()
@@ -27,6 +48,7 @@ Server::Server(int port, std::string pw)
 	, cmdReg_()
 {
 	epoll_.add(listener_.getFD(), EPOLLIN);
+	captureSignals();
 	// Client class
 	// CommandDispatch class
 }
@@ -68,8 +90,7 @@ void Server::run()
 // -------------------------------------------------------------------------- //
 
 Server::Server()
-	: isAlive_(false)
-	, port_(-1)
+	: port_(-1)
 	, pw_("")
 	, listener_(-1)
 	, clients_()
@@ -78,8 +99,7 @@ Server::Server()
 {}
 
 Server::Server(const Server& other)
-	: isAlive_(false)
-	, port_(-1)
+	: port_(-1)
 	, pw_("")
 	, listener_(-1)
 	, clients_()
