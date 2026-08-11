@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:32:56 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/10 00:40:36 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/11 12:01:36 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ class Server
 		Server(int, std::string);
 		~Server();
 		// ----
+		// ----
 		void run();
 	private:
 		// ----
@@ -58,6 +59,8 @@ class Server
 
 // -------------------------------------------------------------------------- //
 
+#endif
+
 /*
 	FROM FIRST DESIGN PLANNING STAGE
 
@@ -76,6 +79,3 @@ class Server
 +sendToClient(...) : boo
 
 */
-
-
-#endif

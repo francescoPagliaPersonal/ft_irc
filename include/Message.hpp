@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:38:21 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/09 17:44:54 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/11 12:00:53 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,6 @@ struct Message
 
 // -------------------------------------------------------------------------- //
 
-Message parseMessage(const std::string&);
+Message transformStringToMessage(const std::string&);
 
 #endif

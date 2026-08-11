@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:52:36 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/10 00:00:56 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/11 12:02:51 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,9 @@ Client* Client::registerNew(int fd, struct sockaddr_in& addr, int nextClientID)
 {
 	(void) addr;
 	(void) nextClientID;
-	if (fd > -1) // HACK
+	if (fd > -1) // HACK remove me
 		::close(fd);
-	// new client, add to map, do sth with addr?
+	// new client, add to map, do sth with addr? IPRecord class?
 	// register epoll fd
 	// throw on errors
 	return (NULL);
