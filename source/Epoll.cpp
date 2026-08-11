@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:58:17 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/11 16:21:02 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/11 17:35:59 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,18 +24,18 @@
 // -------------------------------------------------------------------------- //
 
 Epoll::Epoll()
-	: fd_(-1)
+	: _fd(-1)
 {
-	fd_ = ::epoll_create(1);
-	if (fd_ < 0)
+	_fd = ::epoll_create(1);
+	if (_fd < 0)
 		throw std::runtime_error(
 			std::string("Error on epoll_create(): ") + std::strerror(errno));
 }
 
 Epoll::~Epoll()
 {
-	if (fd_ >= 0)
-		::close(fd_);
+	if (_fd >= 0)
+		::close(_fd);
 }
 
 // -------------------------------------------------------------------------- //
@@ -62,7 +62,7 @@ void Epoll::add(int fd, eventflags eventFlags) const
 	ev.events = eventFlags;
 	ev.data.fd = fd;
 	// 2) add new FD to epoll watchlist
-	if (::epoll_ctl(fd_, EPOLL_CTL_ADD, fd, &ev) < 0)
+	if (::epoll_ctl(_fd, EPOLL_CTL_ADD, fd, &ev) < 0)
 		throw std::runtime_error(std::string("Error on epoll_ctl(ADD): ")
 			+ std::strerror(errno));
 }
@@ -77,7 +77,7 @@ void Epoll::mod(int fd, eventflags eventFlags) const
 	ev.events = eventFlags;
 	ev.data.fd = fd;
 	// 2) modify fd watchlist
-	if (::epoll_ctl(fd_, EPOLL_CTL_MOD, fd, &ev) < 0)
+	if (::epoll_ctl(_fd, EPOLL_CTL_MOD, fd, &ev) < 0)
 		throw std::runtime_error(std::string("Error on epoll_ctl(MODIFY): ")
 			+ std::strerror(errno));
 }
@@ -85,12 +85,12 @@ void Epoll::mod(int fd, eventflags eventFlags) const
 // Removes a FD from the epoll() watchlist.
 void Epoll::del(int fd) const
 {
-	::epoll_ctl(fd_, EPOLL_CTL_DEL, fd, NULL);
+	::epoll_ctl(_fd, EPOLL_CTL_DEL, fd, NULL);
 }
 
 int Epoll::wait(struct epoll_event* ev, int maxEvents, int timeoutMS)
 {
-	int ready = ::epoll_wait(fd_, ev, maxEvents, timeoutMS);
+	int ready = ::epoll_wait(_fd, ev, maxEvents, timeoutMS);
 	if (ready == -1)
 	{
 		if (errno == EINTR)
@@ -106,7 +106,7 @@ int Epoll::wait(struct epoll_event* ev, int maxEvents, int timeoutMS)
 // -------------------------------------------------------------------------- //
 
 Epoll::Epoll(const Epoll& other)
-	: fd_(-1)
+	: _fd(-1)
 {
 	(void) other;
 }

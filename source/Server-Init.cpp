@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/10 00:45:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/11 16:51:37 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/11 17:37:33 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@
 // SIGNALS
 // -------------------------------------------------------------------------- //
 
-volatile std::sig_atomic_t Server::isAlive_ = true;
+volatile std::sig_atomic_t Server::_isAlive = true;
 
 void Server::signalHandler(int)
 {
-	isAlive_ = false;
+	_isAlive = false;
 }
 
 void Server::captureSignals() // TODO this uses <signal.h> not <csignal>! is okay, but make sure what to use
@@ -44,14 +44,14 @@ void Server::captureSignals() // TODO this uses <signal.h> not <csignal>! is oka
 // -------------------------------------------------------------------------- //
 
 Server::Server(int port, std::string pw)
-	: port_(port) // TODO do we still need this when we have the listener now?
-	, pw_(pw)
-	, listener_(port)
-	, clients_()
-	, epoll_()
-	, cmdReg_()
+	: _port(port) // TODO do we still need this when we have the listener now?
+	, _pw(pw)
+	, _listener(port)
+	, _clients()
+	, _epoll()
+	, _cmdReg()
 {
-	epoll_.add(listener_.getFD(), EPOLLIN);
+	_epoll.add(_listener.getFD(), EPOLLIN);
 	captureSignals();
 	// Client class
 	// CommandDispatch class

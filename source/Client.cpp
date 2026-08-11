@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:52:36 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/11 17:29:48 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/11 17:35:59 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,15 +50,15 @@ void printEscaped(std::ostream& os, const std::string& s)
 // -------------------------------------------------------------------------- //
 
 Client::Client(int fd, const struct sockaddr_in& addr)
-	: fd_(fd)
+	: _fd(fd)
 {
 	(void) addr;
 }
 
 Client::~Client()
 {
-	if (fd_ > -1)
-		::close(fd_);
+	if (_fd > -1)
+		::close(_fd);
 }
 
 // -------------------------------------------------------------------------- //
@@ -67,7 +67,7 @@ Client::~Client()
 
 int Client::getFD() const
 {
-	return (fd_);
+	return (_fd);
 }
 
 void Client::debugWriteToBuffer(const std::string& msg)
@@ -80,7 +80,7 @@ e_pollret Client::receiveToBuffer()
 	errno = 0;
 	char buf[BUF_SIZE + 1];
 	ssize_t ret = 0;
-	ret = recv(fd_, buf, BUF_SIZE, 0);
+	ret = recv(_fd, buf, BUF_SIZE, 0);
 	if (ret == -1)
 	{
 		if (errno == EAGAIN || errno == EWOULDBLOCK) // TODO evalute subject violation
@@ -93,7 +93,7 @@ e_pollret Client::receiveToBuffer()
 	bufIN_.append(buf);
 	if (DEBUG)
 	{
-		std::cout << "[FD " << fd_ << "] Buffer received "<< ret << " chars:\n";
+		std::cout << "[FD " << _fd << "] Buffer received "<< ret << " chars:\n";
 		printEscaped(std::cout, bufIN_);
 		std::cout << std::endl;
 	}
@@ -102,7 +102,7 @@ e_pollret Client::receiveToBuffer()
 
 e_pollret Client::sendFromBuffer()
 {
-	ssize_t ret = send(fd_, bufOUT_.c_str(), bufOUT_.size(), 0);
+	ssize_t ret = send(_fd, bufOUT_.c_str(), bufOUT_.size(), 0);
 	if (ret < 0)
 	{
 		if (errno == EAGAIN || errno == EWOULDBLOCK) // TODO evalute subject violation
@@ -126,11 +126,11 @@ e_pollret Client::sendFromBuffer()
 // -------------------------------------------------------------------------- //
 
 Client::Client()
-	: fd_(-1)
+	: _fd(-1)
 {}
 
 Client::Client(const Client& other)
-	: fd_(-1)
+	: _fd(-1)
 {
 	(void) other;
 }

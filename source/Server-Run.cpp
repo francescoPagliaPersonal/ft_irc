@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/11 12:06:37 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/11 17:33:51 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/11 17:37:33 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,15 @@ void Server::run()
 {
 	struct epoll_event ev[MAX_EVENTS]; // TODO do we need to zero that one?
 
-	while (isAlive_)
+	while (_isAlive)
 	{
-		int readyFDs = epoll_.wait(ev, MAX_EVENTS, TIMEOUT);
+		int readyFDs = _epoll.wait(ev, MAX_EVENTS, TIMEOUT);
 		// 1) epoll() stuff
 		for (int i = 0; i < readyFDs; i++)
 		{
 			const int fd = ev[i].data.fd; // TODO unless fd is needed later, just drop this line
 			// A) servers's own listening port
-			if (fd == listener_.getFD())
+			if (fd == _listener.getFD())
 			{
 				handleListenEvent();
 				continue ;

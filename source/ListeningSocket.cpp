@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:55:20 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/11 12:05:12 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/11 17:35:59 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 
 int ListeningSocket::getFD() const
 {
-	return (fd_);
+	return (_fd);
 }
 
 int ListeningSocket::acceptConnection(struct sockaddr_in& ipAddr)
@@ -39,7 +39,7 @@ int ListeningSocket::acceptConnection(struct sockaddr_in& ipAddr)
 	len = sizeof(ipAddr);
 	std::memset(&ipAddr, 0, len);
 	// 1) accept the incoming connection
-	newFD = accept(fd_, reinterpret_cast<struct sockaddr*>(&ipAddr), &len);
+	newFD = accept(_fd, reinterpret_cast<struct sockaddr*>(&ipAddr), &len);
 	if (newFD < 0)
 	{
 		// EAGAIN and EWOULDBLOCK signal the queue is drained, this is OKAY
@@ -63,16 +63,16 @@ int ListeningSocket::acceptConnection(struct sockaddr_in& ipAddr)
 
 ListeningSocket::~ListeningSocket()
 {
-	if (fd_ >= 0)
-		::close(fd_);
+	if (_fd >= 0)
+		::close(_fd);
 }
 
 ListeningSocket::ListeningSocket()
-	: fd_(-1)
+	: _fd(-1)
 {}
 
 ListeningSocket::ListeningSocket(const ListeningSocket& other)
-	: fd_(-1)
+	: _fd(-1)
 {
 	(void) other;
 }

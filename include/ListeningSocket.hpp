@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 16:19:04 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/11 12:01:41 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/11 17:35:59 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ class ListeningSocket
 		int acceptConnection(struct sockaddr_in&);
 	private:
 		// ----
-		int		fd_;
+		int		_fd;
 		// ----
 		// ----
 		ListeningSocket();
