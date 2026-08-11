@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:42:26 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/11 17:37:27 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/11 17:38:07 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,7 @@ void Server::removeClient(Client* client)
 // -------------------------------------------------------------------------- //
 
 Server::Server()
-	: _port(-1)
-	, _pw("")
+	: _pw("")
 	, _listener(-1)
 	, _clients()
 	, _epoll()
@@ -65,8 +64,7 @@ Server::Server()
 {}
 
 Server::Server(const Server& other)
-	: _port(-1)
-	, _pw("")
+	: _pw("")
 	, _listener(-1)
 	, _clients()
 	, _epoll()

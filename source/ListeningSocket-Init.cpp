@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/10 01:00:26 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/11 17:35:59 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/11 17:39:42 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ void configureFD(int fd)
 
 ListeningSocket::ListeningSocket(unsigned short port)
 	: _fd(-1)
+	, _port(port)
 {
 	_fd = createNewSocket();
 	bindAddrToFD(_fd, port);

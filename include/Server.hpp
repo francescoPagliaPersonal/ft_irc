@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:32:56 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/11 17:37:33 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/11 17:37:56 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ class Server
 		void run();
 	private:
 		// ----
-		unsigned short			_port;		// own listening port
 		std::string				_pw;		// connection password
 		ListeningSocket			_listener;	// server's own listening socket
 		std::map<int, Client*>	_clients;	// map of all Clients, sorted by FD
