@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/11 12:06:37 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/11 13:00:00 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/11 17:00:49 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@
 // MAIN LOOP
 // -------------------------------------------------------------------------- //
 
+// Main Server Interface.
+// Listening Socket and epoll() registration
+// has already be done by the constructor.
 void Server::run()
 {
 	struct epoll_event ev[MAX_EVENTS]; // TODO do we need to zero that one?
@@ -26,7 +29,7 @@ void Server::run()
 		// 1) epoll() stuff
 		for (int i = 0; i < readyFDs; i++)
 		{
-			const int fd = ev[i].data.fd;
+			const int fd = ev[i].data.fd; // TODO unless fd is needed later, just drop this line
 			// A) servers's own listening port
 			if (fd == listener_.getFD())
 			{
