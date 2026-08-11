@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:32:56 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/11 12:01:36 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/11 12:59:05 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,10 @@
 # include "Client.hpp"
 # include "CommandRegistry.hpp"
 # include "Epoll.hpp"
+
+// -------------------------------------------------------------------------- //
+
+# define DEF_EPOLL_FL EPOLLIN | EPOLLERR | EPOLLHUP
 
 // -------------------------------------------------------------------------- //
 
@@ -49,7 +53,7 @@ class Server
 		static void signalHandler(int);
 		// ----
 		void handleListenEvent();
-		void handleClientEvent();
+		void handleClientEvent(epoll_event&);
 		void captureSignals();
 		// ----
 		Server();

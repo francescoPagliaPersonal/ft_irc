@@ -6,13 +6,14 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:52:36 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/11 12:02:51 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/11 12:56:07 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Client.hpp"
 
 #include <unistd.h>
+
 // TODO remove or modify if client registration doesnt need it => ipAddr stuff
 #include <netinet/in.h>
 
@@ -40,6 +41,21 @@ Client* Client::registerNew(int fd, struct sockaddr_in& addr, int nextClientID)
 	// register epoll fd
 	// throw on errors
 	return (NULL);
+}
+
+int Client::getFD() const
+{
+	return (fd_);
+}
+
+e_pollret Client::receiveToBuffer()
+{
+	return (RET_OK);
+}
+
+e_pollret Client::sendFromBuffer()
+{
+	return (RET_OK);
 }
 
 // -------------------------------------------------------------------------- //

@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/11 12:06:37 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/11 12:07:40 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/11 13:00:00 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void Server::run()
 				continue ;
 			}
 			// B) normal client (EPOLLIN/EPOLLOUT, filling/emptying our buffers)
-			handleClientEvent();
+			handleClientEvent(ev[i]);
 		}
 		// 2) work the command queue (execute read buff, create write buff)
 		// 3) housekeeping (signal, timeout, sth else?)

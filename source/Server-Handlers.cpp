@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ServerHandlers.cpp                                 :+:      :+:    :+:   */
+/*   Server-Handlers.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 22:58:08 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/10 00:00:42 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/11 13:05:27 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,30 @@ void Server::handleListenEvent()
 	}
 }
 
-void Server::handleClientEvent()
-{}
+void Server::handleClientEvent(epoll_event& ev)
+{
+	e_pollret ret;
+	Client* client = static_cast<Client*>(ev.data.ptr);
 
+	if (ev.events & EPOLLIN)
+	{
+		ret = client->receiveToBuffer();
+	}
+	else if (ev.events & EPOLLOUT)
+	{
+		ret = client->sendFromBuffer();
+	}
+	switch (ret)
+	{
+		case RET_EMPTY:
+			epoll_.mod(ev.data.fd, DEF_EPOLL_FL, client);
+			break;
+		case RET_ERROR: // TODO but also, are they the same for IN/OUT?
+			break;
+		case RET_HASOUTPUT:
+			epoll_.mod(ev.data.fd, DEF_EPOLL_FL | EPOLLOUT, client);
+			break;
+		case RET_CMDTOOLONG: ; // TODO 
+		default: ;
+	}
+}

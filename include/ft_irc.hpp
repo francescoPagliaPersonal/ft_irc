@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:25:38 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/09 22:01:16 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/11 12:47:11 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,5 +25,15 @@
 # define TIMEOUT 1000
 
 // -------------------------------------------------------------------------- //
+
+enum e_pollret 
+{
+	RET_OK,
+	RET_EMPTY,
+	RET_AGAIN,
+	RET_ERROR,
+	RET_HASOUTPUT,
+	RET_CMDTOOLONG
+};
 
 #endif

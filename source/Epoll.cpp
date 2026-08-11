@@ -6,11 +6,12 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:58:17 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/11 12:14:21 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/11 13:01:43 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Epoll.hpp"
+#include "Client.hpp"
 
 #include <stdexcept>
 #include <cstring>
@@ -74,9 +75,23 @@ void Epoll::add(int fd, eventflags eventFlags, void* data) const
 			+ std::strerror(errno));
 }
 
-void Epoll::mod()
-{}
+// Changes the set of events to watch for a given FD.
+void Epoll::mod(int fd, eventflags eventFlags, void* data)
+{
+	struct epoll_event ev;
 
+	// 1) set up
+	std::memset(&ev, 0, sizeof(ev));
+	ev.events = eventFlags;
+	ev.data.fd = fd;
+	ev.data.ptr = data;
+	// 2) modify fd watchlist
+	if (::epoll_ctl(fd_, EPOLL_CTL_MOD, ev.data.fd, &ev) < 0)
+		throw std::runtime_error(std::string("Error on epoll_ctl(MODIFY): ")
+			+ std::strerror(errno));
+}
+
+// Removes a FD from the epoll() watchlist.
 void Epoll::del(int fd) const
 {
 	::epoll_ctl(fd_, EPOLL_CTL_DEL, fd, NULL);
