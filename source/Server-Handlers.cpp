@@ -33,7 +33,11 @@ void Server::handleListenEvent()
 		// 3) register new client
 		registerNewClient(newFD, ipAddr);
 		if (DEBUG)
+		{
 			std::cout << __FUNCTION__ << " accepted a new client connection.\n";
+			clients_[newFD]->debugWriteToBuffer("Testing...\nLoading...\n");
+			epoll_.mod(newFD, DEF_EPOLL_FL | EPOLLOUT);
+		}
 	}
 }
 
@@ -54,6 +58,7 @@ void Server::handleClientEvent(epoll_event& ev)
 			break;
 		case RET_ERROR:
 			removeClient(client);
+			std::cout << __FUNCTION__ << " removed a Client." << std::endl;
 			// TODO but also, are they the same for IN/OUT?
 			// TODO perhaps frame this as RET_CLOSE?
 			break;

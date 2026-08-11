@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:52:36 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/11 15:24:31 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/11 15:41:27 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,11 @@ Client::~Client()
 int Client::getFD() const
 {
 	return (fd_);
+}
+
+void Client::debugWriteToBuffer(const std::string& msg)
+{
+	bufOUT_.append(msg);
 }
 
 e_pollret Client::receiveToBuffer()
