@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/10 00:45:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/11 15:17:51 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/11 16:15:13 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ Server::Server(int port, std::string pw)
 	, epoll_()
 	, cmdReg_()
 {
-	epoll_.add(listener_.getFD(), EPOLLIN, NULL);
+	epoll_.add(listener_.getFD(), EPOLLIN);
 	captureSignals();
 	// Client class
 	// CommandDispatch class

@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 22:58:08 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/11 14:33:54 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/11 16:19:17 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,7 @@ void Server::handleListenEvent()
 void Server::handleClientEvent(epoll_event& ev)
 {
 	e_pollret ret = RET_OK;
-	Client* client = static_cast<Client*>(ev.data.ptr);
-
+	Client* client = static_cast<Client*>(clients_[ev.data.fd]);
 	if (ev.events & (EPOLLHUP | EPOLLERR))
 		ret = RET_ERROR; // TODO perhaps frame this as RET_CLOSE?
 	else if (ev.events & EPOLLIN)
@@ -51,7 +50,7 @@ void Server::handleClientEvent(epoll_event& ev)
 	switch (ret)
 	{
 		case RET_EMPTY:
-			epoll_.mod(ev.data.fd, DEF_EPOLL_FL, client);
+			epoll_.mod(ev.data.fd, DEF_EPOLL_FL);
 			break;
 		case RET_ERROR:
 			removeClient(client);
@@ -59,7 +58,7 @@ void Server::handleClientEvent(epoll_event& ev)
 			// TODO perhaps frame this as RET_CLOSE?
 			break;
 		case RET_HASOUTPUT:
-			epoll_.mod(ev.data.fd, DEF_EPOLL_FL | EPOLLOUT, client);
+			epoll_.mod(ev.data.fd, DEF_EPOLL_FL | EPOLLOUT);
 			break;
 		case RET_CMDTOOLONG: ; // TODO 
 		default: ;

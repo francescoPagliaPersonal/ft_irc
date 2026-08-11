@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:58:17 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/11 14:14:22 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/11 16:21:02 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int epoll_ctl(fd, EPOLL_CTL_ADD, target, &ev)
 */
 
 // Registers a new FD with epoll(). Can take a client* as DATA.
-void Epoll::add(int fd, eventflags eventFlags, void* data) const
+void Epoll::add(int fd, eventflags eventFlags) const
 {
 	struct epoll_event ev;
 
@@ -61,8 +61,6 @@ void Epoll::add(int fd, eventflags eventFlags, void* data) const
 	std::memset(&ev, 0, sizeof(ev));
 	ev.events = eventFlags;
 	ev.data.fd = fd;
-	if (data)
-		ev.data.ptr = data;
 	// 2) add new FD to epoll watchlist
 	if (::epoll_ctl(fd_, EPOLL_CTL_ADD, fd, &ev) < 0)
 		throw std::runtime_error(std::string("Error on epoll_ctl(ADD): ")
@@ -70,7 +68,7 @@ void Epoll::add(int fd, eventflags eventFlags, void* data) const
 }
 
 // Changes the set of events to watch for a given FD.
-void Epoll::mod(int fd, eventflags eventFlags, void* data)
+void Epoll::mod(int fd, eventflags eventFlags) const
 {
 	struct epoll_event ev;
 
@@ -78,7 +76,6 @@ void Epoll::mod(int fd, eventflags eventFlags, void* data)
 	std::memset(&ev, 0, sizeof(ev));
 	ev.events = eventFlags;
 	ev.data.fd = fd;
-	ev.data.ptr = data;
 	// 2) modify fd watchlist
 	if (::epoll_ctl(fd_, EPOLL_CTL_MOD, fd, &ev) < 0)
 		throw std::runtime_error(std::string("Error on epoll_ctl(MODIFY): ")
