@@ -12,6 +12,8 @@
 
 #include "Client.hpp"
 
+#include <cerrno>
+
 #include <unistd.h>
 
 // TODO remove or modify if client registration doesnt need it => ipAddr stuff
@@ -45,12 +47,43 @@ int Client::getFD() const
 
 e_pollret Client::receiveToBuffer()
 {
+	errno = 0;
+	char buf[BUF_SIZE + 1];
+	ssize_t ret = 0;
+	ret = recv(fd_, buf, BUF_SIZE, 0);
+	if (ret == -1)
+	{
+		if (errno == EAGAIN || errno == EWOULDBLOCK)
+			return (RET_AGAIN);
+		return (RET_ERROR);
+	}
+	buf[ret] = '\0';
+	bufIN_.append(buf);
+		std::cout 
+		<< "Receiving buffer on fd " << fd_ 
+		<< " : "<< bufIN_ << std::endl;
 	return (RET_OK);
 }
 
 e_pollret Client::sendFromBuffer()
 {
-	return (RET_OK);
+	ssize_t ret = send(fd_, bufOUT_.c_str(), bufOUT_.size(), 0);
+	if (ret < 0)
+	{
+		if (errno == EAGAIN || errno == EWOULDBLOCK)
+			return (RET_HASOUTPUT);
+		return (RET_ERROR);	
+	}
+	if (ret == static_cast<ssize_t>(bufOUT_.size()))
+	{
+		bufOUT_.clear();
+		return (RET_EMPTY);
+	}
+	else
+	{
+		bufOUT_ = bufOUT_.substr(ret);
+		return (RET_HASOUTPUT);
+	}
 }
 
 // -------------------------------------------------------------------------- //
