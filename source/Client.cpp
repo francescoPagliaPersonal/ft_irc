@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:52:36 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/11 13:49:28 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/11 14:18:44 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,10 +92,12 @@ e_pollret Client::sendFromBuffer()
 
 Client::Client()
 	: fd_(-1)
+	, id_(0)
 {}
 
 Client::Client(const Client& other)
 	: fd_(-1)
+	, id_(0)
 {
 	(void) other;
 }

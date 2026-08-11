@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:42:26 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/11 14:11:58 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/11 14:13:08 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void Server::registerNewClient(int fd, const struct sockaddr_in& addr)
 
 Server::Server()
 	: port_(-1)
+	, nextClient_(1)
 	, pw_("")
 	, listener_(-1)
 	, clients_()
@@ -44,6 +45,7 @@ Server::Server()
 
 Server::Server(const Server& other)
 	: port_(-1)
+	, nextClient_(1)
 	, pw_("")
 	, listener_(-1)
 	, clients_()
