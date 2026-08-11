@@ -25,16 +25,17 @@ class Client
 {
 	public:
 		// ----
+		Client(int, const sockaddr_in&, int);
 		~Client();
 		// ----
 		// ----
-		static Client* registerNew(int, sockaddr_in&, int);
 		int getFD() const;
 		e_pollret receiveToBuffer();
 		e_pollret sendFromBuffer();
 	private:
 		// ----
 		int fd_;
+		int id_;
 		// ----
 		// ----
 		Client();

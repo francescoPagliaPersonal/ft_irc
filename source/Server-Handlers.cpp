@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 22:58:08 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/11 13:05:27 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/11 13:56:49 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ void Server::handleListenEvent()
 {
 	while (true)
 	{
-		std::cout << __FUNCTION__ << " was triggered.\n"; // TODO remove
 		struct sockaddr_in ipAddr; // in case client needs it later
 		// 1) create new FD for new connection
 		int newFD = listener_.acceptConnection(ipAddr);
@@ -32,8 +31,9 @@ void Server::handleListenEvent()
 			break ; // needs to break, to allow loop to empty queue
 		}
 		// 3) register new client
-		clients_[newFD] = Client::registerNew(newFD, ipAddr, nextClient_);
-		nextClient_++;
+		registerNewClient(newFD, ipAddr);
+		if (DEBUG)
+			std::cout << __FUNCTION__ << " accepted a new client connection.\n";
 	}
 }
 
