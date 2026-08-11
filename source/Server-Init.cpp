@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/10 00:45:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/11 16:15:13 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/11 16:51:27 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ void Server::captureSignals()
 
 Server::Server(int port, std::string pw)
 	: port_(port)
-	, nextClient_(1)
 	, pw_(pw)
 	, listener_(port)
 	, clients_()

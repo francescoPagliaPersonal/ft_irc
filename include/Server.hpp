@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:32:56 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/11 14:34:06 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/11 16:51:46 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ class Server
 	private:
 		// ----
 		unsigned short			port_;		// own listening port
-		int						nextClient_;// next available Client ID
 		std::string				pw_;		// connection password
 		ListeningSocket			listener_;	// server's own listening socket
 		std::map<int, Client*>	clients_;	// map of all Clients, sorted by FD
