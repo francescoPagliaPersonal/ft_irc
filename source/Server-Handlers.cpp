@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 22:58:08 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/11 14:03:26 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/11 14:33:54 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,23 +39,24 @@ void Server::handleListenEvent()
 
 void Server::handleClientEvent(epoll_event& ev)
 {
-	e_pollret ret;
+	e_pollret ret = RET_OK;
 	Client* client = static_cast<Client*>(ev.data.ptr);
 
-	if (ev.events & EPOLLIN)
-	{
+	if (ev.events & (EPOLLHUP | EPOLLERR))
+		ret = RET_ERROR; // TODO perhaps frame this as RET_CLOSE?
+	else if (ev.events & EPOLLIN)
 		ret = client->receiveToBuffer();
-	}
 	else if (ev.events & EPOLLOUT)
-	{
 		ret = client->sendFromBuffer();
-	}
 	switch (ret)
 	{
 		case RET_EMPTY:
 			epoll_.mod(ev.data.fd, DEF_EPOLL_FL, client);
 			break;
-		case RET_ERROR: // TODO but also, are they the same for IN/OUT?
+		case RET_ERROR:
+			removeClient(client);
+			// TODO but also, are they the same for IN/OUT?
+			// TODO perhaps frame this as RET_CLOSE?
 			break;
 		case RET_HASOUTPUT:
 			epoll_.mod(ev.data.fd, DEF_EPOLL_FL | EPOLLOUT, client);

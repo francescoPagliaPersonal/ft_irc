@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:32:56 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/11 12:59:05 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/11 14:34:06 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ class Server
 		void handleListenEvent();
 		void handleClientEvent(epoll_event&);
 		void registerNewClient(int, const sockaddr_in&);
+		void removeClient(Client*);
 		// ----
 		Server();
 		Server(const Server&);

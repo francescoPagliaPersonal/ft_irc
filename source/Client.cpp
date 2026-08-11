@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:52:36 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/11 14:18:44 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/11 14:38:43 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,10 @@ e_pollret Client::receiveToBuffer()
 	{
 		if (errno == EAGAIN || errno == EWOULDBLOCK)
 			return (RET_AGAIN);
-		return (RET_ERROR);
+		return (RET_ERROR); // TODO perhaps frame this as RET_CLOSE?
 	}
+	else if (ret == 0) // client disconnected
+		return (RET_ERROR); // TODO perhaps frame this as RET_CLOSE?
 	buf[ret] = '\0';
 	bufIN_.append(buf);
 		std::cout 
