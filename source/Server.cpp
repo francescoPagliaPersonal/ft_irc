@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:42:26 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/11 14:36:29 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/11 14:44:10 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,12 +71,6 @@ Server Server::operator=(const Server& other)
 
 Server::~Server()
 {
-	std::map<int, Client*>::iterator it;
-
-	for (it = clients_.begin(); it != clients_.end(); it++)
-	{
-		// epoll_.del(it->first);
-		// delete it->second;
-		removeClient(it->second);
-	}
+	while (!clients_.empty())
+		removeClient(clients_.begin()->second);
 }
