@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:58:17 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/11 14:06:10 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/11 14:14:22 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,12 @@ int Epoll::wait(struct epoll_event* ev, int maxEvents, int timeoutMS)
 {
 	int ready = ::epoll_wait(fd_, ev, maxEvents, timeoutMS);
 	if (ready == -1)
+	{
+		if (errno == EINTR)
+			return (0);
 		throw std::runtime_error(std::string("Error on epoll_wait(): ")
 			+ std::strerror(errno));
+	}
 	return (ready);
 }
 
