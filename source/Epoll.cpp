@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:58:17 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/11 13:01:43 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/11 13:06:35 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,12 +51,6 @@ int epoll_ctl(fd, EPOLL_CTL_ADD, target, &ev)
 					EPOLLIN | EPOLLOUT | EPOLLERR | EPOLLHUP
 					EPOLLET (edge-trigger, violates poll before every send/recv)
 */
-
-// Registers a new FD with epoll(). This is for the ListeningSocket.
-void Epoll::add(int fd, eventflags eventFlags) const
-{
-	add(fd, eventFlags, NULL);
-}
 
 // Registers a new FD with epoll(). Can take a client* as DATA.
 void Epoll::add(int fd, eventflags eventFlags, void* data) const
