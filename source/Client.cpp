@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:52:36 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/11 16:56:57 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/11 17:29:48 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,8 @@ e_pollret Client::receiveToBuffer()
 	ret = recv(fd_, buf, BUF_SIZE, 0);
 	if (ret == -1)
 	{
-		if (errno == EAGAIN || errno == EWOULDBLOCK)
-			return (RET_AGAIN);
+		if (errno == EAGAIN || errno == EWOULDBLOCK) // TODO evalute subject violation
+			return (RET_PARSEINPUT);
 		return (RET_ERROR); // TODO perhaps frame this as RET_CLOSE?
 	}
 	else if (ret == 0) // client disconnected
@@ -97,7 +97,7 @@ e_pollret Client::receiveToBuffer()
 		printEscaped(std::cout, bufIN_);
 		std::cout << std::endl;
 	}
-	return (RET_OK);
+	return (RET_PARSEINPUT);
 }
 
 e_pollret Client::sendFromBuffer()
@@ -105,7 +105,7 @@ e_pollret Client::sendFromBuffer()
 	ssize_t ret = send(fd_, bufOUT_.c_str(), bufOUT_.size(), 0);
 	if (ret < 0)
 	{
-		if (errno == EAGAIN || errno == EWOULDBLOCK)
+		if (errno == EAGAIN || errno == EWOULDBLOCK) // TODO evalute subject violation
 			return (RET_HASOUTPUT);
 		return (RET_ERROR);	
 	}

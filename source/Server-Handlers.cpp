@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 22:58:08 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/11 16:19:17 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/11 17:33:38 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,16 @@ void Server::handleClientEvent(epoll_event& ev)
 		case RET_HASOUTPUT:
 			epoll_.mod(ev.data.fd, DEF_EPOLL_FL | EPOLLOUT);
 			break;
-		case RET_CMDTOOLONG: ; // TODO 
+		case RET_CMDTOOLONG: ; // TODO
+		case RET_PARSEINPUT:
+			processInputBuffer(); // builds the interneal message array
+			break;
 		default: ;
 	}
+}
+
+void Server::processInputBuffer()
+{
+	// does a million other things
+	// and eventually transformStringToMessage()
 }
