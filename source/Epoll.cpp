@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:58:17 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/11 13:06:35 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/11 14:06:10 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void Epoll::mod(int fd, eventflags eventFlags, void* data)
 	ev.data.fd = fd;
 	ev.data.ptr = data;
 	// 2) modify fd watchlist
-	if (::epoll_ctl(fd_, EPOLL_CTL_MOD, ev.data.fd, &ev) < 0)
+	if (::epoll_ctl(fd_, EPOLL_CTL_MOD, fd, &ev) < 0)
 		throw std::runtime_error(std::string("Error on epoll_ctl(MODIFY): ")
 			+ std::strerror(errno));
 }
