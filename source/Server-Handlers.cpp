@@ -11,6 +11,8 @@
 /* ************************************************************************** */
 
 #include "Server.hpp"
+#include "ft_irc.hpp"
+
 #include <cstring>
 #include <netinet/in.h>
 #include <unistd.h>
@@ -67,14 +69,9 @@ void Server::handleClientEvent(epoll_event& ev)
 			break;
 		case RET_CMDTOOLONG: ; // TODO
 		case RET_PARSEINPUT:
-			processInputBuffer(); // builds the interneal message array
+			if (processInputBuffer(client) == false)
+				removeClient(client); // builds the interneal message array
 			break;
 		default: ;
 	}
-}
-
-void Server::processInputBuffer()
-{
-	// does a million other things
-	// and eventually transformStringToMessage()
 }

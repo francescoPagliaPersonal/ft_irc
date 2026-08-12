@@ -14,22 +14,37 @@
 # define MESSAGE_HPP
 
 // -------------------------------------------------------------------------- //
+# include "Client.hpp"
 
 # include <string>
 # include <vector>
 
 // -------------------------------------------------------------------------- //
 
-struct Message // TODO will be replaced
+enum e_msgflags
 {
-	std::string					prefix_;
-	std::string					command_;
-	std::vector<std::string>	params_;
-	std::string					trailing_;
+	MSG_HAS_PREFIX = 1 << 0,
+	MSG_HAS_COMMAND = 1 << 1,
+	MSG_HAS_PARAMS = 1 << 2,
+	MSG_HAS_TRAILING = 1 << 3
 };
 
 // -------------------------------------------------------------------------- //
 
-Message transformStringToMessage(const std::string&);
+struct Message
+{
+	unsigned char				flags;						
+	std::string					prefix;
+	std::string					command;
+	std::vector<std::string>	params;
+	std::string					trailing;
+	
+	Client *					sender;
+};
+
+// -------------------------------------------------------------------------- //
+
+Message	string2Message(const std::string& raw, Client *client);
+int		argCount(const Message &);
 
 #endif

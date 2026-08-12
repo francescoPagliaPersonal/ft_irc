@@ -23,6 +23,8 @@
 # define MAX_CLIENTS 50000
 # define MAX_EVENTS 32
 # define TIMEOUT 1000
+# define CRLF "\r\n"
+# define MSG_MAX_LENGTH 512
 # ifndef DEBUG
 #  define DEBUG 1 // TODO set this to zero later and ctl via makefile
 # endif

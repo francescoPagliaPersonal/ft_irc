@@ -16,8 +16,10 @@
 // -------------------------------------------------------------------------- //
 
 # include <csignal>
+#include <deque>
 # include <string>
 # include <map>
+#include "Message.hpp"
 # include "ft_irc.hpp"
 # include "ListeningSocket.hpp"
 # include "Client.hpp"
@@ -44,6 +46,7 @@ class Server
 		std::string				_pw;		// connection password
 		ListeningSocket			_listener;	// server's own listening socket
 		std::map<int, Client*>	_clients;	// map of all Clients, sorted by FD
+		std::deque<Message>		_msgsQueue;
 		Epoll					_epoll;		// isolated kernel epoll wrapper
 		CommandRegistry			_cmdReg;	// command orchestrator
 		// ----
@@ -56,7 +59,8 @@ class Server
 		void registerNewClient(int, const sockaddr_in&);
 		void removeClient(Client*);
 		void executeCommands();
-		void processInputBuffer();
+		bool processInputBuffer(Client*);
+		void removeMsgsFromSuspicious(Client*);
 		// ----
 		Server();
 		Server(const Server&);
