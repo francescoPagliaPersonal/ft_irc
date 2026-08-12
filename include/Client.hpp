@@ -41,8 +41,8 @@ class Client
 		// ----
 		int _fd;
 		// ----
-		std::string bufIN_;
-		std::string bufOUT_;
+		std::string _bufIN;
+		std::string _bufOUT;
 		// ----
 		Client();
 		Client(const Client&);

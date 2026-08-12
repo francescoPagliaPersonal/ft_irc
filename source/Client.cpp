@@ -72,7 +72,7 @@ int Client::getFD() const
 
 void Client::debugWriteToBuffer(const std::string& msg)
 {
-	bufOUT_.append(msg);
+	_bufOUT.append(msg);
 }
 
 e_pollret Client::receiveToBuffer()
@@ -90,11 +90,11 @@ e_pollret Client::receiveToBuffer()
 	else if (ret == 0) // client disconnected
 		return (RET_ERROR); // TODO perhaps frame this as RET_CLOSE?
 	buf[ret] = '\0';
-	bufIN_.append(buf);
+	_bufIN.append(buf);
 	if (DEBUG)
 	{
 		std::cout << "[FD " << _fd << "] Buffer received "<< ret << " chars:\n";
-		printEscaped(std::cout, bufIN_);
+		printEscaped(std::cout, _bufIN);
 		std::cout << std::endl;
 	}
 	return (RET_PARSEINPUT);
@@ -102,21 +102,21 @@ e_pollret Client::receiveToBuffer()
 
 e_pollret Client::sendFromBuffer()
 {
-	ssize_t ret = send(_fd, bufOUT_.c_str(), bufOUT_.size(), 0);
+	ssize_t ret = send(_fd, _bufOUT.c_str(), _bufOUT.size(), 0);
 	if (ret < 0)
 	{
 		if (errno == EAGAIN || errno == EWOULDBLOCK) // TODO evalute subject violation
 			return (RET_HASOUTPUT);
 		return (RET_ERROR);	
 	}
-	if (ret == static_cast<ssize_t>(bufOUT_.size()))
+	if (ret == static_cast<ssize_t>(_bufOUT.size()))
 	{
-		bufOUT_.clear();
+		_bufOUT.clear();
 		return (RET_EMPTY);
 	}
 	else
 	{
-		bufOUT_ = bufOUT_.substr(ret);
+		_bufOUT = _bufOUT.substr(ret);
 		return (RET_HASOUTPUT);
 	}
 }
