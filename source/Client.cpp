@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:52:36 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/11 17:35:59 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/12 12:25:57 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,10 +85,10 @@ e_pollret Client::receiveToBuffer()
 	{
 		if (errno == EAGAIN || errno == EWOULDBLOCK) // TODO evalute subject violation
 			return (RET_PARSEINPUT);
-		return (RET_ERROR); // TODO perhaps frame this as RET_CLOSE?
+		return (RET_CLOSE);
 	}
 	else if (ret == 0) // client disconnected
-		return (RET_ERROR); // TODO perhaps frame this as RET_CLOSE?
+		return (RET_CLOSE);
 	buf[ret] = '\0';
 	bufIN_.append(buf);
 	if (DEBUG)
@@ -107,7 +107,7 @@ e_pollret Client::sendFromBuffer()
 	{
 		if (errno == EAGAIN || errno == EWOULDBLOCK) // TODO evalute subject violation
 			return (RET_HASOUTPUT);
-		return (RET_ERROR);	
+		return (RET_CLOSE);	
 	}
 	if (ret == static_cast<ssize_t>(bufOUT_.size()))
 	{
