@@ -24,7 +24,7 @@ void Server::signalHandler(int)
 	_isAlive = false;
 }
 
-void Server::captureSignals() // TODO this uses <signal.h> not <csignal>! is okay, but make sure what to use
+void Server::_captureSignals() // TODO this uses <signal.h> not <csignal>! is okay, but make sure what to use
 {
 	struct sigaction sa;
 	std::memset(&sa, 0, sizeof(sa));
@@ -51,7 +51,7 @@ Server::Server(int port, std::string pw)
 	, _cmdReg()
 {
 	_epoll.add(_listener.getFD(), EPOLLIN);
-	captureSignals();
+	_captureSignals();
 	// Client class
 	// CommandDispatch class
 }

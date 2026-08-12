@@ -17,7 +17,7 @@
 // -------------------------------------------------------------------------- //
 
 // Creates new client and registers FD with epoll.
-void Server::registerNewClient(int fd, const struct sockaddr_in& addr)
+void Server::_registerNewClient(int fd, const struct sockaddr_in& addr)
 {
 	Client* tmp;
 	// new client, add to map, do sth with addr? IPRecord class?
@@ -44,7 +44,7 @@ void Server::registerNewClient(int fd, const struct sockaddr_in& addr)
 }
 
 // Remove a client and deregister FD.
-void Server::removeClient(Client* client)
+void Server::_removeClient(Client* client)
 {
 	_epoll.del(client->getFD());
 	_clients.erase(client->getFD());
@@ -82,5 +82,5 @@ Server Server::operator=(const Server& other)
 Server::~Server()
 {
 	while (!_clients.empty())
-		removeClient(_clients.begin()->second);
+		_removeClient(_clients.begin()->second);
 }

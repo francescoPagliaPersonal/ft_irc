@@ -33,17 +33,17 @@ void Server::run()
 			// A) servers's own listening port
 			if (fd == _listener.getFD())
 			{
-				handleListenEvent();
+				_handleListenEvent();
 				continue ;
 			}
 			// B) normal client (EPOLLIN/EPOLLOUT, filling/emptying our buffers)
-			handleClientEvent(ev[i]);
+			_handleClientEvent(ev[i]);
 		}
 		// 2) work the command queue (execute read buff, create write buff)
-		executeCommands(); // TODO uses some container of messages & clients; executes message array
+		_executeCommands(); // TODO uses some container of messages & clients; executes message array
 		// 3) housekeeping (signal, timeout, sth else?)
 	}
 }
 
-void Server::executeCommands()
+void Server::_executeCommands()
 {}

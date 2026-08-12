@@ -17,7 +17,7 @@
 #include <netinet/in.h>
 #include <unistd.h>
 
-void Server::handleListenEvent()
+void Server::_handleListenEvent()
 {
 	while (true)
 	{
@@ -33,7 +33,7 @@ void Server::handleListenEvent()
 			break ; // needs to break, to allow loop to empty queue
 		}
 		// 3) register new client
-		registerNewClient(newFD, ipAddr);
+		_registerNewClient(newFD, ipAddr);
 		if (DEBUG)
 		{
 			std::cout << __FUNCTION__ << " accepted a new client connection.\n";
@@ -43,7 +43,7 @@ void Server::handleListenEvent()
 	}
 }
 
-void Server::handleClientEvent(epoll_event& ev)
+void Server::_handleClientEvent(epoll_event& ev)
 {
 	e_pollret ret = RET_OK;
 	Client* client = static_cast<Client*>(_clients[ev.data.fd]);
@@ -59,7 +59,7 @@ void Server::handleClientEvent(epoll_event& ev)
 			_epoll.mod(ev.data.fd, DEF_EPOLL_FL);
 			break;
 		case RET_ERROR:
-			removeClient(client);
+			_removeClient(client);
 			std::cout << __FUNCTION__ << " removed a Client." << std::endl;
 			// TODO but also, are they the same for IN/OUT?
 			// TODO perhaps frame this as RET_CLOSE?
@@ -68,8 +68,8 @@ void Server::handleClientEvent(epoll_event& ev)
 			_epoll.mod(ev.data.fd, DEF_EPOLL_FL | EPOLLOUT);
 			break;
 		case RET_PARSEINPUT:
-			if (processInputBuffer(client) == false)
-				removeClient(client); // builds the interneal message array
+			if (_processInputBuffer(client) == false)
+				_removeClient(client); // builds the interneal message array
 			break;
 		default: ;
 	}

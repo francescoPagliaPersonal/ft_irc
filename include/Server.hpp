@@ -53,14 +53,14 @@ class Server
 		static volatile std::sig_atomic_t _isAlive;	// server state
 		static void signalHandler(int);
 		// ----
-		void captureSignals();
-		void handleListenEvent();
-		void handleClientEvent(epoll_event&);
-		void registerNewClient(int, const sockaddr_in&);
-		void removeClient(Client*);
-		void executeCommands();
-		bool processInputBuffer(Client*);
-		void removeMsgsFromSuspicious(Client*);
+		void _captureSignals();
+		void _handleListenEvent();
+		void _handleClientEvent(epoll_event&);
+		void _registerNewClient(int, const sockaddr_in&);
+		void _removeClient(Client*);
+		void _executeCommands();
+		bool _processInputBuffer(Client*);
+		void _removeMsgsFromSuspicious(Client*);
 		// ----
 		Server();
 		Server(const Server&);
