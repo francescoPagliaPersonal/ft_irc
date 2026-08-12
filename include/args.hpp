@@ -1,35 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   args.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/08/09 14:24:23 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/12 14:21:28 by mweghofe         ###   ########.fr       */
+/*   Created: 2026/08/04 12:19:28 by fpaglia           #+#    #+#             */
+/*   Updated: 2026/08/09 20:46:26 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_irc.hpp"
-#include "args.hpp"
-#include "Server.hpp"
+#ifndef ARGS_HPP
+# define ARGS_HPP
 
-int main(int argc, char** argv)
-{
-	if (argc != 3)
-	{
-		std::cout << "Usage: ./ircserv <port> <password>" << std::endl;
-		return (1);
-	}
-	try
-	{
-		Server server(arg2port(argv[1]), arg2password(argv[2]));
-		server.run();
-	}
-	catch (const std::exception& e)
-	{
-		std::cerr << e.what() << std::endl;
-		return (2);
-	}
-	return (0);
-}
+#include <string>
+#include <sstream>
+
+unsigned short	arg2port(const char *port_str);
+std::string		arg2password(const char *pw_str);
+
+#endif

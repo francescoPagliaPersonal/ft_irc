@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 16:22:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/09 18:22:08 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/12 14:18:20 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,34 @@
 
 // -------------------------------------------------------------------------- //
 
+#include "ft_irc.hpp"
+
 // -------------------------------------------------------------------------- //
+
+# define BUF_SIZE 4095
+
+// -------------------------------------------------------------------------- //
+
+struct sockaddr_in;
 
 class Client
 {
 	public:
 		// ----
+		Client(int, const sockaddr_in&);
 		~Client();
 		// ----
 		// ----
+		int getFD() const;
+		e_pollret receiveToBuffer();
+		e_pollret sendFromBuffer();
+		void debugWriteToBuffer(const std::string&);
 	private:
 		// ----
+		int _fd;
 		// ----
+		std::string bufIN_;
+		std::string bufOUT_;
 		// ----
 		Client();
 		Client(const Client&);
