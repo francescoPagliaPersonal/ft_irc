@@ -67,7 +67,6 @@ void Server::handleClientEvent(epoll_event& ev)
 		case RET_HASOUTPUT:
 			_epoll.mod(ev.data.fd, DEF_EPOLL_FL | EPOLLOUT);
 			break;
-		case RET_CMDTOOLONG: ; // TODO
 		case RET_PARSEINPUT:
 			if (processInputBuffer(client) == false)
 				removeClient(client); // builds the interneal message array
