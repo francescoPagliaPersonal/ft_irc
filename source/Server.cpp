@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:42:26 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/11 17:38:07 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/12 13:20:29 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void Server::registerNewClient(int fd, const struct sockaddr_in& addr)
 	// register epoll fd
 	try
 	{
-		_epoll.add(fd, DEF_EPOLL_FL);
+		_epoll.add(fd, DEF_EPOLL_FL, tmp);
 	}
 	catch (const std::exception& e)
 	{

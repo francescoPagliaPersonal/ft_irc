@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 22:58:08 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/12 12:26:30 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/12 13:01:50 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void Server::handleListenEvent()
 		{
 			std::cout << __FUNCTION__ << " accepted a new client connection.\n";
 			_clients[newFD]->debugWriteToBuffer("Testing...\nLoading...\n");
-			_epoll.mod(newFD, DEF_EPOLL_FL | EPOLLOUT);
+			_epoll.mod(newFD, DEF_EPOLL_FL | EPOLLOUT, _clients[newFD]);
 		}
 	}
 }
@@ -44,7 +44,7 @@ void Server::handleListenEvent()
 void Server::handleClientEvent(epoll_event& ev)
 {
 	e_pollret ret = RET_OK;
-	Client* client = static_cast<Client*>(_clients[ev.data.fd]);
+	Client* client = static_cast<Client*>(ev.data.ptr);
 	if (ev.events & (EPOLLHUP | EPOLLERR))
 		ret = RET_CLOSE;
 	else if (ev.events & EPOLLIN)
@@ -54,7 +54,7 @@ void Server::handleClientEvent(epoll_event& ev)
 	switch (ret)
 	{
 		case RET_EMPTY:
-			_epoll.mod(ev.data.fd, DEF_EPOLL_FL);
+			_epoll.mod(client->getFD(), DEF_EPOLL_FL, client);
 			break;
 		case RET_CLOSE:
 			removeClient(client);
@@ -62,7 +62,7 @@ void Server::handleClientEvent(epoll_event& ev)
 			// TODO but also, are they the same for IN/OUT?
 			break;
 		case RET_HASOUTPUT:
-			_epoll.mod(ev.data.fd, DEF_EPOLL_FL | EPOLLOUT);
+			_epoll.mod(client->getFD(), DEF_EPOLL_FL | EPOLLOUT, client);
 			break;
 		case RET_CMDTOOLONG: ; // TODO
 		case RET_PARSEINPUT:

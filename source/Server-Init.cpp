@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/10 00:45:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/11 17:38:16 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/12 13:20:46 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,11 @@ Server::Server(int port, std::string pw)
 	, _epoll()
 	, _cmdReg()
 {
-	_epoll.add(_listener.getFD(), EPOLLIN);
+	_epoll.add(
+		_listener.getFD(),
+		EPOLLIN,
+		// HACK to get a valid fd in the epoll_event data union
+		reinterpret_cast<void*>(static_cast<intptr_t>(_listener.getFD())));
 	captureSignals();
 	// Client class
 	// CommandDispatch class
