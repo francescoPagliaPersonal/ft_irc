@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:58:17 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/12 12:34:52 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/12 13:29:39 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,37 +51,52 @@ int epoll_ctl(fd, EPOLL_CTL_ADD, target, &ev)
 					EPOLLET (edge-trigger, violates poll before every send/recv)
 */
 
-// Registers a new FD with epoll() and stores data pointer for direct access.
-void Epoll::add(int fd, eventflags eventFlags, void* data) const
+// Register new listening socket FD with epoll().
+void Epoll::add(int fd, eventflags eventFlags) const
 {
 	struct epoll_event ev;
 
 	// 1) set up
 	std::memset(&ev, 0, sizeof(ev));
 	ev.events = eventFlags;
-	ev.data.ptr = data;
+	ev.data.fd = fd;
 	// 2) add new FD to epoll watchlist
 	if (::epoll_ctl(_fd, EPOLL_CTL_ADD, fd, &ev) < 0)
 		throw std::runtime_error(std::string("Error on epoll_ctl(ADD): ")
 			+ std::strerror(errno));
 }
 
-// Changes the set of events to watch for a given FD; stores client pointer.
-void Epoll::mod(int fd, eventflags eventFlags, void* data) const
+// Register new client FD with epoll() and store its pointer for later access.
+void Epoll::add(int fd, eventflags eventFlags, Client* client) const
 {
 	struct epoll_event ev;
 
 	// 1) set up
 	std::memset(&ev, 0, sizeof(ev));
 	ev.events = eventFlags;
-	ev.data.ptr = data;
+	ev.data.ptr = client;
+	// 2) add new FD to epoll watchlist
+	if (::epoll_ctl(_fd, EPOLL_CTL_ADD, fd, &ev) < 0)
+		throw std::runtime_error(std::string("Error on epoll_ctl(ADD): ")
+			+ std::strerror(errno));
+}
+
+// Change the set of events to watch for a given FD and store client pointer.
+void Epoll::mod(int fd, eventflags eventFlags, Client* client) const
+{
+	struct epoll_event ev;
+
+	// 1) set up
+	std::memset(&ev, 0, sizeof(ev));
+	ev.events = eventFlags;
+	ev.data.ptr = client;
 	// 2) modify fd watchlist
 	if (::epoll_ctl(_fd, EPOLL_CTL_MOD, fd, &ev) < 0)
 		throw std::runtime_error(std::string("Error on epoll_ctl(MODIFY): ")
 			+ std::strerror(errno));
 }
 
-// Removes a FD from the epoll() watchlist.
+// Remove a FD from the epoll() watchlist.
 void Epoll::del(int fd) const
 {
 	::epoll_ctl(_fd, EPOLL_CTL_DEL, fd, NULL);
