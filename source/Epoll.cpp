@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:58:17 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/12 13:29:39 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/12 13:47:21 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <stdexcept>
 #include <cstring>
 #include <cerrno>
+#include <iostream>
 
 #include <unistd.h>
 
@@ -99,7 +100,18 @@ void Epoll::mod(int fd, eventflags eventFlags, Client* client) const
 // Remove a FD from the epoll() watchlist.
 void Epoll::del(int fd) const
 {
-	::epoll_ctl(_fd, EPOLL_CTL_DEL, fd, NULL);
+	// relevant errors here are:
+	// EBADF - epoll fd (_fd) is invalid or target fd is invalid
+	// ENOENT - target fd is not registered in epoll
+	// EINVAL - epoll fd (_fd) is not an epoll fd (eg. _fd == fd)
+	// EPERM - target fd doesn't support epoll
+	// note: throwing on error breaks cleanup if triggered in class dtor
+	//	     kernel also cleans up epoll watchlist on close(fd)
+	if (::epoll_ctl(_fd, EPOLL_CTL_DEL, fd, NULL) < 0)
+	{
+		std::cerr << "[Warning] Removing FD " << fd
+			<< " from epoll watchlist caused an error" << std::endl;
+	};
 }
 
 int Epoll::wait(struct epoll_event* ev, int maxEvents, int timeoutMS)
