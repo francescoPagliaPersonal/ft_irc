@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/10 01:00:26 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/11 17:39:42 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/12 15:27:13 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 // -------------------------------------------------------------------------- //
 namespace {
 
+	// Helper to create a raw listening socket for the server.
 int createNewSocket()
 {
 	int fd;
@@ -51,6 +52,7 @@ int createNewSocket()
 	return (fd);
 }
 
+// Helper to bind the raw listening socket to a network adddress and port.
 void bindAddrToFD(int fd, unsigned short port)
 {
 	// 3) bind the new socket to any network adress
@@ -65,6 +67,7 @@ void bindAddrToFD(int fd, unsigned short port)
 			std::string("Error on bind(): ") + std::strerror(errno));
 }
 
+// Helper to configure the FD of the listening socket.
 void configureFD(int fd)
 {
 	// 4) set the socket to active listening
@@ -84,6 +87,7 @@ void configureFD(int fd)
 // CUSTOM CTOR
 // -------------------------------------------------------------------------- //
 
+// Custom constructor to create the server's listening socket.
 ListeningSocket::ListeningSocket(unsigned short port)
 	: _fd(-1)
 	, _port(port)

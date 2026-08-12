@@ -6,18 +6,21 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:52:36 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/11 17:35:59 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/12 15:21:45 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Client.hpp"
 
 #include <cerrno>
+#include <cstring>
 
 #include <unistd.h>
 
 // TODO remove or modify if client registration doesnt need it => ipAddr stuff
 #include <netinet/in.h>
+
+// TODO this file will totally need splitting up
 
 namespace
 {
@@ -65,16 +68,19 @@ Client::~Client()
 // OPERATION
 // -------------------------------------------------------------------------- //
 
+// Return Client FD.
 int Client::getFD() const
 {
 	return (_fd);
 }
 
+// Appends MSG directly to the output buffer.
 void Client::debugWriteToBuffer(const std::string& msg)
 {
 	_bufOUT.append(msg);
 }
 
+// Retrieve data via recv() once and write it to input buffer on success.
 e_pollret Client::receiveToBuffer()
 {
 	errno = 0;
@@ -83,12 +89,13 @@ e_pollret Client::receiveToBuffer()
 	ret = recv(_fd, buf, BUF_SIZE, 0);
 	if (ret == -1)
 	{
-		if (errno == EAGAIN || errno == EWOULDBLOCK) // TODO evalute subject violation
-			return (RET_PARSEINPUT);
-		return (RET_ERROR); // TODO perhaps frame this as RET_CLOSE?
+		if (DEBUG)
+			std::cerr << "[Error] FD " << _fd << " recv(): "
+				<< errno << ", " << strerror(errno) << std::endl;
+		return (RET_CLOSE);
 	}
 	else if (ret == 0) // client disconnected
-		return (RET_ERROR); // TODO perhaps frame this as RET_CLOSE?
+		return (RET_CLOSE);
 	buf[ret] = '\0';
 	_bufIN.append(buf);
 	if (DEBUG)
@@ -100,14 +107,17 @@ e_pollret Client::receiveToBuffer()
 	return (RET_PARSEINPUT);
 }
 
+// Send data from the output buffer once via send() and remove it on success.
 e_pollret Client::sendFromBuffer()
 {
+	errno = 0;
 	ssize_t ret = send(_fd, _bufOUT.c_str(), _bufOUT.size(), 0);
 	if (ret < 0)
 	{
-		if (errno == EAGAIN || errno == EWOULDBLOCK) // TODO evalute subject violation
-			return (RET_HASOUTPUT);
-		return (RET_ERROR);	
+		if (DEBUG)
+			std::cerr << "[Error] FD " << _fd << " send(): "
+				<< errno << ", " << strerror(errno) << std::endl;
+		return (RET_CLOSE);	
 	}
 	if (ret == static_cast<ssize_t>(_bufOUT.size()))
 	{

@@ -14,7 +14,7 @@
 #include "Server.hpp"
 #include <deque>
 
-void Server::removeMsgsFromSuspicious(Client *client)
+void Server::_removeMsgsFromSuspicious(Client *client)
 {
 	std::deque<Message>::iterator it = _msgsQueue.begin();
 	while (it != _msgsQueue.end())
@@ -26,7 +26,7 @@ void Server::removeMsgsFromSuspicious(Client *client)
     }
 }
 
-bool Server::processInputBuffer(Client *client)
+bool Server::_processInputBuffer(Client *client)
 {
 	std::vector<std::string> rawStrs = client->getRawStrings();
 	for (size_t i = 0; i < rawStrs.size(); ++i)
@@ -42,7 +42,7 @@ bool Server::processInputBuffer(Client *client)
 					<< "Closing connection now." 
 					<< std::endl;
 			}
-			removeMsgsFromSuspicious(client);
+			_removeMsgsFromSuspicious(client);
 			return false;
 		}
 		Message tmp = string2Message(rawStrs[i], client);

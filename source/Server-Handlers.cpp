@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 22:58:08 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/11 17:37:24 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/12 15:23:36 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <netinet/in.h>
 #include <unistd.h>
 
+// Responsible for handling the process of a new incoming connection.
 void Server::_handleListenEvent()
 {
 	while (true)
@@ -38,17 +39,18 @@ void Server::_handleListenEvent()
 		{
 			std::cout << __FUNCTION__ << " accepted a new client connection.\n";
 			_clients[newFD]->debugWriteToBuffer("Testing...\nLoading...\n");
-			_epoll.mod(newFD, DEF_EPOLL_FL | EPOLLOUT);
+			_epoll.mod(newFD, DEF_EPOLL_FL | EPOLLOUT, _clients[newFD]);
 		}
 	}
 }
 
+// Responsible for handling all epoll events on client FDs.
 void Server::_handleClientEvent(epoll_event& ev)
 {
 	e_pollret ret = RET_OK;
-	Client* client = static_cast<Client*>(_clients[ev.data.fd]);
+	Client* client = static_cast<Client*>(ev.data.ptr);
 	if (ev.events & (EPOLLHUP | EPOLLERR))
-		ret = RET_ERROR; // TODO perhaps frame this as RET_CLOSE?
+		ret = RET_CLOSE;
 	else if (ev.events & EPOLLIN)
 		ret = client->receiveToBuffer();
 	else if (ev.events & EPOLLOUT)
@@ -56,16 +58,15 @@ void Server::_handleClientEvent(epoll_event& ev)
 	switch (ret)
 	{
 		case RET_EMPTY:
-			_epoll.mod(ev.data.fd, DEF_EPOLL_FL);
+			_epoll.mod(client->getFD(), DEF_EPOLL_FL, client);
 			break;
-		case RET_ERROR:
+		case RET_CLOSE:
 			_removeClient(client);
 			std::cout << __FUNCTION__ << " removed a Client." << std::endl;
 			// TODO but also, are they the same for IN/OUT?
-			// TODO perhaps frame this as RET_CLOSE?
 			break;
 		case RET_HASOUTPUT:
-			_epoll.mod(ev.data.fd, DEF_EPOLL_FL | EPOLLOUT);
+			_epoll.mod(client->getFD(), DEF_EPOLL_FL | EPOLLOUT, client);
 			break;
 		case RET_PARSEINPUT:
 			if (_processInputBuffer(client) == false)
