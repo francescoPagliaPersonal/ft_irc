@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:55:20 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/12 14:20:16 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/12 15:25:04 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,16 +26,19 @@
 // OPERATION
 // -------------------------------------------------------------------------- //
 
+// Return server listening socket's FD.
 int ListeningSocket::_getFD() const
 {
 	return (_fd);
 }
 
+// Return server listening socket's port.
 int ListeningSocket::_getPort() const
 {
 	return (_port);
 }
 
+// Orchestrates the process of accepting a new connection from IPADDR.
 int ListeningSocket::_acceptConnection(struct sockaddr_in& ipAddr)
 {
 	socklen_t len;

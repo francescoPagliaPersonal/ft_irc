@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:52:36 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/12 15:20:31 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/12 15:21:45 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 
 // TODO remove or modify if client registration doesnt need it => ipAddr stuff
 #include <netinet/in.h>
+
+// TODO this file will totally need splitting up
 
 namespace
 {
@@ -66,16 +68,19 @@ Client::~Client()
 // OPERATION
 // -------------------------------------------------------------------------- //
 
+// Return Client FD.
 int Client::_getFD() const
 {
 	return (_fd);
 }
 
+// Appends MSG directly to the output buffer.
 void Client::_debugWriteToBuffer(const std::string& msg)
 {
 	bufOUT_.append(msg);
 }
 
+// Retrieve data via recv() once and write it to input buffer on success.
 e_pollret Client::_receiveToBuffer()
 {
 	errno = 0;
@@ -102,6 +107,7 @@ e_pollret Client::_receiveToBuffer()
 	return (RET_PARSEINPUT);
 }
 
+// Send data from the output buffer once via send() and remove it on success.
 e_pollret Client::_sendFromBuffer()
 {
 	errno = 0;

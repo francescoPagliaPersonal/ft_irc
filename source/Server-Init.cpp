@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/10 00:45:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/12 14:20:37 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/12 15:29:17 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,13 @@
 
 volatile std::sig_atomic_t Server::_isAlive = true;
 
+// Signal handler for SIGINT & SIGTERM.
 void Server::signalHandler(int)
 {
 	_isAlive = false;
 }
 
+// Configures and registers signal and signal handlers.
 void Server::_captureSignals() // TODO this uses <signal.h> not <csignal>! is okay, but make sure what to use
 {
 	struct sigaction sa;
@@ -43,6 +45,9 @@ void Server::_captureSignals() // TODO this uses <signal.h> not <csignal>! is ok
 // CUSTOM CTOR
 // -------------------------------------------------------------------------- //
 
+// Custom constructor to start the server on PORT with PW.
+// Also creates the listening socket, activates epoll system and registers
+// the listening socket with epoll. Also set's up the signals.
 Server::Server(int port, std::string pw)
 	: _pw(pw)
 	, _listener(port)

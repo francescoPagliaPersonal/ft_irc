@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 22:58:08 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/12 14:21:06 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/12 15:23:36 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <netinet/in.h>
 #include <unistd.h>
 
+// Responsible for handling the process of a new incoming connection.
 void Server::_handleListenEvent()
 {
 	while (true)
@@ -41,6 +42,7 @@ void Server::_handleListenEvent()
 	}
 }
 
+// Responsible for handling all epoll events on client FDs.
 void Server::_handleClientEvent(epoll_event& ev)
 {
 	e_pollret ret = RET_OK;
