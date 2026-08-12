@@ -38,7 +38,7 @@ class Server
 		~Server();
 		// ----
 		// ----
-		void _run();
+		void run();
 	private:
 		// ----
 		std::string				_pw;		// connection password

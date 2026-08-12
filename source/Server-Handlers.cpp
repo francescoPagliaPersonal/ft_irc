@@ -22,7 +22,7 @@ void Server::_handleListenEvent()
 	{
 		struct sockaddr_in ipAddr; // in case client needs it later
 		// 1) create new FD for new connection
-		int newFD = _listener._acceptConnection(ipAddr);
+		int newFD = _listener.acceptConnection(ipAddr);
 		if (newFD < 0)
 			return ;
 		// 2) check for max clients
@@ -36,8 +36,8 @@ void Server::_handleListenEvent()
 		if (DEBUG)
 		{
 			std::cout << __FUNCTION__ << " accepted a new client connection.\n";
-			_clients[newFD]->_debugWriteToBuffer("Testing...\nLoading...\n");
-			_epoll._mod(newFD, DEF_EPOLL_FL | EPOLLOUT, _clients[newFD]);
+			_clients[newFD]->debugWriteToBuffer("Testing...\nLoading...\n");
+			_epoll.mod(newFD, DEF_EPOLL_FL | EPOLLOUT, _clients[newFD]);
 		}
 	}
 }
@@ -50,13 +50,13 @@ void Server::_handleClientEvent(epoll_event& ev)
 	if (ev.events & (EPOLLHUP | EPOLLERR))
 		ret = RET_CLOSE;
 	else if (ev.events & EPOLLIN)
-		ret = client->_receiveToBuffer();
+		ret = client->receiveToBuffer();
 	else if (ev.events & EPOLLOUT)
-		ret = client->_sendFromBuffer();
+		ret = client->sendFromBuffer();
 	switch (ret)
 	{
 		case RET_EMPTY:
-			_epoll._mod(client->_getFD(), DEF_EPOLL_FL, client);
+			_epoll.mod(client->getFD(), DEF_EPOLL_FL, client);
 			break;
 		case RET_CLOSE:
 			_removeClient(client);
@@ -64,7 +64,7 @@ void Server::_handleClientEvent(epoll_event& ev)
 			// TODO but also, are they the same for IN/OUT?
 			break;
 		case RET_HASOUTPUT:
-			_epoll._mod(client->_getFD(), DEF_EPOLL_FL | EPOLLOUT, client);
+			_epoll.mod(client->getFD(), DEF_EPOLL_FL | EPOLLOUT, client);
 			break;
 		case RET_CMDTOOLONG: ; // TODO
 		case RET_PARSEINPUT:

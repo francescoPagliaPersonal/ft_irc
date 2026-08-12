@@ -55,7 +55,7 @@ Server::Server(int port, std::string pw)
 	, _epoll()
 	, _cmdReg()
 {
-	_epoll._add(_listener._getFD(), EPOLLIN);
+	_epoll.add(_listener.getFD(), EPOLLIN);
 	_captureSignals();
 	// Client class
 	// CommandDispatch class

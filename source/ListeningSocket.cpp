@@ -27,19 +27,19 @@
 // -------------------------------------------------------------------------- //
 
 // Return server listening socket's FD.
-int ListeningSocket::_getFD() const
+int ListeningSocket::getFD() const
 {
 	return (_fd);
 }
 
 // Return server listening socket's port.
-int ListeningSocket::_getPort() const
+int ListeningSocket::getPort() const
 {
 	return (_port);
 }
 
 // Orchestrates the process of accepting a new connection from IPADDR.
-int ListeningSocket::_acceptConnection(struct sockaddr_in& ipAddr)
+int ListeningSocket::acceptConnection(struct sockaddr_in& ipAddr)
 {
 	socklen_t len;
 	int newFD;

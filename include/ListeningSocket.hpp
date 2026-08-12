@@ -27,9 +27,9 @@ class ListeningSocket
 		~ListeningSocket();
 		// ----
 		// ----
-		int _getFD() const;
-		int _getPort() const;
-		int _acceptConnection(struct sockaddr_in&);
+		int getFD() const;
+		int getPort() const;
+		int acceptConnection(struct sockaddr_in&);
 	private:
 		// ----
 		int				_fd;

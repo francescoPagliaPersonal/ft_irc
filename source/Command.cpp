@@ -30,13 +30,13 @@ Command::~Command()
 // OPERATION
 // -------------------------------------------------------------------------- //
 
-void Command::_getName() const
+void Command::getName() const
 {}
 
-void Command::_addPolicy()
+void Command::addPolicy()
 {}
 
-void Command::_execute(Server& srv, Client& client, const Message& msg)
+void Command::execute(Server& srv, Client& client, const Message& msg)
 {
 	(void) srv, (void) client, (void) msg;
 }

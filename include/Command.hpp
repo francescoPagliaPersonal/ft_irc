@@ -33,9 +33,9 @@ class Command
 		~Command();
 		// ----
 		// ----
-		void _getName() const;
-		void _addPolicy();
-		void _execute(Server&, Client&, const Message&);
+		void getName() const;
+		void addPolicy();
+		void execute(Server&, Client&, const Message&);
 	private:
 		// ----
 		std::string	_name;		// name of the command

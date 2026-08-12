@@ -69,19 +69,19 @@ Client::~Client()
 // -------------------------------------------------------------------------- //
 
 // Return Client FD.
-int Client::_getFD() const
+int Client::getFD() const
 {
 	return (_fd);
 }
 
 // Appends MSG directly to the output buffer.
-void Client::_debugWriteToBuffer(const std::string& msg)
+void Client::debugWriteToBuffer(const std::string& msg)
 {
 	bufOUT_.append(msg);
 }
 
 // Retrieve data via recv() once and write it to input buffer on success.
-e_pollret Client::_receiveToBuffer()
+e_pollret Client::receiveToBuffer()
 {
 	errno = 0;
 	char buf[BUF_SIZE + 1];
@@ -108,7 +108,7 @@ e_pollret Client::_receiveToBuffer()
 }
 
 // Send data from the output buffer once via send() and remove it on success.
-e_pollret Client::_sendFromBuffer()
+e_pollret Client::sendFromBuffer()
 {
 	errno = 0;
 	ssize_t ret = send(_fd, bufOUT_.c_str(), bufOUT_.size(), 0);

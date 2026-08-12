@@ -33,7 +33,7 @@ void Server::_registerNewClient(int fd, const struct sockaddr_in& addr)
 	// register epoll fd
 	try
 	{
-		_epoll._add(fd, DEF_EPOLL_FL, tmp);
+		_epoll.add(fd, DEF_EPOLL_FL, tmp);
 	}
 	catch (const std::exception& e)
 	{
@@ -46,8 +46,8 @@ void Server::_registerNewClient(int fd, const struct sockaddr_in& addr)
 // Remove a client and deregister FD.
 void Server::_removeClient(Client* client)
 {
-	_epoll._del(client->_getFD());
-	_clients.erase(client->_getFD());
+	_epoll.del(client->getFD());
+	_clients.erase(client->getFD());
 	delete client;
 }
 

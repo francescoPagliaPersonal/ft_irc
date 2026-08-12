@@ -19,18 +19,18 @@
 // Main Server Interface.
 // Listening Socket and epoll() registration
 // has already be done by the constructor.
-void Server::_run()
+void Server::run()
 {
 	struct epoll_event ev[MAX_EVENTS]; // TODO do we need to zero that one?
 
 	while (_isAlive)
 	{
-		int readyFDs = _epoll._wait(ev, MAX_EVENTS, TIMEOUT);
+		int readyFDs = _epoll.wait(ev, MAX_EVENTS, TIMEOUT);
 		// 1) epoll() stuff
 		for (int i = 0; i < readyFDs; i++)
 		{
 			// A) servers's own listening port
-			if (ev[i].data.fd == _listener._getFD())
+			if (ev[i].data.fd == _listener.getFD())
 			{
 				_handleListenEvent();
 				continue ;

@@ -32,8 +32,8 @@ class CommandRegistry
 		~CommandRegistry();
 		// ----
 		// ----
-		void _registerCmd(const std::string&, const Command*);
-		void _dispatch(Server&, Client&, const Message&);
+		void registerCmd(const std::string&, const Command*);
+		void dispatch(Server&, Client&, const Message&);
 	private:
 		// ----
 		std::map<const std::string, const Command*>		_commands;	// maps CMD to FUNCPTR

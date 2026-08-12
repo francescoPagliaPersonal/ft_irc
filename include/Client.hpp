@@ -33,10 +33,10 @@ class Client
 		~Client();
 		// ----
 		// ----
-		int _getFD() const;
-		e_pollret _receiveToBuffer();
-		e_pollret _sendFromBuffer();
-		void _debugWriteToBuffer(const std::string&);
+		int getFD() const;
+		e_pollret receiveToBuffer();
+		e_pollret sendFromBuffer();
+		void debugWriteToBuffer(const std::string&);
 	private:
 		// ----
 		int _fd;

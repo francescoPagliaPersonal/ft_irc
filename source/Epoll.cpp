@@ -53,7 +53,7 @@ int epoll_ctl(fd, EPOLL_CTL_ADD, target, &ev)
 */
 
 // Register new listening socket FD with epoll().
-void Epoll::_add(int fd, eventflags eventFlags) const
+void Epoll::add(int fd, eventflags eventFlags) const
 {
 	struct epoll_event ev;
 
@@ -68,7 +68,7 @@ void Epoll::_add(int fd, eventflags eventFlags) const
 }
 
 // Register new client FD with epoll() and store its pointer for later access.
-void Epoll::_add(int fd, eventflags eventFlags, Client* client) const
+void Epoll::add(int fd, eventflags eventFlags, Client* client) const
 {
 	struct epoll_event ev;
 
@@ -83,7 +83,7 @@ void Epoll::_add(int fd, eventflags eventFlags, Client* client) const
 }
 
 // Change the set of events to watch for a given FD and store client pointer.
-void Epoll::_mod(int fd, eventflags eventFlags, Client* client) const
+void Epoll::mod(int fd, eventflags eventFlags, Client* client) const
 {
 	struct epoll_event ev;
 
@@ -98,7 +98,7 @@ void Epoll::_mod(int fd, eventflags eventFlags, Client* client) const
 }
 
 // Remove a FD from the epoll() watchlist.
-void Epoll::_del(int fd) const
+void Epoll::del(int fd) const
 {
 	// relevant errors here are:
 	// EBADF - epoll fd (_fd) is invalid or target fd is invalid
@@ -114,7 +114,7 @@ void Epoll::_del(int fd) const
 	};
 }
 
-int Epoll::_wait(struct epoll_event* ev, int maxEvents, int timeoutMS)
+int Epoll::wait(struct epoll_event* ev, int maxEvents, int timeoutMS)
 {
 	int ready = ::epoll_wait(_fd, ev, maxEvents, timeoutMS);
 	if (ready == -1)

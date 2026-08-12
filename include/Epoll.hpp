@@ -31,11 +31,11 @@ class Epoll
 		~Epoll();
 		// ----
 		// ----
-		void _add(int, eventflags) const;
-		void _add(int, eventflags, Client*) const;
-		void _mod(int, eventflags, Client*) const;
-		void _del(int) const;
-		int _wait(struct epoll_event*, int, int);
+		void add(int, eventflags) const;
+		void add(int, eventflags, Client*) const;
+		void mod(int, eventflags, Client*) const;
+		void del(int) const;
+		int wait(struct epoll_event*, int, int);
 	private:
 		// ----
 		int		_fd;

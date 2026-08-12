@@ -16,12 +16,12 @@
 // OPERATION
 // -------------------------------------------------------------------------- //
 
-void CommandRegistry::_registerCmd(const std::string& name, const Command* cmd)
+void CommandRegistry::registerCmd(const std::string& name, const Command* cmd)
 {
 	_commands.insert(std::make_pair(name, cmd));
 }
 
-void CommandRegistry::_dispatch(Server& srv, Client& client, const Message& msg)
+void CommandRegistry::dispatch(Server& srv, Client& client, const Message& msg)
 {
 	(void) srv, (void) client, (void) msg;
 }
