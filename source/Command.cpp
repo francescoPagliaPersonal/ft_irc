@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 18:07:43 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/11 17:36:09 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/12 14:18:58 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,13 @@ Command::~Command()
 // OPERATION
 // -------------------------------------------------------------------------- //
 
-void Command::getName() const
+void Command::_getName() const
 {}
 
-void Command::addPolicy()
+void Command::_addPolicy()
 {}
 
-void Command::execute(Server& srv, Client& client, const Message& msg)
+void Command::_execute(Server& srv, Client& client, const Message& msg)
 {
 	(void) srv, (void) client, (void) msg;
 }

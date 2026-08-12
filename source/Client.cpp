@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:52:36 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/12 12:25:57 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/12 14:18:20 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,17 +65,17 @@ Client::~Client()
 // OPERATION
 // -------------------------------------------------------------------------- //
 
-int Client::getFD() const
+int Client::_getFD() const
 {
 	return (_fd);
 }
 
-void Client::debugWriteToBuffer(const std::string& msg)
+void Client::_debugWriteToBuffer(const std::string& msg)
 {
 	bufOUT_.append(msg);
 }
 
-e_pollret Client::receiveToBuffer()
+e_pollret Client::_receiveToBuffer()
 {
 	errno = 0;
 	char buf[BUF_SIZE + 1];
@@ -100,7 +100,7 @@ e_pollret Client::receiveToBuffer()
 	return (RET_PARSEINPUT);
 }
 
-e_pollret Client::sendFromBuffer()
+e_pollret Client::_sendFromBuffer()
 {
 	ssize_t ret = send(_fd, bufOUT_.c_str(), bufOUT_.size(), 0);
 	if (ret < 0)

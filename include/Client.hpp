@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 16:22:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/11 17:35:59 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/12 14:18:20 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,10 @@ class Client
 		~Client();
 		// ----
 		// ----
-		int getFD() const;
-		e_pollret receiveToBuffer();
-		e_pollret sendFromBuffer();
-		void debugWriteToBuffer(const std::string&);
+		int _getFD() const;
+		e_pollret _receiveToBuffer();
+		e_pollret _sendFromBuffer();
+		void _debugWriteToBuffer(const std::string&);
 	private:
 		// ----
 		int _fd;
