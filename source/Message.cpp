@@ -30,13 +30,12 @@ int argCount(const Message & msg)
 	return count;
 }
 
-Message string2Message(const std::string & raw, Client *client) 
+Message string2Message(std::string str, Client *client) 
 {
 	Message msg;
 	msg.flags = 0;
 	msg.sender = client;
 	
-	std::string str = raw;
 	std::string::size_type start = str.find_first_not_of(' ');
 	
 	// Clear spaces at beggining
@@ -79,20 +78,13 @@ Message string2Message(const std::string & raw, Client *client)
 	}
 	
 	// Extract command
-	std::string::size_type pos = str.find_first_of(' ');
-	if (pos != std::string::npos) 
+	std::string::size_type pos = std::min(str.find_first_of(' '), str.size());
+	if (pos != 0)
 	{
 		msg.command = str.substr(0, pos);
 		allCaps(msg.command);
 		msg.flags |= MSG_HAS_COMMAND;
-		str.erase(0, pos + 1);
-	} 
-	else if (!str.empty()) 
-	{
-		msg.command = str;
-		allCaps(msg.command);
-		msg.flags |= MSG_HAS_COMMAND;
-		str.clear();
+		str.erase(0, pos);
 	}
 	
 	// Extract all params 

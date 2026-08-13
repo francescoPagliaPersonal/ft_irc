@@ -44,7 +44,7 @@ struct Message
 
 // -------------------------------------------------------------------------- //
 
-Message	string2Message(const std::string& raw, Client *client);
+Message	string2Message(std::string str, Client *client);
 int		argCount(const Message &);
 
 #endif
