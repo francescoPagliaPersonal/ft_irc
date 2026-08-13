@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/11 12:06:37 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/13 18:35:13 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/13 20:24:19 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,9 @@ void Server::run()
 		_executeCommands(); // TODO uses some container of messages & clients; executes message array
 		// 3) housekeeping (signal, timeout, sth else?)
 	}
-	addTwoChannels();
-	addClients2Channels();
-	printAll();
+	_addTwoChannels();
+	_addClients2Channels();
+	_printAll();
 }
 
 void Server::_executeCommands()
