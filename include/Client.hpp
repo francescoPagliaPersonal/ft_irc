@@ -16,6 +16,7 @@
 // -------------------------------------------------------------------------- //
 
 #include "ft_irc.hpp"
+#include <vector>
 
 // -------------------------------------------------------------------------- //
 
@@ -37,12 +38,13 @@ class Client
 		e_pollret receiveToBuffer();
 		e_pollret sendFromBuffer();
 		void debugWriteToBuffer(const std::string&);
+		std::vector<std::string>	getRawStrings();
 	private:
 		// ----
 		int _fd;
 		// ----
-		std::string bufIN_;
-		std::string bufOUT_;
+		std::string _bufIN;
+		std::string _bufOUT;
 		// ----
 		Client();
 		Client(const Client&);

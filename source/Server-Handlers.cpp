@@ -11,6 +11,8 @@
 /* ************************************************************************** */
 
 #include "Server.hpp"
+#include "ft_irc.hpp"
+
 #include <cstring>
 #include <netinet/in.h>
 #include <unistd.h>
@@ -66,16 +68,10 @@ void Server::_handleClientEvent(epoll_event& ev)
 		case RET_HASOUTPUT:
 			_epoll.mod(client->getFD(), DEF_EPOLL_FL | EPOLLOUT, client);
 			break;
-		case RET_CMDTOOLONG: ; // TODO
 		case RET_PARSEINPUT:
-			_processInputBuffer(); // builds the interneal message array
+			if (_processInputBuffer(client) == false)
+				_removeClient(client); // builds the interneal message array
 			break;
 		default: ;
 	}
-}
-
-void Server::_processInputBuffer()
-{
-	// does a million other things
-	// and eventually transformStringToMessage()
 }
