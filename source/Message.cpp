@@ -13,11 +13,19 @@
 #include "Message.hpp"
 #include <cctype>
 
+namespace  {
 
-static void allCaps(std::string & str) 
-{
-	for (std::string::size_type i = 0; i < str.size(); ++i)
-		str[i] = std::toupper(static_cast<unsigned char>(str[i]));
+	inline void clear_leading_char(std::string & str, unsigned char c)
+	{
+		std::string::size_type start = str.find_first_not_of(c);
+		str.erase(0, start);
+	}
+
+	inline void allCaps(std::string & str) 
+	{
+		for (std::string::size_type i = 0; i < str.size(); ++i)
+			str[i] = std::toupper(static_cast<unsigned char>(str[i]));
+	}
 }
 
 int argCount(const Message & msg)
@@ -36,38 +44,33 @@ Message string2Message(std::string str, Client *client)
 	msg.flags = 0;
 	msg.sender = client;
 	
-	std::string::size_type start = str.find_first_not_of(' ');
-	
 	// Clear spaces at beggining
 	// if the message is empty is returned as is and the flags will say so!
-	if (start != std::string::npos) 
-		str.erase(0, start);
-	else
-		return msg;
+	
+	clear_leading_char(str, ' ');
+	if (str.empty()) 
+		return msg;		
+	
 	
 	// Extract prefix
 	if (str[0] == ':') 
 	{
 		std::string::size_type end = str.find_first_of(' ');
-		if (end != std::string::npos) 
+		if (end > 1) 
 		{
-			msg.prefix = str.substr(1, end - 1);
-			str.erase(0, end + 1);
-		}
-		else
-		{
-			msg.prefix = str.substr(1);
+			msg.prefix = str.substr(1, end);
+			str.erase(0, end);
 			msg.flags |= MSG_HAS_PREFIX;
-			return msg;
 		}
-		msg.flags |= MSG_HAS_PREFIX;
+		if (str.empty()) 
+			return msg;
 	}
 	
 	// Extract trailing if the patter is " :" must have a space infront
-	std::string::size_type trailing_pos = str.find_first_of(':');
-	if (trailing_pos != std::string::npos && str[trailing_pos - 1] == ' ') 
+	std::string::size_type trailing_pos = str.find(" :");
+	if (trailing_pos != std::string::npos) 
 	{
-		msg.trailing = str.substr(trailing_pos + 1);
+		msg.trailing = str.substr(trailing_pos + 2);
 		str.erase(trailing_pos);
 		msg.flags |= MSG_HAS_TRAILING;
 		
@@ -76,10 +79,12 @@ Message string2Message(std::string str, Client *client)
 		if (last_non_space != std::string::npos) 
 			str.erase(last_non_space + 1);
 	}
+
+	clear_leading_char(str, ' ');
 	
 	// Extract command
-	std::string::size_type pos = std::min(str.find_first_of(' '), str.size());
-	if (pos != 0)
+	std::string::size_type pos = str.find_first_of(' ');
+	if (pos)
 	{
 		msg.command = str.substr(0, pos);
 		allCaps(msg.command);
@@ -90,22 +95,15 @@ Message string2Message(std::string str, Client *client)
 	// Extract all params 
 	while (!str.empty()) 
 	{
-		std::string::size_type start_pos = str.find_first_not_of(' ');
-		if (start_pos == std::string::npos) 
-			break;
-		str.erase(0, start_pos);
+		clear_leading_char(str, ' ');
 		
 		// Find end of param
 		std::string::size_type end_pos = str.find_first_of(' ');
-		if (end_pos != std::string::npos) 
+		if (end_pos > 0)
 		{
-			msg.params.push_back(str.substr(0, end_pos));
+			std::string tmp = str.substr(0, end_pos);
+			msg.params.push_back(tmp);
 			str.erase(0, end_pos);
-		} 
-		else 
-		{
-			msg.params.push_back(str);
-			str.clear();
 		}
 	}
 	
