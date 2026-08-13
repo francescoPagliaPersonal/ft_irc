@@ -74,7 +74,7 @@ bool Server::_processInputBuffer(Client *client)
 		{
 			_msgsQueue.push_back(tmp);
 			if (DEBUG)
-				printMessage(tmp, i);
+				printMessage(tmp, i + 1);
 		}
 	}
 	if (DEBUG)
@@ -82,7 +82,7 @@ bool Server::_processInputBuffer(Client *client)
 		std::cout 
 			<< "Processing input buffer for client: " << client->getFD() << "\n"
 			<< "new raw strings added: " << rawStrs.size() << "\n"
-			<< "new messages added: " << _msgsQueue.size()
+			<< "total message count: " << _msgsQueue.size()
 			<< std::endl;
 	}
 	return true;
