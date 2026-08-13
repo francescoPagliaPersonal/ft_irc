@@ -23,6 +23,7 @@ SRC_MAN		:=  arg2password.cpp arg2port.cpp\
 				Client.cpp Client-getMessages.cpp\
 				Message.cpp\
 				Command.cpp CommandRegistry.cpp\
+				Channel.cpp\
 				main.cpp
 SRC_BON		:= 
 
