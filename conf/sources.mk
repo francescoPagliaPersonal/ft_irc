@@ -24,6 +24,7 @@ SRC_MAN		:=  arg2password.cpp arg2port.cpp\
 				Message.cpp\
 				Command.cpp CommandRegistry.cpp\
 				Channel.cpp\
+				test-admin.cpp\
 				main.cpp
 SRC_BON		:= 
 

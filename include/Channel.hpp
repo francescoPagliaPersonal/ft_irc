@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/13 10:19:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/13 19:54:21 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/13 20:05:24 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ class Channel
 		void setTopic(const std::string&);
 		void setPassword(const std::string&);
 		void setLimit(t_uint);
+		// TESTING
+		void prtMembers();
 	private:
 		// ----
 		bitMask 							_modes;

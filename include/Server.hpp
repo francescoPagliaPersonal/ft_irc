@@ -66,6 +66,10 @@ class Server
 		void _addChannel(const std::string&);
 		void _removeChannel(const std::string&);
 		void _removeChannel(Channel*);
+		// ---- TESTING
+		void addTwoChannels();
+		void addClients2Channels();
+		void printAll();
 		// ----
 		Server();
 		Server(const Server&);
