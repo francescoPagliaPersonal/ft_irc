@@ -46,14 +46,15 @@ bool Server::_processInputBuffer(Client *client)
 			return false;
 		}
 		Message tmp = string2Message(rawStrs[i], client);
-		if (!(tmp.flags & MSG_HAS_COMMAND))
+		if (tmp.flags & MSG_HAS_COMMAND)
 			_msgsQueue.push_back(tmp);
 	}
 	if (DEBUG)
 	{
 		std::cout 
 			<< "Processing input buffer for client: " << client->getFD() << "\n"
-			<< "new raw strings added: " << rawStrs.size()
+			<< "new raw strings added: " << rawStrs.size() << "\n"
+			<< "new messages added: " << _msgsQueue.size()
 			<< std::endl;
 	}
 	return true;
