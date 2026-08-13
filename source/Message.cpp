@@ -85,11 +85,13 @@ Message string2Message(std::string str, Client *client)
 		clear_trailing_char(str, ' ');
 
 		if (!msg.trailing.empty())
-		msg.flags |= MSG_HAS_TRAILING;
+			msg.flags |= MSG_HAS_TRAILING;
 	}
 
 	clear_leading_char(str, ' ');
 	
+	if (str.empty())
+		return msg;
 	// Extract command
 	std::string::size_type pos = str.find_first_of(' ');
 	if (pos)
