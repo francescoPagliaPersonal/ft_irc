@@ -21,6 +21,13 @@ namespace  {
 		str.erase(0, start);
 	}
 
+	inline void clear_trailing_char(std::string & str, unsigned char c)
+	{
+		std::string::size_type start = str.find_last_not_of(c);
+		str.erase(start + 1);
+	}
+
+
 	inline void allCaps(std::string & str) 
 	{
 		for (std::string::size_type i = 0; i < str.size(); ++i)
@@ -58,7 +65,9 @@ Message string2Message(std::string str, Client *client)
 		std::string::size_type end = str.find_first_of(' ');
 		if (end > 1) 
 		{
-			msg.prefix = str.substr(1, end);
+			msg.prefix = str.substr(1, end - 1);
+			if (end == std::string::npos)
+				clear_trailing_char(msg.prefix, ' ');
 			str.erase(0, end);
 			msg.flags |= MSG_HAS_PREFIX;
 		}
@@ -71,13 +80,12 @@ Message string2Message(std::string str, Client *client)
 	if (trailing_pos != std::string::npos) 
 	{
 		msg.trailing = str.substr(trailing_pos + 2);
+		clear_trailing_char(msg.trailing, ' ');
 		str.erase(trailing_pos);
+		clear_trailing_char(str, ' ');
+
+		if (!msg.trailing.empty())
 		msg.flags |= MSG_HAS_TRAILING;
-		
-		// Clear the remaining string of trailing and any additional space
-		std::string::size_type last_non_space = str.find_last_not_of(' ');
-		if (last_non_space != std::string::npos) 
-			str.erase(last_non_space + 1);
 	}
 
 	clear_leading_char(str, ' ');
@@ -88,8 +96,9 @@ Message string2Message(std::string str, Client *client)
 	{
 		msg.command = str.substr(0, pos);
 		allCaps(msg.command);
-		msg.flags |= MSG_HAS_COMMAND;
 		str.erase(0, pos);
+
+		msg.flags |= MSG_HAS_COMMAND;
 	}
 	
 	// Extract all params 
