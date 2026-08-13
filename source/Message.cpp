@@ -55,6 +55,7 @@ Message string2Message(std::string str, Client *client)
 	// if the message is empty is returned as is and the flags will say so!
 	
 	clear_leading_char(str, ' ');
+	clear_trailing_char(str, ' ');
 	if (str.empty()) 
 		return msg;		
 	
@@ -80,7 +81,6 @@ Message string2Message(std::string str, Client *client)
 	if (trailing_pos != std::string::npos) 
 	{
 		msg.trailing = str.substr(trailing_pos + 2);
-		clear_trailing_char(msg.trailing, ' ');
 		str.erase(trailing_pos);
 		clear_trailing_char(str, ' ');
 
