@@ -31,8 +31,8 @@ namespace  {
 int argCount(const Message & msg)
 {
 	size_t count = 0;
-	count += (msg.flags & MSG_HAS_PREFIX) != 0 ;
-	count += (msg.flags & MSG_HAS_COMMAND) != 0;
+	// count += (msg.flags & MSG_HAS_PREFIX) != 0 ;
+	// count += (msg.flags & MSG_HAS_COMMAND) != 0;
 	count += (msg.flags & MSG_HAS_TRAILING) != 0;
 	count += msg.params.size();
 	return count;
