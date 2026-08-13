@@ -14,6 +14,30 @@
 #include "Server.hpp"
 #include <deque>
 
+namespace {
+
+	void printMessage(const Message & msgs, size_t i)
+	{
+
+		std::cout 
+			<< "Message n. " << i  << " \n"
+			<< "Arg count: " << argCount(msgs)  << "\n"
+			<< "Prefix   : {" << msgs.prefix << "}" << "\n"
+			<< "command  : {" << msgs.command << "}"
+			<< std::endl;
+		for (size_t j = 0; j < msgs.params.size(); ++j)
+		{
+			std::cout 
+				<< "Params   : {" << msgs.params[j] << "}"
+				<< std::endl;
+		}
+		std::cout 
+			<< "Trailing : {" << msgs.trailing << "}"
+			<< std::endl;
+		std::cout << std::string(30, '-') <<std::endl;
+	}
+}
+
 void Server::_removeMsgsFromSuspicious(Client *client)
 {
 	std::deque<Message>::iterator it = _msgsQueue.begin();
@@ -47,7 +71,11 @@ bool Server::_processInputBuffer(Client *client)
 		}
 		Message tmp = string2Message(rawStrs[i], client);
 		if (tmp.flags & MSG_HAS_COMMAND)
+		{
 			_msgsQueue.push_back(tmp);
+			if (DEBUG)
+				printMessage(tmp, i);
+		}
 	}
 	if (DEBUG)
 	{
