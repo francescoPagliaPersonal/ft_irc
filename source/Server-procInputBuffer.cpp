@@ -46,7 +46,8 @@ bool Server::_processInputBuffer(Client *client)
 			return false;
 		}
 		Message tmp = string2Message(rawStrs[i], client);
-		_msgsQueue.push_back(tmp);
+		if (!(tmp.flags & MSG_HAS_COMMAND))
+			_msgsQueue.push_back(tmp);
 	}
 	if (DEBUG)
 	{
