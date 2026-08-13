@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:32:56 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/13 20:32:01 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/13 20:35:34 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,10 @@ class Server
 		void _removeChannel(const std::string&);
 		void _removeChannel(Channel*);
 		// ---- TESTING
-		void _addTwoChannels();
+		void _addTwoChannels(const std::string&, const std::string&);
 		void _addClients2Channels();
 		void _printAll();
-		void _removeClientsFromChannelOne();
+		void _removeClientsFromChannel(const std::string&);
 		// ----
 		Server();
 		Server(const Server&);

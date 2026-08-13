@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/13 11:03:40 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/13 20:32:06 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/13 20:36:11 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,10 @@ void prtChannel(std::pair<const std::string, Channel*>& element)
 } // end of namespace test
 
 
-void Server::_addTwoChannels()
+void Server::_addTwoChannels(const std::string& ch1, const std::string& ch2)
 {
-	_addChannel("One");
-	_addChannel("Two");		
+	_addChannel(ch1);
+	_addChannel(ch2);		
 }
 
 void Server::_addClients2Channels()
@@ -49,9 +49,9 @@ void Server::_addClients2Channels()
 	}
 }
 
-void Server::_removeClientsFromChannelOne()
+void Server::_removeClientsFromChannel(const std::string& title)
 {
-	Channel* ch = _channels["One"];
+	Channel* ch = _channels[title];
 	ch->removeMembers();
 }
 
