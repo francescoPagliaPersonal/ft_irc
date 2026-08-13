@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/13 10:19:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/13 20:05:24 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/13 20:27:11 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ class Channel
 		void setLimit(t_uint);
 		// TESTING
 		void prtMembers();
+		void removeMembers();
 	private:
 		// ----
 		bitMask 							_modes;

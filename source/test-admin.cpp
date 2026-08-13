@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/13 11:03:40 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/13 20:24:19 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/13 20:32:06 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,12 @@ void Server::_addClients2Channels()
 	}
 }
 
+void Server::_removeClientsFromChannelOne()
+{
+	Channel* ch = _channels["One"];
+	ch->removeMembers();
+}
+
 void Server::_printAll()
 {
 	Channel* ch;
@@ -82,4 +88,10 @@ void Channel::prtMembers()
 			<< " with privileges set (" << it_m->second << ")" << std::endl;
 		i++;
 	}
+}
+
+void Channel::removeMembers()
+{
+	while(!_members.empty())
+		removeClient(_members.begin()->first);
 }
