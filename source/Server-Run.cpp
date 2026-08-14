@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/11 12:06:37 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/12 14:21:28 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/14 11:52:11 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,14 @@ void Server::run()
 }
 
 void Server::_executeCommands()
-{}
+{
+	while (!_msgsQueue.empty())
+	{
+		std::cout << "looping... Client " << _msgsQueue.front().sender->getFD()
+			<< "\n";
+		// TODO refactor and bring as much SERVER control surface here
+		// at least epoll_ctl can be done here
+		_cmdReg.execute(*this, _msgsQueue.front());
+		_msgsQueue.pop_front();
+	}
+}

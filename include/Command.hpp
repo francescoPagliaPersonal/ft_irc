@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:15:32 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/12 14:18:58 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/14 12:15:52 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,15 @@
 // -------------------------------------------------------------------------- //
 
 # include <string>
+# include <vector>
 # include "Message.hpp"
 
 // -------------------------------------------------------------------------- //
 
 class Server;
-class Client;
+class IPolicy;
 
-typedef void (*command)(Server&, Client&, const Message&);
+typedef int (*command)(Server&, const Message&);
 
 class Command
 {
@@ -33,13 +34,14 @@ class Command
 		~Command();
 		// ----
 		// ----
-		void getName() const;
-		void addPolicy();
-		void execute(Server&, Client&, const Message&);
+		std::string getName() const;
+		void addPolicy(IPolicy*);
+		int execute(Server&, const Message&) const; // TODO func type used?
 	private:
 		// ----
 		std::string	_name;		// name of the command
 		command 	_func;		// function handler for the command
+		std::vector<IPolicy*> _policies;
 		// ----
 		// ----
 		Command();
@@ -48,6 +50,11 @@ class Command
 };
 
 // -------------------------------------------------------------------------- //
+
+int cmd_pass(Server&, const Message&);
+int cmd_nick(Server&, const Message&);
+int cmd_user(Server&, const Message&);
+int cmd_cap(Server&, const Message&);
 
 #endif
 

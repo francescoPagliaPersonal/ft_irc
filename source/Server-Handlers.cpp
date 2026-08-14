@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 22:58:08 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/12 15:23:36 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/14 12:11:20 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void Server::_handleListenEvent()
 		if (DEBUG)
 		{
 			std::cout << __FUNCTION__ << " accepted a new client connection.\n";
-			_clients[newFD]->debugWriteToBuffer("Testing...\nLoading...\n");
+			// _clients[newFD]->debugWriteToBuffer("Testing...\nLoading...\n");
 			_epoll.mod(newFD, DEF_EPOLL_FL | EPOLLOUT, _clients[newFD]);
 		}
 	}

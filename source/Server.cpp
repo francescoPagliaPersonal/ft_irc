@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:42:26 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/12 14:20:59 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/14 11:22:41 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,30 @@ void Server::_removeClient(Client* client)
 	_epoll.del(client->getFD());
 	_clients.erase(client->getFD());
 	delete client;
+}
+
+// Lookup client by NICK and return its pointer. Returns NULL if nothing found.
+Client* Server::findClientByNick(const std::string & nick)
+{
+	std::map<int, Client *>::iterator it = _clients.begin();
+	while (it != _clients.end())
+	{
+
+		if (it->second->getNick() == nick)
+			return it->second;
+		++it;
+	}
+	return NULL;
+}
+
+std::string Server::getPassword() const
+{
+	return (_pw);
+}
+
+const Epoll& Server::getEpoll() const
+{
+	return (_epoll);
 }
 
 // -------------------------------------------------------------------------- //

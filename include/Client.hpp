@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 16:22:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/12 14:18:20 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/14 10:30:42 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,15 @@
 // -------------------------------------------------------------------------- //
 
 struct sockaddr_in;
+class Server;
+
+enum e_clientReg
+{
+	REG_PASSWD = 1 << 0,
+	REG_USER = 1 << 1,
+	REG_NICK = 1 << 2,
+	REG_DONE = REG_PASSWD | REG_USER | REG_NICK
+};
 
 class Client
 {
@@ -38,13 +47,28 @@ class Client
 		e_pollret receiveToBuffer();
 		e_pollret sendFromBuffer();
 		void debugWriteToBuffer(const std::string&);
-		std::vector<std::string>	getRawStrings();
+		std::vector<std::string> getRawStrings();
+		void putReply2Buff(Server &, const std::string &); // TODO why here when it needs server
+		// set
+		bool setRegistrationFlags(int flags);
+		std::string	getNick() const;
+		std::string	getUserName() const;
+		std::string	getRealName() const;
+		// get
+		int	getRegistrationFlags() const;
+		void setNick(const std::string & str);
+		void setUserName(const std::string & str);
+		void setRealName(const std::string & str);
 	private:
 		// ----
 		int _fd;
 		// ----
 		std::string _bufIN;
 		std::string _bufOUT;
+		unsigned char _registrationFlags; // FIXME needs type from newer ft_irc.hpp
+		std::string		_nick;
+		std::string		_userName;
+		std::string		_realName;
 		// ----
 		Client();
 		Client(const Client&);

@@ -6,11 +6,13 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:52:36 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/12 15:21:45 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/14 12:14:05 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Client.hpp"
+#include "Epoll.hpp"
+#include "Server.hpp" // FIXME temp for put2buffer
 
 #include <cerrno>
 #include <cstring>
@@ -54,6 +56,7 @@ void printEscaped(std::ostream& os, const std::string& s)
 
 Client::Client(int fd, const struct sockaddr_in& addr)
 	: _fd(fd)
+	, _registrationFlags(0)
 {
 	(void) addr;
 }
@@ -129,6 +132,73 @@ e_pollret Client::sendFromBuffer()
 		_bufOUT = _bufOUT.substr(ret);
 		return (RET_HASOUTPUT);
 	}
+}
+
+void	Client::putReply2Buff(Server & srv, const std::string & str)
+{
+	
+	_bufOUT.append(str);
+	// HACK temporary solution
+	// FIXME consider CATCH & disconnect
+	srv.getEpoll().mod(_fd, DEF_EPOLL_FL | EPOLLOUT, this);
+	// FIXME evaluate control flow, consider passing Server::_epoll
+	// errno = 0;
+	// EPOLL_CTL_MOD
+	// struct epoll_event ev;
+	// ev.events = EPOLLIN | EPOLLRDHUP | EPOLLOUT ;
+	// ev.data.ptr = this;
+	// int ret = epoll_ctl(srv.get_epollFD(), EPOLL_CTL_MOD, _sockInfo.fd, &ev);
+	std::cout 
+		<< "in funct: " << __FUNCTION__ << "\n"
+		<< "in _bufOUT: " << _bufOUT << "\n"
+		<< "client fd: " << _fd << "\n";
+	// 	<< "epoll_ctl ret: " << ret << "with err: " << strerror(errno)
+ 	// 	<< std::endl;
+
+}
+
+bool Client::setRegistrationFlags(int flags)
+{
+	if (!(_registrationFlags & flags))
+	{
+		_registrationFlags |= flags;
+		return true;
+	}
+	return false;
+}
+
+int Client::getRegistrationFlags() const
+{
+	return (_registrationFlags);
+}
+
+std::string Client::getNick() const
+{
+	return _nick;
+}
+void Client::setNick(const std::string & str)
+{
+	_nick = str;
+}
+
+std::string Client::getUserName() const
+{
+	return _userName;
+}
+
+void Client::setUserName(const std::string & str)
+{
+	_userName = str; 
+}
+
+std::string Client::getRealName() const
+{
+	return _realName;
+}
+
+void Client::setRealName(const std::string & str)
+{
+	_realName = str; 
 }
 
 // -------------------------------------------------------------------------- //
