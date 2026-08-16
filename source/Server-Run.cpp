@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/11 12:06:37 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/16 18:23:44 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/16 19:39:20 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ void Server::run()
 	while (_isAlive)
 	{
 		int readyFDs = _epoll.wait(ev, MAX_EVENTS, TIMEOUT);
+		if (readyFDs != 0 && DEBUG && ev->events & EPOLLIN)
+			std::cout << std::endl;
 		// 1) epoll() stuff
 		for (int i = 0; i < readyFDs; i++)
 		{

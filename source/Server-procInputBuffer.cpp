@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 10:05:02 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/16 18:59:24 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/16 19:39:41 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,22 @@ namespace {
 		std::cout 
 			<< "Trailing : {" << msgs.trailing << "}\n";
 		std::cout << std::string(10, '-') <<std::endl;
+	}
+
+	void printMessageOneLine(const Message& msgs, size_t i)
+	{
+		std::cout << "[FD " << msgs.sender->getFD() << "] Msg #" << i
+			<< " prefix {"<< msgs.prefix 
+			<< "} command {"<< msgs.command
+			<< "} params {" ;
+		for (size_t j = 0; j < msgs.params.size(); j++)
+		{
+			if (j != 0)
+				std::cout << '|';
+			std::cout << msgs.params[j];
+		}
+		std::cout << "} trailing {" << msgs.trailing << "}\n";
+		i++;
 	}
 }
 
@@ -70,11 +86,13 @@ bool Server::_processInputBuffer(Client *client)
 		if (tmp.flags & MSG_HAS_COMMAND)
 		{
 			_msgsQueue.push_back(tmp);
-			if (DEBUG)
+			if (DEBUG == debug::DETAILED)
 				printMessage(tmp, i + 1);
+			else if (DEBUG == debug::BASIC)
+				printMessageOneLine(tmp, i + 1);
 		}
 	}
-	if (DEBUG)
+	if (DEBUG == debug::DETAILED)
 	{
 		std::cout 
 			<< "[FD " << client->getFD() << "] Input buffer processed: "

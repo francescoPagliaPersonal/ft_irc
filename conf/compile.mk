@@ -12,8 +12,8 @@ CINCL	= $(addprefix -I,$(INC_PATHS))
 
 # Mode-specific flags (shared by C and C++)
 C_FLAGS_reg		:=
-C_FLAGS_asan	:= -g -fsanitize=address -fno-omit-frame-pointer -O0
-C_FLAGS_val		:= -g -O0
+C_FLAGS_asan	:= -g -fsanitize=address -fno-omit-frame-pointer -O0 -DDEBUG=1
+C_FLAGS_val		:= -g -O0 -DDEBUG=2
 
 # Final flags used for compilation/linking (recursive; MODE is target-specific)
 # -fPIE: required so C objects link cleanly when LINKER is c++ (mixed)
