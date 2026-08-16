@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 18:07:43 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/16 18:47:02 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/16 19:10:15 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,6 @@ void Command::addPolicy(IPolicy* policy)
 
 int Command::execute(IServerCtrl& srv, const Message& msg) const
 {
-	Client *client = msg.sender;
-	if (client == NULL)
-		return (rfc::NOCONN); // ERR_HANGUP??
 	// TODO ensure POLICY and COMMAND errors are in line with PROTOCOL CODES
 	for (size_t i = 0; i < _policies.size(); ++i)
 	{
