@@ -13,7 +13,7 @@
 #ifndef IPOLICY_HPP
 # define IPOLICY_HPP
 
-#include "Command.hpp"
+# include "Message.hpp"
 
 class IServerCtrl;
 
