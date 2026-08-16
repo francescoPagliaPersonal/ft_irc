@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:25:38 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/16 15:21:01 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/16 17:47:10 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,18 +33,47 @@
 
 namespace rfc
 {
-	enum e_rfc
+	enum e_err
 	{
-		OK,
-		BADCMD = 421,
-		NICKBAD = 432,
-		NICKINUSE,
-		NOTREG = 451,
-		FEWPARAMS = 461,
-		ALREADYREG,
-		BADPASS = 464,
-		NOCONN = 42001,
-		MANYPARAMS
+		NOSUCHNICK = 401,		// ERR_NOSUCHNICK
+		NOSUCHCHANNEL = 403,		// ERR_NOSUCHCHANNEL
+		CANNOTSEND = 404,		// ERR_CANNOTSENDTOCHAN
+		TOOMANYCHANS,			// 405 ERR_TOOMANYCHANNELS
+		NORECIPIENT = 411,		// ERR_NORECIPIENT
+		NOTEXT,					// 412 ERR_NOTEXTTOSEND
+		BADCMD = 421,			// ERR_UNKNOWNCOMMAND
+		NONICK = 431,			// ERR_NONICKNAMEGIVEN
+		NICKBAD,				// 432 ERR_ERRONEUSNICKNAME
+		NICKINUSE,				// 433 ERR_NICKNAMEINUSE
+		NOTINCHANNEL = 441,		// ERR_USERNOTINCHANNEL
+		NOTONCHANNEL,			// 442 ERR_NOTONCHANNEL
+		ONCHANNEL,				// 443 ERR_USERONCHANNEL
+		NOTREG = 451,			// ERR_NOTREGISTERED
+		FEWPARAMS = 461,		// ERR_NEEDMOREPARAMS
+		ALREADYREG,				// 462 ERR_ALREADYREGISTERED
+		BADPASS = 464,			// ERR_PASSWDMISMATCH
+		CHANFULL = 471,			// ERR_CHANNELISFULL
+		UNKNOWNMODE,			// 472 ERR_UNKNOWNMODE
+		INVITEONLY,				// 473 ERR_INVITEONLYCHAN
+		BADKEY = 475,			// ERR_BADCHANNELKEY
+		CHANOPRIVS = 482,		// ERR_CHANOPRIVSNEEDED
+		NOCONN = 42001,			// internal: sender gone
+		MANYPARAMS				// internal: too many parameters // TODO probably wrong place => parsing topic?
+	};
+
+	enum e_rpl
+	{
+		OK = 0,
+		WELCOME = 1,			// 001 RPL_WELCOME
+		YOURHOST,				// 002 RPL_YOURHOST
+		CREATED,				// 003 RPL_CREATED
+		MYINFO,					// 004 RPL_MYINFO
+		CHANNELMODEIS = 324,	// RPL_CHANNELMODEIS
+		NOTOPIC = 331,			// RPL_NOTOPIC
+		TOPIC,					// 332 RPL_TOPIC
+		INVITING = 341,			// RPL_INVITING
+		NAMREPLY = 353,			// RPL_NAMREPLY
+		ENDOFNAMES = 366		// RPL_ENDOFNAMES
 	};
 } // end namespace rfc
 
