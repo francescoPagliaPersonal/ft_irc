@@ -33,6 +33,11 @@ SRC_BON		:=
 # Mixed example: SRC_MAN := main.cpp util.c
 
 # Commands
-DIR_PARSER = commands/
-SRC_PARSER = cmd_cap.cpp cmd_nick.cpp cmd_pass.cpp cmd_user.cpp
-SRC_MAN   += $(addprefix $(DIR_PARSER),$(SRC_PARSER))
+DIR_CMDS = commands/
+SRC_CMDS = cmd_cap.cpp cmd_nick.cpp cmd_pass.cpp cmd_user.cpp
+SRC_MAN   += $(addprefix $(DIR_CMDS),$(SRC_CMDS))
+
+# Policies
+DIR_PLCY = policies/
+SRC_PLCY = AlreadyRegisteredPlcy.cpp ArgsLimitPlcy.cpp 
+SRC_MAN   += $(addprefix $(DIR_PLCY),$(SRC_PLCY))
