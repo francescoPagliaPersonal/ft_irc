@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:42:26 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/16 16:22:52 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/16 17:53:30 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,7 @@ Client* Server::findClientByNick(const std::string & nick)
 
 void Server::sendMessage(Client& client, const std::string& str)
 {
-	// TODO does someone need to evaluate how much is in the buffer?
-	// TODO   or did we say only the kernel output buffer matters?
+	// TODO drop connection if bufOUT grows too much? or do we drop if kernel buffer stays full?
 	client.putReply2Buff(str);
 	// TODO consider CATCH & disconnect
 	_epoll.mod(client.getFD(), DEF_EPOLL_FL | EPOLLOUT, &client);

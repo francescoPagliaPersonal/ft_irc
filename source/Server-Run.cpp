@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/11 12:06:37 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/16 16:26:17 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/16 17:57:46 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,10 @@ void Server::run()
 			// B) normal client (EPOLLIN/EPOLLOUT, filling/emptying our buffers)
 			_handleClientEvent(ev[i]);
 		}
-		// 2) work the command queue (execute read buff, create write buff)
-		_executeCommands(); // TODO uses some container of messages & clients; executes message array
+		// 2) work the command queue (execute msg queue, fill client write buff)
+		_executeCommands();
 		// 3) housekeeping (signal, timeout, sth else?)
+		// TODO devise tasks to do
 	}
 }
 

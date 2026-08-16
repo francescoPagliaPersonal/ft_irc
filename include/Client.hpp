@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 16:22:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/16 13:29:27 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/16 18:05:59 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,12 @@ class Client
 		std::vector<std::string> getRawStrings();
 		void putReply2Buff(const std::string&);
 		// set
-		bool setRegistrationFlags(int flags);
+		int	getRegistrationFlags() const;
 		std::string	getNick() const;
 		std::string	getUserName() const;
 		std::string	getRealName() const;
 		// get
-		int	getRegistrationFlags() const;
+		bool setRegistrationFlags(int flags);
 		void setNick(const std::string & str);
 		void setUserName(const std::string & str);
 		void setRealName(const std::string & str);
@@ -62,12 +62,12 @@ class Client
 		// ----
 		int _fd;
 		// ----
-		std::string _bufIN;
-		std::string _bufOUT;
-		unsigned char _registrationFlags; // FIXME needs type from newer ft_irc.hpp
-		std::string		_nick;
-		std::string		_userName;
-		std::string		_realName;
+		std::string _bufIN;					// continuous storage for input data
+		std::string _bufOUT;				// continuous storage for output msg
+		unsigned char _registrationFlags; // FIXME needs type from newer ft_irc.hpp on Channels branch
+		std::string		_nick;				// client's nick name
+		std::string		_userName;			// client's user name
+		std::string		_realName;			// client's real name
 		// ----
 		Client();
 		Client(const Client&);

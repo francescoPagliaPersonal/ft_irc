@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 18:00:05 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/16 15:38:48 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/16 17:51:05 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ bool CommandRegistry::handleProtocolErrors(IServerCtrl& srv, int numeric,
 	if (!msg.sender)
 		return (false);
 	Client& client = *msg.sender;
-	// TODO requires a proper mechanism; some map perhaps with CODE + REPLY STRING
+	// TODO this is a proof of concept, requires a proper mechanism; some map perhaps with CODE + REPLY STRING
 	switch (numeric)
 	{
 		case rfc::OK: break ;
