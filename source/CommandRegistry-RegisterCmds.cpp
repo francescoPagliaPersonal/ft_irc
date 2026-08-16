@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 11:41:20 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/16 17:42:04 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/16 20:21:53 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,4 +43,8 @@ void CommandRegistry::registerCmds()
 	user->addPolicy(new AlreadyRegisteredPlcy(false));
 	user->addPolicy(new ArgsLimitPlcy(4, 4));
 	_commands[user->getName()] = user;
+
+	Command *ping = new Command("PING", cmd_ping);
+	ping->addPolicy(new ArgsLimitPlcy(1, 2));
+	_commands[ping->getName()] = ping;
 }

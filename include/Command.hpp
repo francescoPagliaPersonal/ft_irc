@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:15:32 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/16 17:49:39 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/16 20:16:02 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ int cmd_pass(IServerCtrl&, const Message&);
 int cmd_nick(IServerCtrl&, const Message&);
 int cmd_user(IServerCtrl&, const Message&);
 int cmd_cap(IServerCtrl&, const Message&);
+int cmd_ping(IServerCtrl&, const Message&);
 
 #endif
 
