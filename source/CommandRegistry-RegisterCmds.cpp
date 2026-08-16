@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 11:41:20 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/14 03:13:20 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/16 17:42:04 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,15 @@
 #include "policies/ArgsLimitPlcy.hpp"
 #include "policies/AlreadyRegisteredPlcy.hpp"
 
+/*
+	IMPORTANT FOR FUTURE COMMANDS
+	- full workflow for checking AlreadyRegisteredPlcy is implemented
+	- thus AFTER registration is done, other CMDs require that require a
+	  registered user MUST be set to TRUE
+	example:
+		join->addPolicy(new AlreadyRegisteredPlcy(true));
+*/
+
 void CommandRegistry::registerCmds()
 {
 	Command	*cap = new Command("CAP", cmd_cap);
@@ -22,7 +31,7 @@ void CommandRegistry::registerCmds()
 	_commands[cap->getName()] = cap;
 
 	Command	*pass = new Command("PASS", cmd_pass);
-	pass->addPolicy(new AlredyRegisteredPlcy(false));
+	pass->addPolicy(new AlreadyRegisteredPlcy(false));
 	pass->addPolicy(new ArgsLimitPlcy(1, 1));
 	_commands[pass->getName()] = pass;
 
@@ -31,7 +40,7 @@ void CommandRegistry::registerCmds()
 	_commands[nick->getName()] = nick;
 
 	Command	*user = new Command("USER", cmd_user);
-	user->addPolicy(new AlredyRegisteredPlcy(false));
+	user->addPolicy(new AlreadyRegisteredPlcy(false));
 	user->addPolicy(new ArgsLimitPlcy(4, 4));
 	_commands[user->getName()] = user;
 }
