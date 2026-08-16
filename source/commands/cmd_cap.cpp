@@ -6,13 +6,13 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 13:54:12 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/16 13:15:34 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/16 13:27:43 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 # include "Command.hpp"
-# include "Server.hpp"
+# include "IServerCtrl.hpp"
 # include "Client.hpp"
 
 int cmd_cap(IServerCtrl & srv, const Message & msg)

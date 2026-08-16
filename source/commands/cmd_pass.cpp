@@ -6,12 +6,12 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 11:42:55 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/16 11:27:54 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/16 13:27:34 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "Command.hpp"
-# include "Server.hpp"
+# include "IServerCtrl.hpp"
 # include "Client.hpp"
 
 int cmd_pass(IServerCtrl & srv, const Message & msg)

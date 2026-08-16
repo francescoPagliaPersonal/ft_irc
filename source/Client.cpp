@@ -6,13 +6,11 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:52:36 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/16 11:36:49 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/16 13:28:42 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Client.hpp"
-#include "Epoll.hpp"
-#include "Server.hpp" // FIXME temp for put2buffer
 
 #include <cerrno>
 #include <cstring>
