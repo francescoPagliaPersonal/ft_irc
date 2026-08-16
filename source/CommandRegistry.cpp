@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 18:00:05 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/16 15:15:49 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/16 15:38:48 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,27 @@ bool CommandRegistry::handleProtocolErrors(IServerCtrl& srv, int numeric,
 	// TODO requires a proper mechanism; some map perhaps with CODE + REPLY STRING
 	switch (numeric)
 	{
-		case 0: break ;
+		case rfc::OK: break ;
 		// case 371:
 		// 	srv.sendMessage(client, ":CoolServ 371 :A policy has not been respected.\r\n");
 		// 	break ;
 		case rfc::BADCMD:
 			srv.sendMessage(client, ":CoolServ 421 :Command not found.\r\n");
 			break ;
+		case rfc::NICKINUSE:
+			srv.sendMessage(client, ":CoolServ 433 :Nickname is already in use.\r\n");
+			break ;
+		case rfc::FEWPARAMS:
+			srv.sendMessage(client, ":CoolServ 461 :Not enough parameters.\r\n");
+			break ;
+		case rfc::ALREADYREG:
+			srv.sendMessage(client, ":CoolServ 462 :This user is already registered.\r\n");
+			break ;
+		case rfc::BADPASS:
+			srv.sendMessage(client, ":CoolServ 464 :Password incorrect.\r\n");
+			break ;
+		case rfc::NOCONN:
+			return (false);
 		default:
 			std::cout << "[Warning] " << __FUNCTION__
 				<< " received a currently unknown protocol error: " << numeric
