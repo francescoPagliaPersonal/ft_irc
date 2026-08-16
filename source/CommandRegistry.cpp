@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 18:00:05 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/16 15:07:17 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/16 15:15:49 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int CommandRegistry::execute(IServerCtrl& srv, const Message& msg)
 {
 	Client *client = msg.sender;
 	if (client == NULL)
-		return 1; // TODO need some internal code?
+		return (rfc::NOCONN);
 	std::map<const std::string, const Command*>::iterator it;
 	it = _commands.find(msg.command);	
 	if ( it == _commands.end())
@@ -32,6 +32,8 @@ int CommandRegistry::execute(IServerCtrl& srv, const Message& msg)
 bool CommandRegistry::handleProtocolErrors(IServerCtrl& srv, int numeric,
 	const Message& msg)
 {
+	if (!msg.sender)
+		return (false);
 	Client& client = *msg.sender;
 	// TODO requires a proper mechanism; some map perhaps with CODE + REPLY STRING
 	switch (numeric)

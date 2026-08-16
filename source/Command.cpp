@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 18:07:43 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/16 15:04:00 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/16 15:10:41 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int Command::execute(IServerCtrl& srv, const Message& msg) const
 {
 	Client *client = msg.sender;
 	if (client == NULL)
-		return 1; // ERR_HANGUP??
+		return (rfc::NOCONN); // ERR_HANGUP??
 
 	std::cout 
 		<< "Commad::" << __FUNCTION__ << "->" << _name
