@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/11 12:06:37 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/16 13:55:33 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/16 16:26:17 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void Server::_executeCommands()
 		Message& msg = _msgsQueue.front();
 		std::cout << "[FD " << msg.sender->getFD()
 			<< "] Processing message queue...\n";
-		// TODO ensure POLICY and PROTOCOL errors are clearly separated and respect the process
+		// TODO ensure POLICY and COMMAND errors are in line with PROTOCOL CODES
 		numeric = _cmdReg.execute(*this, msg);
 		keep = _cmdReg.handleProtocolErrors(*this, numeric, msg);
 		if (!keep)

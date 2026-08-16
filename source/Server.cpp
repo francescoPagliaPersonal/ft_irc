@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:42:26 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/16 13:51:11 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/16 16:22:52 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,11 @@ void Server::_removeClient(Client* client)
 // Disconnects a client: remove all pending msgs, channels then client itself.
 void Server::_disconnectClient(Client* client)
 {
-	// TODO implement this
+	// TODO finish this (channels, what else?)
 	std::cout << "[Warning] Client removal requested for FD " << client->getFD()
-		<< ". NOT IMPLEMENTED yet.\n";
+		<< ". NOT FULLY IMPLEMENTED yet.\n";
+	_removeMsgsFromSuspicious(client);
+	_removeClient(client);
 }
 
 // Lookup client by NICK and return its pointer. Returns NULL if nothing found.
