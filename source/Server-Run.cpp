@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/11 12:06:37 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/16 12:42:54 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/16 13:55:33 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,16 +46,19 @@ void Server::run()
 
 void Server::_executeCommands()
 {
+	int numeric = 0;
+	bool keep = true;
+
 	while (!_msgsQueue.empty())
 	{
-		std::cout << "[FD " << _msgsQueue.front().sender->getFD()
+		Message& msg = _msgsQueue.front();
+		std::cout << "[FD " << msg.sender->getFD()
 			<< "] Processing message queue...\n";
-		// TODO refactor and bring as much SERVER control surface here
-		// at least epoll_ctl can be done here => nope, new interface
-		_cmdReg.execute(*this, _msgsQueue.front());
-		// TODO create a PROTOCOL ERROR numeric reply handler in CmdReg or Server
-		// TODO   this sends replies AND retuns a keep/drop info 
 		// TODO ensure POLICY and PROTOCOL errors are clearly separated and respect the process
+		numeric = _cmdReg.execute(*this, msg);
+		keep = _cmdReg.handleProtocolErrors(*this, numeric, msg);
+		if (!keep)
+			_disconnectClient(msg.sender);
 		_msgsQueue.pop_front();
 	}
 }

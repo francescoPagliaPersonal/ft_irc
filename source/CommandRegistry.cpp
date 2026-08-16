@@ -6,11 +6,12 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 18:00:05 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/16 13:22:23 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/16 14:00:11 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "CommandRegistry.hpp"
+#include "IServerCtrl.hpp"
 
 // -------------------------------------------------------------------------- //
 // OPERATION
@@ -20,22 +21,35 @@ int CommandRegistry::execute(IServerCtrl& srv, const Message& msg)
 {
 	Client *client = msg.sender;
 	if (client == NULL)
-		return 1;
+		return 1; // TODO need some internal code?
 	std::map<const std::string, const Command*>::iterator it;
-	it = _commands.find(msg.command);
-	
+	it = _commands.find(msg.command);	
 	if ( it == _commands.end())
-	{
-		// FIXME pick a unified place to handle PROTOCOL ERROR CODES (see _executeCommands)
-		std::cout << "[Warning] " << __FUNCTION__
-				<< " found an unknown command. Code needs to handle that.\n";
-		// std::string numeric(":CoolServ 421 :Command not found.\r\n");
-		// std::cout << numeric << std::endl;
-		// client->putReply2Buff(srv, numeric);
 		return 421;     // ERR_UNKNOWNCOMMAND
+	return (it->second->execute(srv, msg));
+}
+
+bool CommandRegistry::handleProtocolErrors(IServerCtrl& srv, int numeric,
+	const Message& msg)
+{
+	Client& client = *msg.sender;
+	// TODO requires a proper mechanism; some map perhaps with CODE + REPLY STRING
+	switch (numeric)
+	{
+		case 0: break ;
+		case 371:
+			srv.sendMessage(client, ":CoolServ 371 :A policy has not been respected.\r\n");
+			break ;
+		case 421:
+			srv.sendMessage(client, ":CoolServ 421 :Command not found.\r\n");
+			break ;
+		default:
+			std::cout << "[Warning] " << __FUNCTION__
+				<< " received a currently unknown protocol error: " << numeric
+				<< std::endl;
+			return (false);
 	}
-	it->second->execute(srv, msg); // FIXME forward protocol code
-	return 0;
+	return (true);
 }
 
 // -------------------------------------------------------------------------- //
