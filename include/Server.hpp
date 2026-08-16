@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:32:56 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/14 11:22:44 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/16 10:39:04 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <map>
 #include "Message.hpp"
 # include "ft_irc.hpp"
+# include "IServerCtrl.hpp"
 # include "ListeningSocket.hpp"
 # include "Client.hpp"
 # include "CommandRegistry.hpp"
@@ -32,7 +33,7 @@
 
 // -------------------------------------------------------------------------- //
 
-class Server
+class Server : public IServerCtrl
 {
 	public:
 		// ----
@@ -41,6 +42,7 @@ class Server
 		// ----
 		// ----
 		void run();
+		// interface
 		Client* findClientByNick(const std::string &);
 		std::string getPassword() const;
 		// HACK just temporary
