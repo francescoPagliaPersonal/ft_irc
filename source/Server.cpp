@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:42:26 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/14 11:22:41 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/16 13:07:16 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,14 +65,18 @@ Client* Server::findClientByNick(const std::string & nick)
 	return NULL;
 }
 
+void Server::sendMessage(Client& client, const std::string& str)
+{
+	// TODO does someone need to evaluate how much is in the buffer?
+	// TODO   or did we say only the kernel output buffer matters?
+	client.putReply2Buff(str);
+	// TODO consider CATCH & disconnect
+	_epoll.mod(client.getFD(), DEF_EPOLL_FL | EPOLLOUT, &client);
+}
+
 std::string Server::getPassword() const
 {
 	return (_pw);
-}
-
-const Epoll& Server::getEpoll() const
-{
-	return (_epoll);
 }
 
 // -------------------------------------------------------------------------- //

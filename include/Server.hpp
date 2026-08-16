@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:32:56 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/16 10:39:04 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/16 13:07:10 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,7 @@ class Server : public IServerCtrl
 		// interface
 		Client* findClientByNick(const std::string &);
 		std::string getPassword() const;
-		// HACK just temporary
-		const Epoll& getEpoll() const;
+		void sendMessage(Client&, const std::string&);
 	private:
 		// ----
 		std::string				_pw;		// connection password

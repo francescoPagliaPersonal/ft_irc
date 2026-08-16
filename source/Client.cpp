@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:52:36 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/14 12:14:05 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/16 11:36:49 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,27 +134,13 @@ e_pollret Client::sendFromBuffer()
 	}
 }
 
-void	Client::putReply2Buff(Server & srv, const std::string & str)
+void	Client::putReply2Buff(const std::string& str)
 {
 	
 	_bufOUT.append(str);
-	// HACK temporary solution
-	// FIXME consider CATCH & disconnect
-	srv.getEpoll().mod(_fd, DEF_EPOLL_FL | EPOLLOUT, this);
-	// FIXME evaluate control flow, consider passing Server::_epoll
-	// errno = 0;
-	// EPOLL_CTL_MOD
-	// struct epoll_event ev;
-	// ev.events = EPOLLIN | EPOLLRDHUP | EPOLLOUT ;
-	// ev.data.ptr = this;
-	// int ret = epoll_ctl(srv.get_epollFD(), EPOLL_CTL_MOD, _sockInfo.fd, &ev);
-	std::cout 
-		<< "in funct: " << __FUNCTION__ << "\n"
-		<< "in _bufOUT: " << _bufOUT << "\n"
-		<< "client fd: " << _fd << "\n";
-	// 	<< "epoll_ctl ret: " << ret << "with err: " << strerror(errno)
- 	// 	<< std::endl;
-
+	if (DEBUG)
+		std::cout << "[FD #" << _fd << "] " << __FUNCTION__ << "\n"
+			<< "\t _bufOUT: " << _bufOUT << std::endl;
 }
 
 bool Client::setRegistrationFlags(int flags)

@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 13:54:12 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/14 10:25:02 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/16 12:38:39 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int cmd_cap(Server & srv, const Message & msg)
 	Client *client = msg.sender;
 	if (client == NULL)
 		return 1; // ERR_HANGUP??
-	client->putReply2Buff(srv, ":CoolServ  CAP * LS :\r\n");
+	srv.sendMessage(*client, ":CoolServ  CAP * LS :\r\n");
 	
 	return (0);
 }

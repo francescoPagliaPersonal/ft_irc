@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 13:54:12 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/14 10:33:38 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/16 12:39:16 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int cmd_user(Server & srv, const Message & msg)
 	if (client->getRegistrationFlags() == REG_DONE)
 	{
 		std::cout << "User registration completed." << std::endl;
-		client->putReply2Buff(srv, welcomeMessage(*client));
+		srv.sendMessage(*client, welcomeMessage(*client));
 	}
 	
 	return (0);

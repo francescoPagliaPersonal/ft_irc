@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 16:22:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/14 10:30:42 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/16 11:32:22 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ class Client
 		e_pollret sendFromBuffer();
 		void debugWriteToBuffer(const std::string&);
 		std::vector<std::string> getRawStrings();
-		void putReply2Buff(Server &, const std::string &); // TODO why here when it needs server
+		void putReply2Buff(const std::string&);
 		// set
 		bool setRegistrationFlags(int flags);
 		std::string	getNick() const;
