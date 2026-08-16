@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 13:54:12 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/16 17:54:13 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/16 19:05:58 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,6 @@ int cmd_nick(IServerCtrl & srv, const Message & msg)
 	// should be carried out (against the whole server).
 	// TODO also need charset validation?
 
-	std::cout << "executing: " << msg.command << std::endl;
-
 	Client *client = msg.sender;
 	if (client == NULL)
 		return (rfc::NOCONN); // ERR_HANGUP??
@@ -35,8 +33,9 @@ int cmd_nick(IServerCtrl & srv, const Message & msg)
 	if (client->getRegistrationFlags() != REG_DONE)
 	{
 		client->setRegistrationFlags(REG_NICK);
-		if (client->getRegistrationFlags() & REG_NICK)
-			std::cout << "Nick registration successfull." << std::endl;
+		if (DEBUG)
+			std::cout << "[FD " << client->getFD()
+				<< "] Nick registration successfull.\n";
 		srv.tryCompleteRegistration(*client);
 	}
 	return (rfc::OK);

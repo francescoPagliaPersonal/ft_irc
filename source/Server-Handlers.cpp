@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 22:58:08 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/14 12:11:20 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/16 19:08:44 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,7 @@ void Server::_handleListenEvent()
 		}
 		// 3) register new client
 		_registerNewClient(newFD, ipAddr);
-		if (DEBUG)
-		{
-			std::cout << __FUNCTION__ << " accepted a new client connection.\n";
-			// _clients[newFD]->debugWriteToBuffer("Testing...\nLoading...\n");
-			_epoll.mod(newFD, DEF_EPOLL_FL | EPOLLOUT, _clients[newFD]);
-		}
+		std::cout << "[Info] New connection accepted at FD " << newFD << '\n';
 	}
 }
 
@@ -62,7 +57,8 @@ void Server::_handleClientEvent(epoll_event& ev)
 			break;
 		case RET_CLOSE:
 			_removeClient(client);
-			std::cout << __FUNCTION__ << " removed a Client." << std::endl;
+			// TODO closing events needs validation, thus also the printout
+			std::cout << "[Warning] " << __FUNCTION__ << " removed a Client." << std::endl;
 			// TODO but also, are they the same for IN/OUT?
 			break;
 		case RET_HASOUTPUT:

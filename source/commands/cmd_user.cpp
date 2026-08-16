@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 13:54:12 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/16 17:54:20 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/16 19:02:50 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,6 @@
 
 int cmd_user(IServerCtrl & srv, const Message & msg)
 {
-	std::cout << "executing" << msg.command << std::endl;
-
 	// TODO: this is just a quick proof of concept more complex UserName evaluation 
 	// should be carried out (against the whole server).
 	// TODO also need charset validation?
@@ -31,7 +29,9 @@ int cmd_user(IServerCtrl & srv, const Message & msg)
 		return (rfc::ALREADYREG);
 	client->setUserName(msg.params[0]);
 	client->setRealName(msg.trailing);
-	std::cout << "UserName registration successfull." << std::endl;
+	if (DEBUG)
+		std::cout << "[FD " << client->getFD() 
+			<< "] UserName registration successfull.\n";
 	srv.tryCompleteRegistration(*client);
 
 	return (rfc::OK);

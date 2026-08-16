@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server-procInputBuffer.cpp                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 10:05:02 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/12 10:05:16 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/16 18:59:24 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,23 +18,20 @@ namespace {
 
 	void printMessage(const Message & msgs, size_t i)
 	{
-
-		std::cout 
-			<< "Message n. " << i  << " \n"
-			<< "Arg count: " << argCount(msgs)  << "\n"
-			<< "Prefix   : {" << msgs.prefix << "}" << "\n"
-			<< "command  : {" << msgs.command << "}"
-			<< std::endl;
+		if (i == 1)
+			std::cout << std::string(10, '-') <<std::endl;
+		std::cout
+			<< "Message #" << i  << '\n'
+			<< "Arg count: " << argCount(msgs)  << '\n'
+			<< "Prefix   : {" << msgs.prefix << "}" << '\n'
+			<< "Command  : {" << msgs.command << "}" << '\n';
 		for (size_t j = 0; j < msgs.params.size(); ++j)
 		{
-			std::cout 
-				<< "Params   : {" << msgs.params[j] << "}"
-				<< std::endl;
+			std::cout << "Params   : {" << msgs.params[j] << "}\n";
 		}
 		std::cout 
-			<< "Trailing : {" << msgs.trailing << "}"
-			<< std::endl;
-		std::cout << std::string(30, '-') <<std::endl;
+			<< "Trailing : {" << msgs.trailing << "}\n";
+		std::cout << std::string(10, '-') <<std::endl;
 	}
 }
 
@@ -61,7 +58,7 @@ bool Server::_processInputBuffer(Client *client)
 			{
 				std::cout 
 					<< "Found a message longer than MSG_MAX_LENGTH from client: " 
-					<< client->getFD() << "\n"
+					<< client->getFD() << '\n'
 					<< "eliminating all the messages appended in this batch.\n" 
 					<< "Closing connection now." 
 					<< std::endl;
@@ -80,10 +77,9 @@ bool Server::_processInputBuffer(Client *client)
 	if (DEBUG)
 	{
 		std::cout 
-			<< "Processing input buffer for client: " << client->getFD() << "\n"
-			<< "new raw strings added: " << rawStrs.size() << "\n"
-			<< "total message count: " << _msgsQueue.size()
-			<< std::endl;
+			<< "[FD " << client->getFD() << "] Input buffer processed: "
+			<< "added " << rawStrs.size() << " strings for a total of "
+			<< _msgsQueue.size() << " messages\n";
 	}
 	return true;
 }

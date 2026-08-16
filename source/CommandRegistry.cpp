@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 18:00:05 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/16 17:51:05 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/16 18:24:21 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,9 @@ int CommandRegistry::execute(IServerCtrl& srv, const Message& msg)
 	Client *client = msg.sender;
 	if (client == NULL)
 		return (rfc::NOCONN);
+	if (DEBUG)
+		std::cout << "[FD " << client->getFD() << "] Executing Command <"
+			<< msg.command << ">.\n";
 	std::map<const std::string, const Command*>::iterator it;
 	it = _commands.find(msg.command);	
 	if ( it == _commands.end())
