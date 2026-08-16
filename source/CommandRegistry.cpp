@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 18:00:05 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/16 14:45:45 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/16 15:07:17 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,9 @@ bool CommandRegistry::handleProtocolErrors(IServerCtrl& srv, int numeric,
 	switch (numeric)
 	{
 		case 0: break ;
-		case 371:
-			srv.sendMessage(client, ":CoolServ 371 :A policy has not been respected.\r\n");
-			break ;
+		// case 371:
+		// 	srv.sendMessage(client, ":CoolServ 371 :A policy has not been respected.\r\n");
+		// 	break ;
 		case rfc::BADCMD:
 			srv.sendMessage(client, ":CoolServ 421 :Command not found.\r\n");
 			break ;

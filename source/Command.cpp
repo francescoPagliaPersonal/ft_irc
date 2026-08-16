@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 18:07:43 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/16 13:59:02 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/16 15:04:00 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int Command::execute(IServerCtrl& srv, const Message& msg) const
 		int ret = _policies[i]->check(msg, srv);
 		// TODO the policy returns might need to be properly interpreted
 		if (ret)
-			return (371);
+			return (ret);
 	}
 	std::cout 
 		<< "Command::" << __FUNCTION__ << "->" << _name
