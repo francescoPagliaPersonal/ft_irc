@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 11:42:55 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/16 13:27:34 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/16 14:28:28 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,5 +25,5 @@ int cmd_pass(IServerCtrl & srv, const Message & msg)
 	{
 		client->setRegistrationFlags(REG_PASSWD);
 	}
-	return 1;
+	return 0;
 }
