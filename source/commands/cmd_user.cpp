@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 13:54:12 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/16 12:39:16 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/16 13:15:40 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ namespace  {
 		return ss.str();
 	}
 }
-int cmd_user(Server & srv, const Message & msg)
+int cmd_user(IServerCtrl & srv, const Message & msg)
 {
 	std::cout << "executing" << msg.command << std::endl;
 

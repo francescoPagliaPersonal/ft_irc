@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 13:27:46 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/14 03:04:57 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/16 11:27:04 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ class ArgsLimitPlcy : public IPolicy
 		: _min(minCount), _max(maxCount) {};
 	~ArgsLimitPlcy() {};
 
-	int check(const Message & msg, Server& srv) const
+	int check(const Message & msg, IServerCtrl& srv) const
 	{
 		Client *client = msg.sender;
 		if (client == NULL)

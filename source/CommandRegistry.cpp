@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 18:00:05 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/16 12:37:33 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/16 13:22:23 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 // OPERATION
 // -------------------------------------------------------------------------- //
 
-int CommandRegistry::execute(Server& srv, const Message& msg)
+int CommandRegistry::execute(IServerCtrl& srv, const Message& msg)
 {
 	Client *client = msg.sender;
 	if (client == NULL)

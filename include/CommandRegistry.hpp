@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 16:50:07 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/14 11:30:00 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/16 11:24:40 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 
 // -------------------------------------------------------------------------- //
 
-class Server;
+class IServerCtrl;
 
 class CommandRegistry
 {
@@ -32,7 +32,7 @@ class CommandRegistry
 		// ----
 		// ----
 		void registerCmds();
-		int execute(Server&, const Message&);
+		int execute(IServerCtrl&, const Message&);
 	private:
 		// ----
 		std::map<const std::string, const Command*>		_commands;	// maps CMD to FUNCPTR
@@ -53,6 +53,6 @@ class CommandRegistry
 
 +register(Command*) : void
 +find(string) : Command
-+run(Client*, vector<string>, Server*) : void
++run(Client*, vector<string>, IServerCtrl*) : void
 
 */

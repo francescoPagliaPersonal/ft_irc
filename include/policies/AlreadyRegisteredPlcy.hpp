@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   AlredyRegisteredPlcy.hpp                           :+:      :+:    :+:   */
+/*   AlreadyRegisteredPlcy.hpp                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 13:36:47 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/14 03:05:18 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/16 11:27:11 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ class AlredyRegisteredPlcy : public IPolicy
 	AlredyRegisteredPlcy(bool status): _status(status) {};
 	~AlredyRegisteredPlcy() {};
 
-	int check(const Message & msg, Server& srv) const
+	int check(const Message & msg, IServerCtrl& srv) const
 	{
 		(void) srv;
 		Client *client = msg.sender;

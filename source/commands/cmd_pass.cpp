@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pass.cpp                                           :+:      :+:    :+:   */
+/*   cmd_pass.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 11:42:55 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/12 11:42:57 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/16 11:27:54 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # include "Server.hpp"
 # include "Client.hpp"
 
-int cmd_pass(Server & srv, const Message & msg)
+int cmd_pass(IServerCtrl & srv, const Message & msg)
 {
 	std::cout << "executing" << msg.command << std::endl;
 

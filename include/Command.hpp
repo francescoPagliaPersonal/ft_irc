@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:15:32 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/14 12:15:52 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/16 11:24:12 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@
 
 // -------------------------------------------------------------------------- //
 
-class Server;
+class IServerCtrl;
 class IPolicy;
 
-typedef int (*command)(Server&, const Message&);
+typedef int (*command)(IServerCtrl&, const Message&);
 
 class Command
 {
@@ -36,7 +36,7 @@ class Command
 		// ----
 		std::string getName() const;
 		void addPolicy(IPolicy*);
-		int execute(Server&, const Message&) const; // TODO func type used?
+		int execute(IServerCtrl&, const Message&) const; // TODO func type used?
 	private:
 		// ----
 		std::string	_name;		// name of the command
@@ -51,10 +51,10 @@ class Command
 
 // -------------------------------------------------------------------------- //
 
-int cmd_pass(Server&, const Message&);
-int cmd_nick(Server&, const Message&);
-int cmd_user(Server&, const Message&);
-int cmd_cap(Server&, const Message&);
+int cmd_pass(IServerCtrl&, const Message&);
+int cmd_nick(IServerCtrl&, const Message&);
+int cmd_user(IServerCtrl&, const Message&);
+int cmd_cap(IServerCtrl&, const Message&);
 
 #endif
 
@@ -66,6 +66,6 @@ int cmd_cap(Server&, const Message&);
 -pointerFunction cmdFunction
 
 +addPolicy(IPlcy*) : void
-+execute(Client*, vector<string>, Server*) : void
++execute(Client*, vector<string>, IServerCtrl*) : void
 
 */

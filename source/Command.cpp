@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 18:07:43 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/16 13:09:24 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/16 13:14:51 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void Command::addPolicy(IPolicy* policy)
 	_policies.push_back(policy);
 }
 
-int Command::execute(Server& srv, const Message& msg) const
+int Command::execute(IServerCtrl& srv, const Message& msg) const
 {
 	Client *client = msg.sender;
 	if (client == NULL)

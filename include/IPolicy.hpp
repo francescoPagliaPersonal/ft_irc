@@ -15,7 +15,7 @@
 
 #include "Command.hpp"
 
-class Server;
+class IServerCtrl;
 
 class IPolicy
 {
@@ -23,7 +23,7 @@ class IPolicy
 	IPolicy() {};
 	virtual ~IPolicy() {};
 
-	virtual int		check(const Message &, Server&) const = 0;
+	virtual int		check(const Message &, IServerCtrl&) const = 0;
 
 	private:
 	IPolicy(const IPolicy & other);
