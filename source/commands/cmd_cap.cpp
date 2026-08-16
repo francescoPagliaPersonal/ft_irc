@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 13:54:12 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/16 17:55:20 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/16 20:08:21 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int cmd_cap(IServerCtrl & srv, const Message & msg)
 	Client *client = msg.sender;
 	if (client == NULL)
 		return (rfc::NOCONN); // ERR_HANGUP??
-	srv.sendMessage(*client, ":CoolServ  CAP * LS :\r\n");
+	srv.sendMessage(*client, ":CoolServ CAP * LS :\r\n");
 	
 	return (rfc::OK);
 }
