@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 13:54:12 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/16 13:32:18 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/16 14:36:36 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int cmd_user(IServerCtrl & srv, const Message & msg)
 	// should be carried out (against the whole server).
 	Client *client = msg.sender;
 	if (client == NULL)
-		return 1; // ERR_HANGUP??
+		return (rfc::NOCONN); // ERR_HANGUP??
 
 	client->setUserName(msg.params[0]);
 	client->setRealName(msg.trailing);
@@ -49,5 +49,5 @@ int cmd_user(IServerCtrl & srv, const Message & msg)
 		srv.sendMessage(*client, welcomeMessage(*client));
 	}
 	
-	return (0);
+	return (rfc::OK);
 }
