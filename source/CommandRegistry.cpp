@@ -48,6 +48,9 @@ bool CommandRegistry::handleProtocolErrors(IServerCtrl& srv, int numeric,
 		case rfc::NICKINUSE:
 			srv.sendMessage(client, ":CoolServ 433 :Nickname is already in use.\r\n");
 			break ;
+		case rfc::NOTREG:
+			srv.sendMessage(client, ":CoolServ 451 :You have not registered.\r\n");
+			break ;
 		case rfc::FEWPARAMS:
 			srv.sendMessage(client, ":CoolServ 461 :Not enough parameters.\r\n");
 			break ;

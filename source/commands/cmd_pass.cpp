@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 11:42:55 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/16 14:41:41 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/16 16:05:33 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@ int cmd_pass(IServerCtrl & srv, const Message & msg)
 	Client *client = msg.sender;
 	if (client == NULL)
 		return (rfc::NOCONN); // ERR_HANGUP??
-	if (msg.params[0] == srv.getPassword())
-	{
-		client->setRegistrationFlags(REG_PASSWD);
-		return (rfc::OK);
-	}
-	return (rfc::BADPASS);
+	if (msg.params[0] != srv.getPassword())
+		return (rfc::BADPASS);
+	if (!client->setRegistrationFlags(REG_PASSWD))
+		return (rfc::ALREADYREG);
+	srv.tryCompleteRegistration(*client);
+	return (rfc::OK);
 }

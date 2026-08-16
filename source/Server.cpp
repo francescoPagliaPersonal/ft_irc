@@ -12,6 +12,9 @@
 
 #include "Server.hpp"
 
+#include <sstream>
+// #include <arpa/inet.h> // for the commented out block below
+
 // -------------------------------------------------------------------------- //
 // OPERATION
 // -------------------------------------------------------------------------- //
@@ -80,6 +83,19 @@ void Server::sendMessage(Client& client, const std::string& str)
 	client.putReply2Buff(str);
 	// TODO consider CATCH & disconnect
 	_epoll.mod(client.getFD(), DEF_EPOLL_FL | EPOLLOUT, &client);
+}
+
+void Server::tryCompleteRegistration(Client& client)
+{
+	if (client.getRegistrationFlags() != REG_DONE)
+		return ;
+	std::stringstream ss;
+	ss  << ":CoolServ 001 " << client.getNick()
+		<< " :Welcome to the IRC "
+		<< client.getNick() << "!" << client.getUserName() << CRLF;
+		// << "@" << inet_ntoa(client.addr().sin_addr) << "\r\n";
+	std::cout << "User registration completed." << std::endl;
+	sendMessage(client, ss.str());
 }
 
 std::string Server::getPassword() const

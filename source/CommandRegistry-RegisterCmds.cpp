@@ -18,21 +18,20 @@
 void CommandRegistry::registerCmds()
 {
 	Command	*cap = new Command("CAP", cmd_cap);
-	cap->addPolicy(new AlredyRegisteredPlcy(false));
-	cap->addPolicy(new ArgsLimitPlcy(3,15));
+	cap->addPolicy(new ArgsLimitPlcy(1, 15));
 	_commands[cap->getName()] = cap;
 
 	Command	*pass = new Command("PASS", cmd_pass);
 	pass->addPolicy(new AlredyRegisteredPlcy(false));
-	pass->addPolicy(new ArgsLimitPlcy(1,1));
+	pass->addPolicy(new ArgsLimitPlcy(1, 1));
 	_commands[pass->getName()] = pass;
 
 	Command	*nick = new Command("NICK", cmd_nick);
-	nick->addPolicy(new ArgsLimitPlcy(1,2));
+	nick->addPolicy(new ArgsLimitPlcy(1, 2));
 	_commands[nick->getName()] = nick;
 
 	Command	*user = new Command("USER", cmd_user);
 	user->addPolicy(new AlredyRegisteredPlcy(false));
-	user->addPolicy(new ArgsLimitPlcy(4,4));
+	user->addPolicy(new ArgsLimitPlcy(4, 4));
 	_commands[user->getName()] = user;
 }
