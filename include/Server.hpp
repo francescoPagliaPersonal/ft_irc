@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:32:56 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/17 13:47:00 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/17 15:15:29 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,16 @@ class Server : public IServerCtrl
 		// ----
 		// ----
 		void run();
-		// interface
-		Client* findClientByNick(const std::string &);
+		// ---- Interface ----
 		std::string getPassword() const;
-		void sendMessage(Client&, const std::string&);
+		//		Clients
 		void tryCompleteRegistration(Client&);
+		void sendMessage(Client&, const std::string&);
+		Client* findClientByNick(const std::string &);
+		//		Channels
+		void addToChannel(Client*, const std::string&, const std::string&);
+		void removeFromChannel(Client*, const std::string&, const std::string&);
+		void broadcastToChannel(const std::string&, const std::string&, Client*);
 	private:
 		// ----
 		std::string				_pw;		// connection password
@@ -73,6 +78,8 @@ class Server : public IServerCtrl
 		void _addChannel(const std::string&);
 		void _removeChannel(const std::string&);
 		void _removeChannel(Channel*);
+		Channel* _getOrCreateChannel(const std::string&, const std::string&);
+		Channel* _getChannel(const std::string&);
 		// ----
 		Server();
 		Server(const Server&);
