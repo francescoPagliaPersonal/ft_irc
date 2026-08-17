@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 13:54:12 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/17 14:53:09 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/17 15:36:47 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,24 @@
 # include "Command.hpp"
 # include "IServerCtrl.hpp"
 # include "Client.hpp"
+#include "ft_irc.hpp"
+#include <string>
+
+namespace {
+	bool isCompliant(std::string& nick)
+	{
+		std::string mustNotContain(" .,*?!@");
+		std::string mustNotStartWith("$:~&#@%+");
+		
+		if (nick.size() > MAX_NICKLEN)
+			return false;
+		if (!(nick.find_first_of(mustNotContain) == std::string::npos))
+			return false;
+		if (mustNotStartWith.find_first_of(nick[0]) != std::string::npos)
+			return false;
+		return true;
+	}
+}
 
 int cmd_nick(IServerCtrl & srv, const Message & msg)
 {
@@ -22,10 +40,15 @@ int cmd_nick(IServerCtrl & srv, const Message & msg)
 	// TODO also need charset validation?
 
 	Client *client = msg.sender;
+	std::string currNick = client->getNick();
 	std::string tmpNick = msg.params[0];
 	Client *hasThisNick = srv.findClientByNick(tmpNick);
+	std::string	response(":CoolServ " + msg.command);
+	
 	if (hasThisNick != NULL && hasThisNick != client)
 		return (rfc::NICKINUSE); // ERR_NICKCOLLISION
+	if (!isCompliant(tmpNick))
+		return (rfc::NICKBAD);
 	client->setNick(tmpNick);
 
 	if (client->getRegistrationFlags() != REG_DONE)
@@ -35,6 +58,10 @@ int cmd_nick(IServerCtrl & srv, const Message & msg)
 			std::cout << "[FD " << client->getFD()
 				<< "] Nick registration successfull.\n";
 		srv.tryCompleteRegistration(*client);
+	}
+	else {
+		response += " " + tmpNick + " :" + currNick + " has changed is nickname to " + tmpNick;
+		srv.sendMessage(*client, response);
 	}
 	return (rfc::OK);
 }
