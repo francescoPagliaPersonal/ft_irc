@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/11 12:06:37 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/16 19:39:20 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/17 16:33:37 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,25 +44,5 @@ void Server::run()
 		_executeCommands();
 		// 3) housekeeping (signal, timeout, sth else?)
 		// TODO devise tasks to do
-	}
-}
-
-void Server::_executeCommands()
-{
-	int numeric = 0;
-	bool keep = true;
-
-	if (DEBUG && !_msgsQueue.empty())
-		std::cout << "[Info] Processing message queue with "
-			<< _msgsQueue.size() << " messages...\n";
-	while (!_msgsQueue.empty())
-	{
-		Message& msg = _msgsQueue.front();
-		// TODO ensure POLICY and COMMAND errors are in line with PROTOCOL CODES
-		numeric = _cmdReg.execute(*this, msg);
-		keep = _cmdReg.handleProtocolErrors(*this, numeric, msg);
-		if (!keep)
-			_disconnectClient(msg.sender);
-		_msgsQueue.pop_front();
 	}
 }

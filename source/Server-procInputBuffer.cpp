@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 10:05:02 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/16 19:39:41 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/17 16:34:00 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,18 +49,6 @@ namespace {
 		std::cout << "} trailing {" << msgs.trailing << "}\n";
 		i++;
 	}
-}
-
-void Server::_removeMsgsFromSuspicious(Client *client)
-{
-	std::deque<Message>::iterator it = _msgsQueue.begin();
-	while (it != _msgsQueue.end())
-    {
-        if (it->sender == client)
-            it = _msgsQueue.erase(it); 
-        else
-            ++it;
-    }
 }
 
 bool Server::_processInputBuffer(Client *client)
