@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 13:55:04 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/17 15:31:00 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/17 15:34:39 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,15 @@ void Server::addToChannel(Client* client,
 {
 	// TODO does the client or the server check IF client is a member?
 	Channel* channel = _getOrCreateChannel(chName, pw);
-	channel->addClient(client);
-	client->addChannel(channel);
+	if (channel->getPassword() == pw)
+	{
+		channel->addClient(client);
+		client->addChannel(channel);
+	}
+	else // TODO needs some proper code or just return false and cmd must send different reply
+	{
+		std::cout << "[Info] Channel password incorrect - consequence not handled yet.\n";
+	}
 }
 
 void Server::removeFromChannel(Client* client, const std::string& chName,
