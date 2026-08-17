@@ -21,7 +21,8 @@ SRC_MAN		:=  arg2password.cpp arg2port.cpp\
 				Server-Clients.cpp Server-Channels.cpp Server-Signals.cpp\
 				Server-Commands.cpp Server-procInputBuffer.cpp\
 				Epoll.cpp ListeningSocket.cpp ListeningSocket-CDTOR.cpp\
-				Client.cpp Client-getMessages.cpp\
+				Client.cpp Client-Buffer.cpp Client-Channels.cpp\
+				Client-getMessages.cpp Client-Get.cpp Client-Set.cpp\
 				Message.cpp\
 				Command.cpp CommandRegistry.cpp\
 				CommandRegistry-RegisterCmds.cpp\
