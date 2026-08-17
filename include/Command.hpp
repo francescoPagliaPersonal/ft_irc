@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:15:32 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/12 14:18:58 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/16 20:16:02 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,15 @@
 // -------------------------------------------------------------------------- //
 
 # include <string>
+# include <vector>
 # include "Message.hpp"
 
 // -------------------------------------------------------------------------- //
 
-class Server;
-class Client;
+class IServerCtrl;
+class IPolicy;
 
-typedef void (*command)(Server&, Client&, const Message&);
+typedef int (*command)(IServerCtrl&, const Message&);
 
 class Command
 {
@@ -33,13 +34,14 @@ class Command
 		~Command();
 		// ----
 		// ----
-		void getName() const;
-		void addPolicy();
-		void execute(Server&, Client&, const Message&);
+		std::string getName() const;
+		void addPolicy(IPolicy*);
+		int execute(IServerCtrl&, const Message&) const;
 	private:
 		// ----
-		std::string	_name;		// name of the command
-		command 	_func;		// function handler for the command
+		std::string	_name;				 // name of the command
+		command 	_func;				 // function handler for the command
+		std::vector<IPolicy*> _policies; // active policies per command
 		// ----
 		// ----
 		Command();
@@ -48,6 +50,12 @@ class Command
 };
 
 // -------------------------------------------------------------------------- //
+
+int cmd_pass(IServerCtrl&, const Message&);
+int cmd_nick(IServerCtrl&, const Message&);
+int cmd_user(IServerCtrl&, const Message&);
+int cmd_cap(IServerCtrl&, const Message&);
+int cmd_ping(IServerCtrl&, const Message&);
 
 #endif
 
@@ -59,6 +67,6 @@ class Command
 -pointerFunction cmdFunction
 
 +addPolicy(IPlcy*) : void
-+execute(Client*, vector<string>, Server*) : void
++execute(Client*, vector<string>, IServerCtrl*) : void
 
 */

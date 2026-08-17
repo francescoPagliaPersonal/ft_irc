@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/10 00:45:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/12 15:29:17 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/14 12:03:52 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,4 +59,5 @@ Server::Server(int port, std::string pw)
 	_captureSignals();
 	// Client class
 	// CommandDispatch class
+	_cmdReg.registerCmds();
 }

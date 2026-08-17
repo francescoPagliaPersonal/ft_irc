@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:52:36 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/12 15:21:45 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/16 19:27:37 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ void printEscaped(std::ostream& os, const std::string& s)
 
 Client::Client(int fd, const struct sockaddr_in& addr)
 	: _fd(fd)
+	, _registrationFlags(0)
 {
 	(void) addr;
 }
@@ -98,11 +99,13 @@ e_pollret Client::receiveToBuffer()
 		return (RET_CLOSE);
 	buf[ret] = '\0';
 	_bufIN.append(buf);
-	if (DEBUG)
+	if (DEBUG == debug::DETAILED)
 	{
-		std::cout << "[FD " << _fd << "] Buffer received "<< ret << " chars:\n";
+		std::cout << "[FD " << _fd << "] Received "<< ret
+			<< " chars. Input buffer contains:\n";
 		printEscaped(std::cout, _bufIN);
-		std::cout << std::endl;
+		if (_bufIN.size() && _bufIN[_bufIN.size() - 1] != '\n')
+			std::cout << std::endl;
 	}
 	return (RET_PARSEINPUT);
 }
@@ -129,6 +132,58 @@ e_pollret Client::sendFromBuffer()
 		_bufOUT = _bufOUT.substr(ret);
 		return (RET_HASOUTPUT);
 	}
+}
+
+void	Client::putReply2Buff(const std::string& str)
+{
+	
+	_bufOUT.append(str);
+	if (DEBUG)
+		std::cout << "[FD " << _fd << "] Appending to output buffer:\n" << str;
+}
+
+bool Client::setRegistrationFlags(int flags)
+{
+	if (!(_registrationFlags & flags))
+	{
+		_registrationFlags |= flags;
+		return true;
+	}
+	return false;
+}
+
+int Client::getRegistrationFlags() const
+{
+	return (_registrationFlags);
+}
+
+std::string Client::getNick() const
+{
+	return _nick;
+}
+void Client::setNick(const std::string & str)
+{
+	_nick = str;
+}
+
+std::string Client::getUserName() const
+{
+	return _userName;
+}
+
+void Client::setUserName(const std::string & str)
+{
+	_userName = str; 
+}
+
+std::string Client::getRealName() const
+{
+	return _realName;
+}
+
+void Client::setRealName(const std::string & str)
+{
+	_realName = str; 
 }
 
 // -------------------------------------------------------------------------- //

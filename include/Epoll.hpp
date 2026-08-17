@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 16:56:53 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/12 14:20:02 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/16 18:01:57 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ class Epoll
 		int wait(struct epoll_event*, int, int);
 	private:
 		// ----
-		int		_fd;
+		int		_fd; // the epoll fd
 		// ----
 		// ----
 		Epoll(const Epoll&);

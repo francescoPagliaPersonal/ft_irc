@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/11 12:06:37 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/12 14:21:28 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/16 19:39:20 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ void Server::run()
 	while (_isAlive)
 	{
 		int readyFDs = _epoll.wait(ev, MAX_EVENTS, TIMEOUT);
+		if (readyFDs != 0 && DEBUG && ev->events & EPOLLIN)
+			std::cout << std::endl;
 		// 1) epoll() stuff
 		for (int i = 0; i < readyFDs; i++)
 		{
@@ -38,11 +40,29 @@ void Server::run()
 			// B) normal client (EPOLLIN/EPOLLOUT, filling/emptying our buffers)
 			_handleClientEvent(ev[i]);
 		}
-		// 2) work the command queue (execute read buff, create write buff)
-		_executeCommands(); // TODO uses some container of messages & clients; executes message array
+		// 2) work the command queue (execute msg queue, fill client write buff)
+		_executeCommands();
 		// 3) housekeeping (signal, timeout, sth else?)
+		// TODO devise tasks to do
 	}
 }
 
 void Server::_executeCommands()
-{}
+{
+	int numeric = 0;
+	bool keep = true;
+
+	if (DEBUG && !_msgsQueue.empty())
+		std::cout << "[Info] Processing message queue with "
+			<< _msgsQueue.size() << " messages...\n";
+	while (!_msgsQueue.empty())
+	{
+		Message& msg = _msgsQueue.front();
+		// TODO ensure POLICY and COMMAND errors are in line with PROTOCOL CODES
+		numeric = _cmdReg.execute(*this, msg);
+		keep = _cmdReg.handleProtocolErrors(*this, numeric, msg);
+		if (!keep)
+			_disconnectClient(msg.sender);
+		_msgsQueue.pop_front();
+	}
+}
