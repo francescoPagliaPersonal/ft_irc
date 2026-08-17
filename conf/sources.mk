@@ -23,7 +23,9 @@ SRC_MAN		:=  arg2password.cpp arg2port.cpp\
 				Epoll.cpp ListeningSocket.cpp ListeningSocket-CDTOR.cpp\
 				Client.cpp Client-getMessages.cpp\
 				Message.cpp\
-				Command.cpp CommandRegistry.cpp CommandRegistry-RegisterCmds.cpp\
+				Command.cpp CommandRegistry.cpp\
+				CommandRegistry-RegisterCmds.cpp\
+				CommandRegistry-handleProtocolErrors.cpp\
 				Channel.cpp\
 				main.cpp
 SRC_BON		:= 
