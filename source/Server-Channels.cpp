@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 13:55:04 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/17 15:23:53 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/17 15:31:00 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ void Server::removeFromChannel(Client* client, const std::string& chName,
 {
 	// TODO does the client or the server check IF client is a member?
 	Channel* channel = _getChannel(chName);
+	if (!channel)
+		return ;
 	channel->removeClient(client);
 	client->removeChannel(channel);
 	(void) msg; // TODO depends on what the protocol needs...no idea right now
@@ -70,15 +72,27 @@ void Server::_removeChannel(Channel* channel)
 // Remove a channel by title.
 void Server::_removeChannel(const std::string& title)
 {
-	Channel* channel = _channels[title];
+	Channel* channel;
+	std::map<std::string, Channel*>::iterator it;
+
+	it = _channels.find(title);
+	if (it == _channels.end())
+		return ;
+	channel = it->second;
 	_channels.erase(title);
 	delete channel;
 }
 
 Channel* Server::_getChannel(const std::string& chName)
 {
-	// TODO is it safe? this is only for when we know the channel must exist
-	return (_channels[chName]);
+	// TODO is this safe enough? this function should only be called when we know the channel exists...
+	std::map<std::string, Channel*>::iterator it;
+
+	it = _channels.find(chName);
+	if (it == _channels.end())
+		return (NULL);
+	else
+		return (it->second);
 }
 
 Channel* Server::_getOrCreateChannel(const std::string& chName, const std::string& pw)
