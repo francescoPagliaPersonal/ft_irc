@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:52:36 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/17 15:11:52 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/17 16:57:08 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,12 +73,6 @@ Client::~Client()
 int Client::getFD() const
 {
 	return (_fd);
-}
-
-// Appends MSG directly to the output buffer.
-void Client::debugWriteToBuffer(const std::string& msg)
-{
-	_bufOUT.append(msg);
 }
 
 // Retrieve data via recv() once and write it to input buffer on success.
