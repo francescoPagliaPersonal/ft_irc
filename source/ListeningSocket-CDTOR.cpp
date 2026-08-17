@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ListeningSocket-Init.cpp                           :+:      :+:    :+:   */
+/*   ListeningSocket-CDTOR.cpp                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/10 01:00:26 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/12 15:27:13 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/17 16:47:07 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <netinet/in.h>		// struct sockaddr_in
 #include <netdb.h>			// getprotobyname, struct protoent
 #include <fcntl.h>			// fcntl
+#include <unistd.h>			// close
 
 #include <cerrno>
 #include <cstring>
@@ -95,4 +96,10 @@ ListeningSocket::ListeningSocket(unsigned short port)
 	_fd = createNewSocket();
 	bindAddrToFD(_fd, port);
 	configureFD(_fd);
+}
+
+ListeningSocket::~ListeningSocket()
+{
+	if (_fd >= 0)
+		::close(_fd);
 }

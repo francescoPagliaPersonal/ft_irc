@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:55:20 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/12 15:25:04 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/17 16:47:02 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 #include <sys/socket.h>		// socket, setsockopt, bind, listen, accept
 #include <netinet/in.h>		// struct sockaddr_in
 #include <fcntl.h>			// fcntl
-#include <unistd.h>			// close
 
 #include <cerrno>
 #include <cstring>
@@ -68,12 +67,6 @@ int ListeningSocket::acceptConnection(struct sockaddr_in& ipAddr)
 // -------------------------------------------------------------------------- //
 // OCF
 // -------------------------------------------------------------------------- //
-
-ListeningSocket::~ListeningSocket()
-{
-	if (_fd >= 0)
-		::close(_fd);
-}
 
 ListeningSocket::ListeningSocket()
 	: _fd(-1)
