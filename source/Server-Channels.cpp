@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 13:55:04 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/17 15:04:39 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/17 15:21:07 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,10 @@ Channel* Server::_getOrCreateChannel(const std::string& chName, const std::strin
 
 	it = _channels.find(chName);
 	if (it == _channels.end())
+	{
 		channel = new Channel(chName, pw);
+		_channels[chName] = channel;
+	}
 	else
 		channel = it->second;
 	return (channel);
