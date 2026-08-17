@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_ping.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/16 20:13:56 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/16 20:15:53 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/17 14:53:21 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,7 @@
 int cmd_ping(IServerCtrl& srv, const Message& msg)
 {
 	Client *client = msg.sender;
-	if (client == NULL) // FIXME beware, this is broken; shouldn't even be possible?
-		return (rfc::NOCONN);
-
+	
 	std::string token;
 	if (!msg.params.empty())
 		token = msg.params[0];
