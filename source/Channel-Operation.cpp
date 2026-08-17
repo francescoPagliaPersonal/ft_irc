@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 17:13:52 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/17 17:19:46 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/17 17:41:36 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,19 @@
 // OPERATION
 // -------------------------------------------------------------------------- //
 
+// Add CLIENT to the channel's member list.
 void Channel::addClient(const Client* client)
 {
 	_members[client] = 0;
 }
 
+// Remove CLIENT from the channel's member list.
 void Channel::removeClient(const Client* client)
 {
 	_members.erase(client);
 }
 
+// Check if the channel has no members left.
 bool Channel::isEmpty() const
 {
 	if (_members.empty())

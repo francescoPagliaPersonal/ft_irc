@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 17:10:07 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/17 17:10:39 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/17 17:41:59 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,13 @@
 // CHANNEL INTERACTION
 // -------------------------------------------------------------------------- //
 
+// Add CHANNEL to the client's list of joined channels.
 void Client::addChannel(Channel* channel)
 {
 	_channels.push_back(channel);
 }
 
+// Remove CHANNEL from the client's list of joined channels.
 void Client::removeChannel(Channel* channel)
 {
 	std::vector<Channel*>::iterator it;
@@ -34,6 +36,7 @@ void Client::removeChannel(Channel* channel)
 	}
 }
 
+// Check if the client is a member of CHANNEL.
 bool Client::isChannelMember(Channel* channel) const
 {
 	std::vector<Channel*>::const_iterator it;

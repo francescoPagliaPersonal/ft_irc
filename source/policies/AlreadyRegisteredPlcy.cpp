@@ -13,6 +13,7 @@
 #include "ft_irc.hpp"
 #include "policies/AlreadyRegisteredPlcy.hpp"
 
+// Validate the sender's registration state against the policy's _status.
 int AlreadyRegisteredPlcy::check(const Message & msg, IServerCtrl& srv) const
 {
 	(void) srv;

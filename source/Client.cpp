@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:52:36 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/17 17:17:04 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/17 17:42:26 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 // CUSTOM CTOR & DTOR
 // -------------------------------------------------------------------------- //
 
+// Custom constructor to set up a new client with FD and ADDR.
 Client::Client(int fd, const struct sockaddr_in& addr)
 	: _fd(fd)
 	, _registrationFlags(0)
@@ -25,6 +26,7 @@ Client::Client(int fd, const struct sockaddr_in& addr)
 	(void) addr; // TODO do sth with the address
 }
 
+// Closes the client's FD if it is still open.
 Client::~Client()
 {
 	if (_fd > -1)

@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 18:00:05 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/17 16:52:38 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/17 17:42:53 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 // OPERATION
 // -------------------------------------------------------------------------- //
 
+// Lookup MSG's command and execute it on SRV; returns a protocol numeric.
 int CommandRegistry::execute(IServerCtrl& srv, const Message& msg)
 {
 	Client *client = msg.sender;

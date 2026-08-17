@@ -6,13 +6,15 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 16:52:31 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/17 16:52:57 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/17 17:42:42 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "CommandRegistry.hpp"
 #include "IServerCtrl.hpp"
 
+// Send the proper protocol reply for NUMERIC to the message's sender;
+// returns false if the client should be disconnected.
 bool CommandRegistry::handleProtocolErrors(IServerCtrl& srv, int numeric,
 	const Message& msg)
 {

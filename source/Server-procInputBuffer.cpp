@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 10:05:02 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/17 16:34:00 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/17 17:45:52 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ namespace {
 	}
 }
 
+// Convert the client's raw strings into messages and queue them;
+// returns false if a message exceeds the protocol limit.
 bool Server::_processInputBuffer(Client *client)
 {
 	std::vector<std::string> rawStrs = client->getRawStrings();

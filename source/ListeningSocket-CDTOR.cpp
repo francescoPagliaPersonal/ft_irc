@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/10 01:00:26 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/17 16:47:07 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/17 17:43:22 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,7 @@ ListeningSocket::ListeningSocket(unsigned short port)
 	configureFD(_fd);
 }
 
+// Close the listening socket's FD.
 ListeningSocket::~ListeningSocket()
 {
 	if (_fd >= 0)

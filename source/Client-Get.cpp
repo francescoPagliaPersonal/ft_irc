@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 17:07:36 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/17 17:08:37 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/17 17:42:05 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,21 +22,25 @@ int Client::getFD() const
 	return (_fd);
 }
 
+// Return Client's registration flags bitmask.
 int Client::getRegistrationFlags() const
 {
 	return (_registrationFlags);
 }
 
+// Return Client's nick name.
 std::string Client::getNick() const
 {
 	return _nick;
 }
 
+// Return Client's user name.
 std::string Client::getUserName() const
 {
 	return _userName;
 }
 
+// Return Client's real name.
 std::string Client::getRealName() const
 {
 	return _realName;

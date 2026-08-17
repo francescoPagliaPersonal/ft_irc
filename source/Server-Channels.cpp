@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 13:55:04 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/17 16:36:07 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/18 08:58:53 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,11 @@
 #include "Channel.hpp"
 
 // -------------------------------------------------------------------------- //
-// INTERFACE
+// INTERFACE -- CHANNELS
 // -------------------------------------------------------------------------- //
 
+// Add CLIENT to the channel CHNAME, creating it first if it does not
+// exist yet; the channel password must match PW.
 void Server::addToChannel(Client* client,
 						  const std::string& title,
 						  const std::string& pw = "")
@@ -39,6 +41,7 @@ void Server::addToChannel(Client* client,
 	}
 }
 
+// Remove CLIENT from the channel CHNAME and clean up empty channels.
 void Server::removeFromChannel(Client* client, const std::string& title,
 							   const std::string& reason)
 {
@@ -53,6 +56,7 @@ void Server::removeFromChannel(Client* client, const std::string& title,
 	(void) reason; // TODO depends on what the protocol needs...no idea right now
 }
 
+// Send MSG to all members of the channel CHNAME, optionally excluding SENDER.
 void Server::broadcastToChannel(const std::string& title,
 						const std::string& msg,
 						Client* sender = NULL)
@@ -64,7 +68,7 @@ void Server::broadcastToChannel(const std::string& title,
 }
 
 // -------------------------------------------------------------------------- //
-// PRIVATE
+// PRIVATE -- CHANNELS
 // -------------------------------------------------------------------------- //
 
 // Add a new channel with TITLE.
@@ -97,6 +101,7 @@ void Server::_removeChannel(const std::string& title)
 	delete channel;
 }
 
+// Lookup a channel by name and return its pointer, or NULL if not found.
 Channel* Server::_getChannel(const std::string& title)
 {
 	// TODO is this safe enough? this function should only be called when we know the channel exists...
@@ -109,6 +114,7 @@ Channel* Server::_getChannel(const std::string& title)
 		return (it->second);
 }
 
+// Lookup a channel by name, creating a new one with PW if it does not exist.
 Channel* Server::_getOrCreateChannel(const std::string& title, const std::string& pw)
 {
 	Channel* channel;

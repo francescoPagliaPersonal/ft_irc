@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 16:27:31 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/17 16:38:26 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/17 17:45:28 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 // #include <arpa/inet.h> // for the commented out block below
 
 // -------------------------------------------------------------------------- //
-// INTERFACE
+// INTERFACE -- CLIENTS
 // -------------------------------------------------------------------------- //
 
 // Lookup client by NICK and return its pointer. Returns NULL if nothing found.
@@ -32,6 +32,7 @@ Client* Server::findClientByNick(const std::string & nick)
 	return NULL;
 }
 
+// Send the welcome message once the client finished the registration handshake.
 void Server::tryCompleteRegistration(Client& client)
 {
 	if (client.getRegistrationFlags() != REG_DONE)
@@ -45,6 +46,7 @@ void Server::tryCompleteRegistration(Client& client)
 	sendMessage(client, ss.str());
 }
 
+// Queue STR for sending to CLIENT and enable the EPOLLOUT interest.
 void Server::sendMessage(Client& client, const std::string& str)
 {
 	// TODO drop connection if bufOUT grows too much? or do we drop if kernel buffer stays full?
@@ -54,7 +56,7 @@ void Server::sendMessage(Client& client, const std::string& str)
 }
 
 // -------------------------------------------------------------------------- //
-// PRIVATE
+// PRIVATE -- CLIENTS
 // -------------------------------------------------------------------------- //
 
 // Creates new client and registers FD with epoll.
