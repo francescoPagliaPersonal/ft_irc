@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 13:55:04 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/17 15:21:07 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/17 15:23:53 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 
 void Server::addToChannel(Client* client,
 						  const std::string& chName,
-						  const std::string& pw = NULL)
+						  const std::string& pw = "")
 {
 	// TODO does the client or the server check IF client is a member?
 	Channel* channel = _getOrCreateChannel(chName, pw);
