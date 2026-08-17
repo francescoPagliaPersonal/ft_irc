@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:52:36 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/16 19:27:37 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/17 15:11:52 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,6 +184,37 @@ std::string Client::getRealName() const
 void Client::setRealName(const std::string & str)
 {
 	_realName = str; 
+}
+
+void Client::addChannel(Channel* channel)
+{
+	_channels.push_back(channel);
+}
+
+void Client::removeChannel(Channel* channel)
+{
+	std::vector<Channel*>::iterator it;
+	for (it = _channels.begin(); it != _channels.end(); it++)
+	{
+		if (*it == channel)
+		{
+			_channels.erase(it);
+			break ;
+		}
+	}
+}
+
+bool Client::isChannelMember(Channel* channel) const
+{
+	std::vector<Channel*>::const_iterator it;
+	for (it = _channels.begin(); it != _channels.end(); it++)
+	{
+		if (*it == channel)
+		{
+			return (true);
+		}
+	}
+	return (false);
 }
 
 // -------------------------------------------------------------------------- //
