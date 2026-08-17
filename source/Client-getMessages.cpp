@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client-getMessages.cpp                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 09:16:39 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/12 09:16:57 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/17 12:10:15 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
