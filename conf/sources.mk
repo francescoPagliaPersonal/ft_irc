@@ -22,7 +22,7 @@ SRC_MAN		:=  arg2password.cpp arg2port.cpp\
 				Epoll.cpp ListeningSocket.cpp ListeningSocket-Init.cpp\
 				Client.cpp Client-getMessages.cpp\
 				Message.cpp\
-				Command.cpp CommandRegistry.cpp\
+				Command.cpp CommandRegistry.cpp CommandRegistry-RegisterCmds.cpp\
 				main.cpp
 SRC_BON		:= 
 
@@ -31,3 +31,13 @@ SRC_BON		:=
 #   SRC_PARSER = tokenize.c parse.c
 #   SRC_MAN   += $(addprefix $(DIR_PARSER),$(SRC_PARSER))
 # Mixed example: SRC_MAN := main.cpp util.c
+
+# Commands
+DIR_CMDS = commands/
+SRC_CMDS = cmd_cap.cpp cmd_nick.cpp cmd_pass.cpp cmd_user.cpp cmd_ping.cpp
+SRC_MAN   += $(addprefix $(DIR_CMDS),$(SRC_CMDS))
+
+# Policies
+DIR_PLCY = policies/
+SRC_PLCY = AlreadyRegisteredPlcy.cpp ArgsLimitPlcy.cpp 
+SRC_MAN   += $(addprefix $(DIR_PLCY),$(SRC_PLCY))

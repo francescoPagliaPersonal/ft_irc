@@ -1,34 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Client-getMessages.cpp                             :+:      :+:    :+:   */
+/*   AlreadyRegisteredPlcy.hpp                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/08/12 09:16:39 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/17 12:10:15 by mweghofe         ###   ########.fr       */
+/*   Created: 2026/08/12 13:36:47 by fpaglia           #+#    #+#             */
+/*   Updated: 2026/08/17 12:10:20 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifndef ALREADYREGISTEREDPLCY_HPP
+# define ALREADYREGISTEREDPLCY_HPP
+
 #include "Client.hpp"
+#include "IPolicy.hpp"
 
-std::vector<std::string>		Client::getRawStrings()
+
+class AlreadyRegisteredPlcy : public IPolicy
 {
-	std::vector<std::string>	msgs;
-	std::string::size_type		pos = 0;
+	public:
+	AlreadyRegisteredPlcy(bool status): _status(status) {};
+	~AlreadyRegisteredPlcy() {};
 
-	while (pos != std::string::npos)
-	{
-		pos = _bufIN.find(CRLF, 0);
-		if (pos == std::string::npos)
-		{
-			if (_bufIN.size() > MSG_MAX_LENGTH)
-				msgs.push_back(_bufIN);
-			break;
-		}
-		msgs.push_back(_bufIN.substr(0, pos));
-		// _bufIN = _bufIN.substr(pos + 2);
-		_bufIN.erase(0, pos + 2 );
-	}
-	return msgs;
-}
+	int check(const Message & msg, IServerCtrl& srv) const;
+
+	private:
+	bool	_status;
+
+};
+
+#endif
