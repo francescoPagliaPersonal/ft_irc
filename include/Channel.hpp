@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/13 10:19:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/13 19:54:21 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/17 15:36:28 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ class Channel
 		std::string getTopic() const;
 		std::string getPassword() const;
 		t_uint getLimit() const;
+		bool isEmpty() const;
 		// ---- set
 		void setTopic(const std::string&);
 		void setPassword(const std::string&);

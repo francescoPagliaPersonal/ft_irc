@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/13 10:59:59 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/13 20:00:22 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/17 15:36:56 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,13 @@ std::string Channel::getTopic() const
 std::string Channel::getPassword() const
 {
 	return (_password);
+}
+
+bool Channel::isEmpty() const
+{
+	if (_members.empty())
+		return (true);
+	return (false);
 }
 
 void Channel::setTopic(const std::string& topic)

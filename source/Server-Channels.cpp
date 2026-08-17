@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 13:55:04 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/17 15:34:39 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/17 15:37:18 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ void Server::removeFromChannel(Client* client, const std::string& chName,
 		return ;
 	channel->removeClient(client);
 	client->removeChannel(channel);
+	if (channel->isEmpty())
+		_removeChannel(channel);
 	(void) msg; // TODO depends on what the protocol needs...no idea right now
 }
 
