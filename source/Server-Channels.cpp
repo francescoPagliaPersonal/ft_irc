@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server-Channels.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 13:55:04 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/18 11:02:52 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/18 11:50:17 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,11 @@
 #include "Channel.hpp"
 
 // -------------------------------------------------------------------------- //
-// PUBLIC
+// INTERFACE -- CHANNELS
 // -------------------------------------------------------------------------- //
 
+// Add CLIENT to the channel CHNAME, creating it first if it does not
+// exist yet; the channel password must match PW.
 void Server::addToChannel(Client* client,
 						  const std::string& title,
 						  const std::string& pw = "")
@@ -40,6 +42,7 @@ void Server::addToChannel(Client* client,
 	}
 }
 
+// Remove CLIENT from the channel CHNAME and clean up empty channels.
 void Server::removeFromChannel(Client* client, const std::string& title,
 							   const std::string& reason)
 {
@@ -54,13 +57,15 @@ void Server::removeFromChannel(Client* client, const std::string& title,
 	(void) reason; // TODO depends on what the protocol needs...no idea right now
 }
 
+// Send MSG to all members of CHANNEL, optionally excluding SENDER.
 void Server::broadcastToChannel(Channel* channel,
 						const std::string& msg,
 						Client* sender = NULL)
 {
 	broadcastToChannel(channel->getTitle(), msg, sender);
 }
-						
+
+// Send MSG to all members of the channel TITLE, optionally excluding SENDER.
 void Server::broadcastToChannel(const std::string& title,
 						const std::string& msg,
 						Client* sender = NULL)
@@ -72,7 +77,7 @@ void Server::broadcastToChannel(const std::string& title,
 }
 
 // -------------------------------------------------------------------------- //
-// PRIVATE
+// PRIVATE -- CHANNELS
 // -------------------------------------------------------------------------- //
 
 // Remove a channel by channel pointer.
@@ -92,6 +97,7 @@ void Server::_removeChannel(const std::string& title)
 		_removeChannel(channel);
 }
 
+// Lookup a channel by name and return its pointer, or NULL if not found.
 Channel* Server::_getChannel(const std::string& title)
 {
 	// TODO is this safe enough? this function should only be called when we know the channel exists...
@@ -104,6 +110,7 @@ Channel* Server::_getChannel(const std::string& title)
 		return (it->second);
 }
 
+// Lookup a channel by name, creating a new one with PW if it does not exist.
 Channel* Server::_getOrCreateChannel(const std::string& title, const std::string& pw)
 {
 	Channel* channel;

@@ -33,6 +33,7 @@ namespace {
 	}
 }
 
+// Set the client's nick if it is not already taken by another client.
 int cmd_nick(IServerCtrl & srv, const Message & msg)
 {
 	// TODO: this is just a quick proof of concept more complex nick evaluation 

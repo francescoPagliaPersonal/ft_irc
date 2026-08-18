@@ -13,6 +13,7 @@
 #include "ft_irc.hpp"
 #include "policies/ArgsLimitPlcy.hpp"
 
+// Validate that MSG has between _min and _max arguments.
 int ArgsLimitPlcy::check(const Message & msg, IServerCtrl& srv) const
 {
 	(void) srv;

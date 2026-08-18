@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 12:22:04 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/09 20:50:52 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/17 17:41:18 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ bool contains_aSpecialChar(std::string & passwd)
 }
 } // end of namespace
 
+// Convert a password string, validating length and character classes.
 std::string	arg2password(const char *passwd_str)
 {
 	std::string	passwd(passwd_str);

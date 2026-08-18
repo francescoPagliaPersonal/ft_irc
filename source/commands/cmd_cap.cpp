@@ -15,6 +15,7 @@
 # include "IServerCtrl.hpp"
 # include "Client.hpp"
 
+// Handle the CAP command; currently a stub to advance the handshake.
 int cmd_cap(IServerCtrl & srv, const Message & msg)
 {
 	// TODO need more content? currently is empty stub to advance handshake

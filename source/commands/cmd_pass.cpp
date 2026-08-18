@@ -15,6 +15,7 @@
 # include "Client.hpp"
 # include "ft_irc.hpp"
 
+// Verify the server password and set the PASSWD registration flag.
 int cmd_pass(IServerCtrl & srv, const Message & msg)
 {
 	Client *client = msg.sender;

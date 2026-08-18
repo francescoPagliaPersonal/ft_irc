@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 10:05:02 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/16 19:39:41 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/17 17:45:52 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,18 +51,8 @@ namespace {
 	}
 }
 
-void Server::_removeMsgsFromSuspicious(Client *client)
-{
-	std::deque<Message>::iterator it = _msgsQueue.begin();
-	while (it != _msgsQueue.end())
-    {
-        if (it->sender == client)
-            it = _msgsQueue.erase(it); 
-        else
-            ++it;
-    }
-}
-
+// Convert the client's raw strings into messages and queue them;
+// returns false if a message exceeds the protocol limit.
 bool Server::_processInputBuffer(Client *client)
 {
 	std::vector<std::string> rawStrs = client->getRawStrings();

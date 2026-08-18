@@ -1,51 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Server.cpp                                         :+:      :+:    :+:   */
+/*   Channel-Operation.cpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/08/09 14:42:26 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/17 17:46:00 by mweghofe         ###   ########.fr       */
+/*   Created: 2026/08/17 17:13:52 by mweghofe          #+#    #+#             */
+/*   Updated: 2026/08/17 17:41:36 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Server.hpp"
+#include "Channel.hpp"
 
 // -------------------------------------------------------------------------- //
 // OPERATION
 // -------------------------------------------------------------------------- //
 
-// Return the server's password.
-std::string Server::getPassword() const
+// Add CLIENT to the channel's member list.
+void Channel::addClient(const Client* client)
 {
-	return (_pw);
+	_members[client] = 0;
 }
 
-// -------------------------------------------------------------------------- //
-// OCF
-// -------------------------------------------------------------------------- //
-
-Server::Server()
-	: _pw("")
-	, _listener(-1)
-	, _clients()
-	, _epoll()
-	, _cmdReg()
-{}
-
-Server::Server(const Server& other)
-	: _pw("")
-	, _listener(-1)
-	, _clients()
-	, _epoll()
-	, _cmdReg()
+// Remove CLIENT from the channel's member list.
+void Channel::removeClient(const Client* client)
 {
-	(void) other;
+	_members.erase(client);
 }
 
-Server Server::operator=(const Server& other)
+// Check if the channel has no members left.
+bool Channel::isEmpty() const
 {
-	(void) other;
-	return (*this);
+	if (_members.empty())
+		return (true);
+	return (false);
 }
