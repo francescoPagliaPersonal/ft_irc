@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 16:52:31 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/18 14:24:37 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/18 14:40:00 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ bool CommandRegistry::handleProtocolErrors(IServerCtrl& srv, int numeric,
 			break ;
 		case rfc::NONICK:
 			srv.sendMessage(client, response.str() + " :No nickname given.\r\n");
+			break ;
 		case rfc::NICKINUSE:
 			response << client.getNick() << " " << msg.params[0];
 			srv.sendMessage(client, response.str() + " :Nickname is already in use.\r\n");

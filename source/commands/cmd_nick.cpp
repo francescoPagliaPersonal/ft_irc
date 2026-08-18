@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 13:54:12 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/18 12:23:49 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/18 14:36:02 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # include "Command.hpp"
 # include "IServerCtrl.hpp"
 # include "Client.hpp"
+#include "Message.hpp"
 #include "ft_irc.hpp"
 #include <string>
 
@@ -38,6 +39,8 @@ int cmd_nick(IServerCtrl & srv, const Message & msg)
 {
 	Client *client = msg.sender;
 	std::string currNick = client->getNick();
+	if (!(msg.flags & MSG_HAS_PARAMS))
+		return (rfc::NONICK);
 	std::string tmpNick = msg.params[0];
 	Client *hasThisNick = srv.findClientByNick(tmpNick);
 	std::string	response(":" + currNick + " " + msg.command);
