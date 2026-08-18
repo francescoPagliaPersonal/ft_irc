@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 16:52:31 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/20 00:13:13 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/20 00:17:46 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,11 @@ bool CommandRegistry::handleProtocolErrors(IServerCtrl& srv, int numeric,
 	if (numeric == rfc::NOCONN)
 		return (false);
 	Client& client = *msg.sender;
-	std::string reply(":CoolServ ");
-	std::map<t_uint, rfcResponse>::iterator it;
+	std::stringstream reply;
 	if (numeric != rfc::OK)
 	{
+		reply << ":CoolServ " << numeric << ' ' << client.getNick() << ' ';
+		std::map<t_uint, rfcResponse>::iterator it;
 		// FIXME eventually this shouldn't be needed anymore
 		it = _rfcCodes.find(numeric);
 		if (it == _rfcCodes.end())
@@ -41,8 +42,8 @@ bool CommandRegistry::handleProtocolErrors(IServerCtrl& srv, int numeric,
 				<< std::endl;
 			return (true);
 		}
-		reply.append(_rfcCodes[numeric](msg, client.getNick()));
-		srv.sendMessage(client, reply);
+		reply << _rfcCodes[numeric](msg);
+		srv.sendMessage(client, reply.str());
 	}
 	return (true);
 }

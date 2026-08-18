@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/18 12:35:10 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/20 00:14:36 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/20 00:18:11 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,72 +28,64 @@ void CommandRegistry::registerCodes()
 namespace rfc
 {
 
-std::string nickInUse(const Message& msg, const std::string& nick)
+std::string nickInUse(const Message& msg)
 {
-	std::stringstream ss;
-	ss << rfc::NICKNAMEINUSE << ' ' << nick << ' ' << msg.params[0]
-		<< " :Nickname is already in use." << CRLF;
-	return (ss.str());
+	std::string rpl;
+	rpl = msg.params[0] + " :Nickname is already in use." + CRLF;
+	return (rpl);
 }
 
-std::string badCmd(const Message& msg, const std::string& nick)
+std::string badCmd(const Message& msg)
 {
-	std::stringstream ss;
-	ss << rfc::UNKNOWNCOMMAND << ' ' << nick << " <" << msg.command
-		<< "> :Command not found." << CRLF;
-	return (ss.str());
+	std::string rpl;
+	rpl = "<" + msg.command + "> :Command not found." + CRLF;
+	return (rpl);
 }
 
-std::string notRegistered(const Message& msg, const std::string& nick)
+std::string notRegistered(const Message& msg)
 {
-	std::stringstream ss;
+	std::string rpl(":You have not registered.");
 	(void) msg;
-	ss << rfc::NOTREGISTERED << ' ' << nick
-		<< " :You have not registered." << CRLF;
-	return (ss.str());
+	rpl += CRLF;
+	return (rpl);
 }
 
-std::string tooFewParams(const Message& msg, const std::string& nick)
+std::string tooFewParams(const Message& msg)
 {
-	std::stringstream ss;
-	ss << rfc::NEEDMOREPARAMS << ' ' << nick << " <" << msg.command
-		<< "> :Not enough parameters." << CRLF;
-	return (ss.str());
+	std::string rpl;
+	rpl = '<' + msg.command + "> :Not enough parameters." + CRLF;
+	return (rpl);
 }
 
-std::string alreadyRegistered(const Message& msg, const std::string& nick)
+std::string alreadyRegistered(const Message& msg)
 {
-	std::stringstream ss;
+	std::string rpl(":This user is already registered.");
 	(void) msg;
-	ss << rfc::ALREADYREGISTERED << ' ' << nick
-		<< " :This user is already registered." << CRLF;
-	return (ss.str());
+	rpl += CRLF;
+	return (rpl);
 }
 
-std::string badPassword(const Message& msg, const std::string& nick)
+std::string badPassword(const Message& msg)
 {
-	std::stringstream ss;
+	std::string rpl(":Password incorrect.");
 	(void) msg;
-	ss << rfc::PASSWDMISMATCH << ' ' << nick
-		<< " :Password incorrect." << CRLF;
-	return (ss.str());
+	rpl += CRLF;
+	return (rpl);
 }
 
-std::string noNick(const Message& msg, const std::string& nick)
+std::string noNick(const Message& msg)
 {
-	std::stringstream ss;
+	std::string rpl(":No nickname given.");
 	(void) msg;
-	ss << rfc::NONICKNAMEGIVEN << ' ' << nick
-		<< " :No nickname given." << CRLF;
-	return (ss.str());
+	rpl += CRLF;
+	return (rpl);
 }
 
-std::string nickBad(const Message& msg, const std::string& nick)
+std::string nickBad(const Message& msg)
 {
-	std::stringstream ss;
-	ss << rfc::ERRONEUSNICKNAME << ' ' << nick << ' ' << msg.params[0]
-		<< " :Erroneous Nickname." << CRLF;
-	return (ss.str());
+	std::string rpl;
+	rpl = msg.params[0] + " :Erroneous Nickname." + CRLF;
+	return (rpl);
 }
 
 }
