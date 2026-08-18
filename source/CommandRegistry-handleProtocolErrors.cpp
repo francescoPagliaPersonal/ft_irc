@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 16:52:31 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/18 13:38:12 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/18 14:24:37 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,17 +37,22 @@ bool CommandRegistry::handleProtocolErrors(IServerCtrl& srv, int numeric,
 			response << msg.command;
 			srv.sendMessage(client, response.str() + " :Command not found.\r\n");
 			break ;
+		case rfc::NONICK:
+			srv.sendMessage(client, response.str() + " :No nickname given.\r\n");
 		case rfc::NICKINUSE:
-			if (client.getRegistrationFlags() != REG_DONE)
-				response << " * ";
 			response << client.getNick() << " " << msg.params[0];
 			srv.sendMessage(client, response.str() + " :Nickname is already in use.\r\n");
+			break ;
+		case rfc::NICKBAD:
+			response << client.getNick() << " " << msg.params[0];
+			srv.sendMessage(client, response.str() + " :Erroneous Nickname.\r\n");
 			break ;
 		case rfc::NOTREG:
 			srv.sendMessage(client, ":CoolServ 451 <nick> :You have not registered.\r\n");
 			break ;
 		case rfc::FEWPARAMS:
-			srv.sendMessage(client, ":CoolServ 461 <nick> :Not enough parameters.\r\n");
+			response << client.getNick() << " " << msg.command;
+			srv.sendMessage(client, response.str() + " :Not enough parameters.\r\n");
 			break ;
 		case rfc::ALREADYREG:
 			srv.sendMessage(client, ":CoolServ 462 <nick> :This user is already registered.\r\n");
