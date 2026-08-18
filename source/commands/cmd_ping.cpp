@@ -14,6 +14,7 @@
 #include "IServerCtrl.hpp"
 #include "Client.hpp"
 
+// Answer a PING with a PONG carrying the same token back to the sender.
 int cmd_ping(IServerCtrl& srv, const Message& msg)
 {
 	Client *client = msg.sender;

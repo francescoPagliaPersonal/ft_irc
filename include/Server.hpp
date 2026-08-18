@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:32:56 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/18 11:04:56 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/18 11:44:54 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,7 @@ class Server : public IServerCtrl
 		// ----
 		Server(int, std::string);
 		~Server();
-		// ----
-		// ----
+		// ---- Entry Point ----
 		void run();
 		// ---- Interface ----
 		std::string getPassword() const;
@@ -63,19 +62,22 @@ class Server : public IServerCtrl
 		std::map<std::string, Channel*> _channels; // Channels sorted by title
 		Epoll					_epoll;		// isolated kernel epoll wrapper
 		CommandRegistry			_cmdReg;	// command orchestrator
-		// ----
+		// ---- Signals ---
 		static volatile std::sig_atomic_t _isAlive;	// server state
 		static void signalHandler(int);
-		// ----
 		void _captureSignals();
+		// ---- Event Handler (epoll, buffers) ----
 		void _handleListenEvent();
 		void _handleClientEvent(epoll_event&);
+		// ---- Clients ----
 		void _registerNewClient(int, const sockaddr_in&);
 		void _removeClient(Client*);
 		void _disconnectClient(Client*);
+		// ---- Command Execution ----
 		void _executeCommands();
 		bool _processInputBuffer(Client*);
 		void _removeMsgsFromSuspicious(Client*);
+		// ---- Channels ----
 		void _removeChannel(const std::string&);
 		void _removeChannel(Channel*);
 		Channel* _getOrCreateChannel(const std::string&, const std::string&);

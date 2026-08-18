@@ -6,12 +6,13 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 12:25:05 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/09 21:13:16 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/17 17:41:21 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "args.hpp"
 
+// Convert a port string to an unsigned short, validating the input.
 unsigned short	arg2port(const char *port_str)
 {
 	std::istringstream	stream(port_str);

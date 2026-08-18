@@ -1,51 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Server.cpp                                         :+:      :+:    :+:   */
+/*   Channel-Get.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/08/09 14:42:26 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/17 17:46:00 by mweghofe         ###   ########.fr       */
+/*   Created: 2026/08/17 17:12:46 by mweghofe          #+#    #+#             */
+/*   Updated: 2026/08/17 17:41:25 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Server.hpp"
+#include "Channel.hpp"
 
 // -------------------------------------------------------------------------- //
-// OPERATION
+// GET...
 // -------------------------------------------------------------------------- //
 
-// Return the server's password.
-std::string Server::getPassword() const
+// Return the channel's title.
+std::string Channel::getTitle() const
 {
-	return (_pw);
+	return (_title);
 }
 
-// -------------------------------------------------------------------------- //
-// OCF
-// -------------------------------------------------------------------------- //
-
-Server::Server()
-	: _pw("")
-	, _listener(-1)
-	, _clients()
-	, _epoll()
-	, _cmdReg()
-{}
-
-Server::Server(const Server& other)
-	: _pw("")
-	, _listener(-1)
-	, _clients()
-	, _epoll()
-	, _cmdReg()
+// Return the channel's topic.
+std::string Channel::getTopic() const
 {
-	(void) other;
+	return (_topic);
 }
 
-Server Server::operator=(const Server& other)
+// Return the channel's password.
+std::string Channel::getPassword() const
 {
-	(void) other;
-	return (*this);
+	return (_password);
 }

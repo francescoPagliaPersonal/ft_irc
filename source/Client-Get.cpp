@@ -1,51 +1,47 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Server.cpp                                         :+:      :+:    :+:   */
+/*   Client-Get.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/08/09 14:42:26 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/17 17:46:00 by mweghofe         ###   ########.fr       */
+/*   Created: 2026/08/17 17:07:36 by mweghofe          #+#    #+#             */
+/*   Updated: 2026/08/17 17:42:05 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Server.hpp"
+#include "Client.hpp"
 
 // -------------------------------------------------------------------------- //
-// OPERATION
+// GET...
 // -------------------------------------------------------------------------- //
 
-// Return the server's password.
-std::string Server::getPassword() const
+// Return Client FD.
+int Client::getFD() const
 {
-	return (_pw);
+	return (_fd);
 }
 
-// -------------------------------------------------------------------------- //
-// OCF
-// -------------------------------------------------------------------------- //
-
-Server::Server()
-	: _pw("")
-	, _listener(-1)
-	, _clients()
-	, _epoll()
-	, _cmdReg()
-{}
-
-Server::Server(const Server& other)
-	: _pw("")
-	, _listener(-1)
-	, _clients()
-	, _epoll()
-	, _cmdReg()
+// Return Client's registration flags bitmask.
+int Client::getRegistrationFlags() const
 {
-	(void) other;
+	return (_registrationFlags);
 }
 
-Server Server::operator=(const Server& other)
+// Return Client's nick name.
+std::string Client::getNick() const
 {
-	(void) other;
-	return (*this);
+	return _nick;
+}
+
+// Return Client's user name.
+std::string Client::getUserName() const
+{
+	return _userName;
+}
+
+// Return Client's real name.
+std::string Client::getRealName() const
+{
+	return _realName;
 }

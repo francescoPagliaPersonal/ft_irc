@@ -1,48 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Server-Init.cpp                                    :+:      :+:    :+:   */
+/*   Server-CDTOR.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/10 00:45:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/14 12:03:52 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/17 16:44:58 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
-#include <cstring>
 
 // -------------------------------------------------------------------------- //
-// SIGNALS
-// -------------------------------------------------------------------------- //
-
-volatile std::sig_atomic_t Server::_isAlive = true;
-
-// Signal handler for SIGINT & SIGTERM.
-void Server::signalHandler(int)
-{
-	_isAlive = false;
-}
-
-// Configures and registers signal and signal handlers.
-void Server::_captureSignals() // TODO this uses <signal.h> not <csignal>! is okay, but make sure what to use
-{
-	struct sigaction sa;
-	std::memset(&sa, 0, sizeof(sa));
-	sa.sa_handler = signalHandler;
-	::sigemptyset(&sa.sa_mask);
-	sa.sa_flags = 0;
-	// interrupt and termination
-	::sigaction(SIGINT, &sa, NULL);
-	::sigaction(SIGTERM, &sa, NULL);
-	// pipe error from clients get caught via regular handleClientEvent
-	sa.sa_handler = SIG_IGN;
-	::sigaction(SIGPIPE, &sa, NULL);
-}
-
-// -------------------------------------------------------------------------- //
-// CUSTOM CTOR
+// CUSTOM CTOR & DTOR
 // -------------------------------------------------------------------------- //
 
 // Custom constructor to start the server on PORT with PW.
@@ -60,4 +31,12 @@ Server::Server(int port, std::string pw)
 	// Client class
 	// CommandDispatch class
 	_cmdReg.registerCmds();
+}
+
+Server::~Server()
+{
+	while (!_clients.empty())
+		_removeClient(_clients.begin()->second);
+	while (!_channels.empty())
+		_removeChannel(_channels.begin()->second);
 }

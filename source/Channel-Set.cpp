@@ -1,51 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Server.cpp                                         :+:      :+:    :+:   */
+/*   Channel-Set.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/08/09 14:42:26 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/17 17:46:00 by mweghofe         ###   ########.fr       */
+/*   Created: 2026/08/17 17:13:02 by mweghofe          #+#    #+#             */
+/*   Updated: 2026/08/17 17:41:43 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Server.hpp"
+#include "Channel.hpp"
 
 // -------------------------------------------------------------------------- //
-// OPERATION
+// SET...
 // -------------------------------------------------------------------------- //
 
-// Return the server's password.
-std::string Server::getPassword() const
+// Set the channel's topic.
+void Channel::setTopic(const std::string& topic)
 {
-	return (_pw);
+	_topic = topic;
 }
 
-// -------------------------------------------------------------------------- //
-// OCF
-// -------------------------------------------------------------------------- //
-
-Server::Server()
-	: _pw("")
-	, _listener(-1)
-	, _clients()
-	, _epoll()
-	, _cmdReg()
-{}
-
-Server::Server(const Server& other)
-	: _pw("")
-	, _listener(-1)
-	, _clients()
-	, _epoll()
-	, _cmdReg()
+// Set the channel's password.
+void Channel::setPassword(const std::string& password)
 {
-	(void) other;
+	_password = password;
 }
 
-Server Server::operator=(const Server& other)
+// Set the channel's user limit.
+void Channel::setLimit(t_uint userLimit)
 {
-	(void) other;
-	return (*this);
+	_userLimit = userLimit;
 }

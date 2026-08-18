@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 11:41:20 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/16 20:21:53 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/17 17:42:48 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 		join->addPolicy(new AlreadyRegisteredPlcy(true));
 */
 
+// Register all known commands with their policies.
 void CommandRegistry::registerCmds()
 {
 	Command	*cap = new Command("CAP", cmd_cap);

@@ -15,6 +15,7 @@
 # include "IServerCtrl.hpp"
 # include "Client.hpp"
 
+// Set the client's user name and real name, and mark USER registration.
 int cmd_user(IServerCtrl & srv, const Message & msg)
 {
 	// TODO: this is just a quick proof of concept more complex UserName evaluation 
