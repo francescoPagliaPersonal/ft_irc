@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 16:32:42 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/17 17:45:35 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/18 15:40:13 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@
 void Server::_executeCommands()
 {
 	int numeric = 0;
-	bool keep = true;
 
 	if (DEBUG && !_msgsQueue.empty())
 		std::cout << "[Info] Processing message queue with "
@@ -35,9 +34,7 @@ void Server::_executeCommands()
 		Message& msg = _msgsQueue.front();
 		// TODO ensure POLICY and COMMAND errors are in line with PROTOCOL CODES
 		numeric = _cmdReg.execute(*this, msg);
-		keep = _cmdReg.handleProtocolErrors(*this, numeric, msg);
-		if (!keep)
-			_disconnectClient(msg.sender);
+		_cmdReg.handleProtocolErrors(*this, numeric, msg);
 		_msgsQueue.pop_front();
 	}
 }
