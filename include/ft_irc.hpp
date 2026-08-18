@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:25:38 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/20 00:15:21 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/20 00:19:36 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,8 @@ namespace rfc
 		INVITEONLYCHAN,				// 473 ERR_INVITEONLYCHAN
 		BADCHANNELKEY = 475,		//     ERR_BADCHANNELKEY
 		CHANOPRIVSNEEDED = 482,		//     ERR_CHANOPRIVSNEEDED
-		NOCONN = 42001,				// internal: sender gone
 		// TODO probably wrong place => parsing topic?
-		MANYPARAMS					// internal: too many parameters
+		MANYPARAMS = 42001			// internal: too many parameters
 	};
 
 	enum e_rpl
