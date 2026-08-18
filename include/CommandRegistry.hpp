@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 16:50:07 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/18 14:16:52 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/20 00:16:31 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ namespace rfc
 	std::string tooFewParams(const Message&, const std::string&);
 	std::string badPassword(const Message&, const std::string&);
 	std::string noConnection(const Message&, const std::string&);
+	std::string noNick(const Message&, const std::string&);
+	std::string nickBad(const Message&, const std::string&);
 } // end of namespace
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_nick.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 13:54:12 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/18 14:36:02 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/18 15:14:39 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,15 +40,15 @@ int cmd_nick(IServerCtrl & srv, const Message & msg)
 	Client *client = msg.sender;
 	std::string currNick = client->getNick();
 	if (!(msg.flags & MSG_HAS_PARAMS))
-		return (rfc::NONICK);
+		return (rfc::NONICKNAMEGIVEN);
 	std::string tmpNick = msg.params[0];
 	Client *hasThisNick = srv.findClientByNick(tmpNick);
 	std::string	response(":" + currNick + " " + msg.command);
 	
 	if (hasThisNick != NULL && hasThisNick != client)
-		return (rfc::NICKINUSE); // ERR_NICKCOLLISION
+		return (rfc::NICKNAMEINUSE); // ERR_NICKCOLLISION
 	if (!isCompliant(tmpNick))
-		return (rfc::NICKBAD);
+		return (rfc::ERRONEUSNICKNAME);
 	client->setNick(tmpNick);
 
 	if (client->getRegistrationFlags() != REG_DONE)

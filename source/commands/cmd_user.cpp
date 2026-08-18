@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_user.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 13:54:12 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/17 14:53:27 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/18 15:15:53 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int cmd_user(IServerCtrl & srv, const Message & msg)
 	Client *client = msg.sender;
 	
 	if (!client->setRegistrationFlags(REG_USER))
-		return (rfc::ALREADYREG);
+		return (rfc::ALREADYREGISTERED);
 	client->setUserName(msg.params[0]);
 	client->setRealName(msg.trailing);
 	if (DEBUG == debug::DETAILED)
