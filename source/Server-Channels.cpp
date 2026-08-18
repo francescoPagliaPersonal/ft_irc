@@ -18,10 +18,10 @@
 // -------------------------------------------------------------------------- //
 
 void Server::addToChannel(Client* client,
-						  const std::string& chName,
+						  const std::string& title,
 						  const std::string& pw = "")
 {
-	Channel* channel = _getOrCreateChannel(chName, pw);
+	Channel* channel = _getOrCreateChannel(title, pw);
 	// TODO does the client or the server check IF client is a member?
 	if (client->isChannelMember(channel))
 	{
@@ -39,25 +39,25 @@ void Server::addToChannel(Client* client,
 	}
 }
 
-void Server::removeFromChannel(Client* client, const std::string& chName,
-							   const std::string& msg)
+void Server::removeFromChannel(Client* client, const std::string& title,
+							   const std::string& reason)
 {
 	// TODO does the client or the server check IF client is a member?
-	Channel* channel = _getChannel(chName);
+	Channel* channel = _getChannel(title);
 	if (!channel)
 		return ;
 	channel->removeClient(client);
 	client->removeChannel(channel);
 	if (channel->isEmpty())
 		_removeChannel(channel);
-	(void) msg; // TODO depends on what the protocol needs...no idea right now
+	(void) reason; // TODO depends on what the protocol needs...no idea right now
 }
 
-void Server::broadcastToChannel(const std::string& chName,
+void Server::broadcastToChannel(const std::string& title,
 						const std::string& msg,
 						Client* sender = NULL)
 {
-	(void) chName;
+	(void) title;
 	(void) msg;
 	(void) sender;
 	std::cout << "[Info] " << __FUNCTION__ << " is not implemented.\n";
@@ -97,28 +97,28 @@ void Server::_removeChannel(const std::string& title)
 	delete channel;
 }
 
-Channel* Server::_getChannel(const std::string& chName)
+Channel* Server::_getChannel(const std::string& title)
 {
 	// TODO is this safe enough? this function should only be called when we know the channel exists...
 	std::map<std::string, Channel*>::iterator it;
 
-	it = _channels.find(chName);
+	it = _channels.find(title);
 	if (it == _channels.end())
 		return (NULL);
 	else
 		return (it->second);
 }
 
-Channel* Server::_getOrCreateChannel(const std::string& chName, const std::string& pw)
+Channel* Server::_getOrCreateChannel(const std::string& title, const std::string& pw)
 {
 	Channel* channel;
 	std::map<std::string, Channel*>::iterator it;
 
-	it = _channels.find(chName);
+	it = _channels.find(title);
 	if (it == _channels.end())
 	{
-		channel = new Channel(chName, pw);
-		_channels[chName] = channel;
+		channel = new Channel(title, pw);
+		_channels[title] = channel;
 	}
 	else
 		channel = it->second;
