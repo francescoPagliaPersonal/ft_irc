@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   CommandRegistry-handleProtocolErrors.cpp           :+:      :+:    :+:   */
+/*   CommandRegistry-handleNumericResponses.cpp         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 16:52:31 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/20 00:19:19 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/20 00:20:30 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 // Send the proper protocol reply for NUMERIC to the message's sender;
 // returns false if the client should be disconnected.
-void CommandRegistry::handleProtocolErrors(IServerCtrl& srv, int numeric,
+void CommandRegistry::handleNumericResponses(IServerCtrl& srv, int numeric,
 	const Message& msg)
 {
 	Client& client = *msg.sender;
