@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 13:54:12 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/17 15:54:44 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/18 12:23:49 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,6 @@ namespace {
 // Set the client's nick if it is not already taken by another client.
 int cmd_nick(IServerCtrl & srv, const Message & msg)
 {
-	// TODO: this is just a quick proof of concept more complex nick evaluation 
-	// should be carried out (against the whole server).
-	// TODO also need charset validation?
-
 	Client *client = msg.sender;
 	std::string currNick = client->getNick();
 	std::string tmpNick = msg.params[0];

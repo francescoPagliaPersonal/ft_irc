@@ -3,15 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   CommandRegistry-handleProtocolErrors.cpp           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 16:52:31 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/17 17:42:42 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/18 13:38:12 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "Client.hpp"
 #include "CommandRegistry.hpp"
 #include "IServerCtrl.hpp"
+#include "ft_irc.hpp"
+#include <sstream>
 
 // Send the proper protocol reply for NUMERIC to the message's sender;
 // returns false if the client should be disconnected.
@@ -21,6 +24,8 @@ bool CommandRegistry::handleProtocolErrors(IServerCtrl& srv, int numeric,
 	if (!msg.sender)
 		return (false);
 	Client& client = *msg.sender;
+	std::stringstream response;
+	response << ":CoolServer" << " " << numeric << " " ;
 	// TODO this is a proof of concept, requires a proper mechanism; some map perhaps with CODE + REPLY STRING
 	switch (numeric)
 	{
@@ -29,10 +34,14 @@ bool CommandRegistry::handleProtocolErrors(IServerCtrl& srv, int numeric,
 		// 	srv.sendMessage(client, ":CoolServ 371 :A policy has not been respected.\r\n");
 		// 	break ;
 		case rfc::BADCMD:
-			srv.sendMessage(client, ":CoolServ 421 <nick> <CMD> :Command not found.\r\n");
+			response << msg.command;
+			srv.sendMessage(client, response.str() + " :Command not found.\r\n");
 			break ;
 		case rfc::NICKINUSE:
-			srv.sendMessage(client, ":CoolServ 433 <nick> <newNick> :Nickname is already in use.\r\n");
+			if (client.getRegistrationFlags() != REG_DONE)
+				response << " * ";
+			response << client.getNick() << " " << msg.params[0];
+			srv.sendMessage(client, response.str() + " :Nickname is already in use.\r\n");
 			break ;
 		case rfc::NOTREG:
 			srv.sendMessage(client, ":CoolServ 451 <nick> :You have not registered.\r\n");
