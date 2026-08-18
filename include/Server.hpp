@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:32:56 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/16 17:59:07 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/18 11:04:56 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # include "Client.hpp"
 # include "CommandRegistry.hpp"
 # include "Epoll.hpp"
+# include "Channel.hpp"
 
 // -------------------------------------------------------------------------- //
 
@@ -42,17 +43,24 @@ class Server : public IServerCtrl
 		// ----
 		// ----
 		void run();
-		// interface
-		Client* findClientByNick(const std::string &);
+		// ---- Interface ----
 		std::string getPassword() const;
-		void sendMessage(Client&, const std::string&);
+		//		Clients
 		void tryCompleteRegistration(Client&);
+		void sendMessage(Client&, const std::string&);
+		Client* findClientByNick(const std::string &);
+		//		Channels
+		void addToChannel(Client*, const std::string&, const std::string&);
+		void removeFromChannel(Client*, const std::string&, const std::string&);
+		void broadcastToChannel(Channel*, const std::string&, Client*);
+		void broadcastToChannel(const std::string&, const std::string&, Client*);
 	private:
 		// ----
 		std::string				_pw;		// connection password
 		ListeningSocket			_listener;	// server's own listening socket
 		std::map<int, Client*>	_clients;	// map of all Clients, sorted by FD
 		std::deque<Message>		_msgsQueue; // holds all incoming messages/loop
+		std::map<std::string, Channel*> _channels; // Channels sorted by title
 		Epoll					_epoll;		// isolated kernel epoll wrapper
 		CommandRegistry			_cmdReg;	// command orchestrator
 		// ----
@@ -68,6 +76,10 @@ class Server : public IServerCtrl
 		void _executeCommands();
 		bool _processInputBuffer(Client*);
 		void _removeMsgsFromSuspicious(Client*);
+		void _removeChannel(const std::string&);
+		void _removeChannel(Channel*);
+		Channel* _getOrCreateChannel(const std::string&, const std::string&);
+		Channel* _getChannel(const std::string&);
 		// ----
 		Server();
 		Server(const Server&);

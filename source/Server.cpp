@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:42:26 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/16 18:25:19 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/17 13:55:47 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,4 +136,6 @@ Server::~Server()
 {
 	while (!_clients.empty())
 		_removeClient(_clients.begin()->second);
+	while (!_channels.empty())
+		_removeChannel(_channels.begin()->second);
 }

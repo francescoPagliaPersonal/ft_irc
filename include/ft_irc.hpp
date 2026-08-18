@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:25:38 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/17 15:04:46 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/18 11:49:52 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,5 +101,11 @@ enum e_pollret
 	RET_HASOUTPUT,
 	RET_PARSEINPUT
 };
+
+// -------------------------------------------------------------------------- //
+
+typedef unsigned int		t_uint;
+typedef unsigned char		t_uint8;
+typedef unsigned long int	t_uint32;
 
 #endif
