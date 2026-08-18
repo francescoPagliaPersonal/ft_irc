@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 13:55:04 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/18 08:58:53 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/18 11:50:17 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void Server::addToChannel(Client* client,
 	{
 		channel->addClient(client);
 		client->addChannel(channel);
+		broadcastToChannel(channel, "[Info] New Client joined channel - needs proper msg.", client);
 	}
 	else // TODO needs some proper code or just return false and cmd must send different reply
 	{
@@ -56,7 +57,15 @@ void Server::removeFromChannel(Client* client, const std::string& title,
 	(void) reason; // TODO depends on what the protocol needs...no idea right now
 }
 
-// Send MSG to all members of the channel CHNAME, optionally excluding SENDER.
+// Send MSG to all members of CHANNEL, optionally excluding SENDER.
+void Server::broadcastToChannel(Channel* channel,
+						const std::string& msg,
+						Client* sender = NULL)
+{
+	broadcastToChannel(channel->getTitle(), msg, sender);
+}
+
+// Send MSG to all members of the channel TITLE, optionally excluding SENDER.
 void Server::broadcastToChannel(const std::string& title,
 						const std::string& msg,
 						Client* sender = NULL)
@@ -71,15 +80,6 @@ void Server::broadcastToChannel(const std::string& title,
 // PRIVATE -- CHANNELS
 // -------------------------------------------------------------------------- //
 
-// Add a new channel with TITLE.
-void Server::_addChannel(const std::string& title)
-{
-	Channel* newCh = new Channel(title, "");
-	_channels[title] = newCh;
-	if (DEBUG)
-		std::cout << "[Channel] '" << newCh->getTitle() << "' added.\n";
-}
-
 // Remove a channel by channel pointer.
 void Server::_removeChannel(Channel* channel)
 {
@@ -91,14 +91,10 @@ void Server::_removeChannel(Channel* channel)
 void Server::_removeChannel(const std::string& title)
 {
 	Channel* channel;
-	std::map<std::string, Channel*>::iterator it;
 
-	it = _channels.find(title);
-	if (it == _channels.end())
-		return ;
-	channel = it->second;
-	_channels.erase(title);
-	delete channel;
+	channel = _getChannel(title);
+	if (channel)
+		_removeChannel(channel);
 }
 
 // Lookup a channel by name and return its pointer, or NULL if not found.
@@ -118,15 +114,12 @@ Channel* Server::_getChannel(const std::string& title)
 Channel* Server::_getOrCreateChannel(const std::string& title, const std::string& pw)
 {
 	Channel* channel;
-	std::map<std::string, Channel*>::iterator it;
 
-	it = _channels.find(title);
-	if (it == _channels.end())
+	channel = _getChannel(title);
+	if (!channel)
 	{
 		channel = new Channel(title, pw);
 		_channels[title] = channel;
 	}
-	else
-		channel = it->second;
 	return (channel);
 }

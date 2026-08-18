@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 16:22:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/17 17:11:32 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/18 11:44:37 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 #include "ft_irc.hpp"
 #include <vector>
+#include <deque>
 
 // -------------------------------------------------------------------------- //
 
@@ -72,7 +73,7 @@ class Client
 		std::string		_nick;				// client's nick name
 		std::string		_userName;			// client's user name
 		std::string		_realName;			// client's real name
-		std::vector<Channel*> _channels;	// channels the client is registered to
+		std::deque<Channel*> _channels;	// channels the client is registered to
 		// ----
 		Client();
 		Client(const Client&);

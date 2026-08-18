@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   IServerCtrl.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/14 19:25:52 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/17 15:14:36 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/18 11:04:46 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <string>
 
 class Client;
-// class Channel;
+class Channel;
 
 class IServerCtrl
 {
@@ -32,6 +32,7 @@ public:
 	virtual Client* findClientByNick(const std::string&) = 0;
 	// ---- Sending Messages To Clients
 	virtual void sendMessage(Client&, const std::string&) = 0;
+	virtual void broadcastToChannel(Channel*, const std::string&, Client*) = 0;
 	virtual void broadcastToChannel(const std::string&, const std::string&, Client*) = 0;
 	// ---- Channel Manipulation
 	virtual void addToChannel(Client*, const std::string&, const std::string&) = 0;
