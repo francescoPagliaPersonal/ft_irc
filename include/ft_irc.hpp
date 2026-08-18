@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_irc.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:25:38 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/17 13:46:09 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/18 11:49:52 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@
 # define TIMEOUT 1000
 # define CRLF "\r\n"
 # define MSG_MAX_LENGTH 512
+# define MAX_NICKLEN 32
+
 # ifndef DEBUG
 #  define DEBUG 0 // TODO set this to zero later and ctl via makefile
 # endif

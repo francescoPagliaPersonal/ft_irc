@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ArgsLimitPlcy.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/16 14:48:41 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/16 15:01:29 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/17 14:55:00 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,6 @@
 // Validate that MSG has between _min and _max arguments.
 int ArgsLimitPlcy::check(const Message & msg, IServerCtrl& srv) const
 {
-	Client *client = msg.sender;
-	if (client == NULL)
-		return (rfc::NOCONN); //ERR_HANGHUP
 	(void) srv;
 	int args = argCount(msg);
 	if (args < _min)

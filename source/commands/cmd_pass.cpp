@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_pass.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 11:42:55 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/16 19:30:06 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/17 14:53:14 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,6 @@
 int cmd_pass(IServerCtrl & srv, const Message & msg)
 {
 	Client *client = msg.sender;
-	if (client == NULL)
-		return (rfc::NOCONN); // ERR_HANGUP??
 	if (msg.params[0] != srv.getPassword())
 		return (rfc::BADPASS);
 	if (!client->setRegistrationFlags(REG_PASSWD))
