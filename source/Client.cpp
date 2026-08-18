@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:52:36 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/17 15:11:52 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/18 10:50:08 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,7 +193,7 @@ void Client::addChannel(Channel* channel)
 
 void Client::removeChannel(Channel* channel)
 {
-	std::vector<Channel*>::iterator it;
+	std::deque<Channel*>::iterator it;
 	for (it = _channels.begin(); it != _channels.end(); it++)
 	{
 		if (*it == channel)
@@ -206,7 +206,7 @@ void Client::removeChannel(Channel* channel)
 
 bool Client::isChannelMember(Channel* channel) const
 {
-	std::vector<Channel*>::const_iterator it;
+	std::deque<Channel*>::const_iterator it;
 	for (it = _channels.begin(); it != _channels.end(); it++)
 	{
 		if (*it == channel)
