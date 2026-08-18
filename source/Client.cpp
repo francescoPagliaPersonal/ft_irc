@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:52:36 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/16 19:27:37 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/18 10:50:08 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,6 +184,37 @@ std::string Client::getRealName() const
 void Client::setRealName(const std::string & str)
 {
 	_realName = str; 
+}
+
+void Client::addChannel(Channel* channel)
+{
+	_channels.push_back(channel);
+}
+
+void Client::removeChannel(Channel* channel)
+{
+	std::deque<Channel*>::iterator it;
+	for (it = _channels.begin(); it != _channels.end(); it++)
+	{
+		if (*it == channel)
+		{
+			_channels.erase(it);
+			break ;
+		}
+	}
+}
+
+bool Client::isChannelMember(Channel* channel) const
+{
+	std::deque<Channel*>::const_iterator it;
+	for (it = _channels.begin(); it != _channels.end(); it++)
+	{
+		if (*it == channel)
+		{
+			return (true);
+		}
+	}
+	return (false);
 }
 
 // -------------------------------------------------------------------------- //

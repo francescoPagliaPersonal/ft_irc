@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:25:38 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/16 19:14:08 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/17 13:46:09 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,5 +99,11 @@ enum e_pollret
 	RET_HASOUTPUT,
 	RET_PARSEINPUT
 };
+
+// -------------------------------------------------------------------------- //
+
+typedef unsigned int		t_uint;
+typedef unsigned char		t_uint8;
+typedef unsigned long int	t_uint32;
 
 #endif
