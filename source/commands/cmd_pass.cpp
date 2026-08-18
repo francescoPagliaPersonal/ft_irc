@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_pass.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 11:42:55 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/17 14:53:14 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/18 15:16:02 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ int cmd_pass(IServerCtrl & srv, const Message & msg)
 {
 	Client *client = msg.sender;
 	if (msg.params[0] != srv.getPassword())
-		return (rfc::BADPASS);
+		return (rfc::PASSWDMISMATCH);
 	if (!client->setRegistrationFlags(REG_PASSWD))
-		return (rfc::ALREADYREG);
+		return (rfc::ALREADYREGISTERED);
 	if (DEBUG == debug::DETAILED)
 		std::cout << "[FD " << client->getFD() 
 			<< "] Server password correct.\n";
