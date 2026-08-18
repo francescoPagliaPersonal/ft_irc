@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/18 12:35:10 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/18 14:49:25 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/18 15:05:27 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ void CommandRegistry::registerCodes()
 	_rfcCodes[rfc::ALREADYREG] = rfc::alreadyRegistered;
 	_rfcCodes[rfc::FEWPARAMS] = rfc::tooFewParams;
 	_rfcCodes[rfc::BADPASS] = rfc::badPassword;
+	_rfcCodes[rfc::NONICK] = rfc::noNick;
+	_rfcCodes[rfc::NICKBAD] = rfc::nickBad;
 }
 
 namespace rfc
@@ -76,4 +78,22 @@ std::string badPassword(const Message& msg, const std::string& nick)
 		<< " :Password incorrect." << CRLF;
 	return (ss.str());
 }
+
+std::string noNick(const Message& msg, const std::string& nick)
+{
+	std::stringstream ss;
+	(void) msg;
+	ss << rfc::NONICK << ' ' << nick
+		<< " :No nickname given." << CRLF;
+	return (ss.str());
+}
+
+std::string nickBad(const Message& msg, const std::string& nick)
+{
+	std::stringstream ss;
+	ss << rfc::NICKBAD << ' ' << nick << ' ' << msg.params[0]
+		<< " :Erroneous Nickname." << CRLF;
+	return (ss.str());
+}
+
 }

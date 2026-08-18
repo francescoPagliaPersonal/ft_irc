@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   AlreadyRegisteredPlcy.cpp                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/16 14:47:38 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/16 17:42:04 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/17 14:53:47 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@ int AlreadyRegisteredPlcy::check(const Message & msg, IServerCtrl& srv) const
 {
 	(void) srv;
 	Client *client = msg.sender;
-	if (client == NULL)
-		return (rfc::NOCONN); //ERR_HANGHUP
 	if (_status)
 	{
 		if (client->getRegistrationFlags() != REG_DONE)
