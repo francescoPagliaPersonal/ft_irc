@@ -42,8 +42,8 @@ class Channel
 		~Channel();
 		// ----
 		// ---- operation
-		void addClient(const Client*);
-		void removeClient(const Client*);
+		void addClient(Client*);
+		void removeClient(Client*);
 		bool isEmpty() const;
 		// ---- get
 		std::string getTitle() const;		// used in debug & test functions
@@ -61,7 +61,7 @@ class Channel
 		const std::string					_title; // RENAME cmd not required
 		std::string							_topic;
 		std::string							_password;
-		std::map<const Client*, bitMask>	_members;
+		std::map<Client*, bitMask>			_members;
 		// ----
 		// ----
 		Channel();
