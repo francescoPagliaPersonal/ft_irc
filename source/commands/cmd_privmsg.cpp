@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 15:31:28 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/19 16:12:28 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/19 22:17:46 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ int cmd_privmsg(IServerCtrl& srv, const Message& msg)
 	std::string reply;
 	Client* sender = msg.sender;
 	// TODO do we want proper return codes ie. 401, 411,412 ERR_NOTEXTTOSEND
-	// TODO arguments for privmsg .. currently this doesn trigger
+	// TODO argument policy currently prevents a missing recipient
+	// TODO neither return has a message yet
 	if (!(msg.flags & MSG_HAS_PARAMS))
 		return (rfc::NORECIPIENT);
 	if (!(msg.flags & MSG_HAS_TRAILING))
