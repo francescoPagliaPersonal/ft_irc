@@ -6,13 +6,11 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 16:27:31 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/17 17:45:28 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/19 13:19:38 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
-#include <sstream>
-// #include <arpa/inet.h> // for the commented out block below
 
 // -------------------------------------------------------------------------- //
 // INTERFACE -- CLIENTS
@@ -30,20 +28,6 @@ Client* Server::findClientByNick(const std::string & nick)
 		++it;
 	}
 	return NULL;
-}
-
-// Send the welcome message once the client finished the registration handshake.
-void Server::tryCompleteRegistration(Client& client)
-{
-	if (client.getRegistrationFlags() != REG_DONE)
-		return ;
-	std::stringstream ss;
-	ss  << ":CoolServ 001 " << client.getNick()
-		<< " :Welcome to the IRC "
-		<< client.getNick() << "!" << client.getUserName() << CRLF;
-		// << "@" << inet_ntoa(client.addr().sin_addr) << "\r\n";
-	std::cout << "[FD " << client.getFD() << "] User registration completed.\n";
-	sendMessage(client, ss.str());
 }
 
 // Queue STR for sending to CLIENT and enable the EPOLLOUT interest.
