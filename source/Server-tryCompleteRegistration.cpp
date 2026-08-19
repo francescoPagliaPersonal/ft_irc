@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 13:19:17 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/19 13:44:11 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/19 13:46:10 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void buildMessageOfTheDay(std::stringstream& ss, Client& client)
 	const std::string nick(client.getNick());
 	ss	<< ":CoolServ " << rfc::MOTDSTART << ' ' << nick
 		<< " :CoolServ presents daily wisdom" << CRLF;
+	// TODO consider ISUPPORT and LUSER (stats of inspircd)
 	buildMotdLine(ss, nick, "+==============================================+");
 	buildMotdLine(ss, nick, "|          Alle Wege führen nach Rom.          |");
 	buildMotdLine(ss, nick, "+==============================================+");
