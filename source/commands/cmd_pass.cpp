@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 11:42:55 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/18 15:16:02 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/19 10:05:47 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,5 @@ int cmd_pass(IServerCtrl & srv, const Message & msg)
 	if (DEBUG == debug::DETAILED)
 		std::cout << "[FD " << client->getFD() 
 			<< "] Server password correct.\n";
-	srv.tryCompleteRegistration(*client);
 	return (rfc::OK);
 }

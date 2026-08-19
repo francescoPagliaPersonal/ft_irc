@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 13:54:12 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/18 15:14:39 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/19 10:05:40 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ int cmd_nick(IServerCtrl & srv, const Message & msg)
 		if (DEBUG == debug::DETAILED)
 			std::cout << "[FD " << client->getFD()
 				<< "] Nick registration successfull.\n";
-		srv.tryCompleteRegistration(*client);
 	}
 	else {
 		response += " " + tmpNick + " :" + currNick + " has changed is nickname to " + tmpNick + CRLF;
