@@ -10,6 +10,14 @@ all:		MODE := reg
 all:		PART := man
 all:		build
 
+nc:			EXEC_STR = nc -C $(HOST) $(PORT)
+nc:
+	$(EXEC)
+
+chat:		EXEC_STR = irssi -c $(HOST) -p $(PORT) -w $(PASSWORD) -n $(NICK)
+chat:
+	$(EXEC)
+
 bonus:		MODE := reg
 bonus:		PART := bon
 bonus:		build
@@ -117,4 +125,5 @@ norm:
 
 .PHONY:	all bonus clean fclean re \
 		run runb asan asanb val valb \
-		print build libft norm
+		print build libft norm \
+		nc chat
