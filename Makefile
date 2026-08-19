@@ -45,9 +45,14 @@ LFT_ROOT		:= lib/libft/
 
 # ----------------------------------------------------------------------------
 # arguments for executing the program in the various modes
-RUN_ARGS_reg	:= 6669 1o.0
-RUN_ARGS_asan	:= 6669 1o.0
-RUN_ARGS_val	:= 6669 1o.0
+PORT			:= 6669
+PASSWORD		:= 1o.0
+HOST			:= localhost
+NICK			:= BugDetector
+
+RUN_ARGS_reg	:= $(PORT) $(PASSWORD)
+RUN_ARGS_asan	:= $(PORT) $(PASSWORD)
+RUN_ARGS_val	:= $(PORT) $(PASSWORD)
 # ----------------------------------------------------------------------------
 VALGRIND_FLAGS	:=	--leak-check=full \
 					--show-leak-kinds=all --errors-for-leak-kinds=all\
