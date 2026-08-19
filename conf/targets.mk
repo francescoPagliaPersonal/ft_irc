@@ -10,6 +10,12 @@ all:		MODE := reg
 all:		PART := man
 all:		build
 
+nc:
+	nc -C $(HOST) $(PORT)
+
+chat:
+	irssi -c $(HOST) -p $(PORT) -w $(PASSWORD) -n $(NICK)
+
 bonus:		MODE := reg
 bonus:		PART := bon
 bonus:		build
@@ -117,4 +123,5 @@ norm:
 
 .PHONY:	all bonus clean fclean re \
 		run runb asan asanb val valb \
-		print build libft norm
+		print build libft norm \
+		nc chat
