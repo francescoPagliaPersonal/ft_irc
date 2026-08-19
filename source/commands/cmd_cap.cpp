@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 13:54:12 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/19 11:56:54 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/19 12:00:28 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int cmd_cap(IServerCtrl & srv, const Message & msg)
 	{
 		if (msg.params[0] == "LS")
 		{
-			client->setCap();
+			client->setCap(true);
 			std::string reply;
 			reply = ":CoolServ CAP " + client->getNick() + " LS :" + CRLF;
 			srv.sendMessage(*client, reply);
@@ -41,7 +41,10 @@ int cmd_cap(IServerCtrl & srv, const Message & msg)
 		else if (msg.params[0] == "END")
 		{
 			if (client->getCap())
+			{
 				srv.tryCompleteRegistration(*client);
+				client->setCap(false);
+			}
 			// else ;
 				// some error
 		}
