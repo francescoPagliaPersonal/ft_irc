@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 13:19:17 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/19 13:30:08 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/19 13:44:11 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,24 @@ void buildWelcomeMessage(std::stringstream& ss, Client& client)
 	ss	<< " CoolServ ft_irc-v202608 o itkol" << CRLF;
 }
 
+void buildMotdLine(std::stringstream& ss, const std::string& nick, const std::string& msg)
+{
+	ss << ":CoolServ " << rfc::MOTD << ' ' << nick << ' ' << msg << CRLF;
 }
+
+void buildMessageOfTheDay(std::stringstream& ss, Client& client)
+{
+	const std::string nick(client.getNick());
+	ss	<< ":CoolServ " << rfc::MOTDSTART << ' ' << nick
+		<< " :CoolServ presents daily wisdom" << CRLF;
+	buildMotdLine(ss, nick, "+==============================================+");
+	buildMotdLine(ss, nick, "|          Alle Wege führen nach Rom.          |");
+	buildMotdLine(ss, nick, "+==============================================+");
+	ss	<< ":CoolServ " << rfc::ENDOFMOTD << ' ' << nick
+		<< " :End of MOTD" << CRLF;
+}
+
+} // end of namespace
 
 // Send the welcome message once the client finished the registration handshake.
 void Server::tryCompleteRegistration(Client& client)
@@ -47,5 +64,6 @@ void Server::tryCompleteRegistration(Client& client)
 	std::cout << "[FD " << client.getFD() << "] User registration completed.\n";
 	std::stringstream ss;
 	buildWelcomeMessage(ss, client);
+	buildMessageOfTheDay(ss, client);
 	sendMessage(client, ss.str());
 }
