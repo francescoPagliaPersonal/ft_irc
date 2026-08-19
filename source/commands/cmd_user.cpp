@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 13:54:12 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/19 23:28:39 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/19 23:29:51 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,5 +32,7 @@ int cmd_user(IServerCtrl & srv, const Message & msg)
 	if (DEBUG == debug::DETAILED)
 		std::cout << "[FD " << client->getFD() 
 			<< "] UserName registration successfull.\n";
+	if (!client->getCap())
+			srv.tryCompleteRegistration(*client);
 	return (rfc::OK);
 }
