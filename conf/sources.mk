@@ -20,6 +20,7 @@ SRC_MAN		:=  arg2password.cpp arg2port.cpp\
 				Server.cpp Server-CDTOR.cpp Server-Run.cpp Server-Handlers.cpp\
 				Server-Clients.cpp Server-Channels.cpp Server-Signals.cpp\
 				Server-Commands.cpp Server-procInputBuffer.cpp\
+				Server-Broadcast.cpp\
 				Epoll.cpp ListeningSocket.cpp ListeningSocket-CDTOR.cpp\
 				Client.cpp Client-Buffer.cpp Client-Channels.cpp\
 				Client-getMessages.cpp Client-Get.cpp Client-Set.cpp\
@@ -40,7 +41,7 @@ SRC_BON		:=
 
 # Commands
 DIR_CMDS = commands/
-SRC_CMDS = cmd_cap.cpp cmd_nick.cpp cmd_pass.cpp cmd_user.cpp cmd_ping.cpp
+SRC_CMDS = cmd_cap.cpp cmd_nick.cpp cmd_pass.cpp cmd_user.cpp cmd_ping.cpp cmd_join.cpp
 SRC_MAN   += $(addprefix $(DIR_CMDS),$(SRC_CMDS))
 
 # Policies

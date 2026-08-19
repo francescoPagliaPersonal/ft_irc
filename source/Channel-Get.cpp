@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel-Get.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 17:12:46 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/17 17:41:25 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/19 18:32:40 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,4 +32,9 @@ std::string Channel::getTopic() const
 std::string Channel::getPassword() const
 {
 	return (_password);
+}
+
+std::map<Client *, bitMask> Channel::getClientMap() const
+{
+	return (_members);
 }

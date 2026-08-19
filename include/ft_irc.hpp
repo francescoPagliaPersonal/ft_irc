@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:25:38 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/18 11:49:52 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/19 16:24:34 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ namespace rfc
 		NICKINUSE,				// 433 ERR_NICKNAMEINUSE
 		NOTINCHANNEL = 441,		// ERR_USERNOTINCHANNEL
 		NOTONCHANNEL,			// 442 ERR_NOTONCHANNEL
-		ONCHANNEL,				// 443 ERR_USERONCHANNEL
+		USERONCHANNEL,				// 443 ERR_USERONCHANNEL
 		NOTREG = 451,			// ERR_NOTREGISTERED
 		FEWPARAMS = 461,		// ERR_NEEDMOREPARAMS
 		ALREADYREG,				// 462 ERR_ALREADYREGISTERED
@@ -70,6 +70,7 @@ namespace rfc
 		UNKNOWNMODE,			// 472 ERR_UNKNOWNMODE
 		INVITEONLY,				// 473 ERR_INVITEONLYCHAN
 		BADKEY = 475,			// ERR_BADCHANNELKEY
+		BADCHANMASK,			// ERR_BADCHANMASK
 		CHANOPRIVS = 482,		// ERR_CHANOPRIVSNEEDED
 		NOCONN = 42001,			// internal: sender gone
 		MANYPARAMS				// internal: too many parameters // TODO probably wrong place => parsing topic?

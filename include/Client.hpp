@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 16:22:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/18 11:44:37 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/19 17:05:28 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 // -------------------------------------------------------------------------- //
 
 #include "ft_irc.hpp"
+#include "Channel.hpp"
 #include <vector>
 #include <deque>
 
@@ -26,7 +27,7 @@
 // -------------------------------------------------------------------------- //
 
 struct sockaddr_in;
-class Channel;
+// class Channel;
 
 enum e_clientReg
 {

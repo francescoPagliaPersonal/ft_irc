@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:32:56 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/18 11:44:54 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/19 19:06:31 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,14 @@ class Server : public IServerCtrl
 		void tryCompleteRegistration(Client&);
 		void sendMessage(Client&, const std::string&);
 		Client* findClientByNick(const std::string &);
+		Channel* getChannelByTitle(const std::string&);
 		//		Channels
-		void addToChannel(Client*, const std::string&, const std::string&);
+		int addToChannel(Client*, const std::string&, const std::string&);
 		void removeFromChannel(Client*, const std::string&, const std::string&);
 		void broadcastToChannel(Channel*, const std::string&, Client*);
 		void broadcastToChannel(const std::string&, const std::string&, Client*);
+		void broadcast(const std::string&, std::map<Client*, t_uint8>, Client*);
+		
 	private:
 		// ----
 		std::string				_pw;		// connection password

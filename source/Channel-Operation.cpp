@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   Channel-Operation.cpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 17:13:52 by mweghofe          #+#    #+#             */
 /*   Updated: 2026/08/19 18:33:40 by fpaglia          ###   ########.fr       */

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/13 10:19:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/17 17:13:23 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/19 18:34:12 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 # include <string>
 # include <map>
+#include <vector>
 
 # include "ft_irc.hpp"
 
@@ -50,6 +51,8 @@ class Channel
 		std::string getTopic() const;
 		std::string getPassword() const;
 		t_uint getLimit() const;
+		std::map<Client*, bitMask>	getClientMap() const;
+		
 		// ---- set
 		void setTopic(const std::string&);
 		void setPassword(const std::string&);

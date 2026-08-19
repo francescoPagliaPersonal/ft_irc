@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/14 19:25:52 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/18 11:04:46 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/19 19:06:10 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 # define ISERVERCTRL_HPP
 
 #include <string>
+#include <vector>
+#include <map>
+#include "ft_irc.hpp"
 
 class Client;
 class Channel;
@@ -34,9 +37,11 @@ public:
 	virtual void sendMessage(Client&, const std::string&) = 0;
 	virtual void broadcastToChannel(Channel*, const std::string&, Client*) = 0;
 	virtual void broadcastToChannel(const std::string&, const std::string&, Client*) = 0;
+	virtual void broadcast(const std::string&, std::map<Client*, t_uint8>, Client *) = 0;
 	// ---- Channel Manipulation
-	virtual void addToChannel(Client*, const std::string&, const std::string&) = 0;
+	virtual int addToChannel(Client*, const std::string&, const std::string&) = 0;
 	virtual void removeFromChannel(Client*, const std::string&, const std::string&) = 0;
+	virtual Channel * getChannelByTitle(const std::string&) = 0;
 	// ---- Operation
 	// virtual void disconnectClient(Client&, const std::string&) = 0;
 };
