@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 16:27:31 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/17 17:45:28 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/19 12:47:27 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void Server::tryCompleteRegistration(Client& client)
 	if (client.getRegistrationFlags() != REG_DONE)
 		return ;
 	std::stringstream ss;
-	ss  << ":CoolServ 001 " << client.getNick()
+	ss  << ":CoolServ" << " 00" << rfc::WELCOME << ' ' << client.getNick()
 		<< " :Welcome to the IRC "
 		<< client.getNick() << "!" << client.getUserName() << CRLF;
 		// << "@" << inet_ntoa(client.addr().sin_addr) << "\r\n";
