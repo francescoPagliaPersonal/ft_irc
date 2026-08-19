@@ -10,11 +10,13 @@ all:		MODE := reg
 all:		PART := man
 all:		build
 
+nc:			EXEC_STR = nc -C $(HOST) $(PORT)
 nc:
-	nc -C $(HOST) $(PORT)
+	$(EXEC)
 
+chat:		EXEC_STR = irssi -c $(HOST) -p $(PORT) -w $(PASSWORD) -n $(NICK)
 chat:
-	irssi -c $(HOST) -p $(PORT) -w $(PASSWORD) -n $(NICK)
+	$(EXEC)
 
 bonus:		MODE := reg
 bonus:		PART := bon
