@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:25:38 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/19 13:26:31 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/19 23:33:17 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ namespace rfc
 		NOSUCHCHANNEL = 403,		// ERR_NOSUCHCHANNEL
 		CANNOTSEND = 404,		// ERR_CANNOTSENDTOCHAN
 		TOOMANYCHANS,			// 405 ERR_TOOMANYCHANNELS
-		NORECIPIENT = 411,		// ERR_NORECIPIENT
+		INVALIDCAPCMD = 410,		//     ERR_INVALIDCAPCMD (IRCv3)
+		NORECIPIENT,			// ERR_NORECIPIENT
 		NOTEXT,					// 412 ERR_NOTEXTTOSEND
 		BADCMD = 421,			// ERR_UNKNOWNCOMMAND
 		NONICK = 431,			// ERR_NONICKNAMEGIVEN
