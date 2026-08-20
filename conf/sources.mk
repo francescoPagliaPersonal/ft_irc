@@ -31,6 +31,7 @@ SRC_MAN		:=  arg2password.cpp arg2port.cpp\
 				CommandRegistry-RegisterCodes.cpp\
 				Channel.cpp Channel-Get.cpp Channel-Set.cpp\
 				Channel-Operation.cpp\
+				RFCnumeric.cpp\
 				main.cpp
 SRC_BON		:= 
 
