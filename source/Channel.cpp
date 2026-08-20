@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/13 10:59:59 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/17 17:41:46 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/20 15:48:03 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ Channel::Channel(const std::string& title, const std::string& pw)
 	: _modes(0)
 	, _userLimit(MAX_CHANNELUSERS)
 	, _title(title)
-	, _topic()
+	, _topic("")
 	, _password(pw)
 	, _members()
 {}

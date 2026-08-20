@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 13:55:04 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/19 17:34:46 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/20 15:59:09 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,9 @@ int Server::addToChannel(Client* client,
 						  const std::string& title,
 						  const std::string& pw = "")
 {
-	Channel* channel = _getOrCreateChannel(title, pw);
+	Channel* channel = _getChannel(title);
+	if (!channel)
+		_newChannel(title, pw);
 	// TODO does the client or the server check IF client is a member?
 	if (client->isChannelMember(channel))
 	{
@@ -128,5 +130,14 @@ Channel* Server::_getOrCreateChannel(const std::string& title, const std::string
 		channel = new Channel(title, pw);
 		_channels[title] = channel;
 	}
+	return (channel);
+}
+
+Channel* Server::_newChannel(const std::string& title, const std::string& pw)
+{
+
+	Channel* channel = new Channel(title, pw);
+	_channels[title] = channel;
+
 	return (channel);
 }

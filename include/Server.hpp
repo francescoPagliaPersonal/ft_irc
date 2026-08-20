@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:32:56 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/19 19:06:31 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/20 15:57:09 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ class Server : public IServerCtrl
 		void _removeChannel(Channel*);
 		Channel* _getOrCreateChannel(const std::string&, const std::string&);
 		Channel* _getChannel(const std::string&);
+		Channel* _newChannel(const std::string&, const std::string&);
 		// ----
 		Server();
 		Server(const Server&);
