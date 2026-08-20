@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 15:31:28 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/19 22:17:46 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/20 12:14:20 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int cmd_privmsg(IServerCtrl& srv, const Message& msg)
 	reply = ':' + sender->getNick() + '!' + sender->getUserName();
 	// FIXME still needs the ADDR stuff and getAddr or getHost
 	// reply += '@' + sender->getHost
+	// TODO replace with comming chunkifyTrailing()
 	reply += " PRIVMSG " + msg.params[0] + " :" + msg.trailing + CRLF;
 	srv.sendMessage(*recipient, reply);
 	return (rfc::OK);
