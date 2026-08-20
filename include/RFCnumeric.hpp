@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/20 09:12:05 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/20 11:33:58 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/20 11:35:59 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ enum e_err
 	NOSUCHCHANNEL = 403,		//     ERR_NOSUCHCHANNEL
 	CANNOTSENDTOCHAN = 404,		//     ERR_CANNOTSENDTOCHAN
 	TOOMANYCHANNELS,			// 405 ERR_TOOMANYCHANNELS
-	NORECIPIENT = 411,			//     ERR_NORECIPIENT
+	INVALIDCAPCMD = 410,		//     ERR_INVALIDCAPCMD (IRCv3)
+	NORECIPIENT,				// 411 ERR_NORECIPIENT
 	NOTEXTTOSEND,				// 412 ERR_NOTEXTTOSEND
 	UNKNOWNCOMMAND = 421,		//     ERR_UNKNOWNCOMMAND
 	NONICKNAMEGIVEN = 431,		//     ERR_NONICKNAMEGIVEN

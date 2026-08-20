@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 17:07:36 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/17 17:42:05 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/19 11:43:46 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,16 @@ std::string Client::getNick() const
 // Return Client's user name.
 std::string Client::getUserName() const
 {
-	return _userName;
+	return (_userName);
 }
 
 // Return Client's real name.
 std::string Client::getRealName() const
 {
-	return _realName;
+	return (_realName);
+}
+
+bool Client::getCap() const
+{
+	return (_capRequested);
 }
