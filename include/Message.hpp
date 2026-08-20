@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Message.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:38:21 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/16 18:03:54 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/20 11:09:52 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 // -------------------------------------------------------------------------- //
 # include "Client.hpp"
 
+#include <cstddef>
 # include <string>
 # include <vector>
 
@@ -47,5 +48,9 @@ struct Message
 
 Message	string2Message(std::string str, Client *client);
 int		argCount(const Message &);
+
+std::vector<std::string> strSplit(std::string str, char ch, bool keepEmptyStr);
+std::vector<std::string> chunkyfyTrailing(size_t usedBuffer, std::string message);
+
 
 #endif

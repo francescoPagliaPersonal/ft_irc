@@ -3,15 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   Message.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 09:01:01 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/17 17:43:39 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/20 11:25:21 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Message.hpp"
+#include "ft_irc.hpp"
 #include <cctype>
+#include <exception>
+#include <stdexcept>
 
 namespace  {
 
@@ -124,4 +127,50 @@ Message string2Message(std::string str, Client *client)
 		msg.flags |= MSG_HAS_PARAMS;
 	
 	return msg;
+}
+
+
+std::vector<std::string> strSplit(std::string str, char ch, bool keepEmptyStr)
+{
+	std::vector<std::string>	words;
+
+	std::string::size_type pos = str.find_first_of(ch);
+	
+	while (pos != std::string::npos)
+	{
+		if (pos == 0 && keepEmptyStr)
+			words.push_back("");
+		else
+			words.push_back(str.substr(0,pos));
+		str.erase(0,pos + 1);
+		pos = str.find_first_of(ch);
+	}
+	if (str.size())
+		words.push_back(str);
+	
+	return words;
+}
+
+
+std::vector<std::string> chunkyfyTrailing(size_t usedBuffer, std::string message)
+{
+	size_t availBuffer = usedBuffer < MSG_MAX_LENGTH - 4 ? MSG_MAX_LENGTH - usedBuffer - 4 : 0;
+	if (!availBuffer)
+		throw std::runtime_error("cannot build a message because the buffer used is too long.");
+	if (message.size() > availBuffer)
+	{
+		/*TODO: find first \n
+				if \n is not found or the lenght is still too long 
+				then find closes space before [available buffer]
+				if no spaces are found cut the message at available buffer 
+				then repeat till message is empty.
+		*/
+		// if (message[availBuffer] != )
+		
+	}
+	std::vector<std::string> tmp;
+	tmp.push_back("");
+	
+	return tmp;
+	// TODO: fill the topic section!!
 }

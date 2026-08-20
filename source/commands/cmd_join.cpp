@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 14:24:29 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/19 19:05:48 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/20 11:26:06 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,30 +21,9 @@
 #include <vector>
 
 
-std::vector<std::string> strSplit(std::string str, char ch)
+void sendTopic(Channel *channel)
 {
-	std::vector<std::string>	words;
-
-	std::string::size_type pos = str.find_first_of(ch);
-	
-	while (pos != std::string::npos)
-	{
-		if (pos == 0)
-			words.push_back("");
-		else
-			words.push_back(str.substr(0,pos));
-		str.erase(0,pos + 1);
-		pos = str.find_first_of(ch);
-	}
-	if (str.size())
-		words.push_back(str);
-	
-	return words;
-}
-
-void sendTopicInChuncks(Channel*)
-{
-	// TODO: fill the topic section!!
+	(void) channel;
 }
 
 std::string addPropertyToNick(const Client & client, bitMask mask)
@@ -59,9 +38,9 @@ int cmd_join(IServerCtrl & srv, const Message & msg)
 	std::vector<std::string>	passwords;
 	
 	Client *client = msg.sender;
-	channels = strSplit(msg.params[0], ',');
+	channels = strSplit(msg.params[0], ',', false);
 	if (msg.params.size() == 2)
-		passwords = strSplit(msg.params[1], ',');
+		passwords = strSplit(msg.params[1], ',', true);
 	else
 	{
 		
@@ -103,7 +82,7 @@ int cmd_join(IServerCtrl & srv, const Message & msg)
 
 			// send the topic of the channel to the client
 			if (!channel->getTopic().empty())
-				sendTopicInChuncks(channel);
+				sendTopic(channel);
 			
 			// send the list of users to the client			
 			//  <client> <symbol> <channel> :[prefix]<nick>{ [prefix]<nick>}
