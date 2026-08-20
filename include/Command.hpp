@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:15:32 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/19 14:26:12 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/20 14:58:09 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ int cmd_user(IServerCtrl&, const Message&);
 int cmd_cap(IServerCtrl&, const Message&);
 int cmd_ping(IServerCtrl&, const Message&);
 int cmd_join(IServerCtrl&, const Message&);
+int cmd_privmsg(IServerCtrl&, const Message&);
 
 #endif
 
