@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:25:38 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/19 16:24:34 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/20 10:16:19 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ namespace rfc
 		NOSUCHCHANNEL = 403,		// ERR_NOSUCHCHANNEL
 		CANNOTSEND = 404,		// ERR_CANNOTSENDTOCHAN
 		TOOMANYCHANS,			// 405 ERR_TOOMANYCHANNELS
-		NORECIPIENT = 411,		// ERR_NORECIPIENT
+		INVALIDCAPCMD = 410,		//     ERR_INVALIDCAPCMD (IRCv3)
+		NORECIPIENT,			// ERR_NORECIPIENT
 		NOTEXT,					// 412 ERR_NOTEXTTOSEND
 		BADCMD = 421,			// ERR_UNKNOWNCOMMAND
 		NONICK = 431,			// ERR_NONICKNAMEGIVEN
@@ -88,7 +89,10 @@ namespace rfc
 		TOPIC,					// 332 RPL_TOPIC
 		INVITING = 341,			// RPL_INVITING
 		NAMREPLY = 353,			// RPL_NAMREPLY
-		ENDOFNAMES = 366		// RPL_ENDOFNAMES
+		ENDOFNAMES = 366,		// RPL_ENDOFNAMES
+		MOTD = 372,				//      RPL_MOTD
+		MOTDSTART = 375,		//      RPL_MOTDSTART 
+		ENDOFMOTD				// 376  RPL_ENDOFMOTD
 	};
 } // end namespace rfc
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_pass.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 11:42:55 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/17 14:53:14 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/19 23:30:02 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ int cmd_pass(IServerCtrl & srv, const Message & msg)
 	if (DEBUG == debug::DETAILED)
 		std::cout << "[FD " << client->getFD() 
 			<< "] Server password correct.\n";
-	srv.tryCompleteRegistration(*client);
+	if (!client->getCap())
+			srv.tryCompleteRegistration(*client);
 	return (rfc::OK);
 }
