@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 14:24:29 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/20 11:26:06 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/20 11:48:22 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ std::string addPropertyToNick(const Client & client, bitMask mask)
 	(void)mask;
 	return client.getNick();
 }
+
+//TODO: if a x is found and the pwd is empty then grant connection.
 
 int cmd_join(IServerCtrl & srv, const Message & msg)
 {
