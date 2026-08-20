@@ -6,12 +6,12 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/16 14:47:38 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/18 15:18:33 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/20 09:20:53 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_irc.hpp"
 #include "policies/AlreadyRegisteredPlcy.hpp"
+#include "RFCnumeric.hpp"
 
 // Validate the sender's registration state against the policy's _status.
 int AlreadyRegisteredPlcy::check(const Message & msg, IServerCtrl& srv) const

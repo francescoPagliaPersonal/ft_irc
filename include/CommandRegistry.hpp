@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 16:50:07 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/20 00:28:38 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/20 09:12:14 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,18 +47,6 @@ class CommandRegistry
 };
 
 // -------------------------------------------------------------------------- //
-
-namespace rfc
-{
-	std::string badCmd(const Message&);
-	std::string nickInUse(const Message&);
-	std::string notRegistered(const Message&);
-	std::string alreadyRegistered(const Message&);
-	std::string tooFewParams(const Message&);
-	std::string badPassword(const Message&);
-	std::string noNick(const Message&);
-	std::string nickBad(const Message&);
-} // end of namespace
 
 #endif
 

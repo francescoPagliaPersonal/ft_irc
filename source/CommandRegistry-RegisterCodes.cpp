@@ -6,11 +6,12 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/18 12:35:10 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/20 00:18:11 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/20 09:15:58 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "CommandRegistry.hpp"
+#include "RFCnumeric.hpp"
 #include <sstream>
 
 void CommandRegistry::registerCodes()

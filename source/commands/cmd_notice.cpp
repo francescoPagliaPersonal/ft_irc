@@ -1,32 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cmd_ping.cpp                                       :+:      :+:    :+:   */
+/*   cmd_notice.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/08/16 20:13:56 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/20 09:20:36 by mweghofe         ###   ########.fr       */
+/*   Created: 2026/08/19 15:30:45 by mweghofe          #+#    #+#             */
+/*   Updated: 2026/08/19 15:31:15 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Command.hpp"
 #include "IServerCtrl.hpp"
 #include "Client.hpp"
-#include "RFCnumeric.hpp"
 
-// Answer a PING with a PONG carrying the same token back to the sender.
-int cmd_ping(IServerCtrl& srv, const Message& msg)
-{
-	Client *client = msg.sender;
-	
-	std::string token;
-	if (!msg.params.empty())
-		token = msg.params[0];
-	else
-		token = msg.trailing;
-
-	srv.sendMessage(*client,
-		std::string(":CoolServ PONG CoolServ :") + token + CRLF);
-	return (rfc::OK);
-}
+int cmd_notice(IServerCtrl& srv, const Message& msg)
+{}

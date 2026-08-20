@@ -6,14 +6,14 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 11:42:55 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/18 15:16:02 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/20 09:20:20 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "Command.hpp"
-# include "IServerCtrl.hpp"
-# include "Client.hpp"
-# include "ft_irc.hpp"
+#include "Command.hpp"
+#include "IServerCtrl.hpp"
+#include "Client.hpp"
+#include "RFCnumeric.hpp"
 
 // Verify the server password and set the PASSWD registration flag.
 int cmd_pass(IServerCtrl & srv, const Message & msg)

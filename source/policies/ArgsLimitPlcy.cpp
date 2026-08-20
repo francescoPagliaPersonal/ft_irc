@@ -6,12 +6,12 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/16 14:48:41 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/18 15:15:43 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/20 09:21:03 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_irc.hpp"
 #include "policies/ArgsLimitPlcy.hpp"
+#include "RFCnumeric.hpp"
 
 // Validate that MSG has between _min and _max arguments.
 int ArgsLimitPlcy::check(const Message & msg, IServerCtrl& srv) const

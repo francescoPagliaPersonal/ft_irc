@@ -6,11 +6,12 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 13:19:17 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/19 13:46:10 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/20 09:17:16 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
+#include "RFCnumeric.hpp"
 #include <sstream>
 // #include <arpa/inet.h> // for the commented out block below
 

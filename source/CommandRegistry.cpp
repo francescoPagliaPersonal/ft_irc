@@ -6,12 +6,13 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 18:00:05 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/18 15:14:15 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/20 09:18:00 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "CommandRegistry.hpp"
 #include "IServerCtrl.hpp"
+#include "RFCnumeric.hpp"
 
 // -------------------------------------------------------------------------- //
 // OPERATION

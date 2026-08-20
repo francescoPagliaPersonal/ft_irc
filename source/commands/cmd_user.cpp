@@ -6,14 +6,15 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 13:54:12 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/18 15:15:53 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/20 09:20:24 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
-# include "Command.hpp"
-# include "IServerCtrl.hpp"
-# include "Client.hpp"
+#include "Command.hpp"
+#include "IServerCtrl.hpp"
+#include "Client.hpp"
+#include "RFCnumeric.hpp"
 
 // Set the client's user name and real name, and mark USER registration.
 int cmd_user(IServerCtrl & srv, const Message & msg)
