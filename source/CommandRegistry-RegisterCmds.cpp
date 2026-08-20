@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 11:41:20 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/17 17:42:48 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/19 15:33:50 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,4 +48,9 @@ void CommandRegistry::registerCmds()
 	Command *ping = new Command("PING", cmd_ping);
 	ping->addPolicy(new ArgsLimitPlcy(1, 2));
 	_commands[ping->getName()] = ping;
+
+	Command	*privmsg = new Command("PRIVMSG", cmd_privmsg);
+	privmsg->addPolicy(new AlreadyRegisteredPlcy(true));
+	privmsg->addPolicy(new ArgsLimitPlcy(2, 2));
+	_commands[privmsg->getName()] = privmsg;
 }
