@@ -6,12 +6,12 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/20 09:12:05 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/20 09:17:40 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/20 11:33:58 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RFCNUMERIC_HPP
-# define RFCNUMEIC_HPP
+# define RFCNUMERIC_HPP
 
 // -------------------------------------------------------------------------- //
 
