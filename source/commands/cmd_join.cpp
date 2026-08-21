@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 14:24:29 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/21 12:30:49 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/21 16:16:01 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,6 @@ std::string addPropertyToNick(const Client & client, bitMask mask)
 	return client.getNick();
 }
 
-namespace {
-	
-}
-//TODO: if a x is found and the pwd is empty then grant connection.
 
 int cmd_join(IServerCtrl & srv, const Message & msg)
 {
@@ -60,12 +56,8 @@ int cmd_join(IServerCtrl & srv, const Message & msg)
 	{
 		if (channels[i][0] == '#' || channels[i][0] == '&')
 		{
-			if (!Channel::isTitleCompliant(channels[i].substr(0)))
-				return rfc::BADCHANMASK;
-			if (!Client::isNickCompliant(passwords[i]))
-				return rfc::BADCHANNELKEY;
-			// TODO revisit the return types of the add to Channels
-			int ret = srv.addToChannel(client, channels[i].substr(1), passwords[i]);
+			
+			int ret = srv.addToChannel(client, channels[i], passwords[i]);
 			if (ret)
 			{
 				reply 
@@ -82,7 +74,7 @@ int cmd_join(IServerCtrl & srv, const Message & msg)
 				<< channels[i] << " " 
 				<< CRLF;
 
-			Channel *channel = srv.getChannelByTitle(channels[i].substr(1));
+			Channel *channel = srv.getChannelByTitle(channels[i]);
 			
 			// TASKS:
 			// send a join msg to the whole channel

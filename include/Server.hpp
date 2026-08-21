@@ -85,7 +85,8 @@ class Server : public IServerCtrl
 		void _removeChannel(Channel*);
 		Channel* _getOrCreateChannel(const std::string&, const std::string&);
 		Channel* _getChannel(const std::string&);
-		Channel* _newChannel(const std::string&, const std::string&);
+		Channel* _addChannel(const std::string& key, const std::string& title, const std::string& pw);
+		Channel* _addChannel(const std::string& title, const std::string& pw);
 		// ----
 		Server();
 		Server(const Server&);

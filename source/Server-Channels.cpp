@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 13:55:04 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/21 13:15:06 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/21 16:02:57 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,12 +81,12 @@ void Server::_removeChannel(const std::string& title)
 }
 
 // Lookup a channel by name and return its pointer, or NULL if not found.
-Channel* Server::_getChannel(const std::string& title)
+Channel* Server::_getChannel(const std::string& mapKey)
 {
 	// TODO is this safe enough? this function should only be called when we know the channel exists...
 	std::map<std::string, Channel*>::iterator it;
 
-	it = _channels.find(title);
+	it = _channels.find(mapKey);
 	if (it == _channels.end())
 		return (NULL);
 	else
@@ -107,10 +107,20 @@ Channel* Server::_getOrCreateChannel(const std::string& title, const std::string
 	return (channel);
 }
 
-Channel* Server::_newChannel(const std::string& title, const std::string& pw)
+Channel* Server::_addChannel(const std::string& mapKey, const std::string& title, const std::string& pw)
 {
 	Channel* channel = new Channel(title, pw);
-	_channels[title] = channel;
+	_channels[mapKey] = channel;
 
 	return (channel);
 }
+
+Channel* Server::_addChannel(const std::string& title, const std::string& pw)
+{
+	std::string mapKey = Channel::title2key(title);
+	Channel* channel = new Channel(title, pw);
+	_channels[mapKey] = channel;
+
+	return (channel);
+}
+

@@ -6,12 +6,15 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/21 12:12:19 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/21 13:31:58 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/21 15:43:28 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Channel.hpp"
+#include <algorithm>
+#include <deque>
 #include <map>
+#include <ratio>
 
 bool Channel::isTitleCompliant(const std::string& channel)
 {
@@ -47,7 +50,22 @@ bool Channel::passwordMatch(const std::string & pw)
 	return (_password.empty() && (pw == "x" || pw.empty()));
 }
 
-bool Channel::hasRights(Client *)
+bool Channel::belowChannelLimit()
 {
-	return true;
+	return (!(_userLimit && (_members.size() < _userLimit)));
 };
+
+bool Channel::joinGranted(Client *client)
+{
+	std::deque<Client*>::iterator it; ;
+	
+	if (!(_modes & CH_INVITE))
+		return true;
+	
+	for (it = _invites.begin(); it != _invites.end(); ++it)
+	{
+		if (*it == client)
+			return true;
+	}
+	return false;
+}

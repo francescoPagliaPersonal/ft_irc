@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/13 10:19:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/21 13:35:00 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/21 16:10:08 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 // -------------------------------------------------------------------------- //
 
+#include <deque>
 # include <string>
 # include <map>
 #include <vector>
@@ -44,7 +45,8 @@ enum e_chMask
 	CH_INVITE = 1 << 0,
 	CH_TOPIC = 1 << 1,
 	CH_PASSWORD = 1 << 2,
-	CH_LIMIT = 1 << 3
+	CH_LIMIT = 1 << 3,
+	CH_LOCAL = 1 << 4
 };
 
 enum e_usrMask
@@ -90,7 +92,9 @@ class Channel
 
 		bool isMember(Client *);
 		bool passwordMatch(const std::string & pw);
-		bool hasRights(Client *);
+		bool belowChannelLimit();
+		bool joinGranted(Client *);
+		
 	private:
 		// ----
 		bitMask 							_modes;
@@ -99,6 +103,7 @@ class Channel
 		std::string							_topic;
 		std::string							_password;
 		std::map<Client*, bitMask>			_members;
+		std::deque<Client *>				_invites;
 		// ----
 		// ----
 		Channel();
