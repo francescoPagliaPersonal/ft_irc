@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/13 10:19:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/21 16:10:08 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/21 16:58:17 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ class Channel
 		std::string getPassword() const;
 		t_uint 		getLimit() const;
 		bitMask		getModes() const;
-		std::map<Client*, bitMask>	getClientMap() const;
+		std::map<Client*, bitMask>	getMembersMap() const;
 		
 		// ---- set
 		void setTopic(const std::string&);

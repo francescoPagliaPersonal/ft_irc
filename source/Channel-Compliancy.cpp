@@ -6,15 +6,13 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/21 12:12:19 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/21 15:43:28 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/21 17:33:46 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Channel.hpp"
-#include <algorithm>
 #include <deque>
 #include <map>
-#include <ratio>
 
 bool Channel::isTitleCompliant(const std::string& channel)
 {
@@ -22,12 +20,12 @@ bool Channel::isTitleCompliant(const std::string& channel)
 	
 	if (channel.size() > MAX_CHANLEN)
 		return false;
-	if (channel[0] != '#' || channel[0] != '&' )
+	if (channel[0] != '#' && channel[0] != '&' )
 		return false;
 	for (size_t i = 1; i < channel.size(); ++i)
 	{
 		if (!std::isalnum(channel[i]) 
-			|| validChar.find_first_of(channel[i]) == std::string::npos)
+			&& validChar.find_first_of(channel[i]) == std::string::npos)
 			return false;
 	}
 	return true;
@@ -53,7 +51,7 @@ bool Channel::passwordMatch(const std::string & pw)
 bool Channel::belowChannelLimit()
 {
 	return (!(_userLimit && (_members.size() < _userLimit)));
-};
+}
 
 bool Channel::joinGranted(Client *client)
 {

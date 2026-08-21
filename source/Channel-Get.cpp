@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 17:12:46 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/19 18:32:40 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/21 16:58:17 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ std::string Channel::getPassword() const
 	return (_password);
 }
 
-std::map<Client *, bitMask> Channel::getClientMap() const
+std::map<Client *, bitMask> Channel::getMembersMap() const
 {
 	return (_members);
 }
