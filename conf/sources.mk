@@ -22,15 +22,17 @@ SRC_MAN		:=  arg2password.cpp arg2port.cpp\
 				Server-Commands.cpp Server-procInputBuffer.cpp\
 				Server-Broadcast.cpp\
 				Server-tryCompleteRegistration.cpp\
+				Server-addToChannel.cpp\
 				Epoll.cpp ListeningSocket.cpp ListeningSocket-CDTOR.cpp\
 				Client.cpp Client-Buffer.cpp Client-Channels.cpp\
 				Client-getMessages.cpp Client-Get.cpp Client-Set.cpp\
+				Client-Compliancy.cpp\
 				Message.cpp\
 				Command.cpp CommandRegistry.cpp\
 				CommandRegistry-RegisterCmds.cpp\
 				CommandRegistry-handleProtocolErrors.cpp\
 				Channel.cpp Channel-Get.cpp Channel-Set.cpp\
-				Channel-Operation.cpp\
+				Channel-Operation.cpp Channel-Compliancy.cpp\
 				main.cpp
 SRC_BON		:= 
 

@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 16:22:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/20 10:16:08 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/21 12:05:45 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ class Client
 		bool isChannelMember(Channel*) const;
 		void addChannel(Channel*);
 		void removeChannel(Channel*);
+
+		static bool isNickCompliant(const std::string & nick);
 	private:
 		// ----
 		int _fd;

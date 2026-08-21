@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/13 10:19:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/21 11:14:40 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/21 13:35:00 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ enum e_chMask
 
 enum e_usrMask
 {
+	US_BASIC = 0,
 	US_OPERATOR = 1 << 1,
 	US_FOUNDER = 1 << 2,
 	US_INVISIBLE = 1 << 3
@@ -75,7 +76,7 @@ class Channel
 		std::string getTopic() const;
 		std::string getPassword() const;
 		t_uint 		getLimit() const;
-		std::string	getModes() const;
+		bitMask		getModes() const;
 		std::map<Client*, bitMask>	getClientMap() const;
 		
 		// ---- set
@@ -83,6 +84,11 @@ class Channel
 		void setPassword(const std::string&);
 		void setLimit(t_uint);
 		void setInvite();
+
+		static bool isTitleCompliant(const std::string& channel);
+		bool isMember(Client *);
+		bool passwordMatch(const std::string & pw);
+		bool hasRights(Client *);
 	private:
 		// ----
 		bitMask 							_modes;

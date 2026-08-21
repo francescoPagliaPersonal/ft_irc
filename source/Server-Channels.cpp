@@ -6,45 +6,19 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 13:55:04 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/21 10:47:33 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/21 13:15:06 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 #include "Channel.hpp"
 #include "ft_irc.hpp"
+#include <cstddef>
 
 // -------------------------------------------------------------------------- //
 // INTERFACE -- CHANNELS
 // -------------------------------------------------------------------------- //
 
-// Add CLIENT to the channel CHNAME, creating it first if it does not
-// exist yet; the channel password must match PW.
-int Server::addToChannel(Client* client,
-						  const std::string& title,
-						  const std::string& pw = "")
-{
-	Channel* channel = _getChannel(title);
-	if (!channel)
-		_newChannel(title, pw);
-	// TODO does the client or the server check IF client is a member?
-	if (client->isChannelMember(channel))
-	{
-		std::cout << "[Info] Client is already member of that channel - consequence not handled yet.\n";
-		return rfc::USERONCHANNEL;
-	}
-	if (channel->getPassword() == pw)
-	{
-		channel->addClient(client);
-		client->addChannel(channel);
-		broadcastToChannel(channel, "[Info] New Client joined channel - needs proper msg.", client);
-	}
-	else // TODO needs some proper code or just return false and cmd must send different reply
-	{
-		std::cout << "[Info] Channel password incorrect - consequence not handled yet.\n";
-	}
-	return rfc::OK;
-}
 
 Channel* Server::getChannelByTitle(const std::string & title)
 {
@@ -135,8 +109,6 @@ Channel* Server::_getOrCreateChannel(const std::string& title, const std::string
 
 Channel* Server::_newChannel(const std::string& title, const std::string& pw)
 {
-
-	
 	Channel* channel = new Channel(title, pw);
 	_channels[title] = channel;
 

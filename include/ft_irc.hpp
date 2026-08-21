@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:25:38 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/21 11:15:44 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/21 12:31:16 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ namespace rfc
 		CHANFULL = 471,			// ERR_CHANNELISFULL
 		UNKNOWNMODE,			// 472 ERR_UNKNOWNMODE
 		INVITEONLY,				// 473 ERR_INVITEONLYCHAN
-		BADKEY = 475,			// ERR_BADCHANNELKEY
+		BADCHANNELKEY = 475,	// ERR_BADCHANNELKEY
 		BADCHANMASK,			// ERR_BADCHANMASK
 		CHANOPRIVS = 482,		// ERR_CHANOPRIVSNEEDED
 		NOCONN = 42001,			// internal: sender gone
@@ -116,8 +116,5 @@ typedef unsigned int		t_uint;
 typedef unsigned char		t_uint8;
 typedef unsigned long int	t_uint32;
 
-namespace irc {
-	bool isNickCompliant(const std::string& );
-	bool isChannelCompliant(const std::string&);
-}
+namespace irc {}
 #endif

@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 13:54:12 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/21 11:17:38 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/21 12:07:03 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int cmd_nick(IServerCtrl & srv, const Message & msg)
 		return (rfc::NONICK);
 	
 	std::string tmpNick = msg.params[0];
-	if (!irc::isNickCompliant(tmpNick))
+	if (!Client::isNickCompliant(tmpNick))
 		return (rfc::NICKBAD);
 	
 	Client *hasThisNick = srv.findClientByNick(tmpNick);

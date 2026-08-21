@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 14:24:29 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/21 11:09:10 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/21 12:30:49 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,10 @@ int cmd_join(IServerCtrl & srv, const Message & msg)
 	{
 		if (channels[i][0] == '#' || channels[i][0] == '&')
 		{
+			if (!Channel::isTitleCompliant(channels[i].substr(0)))
+				return rfc::BADCHANMASK;
+			if (!Client::isNickCompliant(passwords[i]))
+				return rfc::BADCHANNELKEY;
 			// TODO revisit the return types of the add to Channels
 			int ret = srv.addToChannel(client, channels[i].substr(1), passwords[i]);
 			if (ret)
