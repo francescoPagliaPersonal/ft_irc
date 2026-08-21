@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 13:55:04 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/20 15:59:09 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/21 10:47:33 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,7 @@ Channel* Server::_getOrCreateChannel(const std::string& title, const std::string
 Channel* Server::_newChannel(const std::string& title, const std::string& pw)
 {
 
+	
 	Channel* channel = new Channel(title, pw);
 	_channels[title] = channel;
 

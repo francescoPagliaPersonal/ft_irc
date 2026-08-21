@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 17:13:52 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/19 18:33:40 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/21 10:41:18 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@
 // -------------------------------------------------------------------------- //
 
 // Add CLIENT to the channel's member list.
-void Channel::addClient(Client* client)
+void Channel::addClient(Client* client, bitMask privileges = 0)
 {
-	_members[client] = 0;
+	_members[client] = privileges;
 }
 
 // Remove CLIENT from the channel's member list.

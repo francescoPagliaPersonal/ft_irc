@@ -26,6 +26,9 @@
 # define CRLF "\r\n"
 # define MSG_MAX_LENGTH 512
 # define MAX_NICKLEN 32
+# define MAX_CHANLEN 32
+# define MAX_TOPICLEN 300
+# define MAX_CHANNELUSERS 500
 
 # ifndef DEBUG
 #  define DEBUG 0 // TODO set this to zero later and ctl via makefile
@@ -115,5 +118,6 @@ typedef unsigned long int	t_uint32;
 
 namespace irc {
 	bool isNickCompliant(const std::string& );
+	bool isChannelCompliant(const std::string&);
 }
 #endif

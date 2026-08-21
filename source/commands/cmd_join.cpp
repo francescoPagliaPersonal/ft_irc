@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 14:24:29 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/20 11:48:22 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/21 11:09:10 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "Client.hpp"
 #include "ft_irc.hpp"
 #include <algorithm>
+#include <cctype>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -32,6 +33,9 @@ std::string addPropertyToNick(const Client & client, bitMask mask)
 	return client.getNick();
 }
 
+namespace {
+	
+}
 //TODO: if a x is found and the pwd is empty then grant connection.
 
 int cmd_join(IServerCtrl & srv, const Message & msg)

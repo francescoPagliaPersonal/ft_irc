@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/13 10:19:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/20 15:46:55 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/21 11:14:40 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@
 
 // -------------------------------------------------------------------------- //
 
-# define MAX_CHANNELUSERS 100
+
+
 // TODO need the right bit values
 // # define CH_INVITE
 // # define CH_TOPIC
@@ -66,7 +67,7 @@ class Channel
 		~Channel();
 		// ----
 		// ---- operation
-		void addClient(Client*);
+		void addClient(Client*, bitMask);
 		void removeClient(Client*);
 		bool isEmpty() const;
 		// ---- get
