@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:25:38 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/21 11:31:58 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/21 11:44:34 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 
 # include <iostream>
 # include <stdexcept>
+# include <string>
+# include <vector>
 
 // -------------------------------------------------------------------------- //
 
@@ -114,5 +116,6 @@ typedef unsigned long int	t_uint32;
 
 namespace irc {
 	bool isNickCompliant(const std::string& );
+	std::vector<std::string> strSplit(std::string str, char ch, bool keepEmptyStr);
 }
 #endif
