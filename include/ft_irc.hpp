@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_irc.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:25:38 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/19 23:33:17 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/21 11:31:58 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,4 +112,7 @@ typedef unsigned int		t_uint;
 typedef unsigned char		t_uint8;
 typedef unsigned long int	t_uint32;
 
+namespace irc {
+	bool isNickCompliant(const std::string& );
+}
 #endif
