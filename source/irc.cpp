@@ -11,3 +11,9 @@
 /* ************************************************************************** */
 
 #include "ft_irc.hpp"
+
+void irc::allCaps(std::string & str) 
+{
+	for (std::string::size_type i = 0; i < str.size(); ++i)
+		str[i] = std::toupper(static_cast<unsigned char>(str[i]));
+}

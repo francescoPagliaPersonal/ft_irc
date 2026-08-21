@@ -116,5 +116,8 @@ typedef unsigned int		t_uint;
 typedef unsigned char		t_uint8;
 typedef unsigned long int	t_uint32;
 
-namespace irc {}
+namespace irc {
+	void allCaps(std::string & str);
+}
+
 #endif
