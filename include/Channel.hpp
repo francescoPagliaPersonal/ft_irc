@@ -86,6 +86,8 @@ class Channel
 		void setInvite();
 
 		static bool isTitleCompliant(const std::string& channel);
+		static std::string title2key(std::string);
+
 		bool isMember(Client *);
 		bool passwordMatch(const std::string & pw);
 		bool hasRights(Client *);

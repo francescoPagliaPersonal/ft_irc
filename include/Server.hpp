@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:32:56 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/20 15:57:09 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/21 15:54:24 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ class Server : public IServerCtrl
 		void tryCompleteRegistration(Client&);
 		void sendMessage(Client&, const std::string&);
 		Client* findClientByNick(const std::string &);
-		Channel* getChannelByTitle(const std::string&);
+		Channel* getChannelByTitle(std::string);
 		//		Channels
 		int addToChannel(Client*, const std::string&, const std::string&);
 		void removeFromChannel(Client*, const std::string&, const std::string&);

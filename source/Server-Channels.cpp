@@ -20,9 +20,9 @@
 // -------------------------------------------------------------------------- //
 
 
-Channel* Server::getChannelByTitle(const std::string & title)
+Channel* Server::getChannelByTitle(std::string title)
 {
-	return _getChannel(title);
+	return _getChannel(Channel::title2key(title));
 }
 
 // Remove CLIENT from the channel CHNAME and clean up empty channels.

@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 17:13:52 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/21 10:41:18 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/21 15:46:02 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,4 +34,11 @@ bool Channel::isEmpty() const
 	if (_members.empty())
 		return (true);
 	return (false);
+}
+
+std::string Channel::title2key(std::string title)
+{
+	title.erase(0,1);
+	irc::allCaps(title);
+	return title;
 }
