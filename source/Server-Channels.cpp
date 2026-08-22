@@ -66,7 +66,7 @@ void Server::broadcastToChannel(const std::string& title,
 // Remove a channel by channel pointer.
 void Server::_removeChannel(Channel* channel)
 {
-	_channels.erase(channel->getTitle());
+	_channels.erase(Channel::title2key(channel->getTitle()));
 	delete channel;
 }
 
