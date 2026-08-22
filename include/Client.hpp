@@ -55,6 +55,7 @@ class Client
 		std::string	getNick() const;
 		std::string	getUserName() const;
 		std::string	getRealName() const;
+		std::deque<Channel*> getChannelsList() const;
 		bool getCap() const;
 		// ---- Set ----
 		bool setRegistrationFlags(int flags);

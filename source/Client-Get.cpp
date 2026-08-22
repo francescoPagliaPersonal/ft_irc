@@ -50,3 +50,8 @@ bool Client::getCap() const
 {
 	return (_capRequested);
 }
+
+std::deque<Channel*> Client::getChannelsList() const
+{
+	return _channels;
+}

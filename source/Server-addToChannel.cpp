@@ -22,6 +22,8 @@ int Server::addToChannel(Client* client,
 						  const std::string& title,
 						  const std::string& pw = "")
 {
+	if (!(client->getChannelsList().size() < MAX_CHANJOIN))
+		return rfc::TOOMANYCHANS;
 	if (!Channel::isTitleCompliant(title))
 		return rfc::BADCHANMASK;
 	if (!Client::isNickCompliant(pw))

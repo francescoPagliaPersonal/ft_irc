@@ -28,6 +28,7 @@
 # define MAX_NICKLEN 32
 # define MAX_CHANLEN 32
 # define MIN_CHANLEN 4
+# define MAX_CHANJOIN 3
 # define MAX_TOPICLEN 300
 # define MAX_CHANNELUSERS 500
 
