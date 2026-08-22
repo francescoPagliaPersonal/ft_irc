@@ -18,7 +18,7 @@ bool Channel::isTitleCompliant(const std::string& channel)
 {
 	std::string validChar("-_");
 	
-	if (channel.size() > MAX_CHANLEN)
+	if (!(channel.size() >= MIN_CHANLEN && channel.size() <= MAX_CHANLEN))
 		return false;
 	if (channel[0] != '#' && channel[0] != '&' )
 		return false;
