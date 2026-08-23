@@ -13,8 +13,6 @@
 #include "Server.hpp"
 #include "Channel.hpp"
 #include "ft_irc.hpp"
-#include <cstddef>
-#include <vector>
 
 void Server::broadcast(const std::string& reply, std::map<Client*, t_uint8> channelMembers, Client* client)
 {

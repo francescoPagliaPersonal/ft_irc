@@ -15,7 +15,6 @@
 # include "IServerCtrl.hpp"
 # include "Client.hpp"
 #include "ft_irc.hpp"
-#include <algorithm>
 #include <cctype>
 #include <sstream>
 #include <string>

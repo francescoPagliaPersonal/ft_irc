@@ -13,7 +13,6 @@
 #include "Message.hpp"
 #include "ft_irc.hpp"
 #include <cctype>
-#include <exception>
 #include <stdexcept>
 
 namespace  {
