@@ -13,6 +13,7 @@
 #include "Message.hpp"
 #include "ft_irc.hpp"
 #include <cctype>
+#include <cstddef>
 #include <stdexcept>
 
 namespace  {
@@ -150,26 +151,45 @@ std::vector<std::string> strSplit(std::string str, char ch, bool keepEmptyStr)
 	return words;
 }
 
-
-std::vector<std::string> chunkyfyTrailing(size_t usedBuffer, std::string message)
+/* Given a message of any lenght that includes the complete formatting, split the trailing apart
+ in multiple chuncks and return a string that contains as many message as needed that fit in MSG_MAX_LENGTH
+ given this example:
+ 	:dan!~h@localhost PRIVMSG #coolpeople :the message
+ the lenght of each part is
+ nick = 32
+ user = 32
+ host = between 64 and 254
+ chat = 32
+ max total of the msgArgs is 1 + 32 + 1 + 32 + 1 + 254 + 1 + 7 +1 32 + 2 = 364
+ by setting the MIN_TRAIL_LENGTH to 32 should be more than safe
+if \n is not found or the lenght is still too long 
+then find closes space before [max trail len]
+if no spaces are found cut the message at available buffer 
+then repeat till message is empty.
+*/
+std::string chunkyfyTrailing(const std::string & msgArgs, std::string msgTrailing)
 {
-	size_t availBuffer = usedBuffer < MSG_MAX_LENGTH - 4 ? MSG_MAX_LENGTH - usedBuffer - 4 : 0;
-	if (!availBuffer)
-		throw std::runtime_error("cannot build a message because the buffer used is too long.");
-	if (message.size() > availBuffer)
+	size_t eomsg = 2; //\CRLF
+	std::string response;
+
+	if (msgArgs.size() + MIN_TRAIL_LENGTH + eomsg > MSG_MAX_LENGTH )
+		return std::string(""); //TODO: verify if this could even occur and if we should send a numeric
+
+	size_t maxTrailLen = MSG_MAX_LENGTH - (msgArgs.size() + eomsg);
+
+	while (msgTrailing.size() + eomsg > maxTrailLen)
 	{
-		/*TODO: find first \n
-				if \n is not found or the lenght is still too long 
-				then find closes space before [available buffer]
-				if no spaces are found cut the message at available buffer 
-				then repeat till message is empty.
-		*/
-		// if (message[availBuffer] != )
+		std::string::size_type pos;
+		pos = msgTrailing.find_last_of('\n', maxTrailLen);
+		if (pos == std::string::npos)
+			pos = msgTrailing.find_last_of(".;,: \t", maxTrailLen);
+		if (pos == std::string::npos)
+			pos = maxTrailLen;
+		response += msgArgs + msgTrailing.substr(0, pos) + CRLF;
+		msgTrailing.erase(0, pos);
 		
 	}
-	std::vector<std::string> tmp;
-	tmp.push_back("");
-	
-	return tmp;
-	// TODO: fill the topic section!!
+	response += msgArgs + msgTrailing + CRLF;
+
+	return response;
 }

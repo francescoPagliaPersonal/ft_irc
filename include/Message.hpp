@@ -20,6 +20,8 @@
 # include <string>
 # include <vector>
 
+# define MIN_TRAIL_LENGTH 32
+
 // -------------------------------------------------------------------------- //
 
 enum e_msgflags
@@ -50,7 +52,7 @@ Message	string2Message(std::string str, Client *client);
 int		argCount(const Message &);
 
 std::vector<std::string> strSplit(std::string str, char ch, bool keepEmptyStr);
-std::vector<std::string> chunkyfyTrailing(size_t usedBuffer, std::string message);
+std::string chunkyfyTrailing(const std::string & msgArgs, std::string msgTrailing);
 
 
 #endif

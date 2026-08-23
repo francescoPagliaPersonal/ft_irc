@@ -35,11 +35,13 @@ std::string buildResponse(Client* sender, std::string recipient, std::string mes
 // TODO channel broadcast here?
 	// TODO (if we feel like it ;) ) split by `,` for PRIVMSG client,another,more hi
 	reply = ':' + sender->getNick() + '!' + sender->getUserName();
+	reply += " PRIVMSG " + recipient + " :";
 	// FIXME still needs the ADDR stuff and getAddr or getHost
 	// reply += '@' + sender->getHost
 	// TODO replace with comming chunkifyTrailing()
+	reply = chunkyfyTrailing(reply, message);
 	// reply += " PRIVMSG " + msg.params[0] + " :" + msg.trailing + CRLF;
-	reply += " PRIVMSG " + recipient + " :" + message + CRLF;
+	// reply += " PRIVMSG " + recipient + " :" + message + CRLF;
 	return reply;
 }
 
