@@ -26,7 +26,7 @@ std::string topicReply(Client * client, Channel * channel)
 	std::stringstream reply;
 	reply << ":CoolServ" << " ";
 	
-	if (!channel->getTopic().empty())
+	if (channel->getTopic().empty())
 	{
 		reply 
 			<< "331" << " "
