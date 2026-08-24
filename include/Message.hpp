@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Message.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:38:21 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/24 18:34:47 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/24 18:37:32 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 // -------------------------------------------------------------------------- //
 # include "Client.hpp"
 
-#include <cstddef>
 # include <string>
 # include <vector>
 
