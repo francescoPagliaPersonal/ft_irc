@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_join.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 14:24:29 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/24 12:10:31 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/24 14:17:19 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,8 @@ std::string userListReply(Client *client, Channel* channel )
 	for (; it != channelMembers.end(); ++it)
 	{
 		std::string nickToPrint = addPropertyToNick(*it->first, it->second);  // TODO: add Property to nick  
+		// FIXME nick reply needs 'nicklist_set_host'. the test below fixed the error. still needs proper address handled
+		// nickToPrint += "!localhost";
 		if (replyBase.size() + tmp.size() + nickToPrint.size() < MSG_MAX_LENGTH)
 			tmp.append(nickToPrint + " ");				
 		else 
