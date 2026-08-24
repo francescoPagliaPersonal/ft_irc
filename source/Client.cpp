@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:52:36 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/24 12:14:41 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/25 00:35:46 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,19 +44,3 @@ Client::~Client()
 // -------------------------------------------------------------------------- //
 // OCF
 // -------------------------------------------------------------------------- //
-
-Client::Client()
-	: _fd(-1)
-{}
-
-Client::Client(const Client& other)
-	: _fd(-1)
-{
-	(void) other;
-}
-
-Client Client::operator=(const Client& other)
-{
-	(void) other;
-	return (*this);
-}
