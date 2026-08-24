@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server-addToChannel.cpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/21 13:14:43 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/21 17:15:13 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/24 14:30:02 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,6 @@ int Server::addToChannel(Client* client,
 		client->addChannel(channel);
 		return rfc::OK;
 	}
-	// TODO does the client or the server check IF client is a member?
-	// if (client->isChannelMember(channel))
-	// it is more meaningfull that the channel checks the membership 
-	// the client information is a convenince for us 
 	if (channel->isMember(client))
 		return rfc::USERONCHANNEL;
 	if (!channel->passwordMatch(pw))

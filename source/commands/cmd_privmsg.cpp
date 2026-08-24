@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 15:31:28 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/20 14:18:33 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/24 14:51:05 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,16 +32,12 @@ std::string buildResponse(Client* sender, std::string recipient, std::string mes
 {
 	std::string reply;
 
-// TODO channel broadcast here?
 	// TODO (if we feel like it ;) ) split by `,` for PRIVMSG client,another,more hi
 	reply = ':' + sender->getNick() + '!' + sender->getUserName();
 	reply += " PRIVMSG " + recipient + " :";
 	// FIXME still needs the ADDR stuff and getAddr or getHost
 	// reply += '@' + sender->getHost
-	// TODO replace with comming chunkifyTrailing()
 	reply = chunkyfyTrailing(reply, message);
-	// reply += " PRIVMSG " + msg.params[0] + " :" + msg.trailing + CRLF;
-	// reply += " PRIVMSG " + recipient + " :" + message + CRLF;
 	return reply;
 }
 
