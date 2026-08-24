@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 14:24:29 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/21 17:27:06 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/24 12:10:31 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ std::string userListReply(Client *client, Channel* channel )
 		{
 			response.append(replyBase + tmp + CRLF);
 			tmp.clear();
+			tmp.append(nickToPrint + " ");
 		}
 	}
 	if (!tmp.empty())
@@ -108,12 +109,9 @@ int cmd_join(IServerCtrl & srv, const Message & msg)
 	channels = strSplit(msg.params[0], ',', false);
 	if (msg.params.size() == 2)
 		passwords = strSplit(msg.params[1], ',', true);
-	else
-	{
-		
-		for (size_t i = passwords.size(); i < channels.size(); ++i)
-			passwords.push_back("");		
-	}
+
+	for (size_t i = passwords.size(); i < channels.size(); ++i)
+		passwords.push_back("");		
 
 	std::stringstream reply;
 	
@@ -137,6 +135,7 @@ int cmd_join(IServerCtrl & srv, const Message & msg)
 			<< channels[i] << " " 
 			<< CRLF;
 
+		
 		Channel *channel = srv.getChannelByTitle(channels[i]);
 		
 		// TASKS:
@@ -153,6 +152,8 @@ int cmd_join(IServerCtrl & srv, const Message & msg)
 		srv.sendMessage(*client, userListReply(client, channel));
 		srv.sendMessage(*client, endOfNames(client->getNick(), channel->getTitle()));
 	
+		reply.clear();
+		
 	}
 	
 	return rfc::OK;
