@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 14:24:29 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/24 14:17:19 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/24 15:02:46 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,9 +142,7 @@ int cmd_join(IServerCtrl & srv, const Message & msg)
 		
 		// TASKS:
 		// send a join msg to the whole channel
-
-		std::map<Client *, bitMask>	channelMembers = channel->getMembersMap();
-		srv.broadcast(reply.str(), channelMembers, client);
+		srv.broadcast(reply.str(), channel, client);
 
 		// send the topic of the channel to the client
 					

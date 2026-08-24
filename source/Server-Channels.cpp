@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 13:55:04 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/24 14:49:38 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/24 14:59:15 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,25 +38,6 @@ void Server::removeFromChannel(Client* client, const std::string& title,
 	if (channel->isEmpty())
 		_removeChannel(channel);
 	(void) reason; // TODO depends on what the protocol needs...no idea right now
-}
-
-// Send MSG to all members of CHANNEL, optionally excluding SENDER.
-void Server::broadcastToChannel(Channel* channel,
-						const std::string& msg,
-						Client* sender = NULL)
-{
-	broadcastToChannel(channel->getTitle(), msg, sender);
-}
-
-// Send MSG to all members of the channel TITLE, optionally excluding SENDER.
-void Server::broadcastToChannel(const std::string& title,
-						const std::string& msg,
-						Client* sender = NULL)
-{
-	(void) title;
-	(void) msg;
-	(void) sender;
-	std::cout << "[Info] " << __FUNCTION__ << " is not implemented.\n";
 }
 
 // -------------------------------------------------------------------------- //

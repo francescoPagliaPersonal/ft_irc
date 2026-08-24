@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 15:31:28 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/24 14:51:05 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/24 15:02:54 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int cmd_privmsg(IServerCtrl& srv, const Message& msg)
 		else
 		{
 			std::string reply = buildResponse(sender, recipients[i], msg.trailing);
-			srv.broadcast(reply, channel->getMembersMap(), sender);
+			srv.broadcast(reply, channel, sender);
 		}
 
 	}
