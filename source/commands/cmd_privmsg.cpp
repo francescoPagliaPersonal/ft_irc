@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 15:31:28 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/24 15:02:54 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/24 18:15:53 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "IServerCtrl.hpp"
 #include "Client.hpp"
 #include "Message.hpp"
-#include "ft_irc.hpp"
+#include "irc.hpp"
 #include <sstream>
 #include <vector>
 
@@ -41,16 +41,16 @@ std::string buildResponse(Client* sender, std::string recipient, std::string mes
 	return reply;
 }
 
-int cmd_privmsg(IServerCtrl& srv, const Message& msg)
+rfc cmd_privmsg(IServerCtrl& srv, const Message& msg)
 {
 	Client* sender = msg.sender;
 	// TODO do we want proper return codes ie. 401, 411,412 ERR_NOTEXTTOSEND
 	// TODO argument policy currently prevents a missing recipient
 	// TODO neither return has a message yet
 	if (!(msg.flags & MSG_HAS_PARAMS))
-		return (rfc::NORECIPIENT);
+		return (irc::NORECIPIENT);
 	if (!(msg.flags & MSG_HAS_TRAILING))
-		return (rfc::NOTEXT);
+		return (irc::NOTEXT);
 	std::vector<std::string>	recipients = strSplit(msg.params[0], ',', false);
 	for (size_t i = 0; i < recipients.size(); ++i)
 	{
@@ -58,7 +58,7 @@ int cmd_privmsg(IServerCtrl& srv, const Message& msg)
 		{
 			Client* recipient = srv.findClientByNick(recipients[i]);
 			if (recipient == NULL)
-				srv.sendMessage(*sender, replyNoNick(sender, rfc::NOSUCHNICK));
+				srv.sendMessage(*sender, replyNoNick(sender, irc::NOSUCHNICK));
 			else
 			{
 				std::string reply = buildResponse(sender, recipients[i], msg.trailing);
@@ -68,7 +68,7 @@ int cmd_privmsg(IServerCtrl& srv, const Message& msg)
 		}
 		Channel* channel = srv.getChannelByTitle(recipients[i]);
 		if (channel == NULL)
-				srv.sendMessage(*sender, replyNoNick(sender, rfc::NOSUCHCHANNEL));
+				srv.sendMessage(*sender, replyNoNick(sender, irc::NOSUCHCHANNEL));
 		else
 		{
 			std::string reply = buildResponse(sender, recipients[i], msg.trailing);
@@ -77,5 +77,5 @@ int cmd_privmsg(IServerCtrl& srv, const Message& msg)
 
 	}
 	
-	return (rfc::OK);
+	return (irc::OK);
 }

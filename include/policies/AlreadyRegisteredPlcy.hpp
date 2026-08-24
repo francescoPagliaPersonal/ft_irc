@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 13:36:47 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/17 12:10:20 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/24 18:08:00 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 #include "Client.hpp"
 #include "IPolicy.hpp"
-
+#include "irc.hpp"
 
 class AlreadyRegisteredPlcy : public IPolicy
 {
@@ -23,7 +23,7 @@ class AlreadyRegisteredPlcy : public IPolicy
 	AlreadyRegisteredPlcy(bool status): _status(status) {};
 	~AlreadyRegisteredPlcy() {};
 
-	int check(const Message & msg, IServerCtrl& srv) const;
+	rfc check(const Message & msg, IServerCtrl& srv) const;
 
 	private:
 	bool	_status;

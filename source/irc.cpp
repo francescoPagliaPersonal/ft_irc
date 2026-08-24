@@ -3,15 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   irc.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/21 11:27:30 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/21 11:46:37 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/24 17:53:20 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_irc.hpp"
+#include "irc.hpp"
 
+void irc::allCaps(std::string & str) 
+{
+	for (std::string::size_type i = 0; i < str.size(); ++i)
+		str[i] = std::toupper(static_cast<unsigned char>(str[i]));
+}
 
 bool irc::isNickCompliant(const std::string & nick)
 {
@@ -26,7 +32,6 @@ bool irc::isNickCompliant(const std::string & nick)
 		return false;
 	return true;
 }
-
 
 std::vector<std::string> irc::strSplit(std::string str, char ch, bool keepEmptyStr)
 {

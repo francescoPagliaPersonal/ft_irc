@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   Channel-Operation.cpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 17:13:52 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/21 17:15:37 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/24 18:16:18 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Channel.hpp"
+#include "irc.hpp"
 
 // -------------------------------------------------------------------------- //
 // OPERATION

@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 13:54:12 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/19 12:27:13 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/24 18:15:53 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # include "Command.hpp"
 # include "IServerCtrl.hpp"
 # include "Client.hpp"
+# include "irc.hpp"
 
 /*
 	CAPABILITY NEGOTIATION of IRCv3
@@ -24,7 +25,7 @@
 */
 
 // Handle the CAP command; currently a stub to advance the handshake.
-int cmd_cap(IServerCtrl & srv, const Message & msg)
+rfc cmd_cap(IServerCtrl & srv, const Message & msg)
 {
 	// TODO need more content? currently is empty stub to advance handshake
 	
@@ -45,7 +46,7 @@ int cmd_cap(IServerCtrl & srv, const Message & msg)
 				client->setCap(false);
 		}
 		else
-			return (rfc::INVALIDCAPCMD);
+			return (irc::INVALIDCAPCMD);
 	}
-	return (rfc::OK);
+	return (irc::OK);
 }

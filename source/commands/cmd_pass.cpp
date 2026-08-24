@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 11:42:55 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/19 23:30:02 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/24 18:15:53 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,20 @@
 # include "IServerCtrl.hpp"
 # include "Client.hpp"
 # include "ft_irc.hpp"
+# include "irc.hpp"
 
 // Verify the server password and set the PASSWD registration flag.
-int cmd_pass(IServerCtrl & srv, const Message & msg)
+rfc cmd_pass(IServerCtrl & srv, const Message & msg)
 {
 	Client *client = msg.sender;
 	if (msg.params[0] != srv.getPassword())
-		return (rfc::BADPASS);
+		return (irc::BADPASS);
 	if (!client->setRegistrationFlags(REG_PASSWD))
-		return (rfc::ALREADYREG);
+		return (irc::ALREADYREG);
 	if (DEBUG == debug::DETAILED)
 		std::cout << "[FD " << client->getFD() 
 			<< "] Server password correct.\n";
 	if (!client->getCap())
 			srv.tryCompleteRegistration(*client);
-	return (rfc::OK);
+	return (irc::OK);
 }

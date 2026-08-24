@@ -14,6 +14,7 @@
 # define IPOLICY_HPP
 
 # include "Message.hpp"
+# include "irc.hpp"
 
 class IServerCtrl;
 
@@ -23,7 +24,7 @@ class IPolicy
 	IPolicy() {};
 	virtual ~IPolicy() {};
 
-	virtual int		check(const Message &, IServerCtrl&) const = 0;
+	virtual rfc		check(const Message &, IServerCtrl&) const = 0;
 
 	private:
 	IPolicy(const IPolicy & other);

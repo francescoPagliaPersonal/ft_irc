@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 13:54:12 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/24 17:41:30 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/24 18:15:53 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,26 +16,27 @@
 # include "Client.hpp"
 #include "Message.hpp"
 #include "ft_irc.hpp"
+#include "irc.hpp"
 #include <string>
 
 
 // Set the client's nick if it is not already taken by another client.
-int cmd_nick(IServerCtrl & srv, const Message & msg)
+rfc cmd_nick(IServerCtrl & srv, const Message & msg)
 {
 	Client *client = msg.sender;
 	std::string currNick = client->getNick();
 	if (!(msg.flags & MSG_HAS_PARAMS))
-		return (rfc::NONICK);
+		return (irc::NONICK);
 	
 	std::string tmpNick = msg.params[0];
 	if (!irc::isNickCompliant(tmpNick))
-		return (rfc::NICKBAD);
+		return (irc::NICKBAD);
 	
 	Client *hasThisNick = srv.findClientByNick(tmpNick);
 	std::string	response(":" + currNick + " " + msg.command);
 	
 	if (hasThisNick != NULL && hasThisNick != client)
-		return (rfc::NICKINUSE); // ERR_NICKCOLLISION
+		return (irc::NICKINUSE); // ERR_NICKCOLLISION
 	
 	client->setNick(tmpNick);
 
@@ -52,5 +53,5 @@ int cmd_nick(IServerCtrl & srv, const Message & msg)
 		response += " " + tmpNick + " :" + currNick + " has changed is nickname to " + tmpNick + CRLF;
 		srv.sendMessage(*client, response);
 	}
-	return (rfc::OK);
+	return (irc::OK);
 }
