@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/21 12:12:19 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/21 17:33:46 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/24 12:57:53 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,11 @@ bool Channel::passwordMatch(const std::string & pw)
 
 bool Channel::belowChannelLimit()
 {
-	return (!(_userLimit && (_members.size() < _userLimit)));
+	if (!_userLimit)
+		return (true);
+	if (_members.size() < _userLimit)
+		return (true);
+	return (false);
 }
 
 bool Channel::joinGranted(Client *client)
