@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/24 17:48:24 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/24 18:24:17 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/24 18:33:44 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ namespace irc
 	void allCaps(std::string & str);
 	bool isNameCompliant(const std::string& );
 	std::vector<std::string> strSplit(std::string str, char ch, bool keepEmptyStr);
+	std::string chunkifyTrailing(const std::string & msgArgs, std::string msgTrailing);
 
 	enum rfc
 	{

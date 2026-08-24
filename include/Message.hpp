@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:38:21 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/24 18:31:21 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/24 18:34:47 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,6 @@
 #include <cstddef>
 # include <string>
 # include <vector>
-
-# define MIN_TRAIL_LENGTH 32
 
 // -------------------------------------------------------------------------- //
 
@@ -50,7 +48,5 @@ struct Message
 
 Message	string2Message(std::string str, Client *client);
 int		argCount(const Message &);
-
-std::string chunkyfyTrailing(const std::string & msgArgs, std::string msgTrailing);
 
 #endif

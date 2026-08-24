@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 15:31:28 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/24 18:32:10 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/24 18:35:23 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ std::string buildResponse(Client* sender, std::string recipient, std::string mes
 	reply += " PRIVMSG " + recipient + " :";
 	// FIXME still needs the ADDR stuff and getAddr or getHost
 	// reply += '@' + sender->getHost
-	reply = chunkyfyTrailing(reply, message);
+	reply = irc::chunkifyTrailing(reply, message);
 	return reply;
 }
 
