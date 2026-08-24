@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_irc.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:25:38 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/19 23:33:17 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/21 12:31:16 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,11 @@
 # define CRLF "\r\n"
 # define MSG_MAX_LENGTH 512
 # define MAX_NICKLEN 32
+# define MAX_CHANLEN 32
+# define MIN_CHANLEN 4
+# define MAX_CHANJOIN 3
+# define MAX_TOPICLEN 300
+# define MAX_CHANNELUSERS 500
 
 # ifndef DEBUG
 #  define DEBUG 0 // TODO set this to zero later and ctl via makefile
@@ -62,7 +67,7 @@ namespace rfc
 		NICKINUSE,				// 433 ERR_NICKNAMEINUSE
 		NOTINCHANNEL = 441,		// ERR_USERNOTINCHANNEL
 		NOTONCHANNEL,			// 442 ERR_NOTONCHANNEL
-		ONCHANNEL,				// 443 ERR_USERONCHANNEL
+		USERONCHANNEL,				// 443 ERR_USERONCHANNEL
 		NOTREG = 451,			// ERR_NOTREGISTERED
 		FEWPARAMS = 461,		// ERR_NEEDMOREPARAMS
 		ALREADYREG,				// 462 ERR_ALREADYREGISTERED
@@ -70,7 +75,8 @@ namespace rfc
 		CHANFULL = 471,			// ERR_CHANNELISFULL
 		UNKNOWNMODE,			// 472 ERR_UNKNOWNMODE
 		INVITEONLY,				// 473 ERR_INVITEONLYCHAN
-		BADKEY = 475,			// ERR_BADCHANNELKEY
+		BADCHANNELKEY = 475,	// ERR_BADCHANNELKEY
+		BADCHANMASK,			// ERR_BADCHANMASK
 		CHANOPRIVS = 482,		// ERR_CHANOPRIVSNEEDED
 		NOCONN = 42001,			// internal: sender gone
 		MANYPARAMS				// internal: too many parameters // TODO probably wrong place => parsing topic?
@@ -111,5 +117,9 @@ enum e_pollret
 typedef unsigned int		t_uint;
 typedef unsigned char		t_uint8;
 typedef unsigned long int	t_uint32;
+
+namespace irc {
+	void allCaps(std::string & str);
+}
 
 #endif

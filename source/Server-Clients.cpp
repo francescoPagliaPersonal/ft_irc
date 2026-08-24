@@ -3,14 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   Server-Clients.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 16:27:31 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/19 13:19:38 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/24 12:02:57 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "Channel.hpp"
 #include "Server.hpp"
+#include <cstddef>
+#include <deque>
 
 // -------------------------------------------------------------------------- //
 // INTERFACE -- CLIENTS
@@ -69,11 +72,25 @@ void Server::_registerNewClient(int fd, const struct sockaddr_in& addr)
 	}
 	_clients[fd] = tmp;
 }
+void Server::_removeClientFromChannels(Client * client)
+{
+	std::deque<Channel *> channels = client->getChannelsList();
+	for (size_t i = 0; i < channels.size(); ++i)
+	{
+		std::map<std::string, Channel*>::iterator it;
+		it = _channels.find(Channel::title2key(channels[i]->getTitle()));
+		if (it == _channels.end())
+			continue;
+		it->second->removeClient(client);
+		client->removeChannel(it->second);
+	}
+}
 
 // Remove a client and deregister FD.
 void Server::_removeClient(Client* client)
 {
 	_epoll.del(client->getFD());
+	_removeClientFromChannels(client);
 	_clients.erase(client->getFD());
 	delete client;
 }

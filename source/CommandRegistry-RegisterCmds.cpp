@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandRegistry-RegisterCmds.cpp                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 11:41:20 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/19 15:33:50 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/20 14:58:34 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,11 @@ void CommandRegistry::registerCmds()
 	ping->addPolicy(new ArgsLimitPlcy(1, 2));
 	_commands[ping->getName()] = ping;
 
+	Command *join = new Command("JOIN", cmd_join);
+	join->addPolicy(new AlreadyRegisteredPlcy(true));
+	join->addPolicy(new ArgsLimitPlcy(1, 2));
+	_commands[join->getName()] = join;
+	
 	Command	*privmsg = new Command("PRIVMSG", cmd_privmsg);
 	privmsg->addPolicy(new AlreadyRegisteredPlcy(true));
 	privmsg->addPolicy(new ArgsLimitPlcy(2, 2));

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 16:22:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/19 12:00:03 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/21 12:05:45 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 // -------------------------------------------------------------------------- //
 
 #include "ft_irc.hpp"
+#include "Channel.hpp"
 #include <vector>
 #include <deque>
 
@@ -26,7 +27,7 @@
 // -------------------------------------------------------------------------- //
 
 struct sockaddr_in;
-class Channel;
+// class Channel;
 
 enum e_clientReg
 {
@@ -54,6 +55,7 @@ class Client
 		std::string	getNick() const;
 		std::string	getUserName() const;
 		std::string	getRealName() const;
+		std::deque<Channel*> getChannelsList() const;
 		bool getCap() const;
 		// ---- Set ----
 		bool setRegistrationFlags(int flags);
@@ -65,6 +67,8 @@ class Client
 		bool isChannelMember(Channel*) const;
 		void addChannel(Channel*);
 		void removeChannel(Channel*);
+
+		static bool isNickCompliant(const std::string & nick);
 	private:
 		// ----
 		int _fd;
