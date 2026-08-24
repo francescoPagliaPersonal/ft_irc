@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server-Channels.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 13:55:04 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/24 11:38:35 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/24 14:49:38 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void Server::removeFromChannel(Client* client, const std::string& title,
 							   const std::string& reason)
 {
 	// TODO does the client or the server check IF client is a member?
-	Channel* channel = _getChannel(title);
+	Channel* channel = _getChannel(Channel::title2key(title));
 	if (!channel)
 		return ;
 	channel->removeClient(client);
