@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 14:24:29 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/24 18:15:53 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/24 18:31:54 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,9 +107,9 @@ rfc cmd_join(IServerCtrl & srv, const Message & msg)
 	std::vector<std::string>	passwords;
 	
 	Client *client = msg.sender;
-	channels = strSplit(msg.params[0], ',', false);
+	channels = irc::strSplit(msg.params[0], ',', false);
 	if (msg.params.size() == 2)
-		passwords = strSplit(msg.params[1], ',', true);
+		passwords = irc::strSplit(msg.params[1], ',', true);
 
 	for (size_t i = passwords.size(); i < channels.size(); ++i)
 		passwords.push_back("");		

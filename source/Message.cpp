@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Message.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 09:01:01 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/20 11:25:21 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/24 18:31:16 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,28 +127,6 @@ Message string2Message(std::string str, Client *client)
 		msg.flags |= MSG_HAS_PARAMS;
 	
 	return msg;
-}
-
-
-std::vector<std::string> strSplit(std::string str, char ch, bool keepEmptyStr)
-{
-	std::vector<std::string>	words;
-
-	std::string::size_type pos = str.find_first_of(ch);
-	
-	while (pos != std::string::npos)
-	{
-		if (pos == 0 && keepEmptyStr)
-			words.push_back("");
-		else
-			words.push_back(str.substr(0,pos));
-		str.erase(0,pos + 1);
-		pos = str.find_first_of(ch);
-	}
-	if (str.size())
-		words.push_back(str);
-	
-	return words;
 }
 
 /* Given a message of any lenght that includes the complete formatting, split the trailing apart
