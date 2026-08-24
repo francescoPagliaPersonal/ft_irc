@@ -58,7 +58,7 @@ int cmd_privmsg(IServerCtrl& srv, const Message& msg)
 	std::vector<std::string>	recipients = strSplit(msg.params[0], ',', false);
 	for (size_t i = 0; i < recipients.size(); ++i)
 	{
-		if (recipients[i][0] != '#' && recipients[i][0] != '#' )
+		if (recipients[i][0] != '#' && recipients[i][0] != '&' )
 		{
 			Client* recipient = srv.findClientByNick(recipients[i]);
 			if (recipient == NULL)
