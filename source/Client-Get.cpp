@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client-Get.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 17:07:36 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/19 11:43:46 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/24 12:22:20 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,9 @@ std::string Client::getRealName() const
 bool Client::getCap() const
 {
 	return (_capRequested);
+}
+
+std::deque<Channel*> Client::getChannelsList() const
+{
+	return _channels;
 }

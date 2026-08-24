@@ -6,40 +6,23 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 13:55:04 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/18 11:50:17 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/24 14:59:15 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ft_irc.hpp"
 #include "Server.hpp"
 #include "Channel.hpp"
+#include <cstddef>
 
 // -------------------------------------------------------------------------- //
 // INTERFACE -- CHANNELS
 // -------------------------------------------------------------------------- //
 
-// Add CLIENT to the channel CHNAME, creating it first if it does not
-// exist yet; the channel password must match PW.
-void Server::addToChannel(Client* client,
-						  const std::string& title,
-						  const std::string& pw = "")
+
+Channel* Server::getChannelByTitle(std::string title)
 {
-	Channel* channel = _getOrCreateChannel(title, pw);
-	// TODO does the client or the server check IF client is a member?
-	if (client->isChannelMember(channel))
-	{
-		std::cout << "[Info] Client is already member of that channel - consequence not handled yet.\n";
-		return ;
-	}
-	if (channel->getPassword() == pw)
-	{
-		channel->addClient(client);
-		client->addChannel(channel);
-		broadcastToChannel(channel, "[Info] New Client joined channel - needs proper msg.", client);
-	}
-	else // TODO needs some proper code or just return false and cmd must send different reply
-	{
-		std::cout << "[Info] Channel password incorrect - consequence not handled yet.\n";
-	}
+	return _getChannel(Channel::title2key(title));
 }
 
 // Remove CLIENT from the channel CHNAME and clean up empty channels.
@@ -47,7 +30,7 @@ void Server::removeFromChannel(Client* client, const std::string& title,
 							   const std::string& reason)
 {
 	// TODO does the client or the server check IF client is a member?
-	Channel* channel = _getChannel(title);
+	Channel* channel = _getChannel(Channel::title2key(title));
 	if (!channel)
 		return ;
 	channel->removeClient(client);
@@ -57,25 +40,6 @@ void Server::removeFromChannel(Client* client, const std::string& title,
 	(void) reason; // TODO depends on what the protocol needs...no idea right now
 }
 
-// Send MSG to all members of CHANNEL, optionally excluding SENDER.
-void Server::broadcastToChannel(Channel* channel,
-						const std::string& msg,
-						Client* sender = NULL)
-{
-	broadcastToChannel(channel->getTitle(), msg, sender);
-}
-
-// Send MSG to all members of the channel TITLE, optionally excluding SENDER.
-void Server::broadcastToChannel(const std::string& title,
-						const std::string& msg,
-						Client* sender = NULL)
-{
-	(void) title;
-	(void) msg;
-	(void) sender;
-	std::cout << "[Info] " << __FUNCTION__ << " is not implemented.\n";
-}
-
 // -------------------------------------------------------------------------- //
 // PRIVATE -- CHANNELS
 // -------------------------------------------------------------------------- //
@@ -83,7 +47,7 @@ void Server::broadcastToChannel(const std::string& title,
 // Remove a channel by channel pointer.
 void Server::_removeChannel(Channel* channel)
 {
-	_channels.erase(channel->getTitle());
+	_channels.erase(Channel::title2key(channel->getTitle()));
 	delete channel;
 }
 
@@ -92,18 +56,18 @@ void Server::_removeChannel(const std::string& title)
 {
 	Channel* channel;
 
-	channel = _getChannel(title);
+	channel = _getChannel(Channel::title2key(title));
 	if (channel)
 		_removeChannel(channel);
 }
 
 // Lookup a channel by name and return its pointer, or NULL if not found.
-Channel* Server::_getChannel(const std::string& title)
+Channel* Server::_getChannel(const std::string& mapKey)
 {
 	// TODO is this safe enough? this function should only be called when we know the channel exists...
 	std::map<std::string, Channel*>::iterator it;
 
-	it = _channels.find(title);
+	it = _channels.find(mapKey);
 	if (it == _channels.end())
 		return (NULL);
 	else
@@ -123,3 +87,21 @@ Channel* Server::_getOrCreateChannel(const std::string& title, const std::string
 	}
 	return (channel);
 }
+
+Channel* Server::_addChannel(const std::string& mapKey, const std::string& title, const std::string& pw)
+{
+	Channel* channel = new Channel(title, pw);
+	_channels[mapKey] = channel;
+
+	return (channel);
+}
+
+Channel* Server::_addChannel(const std::string& title, const std::string& pw)
+{
+	std::string mapKey = Channel::title2key(title);
+	Channel* channel = new Channel(title, pw);
+	_channels[mapKey] = channel;
+
+	return (channel);
+}
+
