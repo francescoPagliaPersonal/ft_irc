@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 14:24:29 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/24 15:02:46 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/24 18:31:54 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,11 @@
 # include "Command.hpp"
 # include "IServerCtrl.hpp"
 # include "Client.hpp"
-#include "ft_irc.hpp"
+# include "irc.hpp"
 #include <cctype>
 #include <sstream>
 #include <string>
 #include <vector>
-
 
 std::string topicReply(Client * client, Channel * channel)
 {
@@ -102,15 +101,15 @@ std::string endOfNames(const std::string &client, const std::string &channel)
 	return response.str();
 }
 
-int cmd_join(IServerCtrl & srv, const Message & msg)
+rfc cmd_join(IServerCtrl & srv, const Message & msg)
 {
 	std::vector<std::string>	channels;
 	std::vector<std::string>	passwords;
 	
 	Client *client = msg.sender;
-	channels = strSplit(msg.params[0], ',', false);
+	channels = irc::strSplit(msg.params[0], ',', false);
 	if (msg.params.size() == 2)
-		passwords = strSplit(msg.params[1], ',', true);
+		passwords = irc::strSplit(msg.params[1], ',', true);
 
 	for (size_t i = passwords.size(); i < channels.size(); ++i)
 		passwords.push_back("");		
@@ -156,5 +155,5 @@ int cmd_join(IServerCtrl & srv, const Message & msg)
 		
 	}
 	
-	return rfc::OK;
+	return irc::OK;
 }

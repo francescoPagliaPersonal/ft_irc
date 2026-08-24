@@ -3,19 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_ping.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/16 20:13:56 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/17 14:53:21 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/24 18:15:53 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Command.hpp"
 #include "IServerCtrl.hpp"
 #include "Client.hpp"
+#include "irc.hpp"
 
 // Answer a PING with a PONG carrying the same token back to the sender.
-int cmd_ping(IServerCtrl& srv, const Message& msg)
+rfc cmd_ping(IServerCtrl& srv, const Message& msg)
 {
 	Client *client = msg.sender;
 	
@@ -27,5 +28,5 @@ int cmd_ping(IServerCtrl& srv, const Message& msg)
 
 	srv.sendMessage(*client,
 		std::string(":CoolServ PONG CoolServ :") + token + CRLF);
-	return (rfc::OK);
+	return (irc::OK);
 }

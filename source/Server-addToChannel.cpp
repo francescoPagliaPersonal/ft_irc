@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/21 13:14:43 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/24 14:30:02 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/24 18:23:38 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,11 @@ int Server::addToChannel(Client* client,
 						  const std::string& pw = "")
 {
 	if (!(client->getChannelsList().size() < MAX_CHANJOIN))
-		return rfc::TOOMANYCHANS;
+		return irc::TOOMANYCHANNELS;
 	if (!Channel::isTitleCompliant(title))
-		return rfc::BADCHANMASK;
-	if (!Client::isNickCompliant(pw))
-		return rfc::BADCHANNELKEY;
+		return irc::BADCHANMASK;
+	if (!irc::isNameCompliant(pw))
+		return irc::BADCHANNELKEY;
 	
 	std::string mapKey = Channel::title2key(title);
 	
@@ -37,19 +37,19 @@ int Server::addToChannel(Client* client,
 		channel = _addChannel(mapKey, title, pw);
 		channel->addClient(client, US_FOUNDER | US_OPERATOR);
 		client->addChannel(channel);
-		return rfc::OK;
+		return irc::OK;
 	}
 	if (channel->isMember(client))
-		return rfc::USERONCHANNEL;
+		return irc::USERONCHANNEL;
 	if (!channel->passwordMatch(pw))
-		return rfc::BADCHANNELKEY;
+		return irc::BADCHANNELKEY;
 	if (!channel->belowChannelLimit())
-		return rfc::CHANFULL;
+		return irc::CHANNELISFULL;
 	if (!channel->joinGranted(client))
-		return rfc::INVITEONLY;
+		return irc::INVITEONLYCHAN;
 
 	channel->addClient(client, US_BASIC);
 	client->addChannel(channel);
 		
-	return rfc::OK;
+	return irc::OK;
 }

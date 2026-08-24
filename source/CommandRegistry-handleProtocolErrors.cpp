@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandRegistry-handleProtocolErrors.cpp           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 16:52:31 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/18 14:40:00 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/24 18:23:26 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,39 +29,39 @@ bool CommandRegistry::handleProtocolErrors(IServerCtrl& srv, int numeric,
 	// TODO this is a proof of concept, requires a proper mechanism; some map perhaps with CODE + REPLY STRING
 	switch (numeric)
 	{
-		case rfc::OK: break ;
+		case irc::OK: break ;
 		// case 371:
 		// 	srv.sendMessage(client, ":CoolServ 371 :A policy has not been respected.\r\n");
 		// 	break ;
-		case rfc::BADCMD:
+		case irc::UNKNOWNCOMMAND:
 			response << msg.command;
 			srv.sendMessage(client, response.str() + " :Command not found.\r\n");
 			break ;
-		case rfc::NONICK:
+		case irc::NONICKNAMEGIVEN:
 			srv.sendMessage(client, response.str() + " :No nickname given.\r\n");
 			break ;
-		case rfc::NICKINUSE:
+		case irc::NICKNAMEINUSE:
 			response << client.getNick() << " " << msg.params[0];
 			srv.sendMessage(client, response.str() + " :Nickname is already in use.\r\n");
 			break ;
-		case rfc::NICKBAD:
+		case irc::ERRONEUSNICKNAME:
 			response << client.getNick() << " " << msg.params[0];
 			srv.sendMessage(client, response.str() + " :Erroneous Nickname.\r\n");
 			break ;
-		case rfc::NOTREG:
+		case irc::NOTREGISTERED:
 			srv.sendMessage(client, ":CoolServ 451 <nick> :You have not registered.\r\n");
 			break ;
-		case rfc::FEWPARAMS:
+		case irc::NEEDMOREPARAMS:
 			response << client.getNick() << " " << msg.command;
 			srv.sendMessage(client, response.str() + " :Not enough parameters.\r\n");
 			break ;
-		case rfc::ALREADYREG:
+		case irc::ALREADYREGISTERED:
 			srv.sendMessage(client, ":CoolServ 462 <nick> :This user is already registered.\r\n");
 			break ;
-		case rfc::BADPASS:
+		case irc::PASSWDMISMATCH:
 			srv.sendMessage(client, ":CoolServ 464 <nick> :Password incorrect.\r\n");
 			break ;
-		case rfc::NOCONN:
+		case irc::NOCONN:
 			return (false); // FIXME this is a hard crash - we cannot remove a missing client w/o a pointer; catch elsewhere!
 		default:
 			std::cout << "[Warning] " << __FUNCTION__

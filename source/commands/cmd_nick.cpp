@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_nick.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 13:54:12 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/21 12:07:03 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/24 18:23:00 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,26 +16,27 @@
 # include "Client.hpp"
 #include "Message.hpp"
 #include "ft_irc.hpp"
+#include "irc.hpp"
 #include <string>
 
 
 // Set the client's nick if it is not already taken by another client.
-int cmd_nick(IServerCtrl & srv, const Message & msg)
+rfc cmd_nick(IServerCtrl & srv, const Message & msg)
 {
 	Client *client = msg.sender;
 	std::string currNick = client->getNick();
 	if (!(msg.flags & MSG_HAS_PARAMS))
-		return (rfc::NONICK);
+		return (irc::NONICKNAMEGIVEN);
 	
 	std::string tmpNick = msg.params[0];
-	if (!Client::isNickCompliant(tmpNick))
-		return (rfc::NICKBAD);
+	if (!irc::isNameCompliant(tmpNick))
+		return (irc::ERRONEUSNICKNAME);
 	
 	Client *hasThisNick = srv.findClientByNick(tmpNick);
 	std::string	response(":" + currNick + " " + msg.command);
 	
 	if (hasThisNick != NULL && hasThisNick != client)
-		return (rfc::NICKINUSE); // ERR_NICKCOLLISION
+		return (irc::NICKNAMEINUSE); // ERR_NICKCOLLISION
 	
 	client->setNick(tmpNick);
 
@@ -52,5 +53,5 @@ int cmd_nick(IServerCtrl & srv, const Message & msg)
 		response += " " + tmpNick + " :" + currNick + " has changed is nickname to " + tmpNick + CRLF;
 		srv.sendMessage(*client, response);
 	}
-	return (rfc::OK);
+	return (irc::OK);
 }

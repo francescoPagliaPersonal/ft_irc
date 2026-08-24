@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 16:50:07 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/16 18:01:43 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/24 18:00:45 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <map>
 # include <string>
 # include "Command.hpp"
+# include "irc.hpp"
 
 // -------------------------------------------------------------------------- //
 
@@ -32,7 +33,7 @@ class CommandRegistry
 		// ----
 		// ----
 		void registerCmds();
-		int execute(IServerCtrl&, const Message&);
+		rfc execute(IServerCtrl&, const Message&);
 		bool handleProtocolErrors(IServerCtrl&, int, const Message&);
 	private:
 		// ---- maps COMMAND-NAME to a COMMAND-INSTANCE with plcy & func.ptr.

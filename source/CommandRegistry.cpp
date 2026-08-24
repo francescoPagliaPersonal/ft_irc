@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandRegistry.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 18:00:05 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/18 12:03:07 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/24 18:22:43 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 // -------------------------------------------------------------------------- //
 
 // Lookup MSG's command and execute it on SRV; returns a protocol numeric.
-int CommandRegistry::execute(IServerCtrl& srv, const Message& msg)
+rfc CommandRegistry::execute(IServerCtrl& srv, const Message& msg)
 {
 	Client *client = msg.sender;
 	if (DEBUG)
@@ -27,7 +27,7 @@ int CommandRegistry::execute(IServerCtrl& srv, const Message& msg)
 	std::map<const std::string, const Command*>::iterator it;
 	it = _commands.find(msg.command);	
 	if ( it == _commands.end())
-		return (rfc::BADCMD);     // ERR_UNKNOWNCOMMAND
+		return (irc::UNKNOWNCOMMAND);     // ERR_UNKNOWNCOMMAND
 	return (it->second->execute(srv, msg));
 }
 
