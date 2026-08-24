@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/13 10:59:59 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/21 16:25:59 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/24 11:46:22 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,12 @@ Channel::Channel(const std::string& title, const std::string& pw)
 
 // Channel destructor.
 Channel::~Channel()
-{}
+{
+	if (!_members.empty())
+		_members.clear();
+	if (!_invites.empty())
+		_invites.clear();
+}
 
 // -------------------------------------------------------------------------- //
 // OCF - only declared, not defined, unusable

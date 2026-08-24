@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 13:55:04 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/21 16:02:57 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/24 11:38:35 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void Server::_removeChannel(const std::string& title)
 {
 	Channel* channel;
 
-	channel = _getChannel(title);
+	channel = _getChannel(Channel::title2key(title));
 	if (channel)
 		_removeChannel(channel);
 }
