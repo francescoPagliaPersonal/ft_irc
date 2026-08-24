@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/21 13:14:43 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/24 18:20:15 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/24 18:23:38 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int Server::addToChannel(Client* client,
 						  const std::string& pw = "")
 {
 	if (!(client->getChannelsList().size() < MAX_CHANJOIN))
-		return irc::TOOMANYCHANS;
+		return irc::TOOMANYCHANNELS;
 	if (!Channel::isTitleCompliant(title))
 		return irc::BADCHANMASK;
 	if (!irc::isNameCompliant(pw))
@@ -44,9 +44,9 @@ int Server::addToChannel(Client* client,
 	if (!channel->passwordMatch(pw))
 		return irc::BADCHANNELKEY;
 	if (!channel->belowChannelLimit())
-		return irc::CHANFULL;
+		return irc::CHANNELISFULL;
 	if (!channel->joinGranted(client))
-		return irc::INVITEONLY;
+		return irc::INVITEONLYCHAN;
 
 	channel->addClient(client, US_BASIC);
 	client->addChannel(channel);

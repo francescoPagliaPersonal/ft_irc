@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 13:54:12 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/24 18:15:53 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/24 18:23:22 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ rfc cmd_user(IServerCtrl & srv, const Message & msg)
 	(void) srv;
 	
 	if (!client->setRegistrationFlags(REG_USER))
-		return (irc::ALREADYREG);
+		return (irc::ALREADYREGISTERED);
 	client->setUserName(msg.params[0]);
 	client->setRealName(msg.trailing);
 	if (DEBUG == debug::DETAILED)

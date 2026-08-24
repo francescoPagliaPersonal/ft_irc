@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 13:54:12 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/24 18:20:15 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/24 18:23:00 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,17 +26,17 @@ rfc cmd_nick(IServerCtrl & srv, const Message & msg)
 	Client *client = msg.sender;
 	std::string currNick = client->getNick();
 	if (!(msg.flags & MSG_HAS_PARAMS))
-		return (irc::NONICK);
+		return (irc::NONICKNAMEGIVEN);
 	
 	std::string tmpNick = msg.params[0];
 	if (!irc::isNameCompliant(tmpNick))
-		return (irc::NICKBAD);
+		return (irc::ERRONEUSNICKNAME);
 	
 	Client *hasThisNick = srv.findClientByNick(tmpNick);
 	std::string	response(":" + currNick + " " + msg.command);
 	
 	if (hasThisNick != NULL && hasThisNick != client)
-		return (irc::NICKINUSE); // ERR_NICKCOLLISION
+		return (irc::NICKNAMEINUSE); // ERR_NICKCOLLISION
 	
 	client->setNick(tmpNick);
 

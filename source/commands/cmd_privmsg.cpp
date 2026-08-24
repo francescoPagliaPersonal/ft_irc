@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 15:31:28 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/24 18:15:53 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/24 18:22:38 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ rfc cmd_privmsg(IServerCtrl& srv, const Message& msg)
 	if (!(msg.flags & MSG_HAS_PARAMS))
 		return (irc::NORECIPIENT);
 	if (!(msg.flags & MSG_HAS_TRAILING))
-		return (irc::NOTEXT);
+		return (irc::NOTEXTTOSEND);
 	std::vector<std::string>	recipients = strSplit(msg.params[0], ',', false);
 	for (size_t i = 0; i < recipients.size(); ++i)
 	{

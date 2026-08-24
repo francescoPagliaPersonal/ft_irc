@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/16 14:48:41 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/24 18:15:53 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/24 18:23:18 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ rfc ArgsLimitPlcy::check(const Message & msg, IServerCtrl& srv) const
 	(void) srv;
 	int args = argCount(msg);
 	if (args < _min)
-		return (irc::FEWPARAMS); // ERR_NEEDMOREPARAM
+		return (irc::NEEDMOREPARAMS); // ERR_NEEDMOREPARAM
 	// TODO needed? i couldn't find an official numeric for that
 	// there only seems to be a 15 params rule for the msg, which might be a parsing case, not an execution one
 	else if (args > _max)

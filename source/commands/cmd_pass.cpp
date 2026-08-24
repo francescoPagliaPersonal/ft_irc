@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 11:42:55 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/24 18:15:53 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/24 18:23:26 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ rfc cmd_pass(IServerCtrl & srv, const Message & msg)
 {
 	Client *client = msg.sender;
 	if (msg.params[0] != srv.getPassword())
-		return (irc::BADPASS);
+		return (irc::PASSWDMISMATCH);
 	if (!client->setRegistrationFlags(REG_PASSWD))
-		return (irc::ALREADYREG);
+		return (irc::ALREADYREGISTERED);
 	if (DEBUG == debug::DETAILED)
 		std::cout << "[FD " << client->getFD() 
 			<< "] Server password correct.\n";

@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 16:52:31 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/24 18:15:53 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/24 18:23:26 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,32 +33,32 @@ bool CommandRegistry::handleProtocolErrors(IServerCtrl& srv, int numeric,
 		// case 371:
 		// 	srv.sendMessage(client, ":CoolServ 371 :A policy has not been respected.\r\n");
 		// 	break ;
-		case irc::BADCMD:
+		case irc::UNKNOWNCOMMAND:
 			response << msg.command;
 			srv.sendMessage(client, response.str() + " :Command not found.\r\n");
 			break ;
-		case irc::NONICK:
+		case irc::NONICKNAMEGIVEN:
 			srv.sendMessage(client, response.str() + " :No nickname given.\r\n");
 			break ;
-		case irc::NICKINUSE:
+		case irc::NICKNAMEINUSE:
 			response << client.getNick() << " " << msg.params[0];
 			srv.sendMessage(client, response.str() + " :Nickname is already in use.\r\n");
 			break ;
-		case irc::NICKBAD:
+		case irc::ERRONEUSNICKNAME:
 			response << client.getNick() << " " << msg.params[0];
 			srv.sendMessage(client, response.str() + " :Erroneous Nickname.\r\n");
 			break ;
-		case irc::NOTREG:
+		case irc::NOTREGISTERED:
 			srv.sendMessage(client, ":CoolServ 451 <nick> :You have not registered.\r\n");
 			break ;
-		case irc::FEWPARAMS:
+		case irc::NEEDMOREPARAMS:
 			response << client.getNick() << " " << msg.command;
 			srv.sendMessage(client, response.str() + " :Not enough parameters.\r\n");
 			break ;
-		case irc::ALREADYREG:
+		case irc::ALREADYREGISTERED:
 			srv.sendMessage(client, ":CoolServ 462 <nick> :This user is already registered.\r\n");
 			break ;
-		case irc::BADPASS:
+		case irc::PASSWDMISMATCH:
 			srv.sendMessage(client, ":CoolServ 464 <nick> :Password incorrect.\r\n");
 			break ;
 		case irc::NOCONN:
