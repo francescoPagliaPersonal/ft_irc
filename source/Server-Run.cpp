@@ -6,11 +6,21 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/11 12:06:37 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/17 16:33:37 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/25 11:04:02 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
+
+#include <cstring>		// memset
+#include <arpa/inet.h>	// inet_ntop, INET_ADDRSTRLEN
+#include <netdb.h>		// getaddrinfo, freeaddrinfo, struct addrinfo
+#include <netinet/in.h> // AF_INET, sockaddr_in
+
+
+namespace {
+	void howToUse(int, const std::string&);
+}
 
 // -------------------------------------------------------------------------- //
 // MAIN LOOP
@@ -22,7 +32,7 @@
 void Server::run()
 {
 	struct epoll_event ev[MAX_EVENTS]; // TODO do we need to zero that one?
-
+	howToUse(_listener.getPort(), _pw);
 	while (_isAlive)
 	{
 		int readyFDs = _epoll.wait(ev, MAX_EVENTS, TIMEOUT);
@@ -46,3 +56,47 @@ void Server::run()
 		// TODO devise tasks to do
 	}
 }
+
+// -------------------------------------------------------------------------- //
+// HOW TO USE THE SERVER
+// -------------------------------------------------------------------------- //
+
+namespace
+{
+
+// Resolves and prints own IPv4 address with instructions how to connect.
+void howToUse(int port, const std::string& pw)
+{
+	char hostname[256];
+	std::string ip = "127.0.0.1"; // fallback value
+	// 1) ask machine for local hostname
+	if (gethostname(hostname, sizeof(hostname)) == 0)
+	{
+		struct addrinfo filter;
+		struct addrinfo* res = NULL;
+		// clear and set filter structure
+		std::memset (&filter, 0, sizeof(filter));
+		filter.ai_family = AF_INET;
+		filter.ai_socktype = SOCK_STREAM;
+		// 2) resolve hostname to a IPv4 socket address
+		if (getaddrinfo(hostname, NULL, &filter, &res) == 0 && res != NULL)
+		{
+			char buf[INET_ADDRSTRLEN];
+			struct sockaddr_in *addr;
+			addr = reinterpret_cast<struct sockaddr_in*>(res->ai_addr);
+			// 3) convert address into regular IP text notation
+			if (inet_ntop(AF_INET, &addr->sin_addr, buf, sizeof(buf)) != NULL)
+				ip = buf;
+			freeaddrinfo(res);
+		}
+	}
+	// print welcome message with instructions
+	std::cout << "[Info] Server address: " << ip << ':' << port << '\n';
+	std::cout << "[Info] Connect with irssi\n"
+			  << "       locally:  irssi -c localhost -p " << port
+			  << " -w " << pw << '\n'
+			  << "       remotely: irssi -c " << ip << " -p " << port
+			  << " -w " << pw << '\n';
+}
+
+} // end of namespace
