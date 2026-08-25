@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 17:07:36 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/25 00:47:38 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/25 09:56:07 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,16 @@ std::string Client::getRealName() const
 	return (_realName);
 }
 
-// Return Client"s host name (ie. IP address)
+// Return Client's host name (ie. IP address)
 std::string Client::getHost() const
 {
 	return (_host);
+}
+
+// Return Client's full ID (NICK!USER@HOST)
+std::string Client::getID() const
+{
+	return (std::string(_nick + "!" + _userName + "@" + _host));
 }
 
 bool Client::getCap() const

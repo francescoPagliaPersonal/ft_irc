@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 14:24:29 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/25 09:49:18 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/25 09:57:44 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,9 +131,7 @@ rfc cmd_join(IServerCtrl & srv, const Message & msg)
 			continue;
 		}
 		reply	
-			<< ":" << client->getNick()
-			<< "!" << client->getUserName()
-			<< "@" << client->getHost() << " "
+			<< ":" << client->getID() << " "
 			<< msg.command << " "
 			<< channels[i] << " " 
 			<< CRLF;
