@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 14:24:29 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/25 09:36:02 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/25 09:39:23 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,9 @@ rfc cmd_join(IServerCtrl & srv, const Message & msg)
 	
 	for (size_t i = 0; i < channels.size(); ++i)
 	{
-		
+		reply.str("");
+		reply.clear();
+
 		int ret = srv.addToChannel(client, channels[i], passwords[i]);
 		if (ret)
 		{
@@ -150,10 +152,6 @@ rfc cmd_join(IServerCtrl & srv, const Message & msg)
 		// send the list of users to the client			
 		srv.sendMessage(*client, userListReply(client, channel));
 		srv.sendMessage(*client, endOfNames(client->getNick(), channel->getTitle()));
-	
-		reply.clear();
-		
 	}
-	
 	return irc::OK;
 }
