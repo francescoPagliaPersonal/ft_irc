@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/10 00:45:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/25 11:48:21 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/25 11:54:26 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@
 #include <unistd.h>		// close
 
 namespace {
-	void howToUse(int, const std::string&);
+	std::string retrieveServerAddress();
+	void printNetworkUsageInfo(const std::string&, int, const std::string&);
 }
 
 // -------------------------------------------------------------------------- //
@@ -40,7 +41,8 @@ Server::Server(int port, std::string pw)
 	// Client class
 	// CommandDispatch class
 	_cmdReg.registerCmds();
-	howToUse(port, pw);
+	std::string ip = retrieveServerAddress();
+	printNetworkUsageInfo(ip, port, pw);
 }
 
 Server::~Server()
@@ -58,8 +60,8 @@ Server::~Server()
 namespace
 {
 
-// Resolves and prints own IPv4 address with instructions how to connect.
-void howToUse(int port, const std::string& pw)
+// Resolves own IPv4 address via dummy UDP connection workaround.
+std::string retrieveServerAddress()
 {
 	std::string ip = "127.0.0.1"; // fallback value
 	// 1) create a temporary UDP socket
@@ -93,8 +95,12 @@ void howToUse(int port, const std::string& pw)
 		}
 		close(fd);
 	}
+	return (ip);
+}
 
-	// print welcome message with instructions
+// Print welcome message with instructions.
+void printNetworkUsageInfo(const std::string& ip, int port, const std::string& pw)
+{
 	std::cout << "[Info] Server address: " << ip << ':' << port << '\n';
 	std::cout << "[Info] Connect with irssi from terminal\n" << COL_CYAN
 			  << "       locally:  " << COL_RESET << "irssi -c localhost"
