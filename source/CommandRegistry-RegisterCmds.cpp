@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandRegistry-RegisterCmds.cpp                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 11:41:20 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/20 14:58:34 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/25 17:18:34 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,4 +58,9 @@ void CommandRegistry::registerCmds()
 	privmsg->addPolicy(new AlreadyRegisteredPlcy(true));
 	privmsg->addPolicy(new ArgsLimitPlcy(2, 2));
 	_commands[privmsg->getName()] = privmsg;
+
+	Command *quit = new Command("QUIT", cmd_quit);
+	quit->addPolicy(new AlreadyRegisteredPlcy(true));
+	quit->addPolicy(new ArgsLimitPlcy(0, 1));
+	_commands[quit->getName()] = quit;
 }

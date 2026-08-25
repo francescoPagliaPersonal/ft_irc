@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:15:32 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/27 13:05:14 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/27 19:42:25 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ rfc cmd_cap(IServerCtrl&, const Message&);
 rfc cmd_ping(IServerCtrl&, const Message&);
 rfc cmd_join(IServerCtrl&, const Message&);
 rfc cmd_privmsg(IServerCtrl&, const Message&);
+rfc cmd_quit(IServerCtrl&, const Message&);
 
 #endif
 
