@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/14 19:25:52 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/24 15:02:01 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/25 09:32:24 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ public:
 	// ---- Sending Messages To Clients
 	virtual void sendMessage(Client&, const std::string&) = 0;
 	virtual void broadcast(const std::string&, Channel*, Client *) = 0;
+	virtual void broadcast(const std::string&, Channel*) = 0;
 	// ---- Channel Manipulation
 	virtual int addToChannel(Client*, const std::string&, const std::string&) = 0;
 	virtual void removeFromChannel(Client*, const std::string&, const std::string&) = 0;
