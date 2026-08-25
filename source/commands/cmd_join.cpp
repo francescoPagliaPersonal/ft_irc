@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 14:24:29 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/24 18:31:54 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/25 09:29:45 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,7 @@ std::string userListReply(Client *client, Channel* channel )
 	std::map<Client*, bitMask>::const_iterator it = channelMembers.begin();
 	for (; it != channelMembers.end(); ++it)
 	{
-		std::string nickToPrint = addPropertyToNick(*it->first, it->second);  // TODO: add Property to nick  
-		// FIXME nick reply needs 'nicklist_set_host'. the test below fixed the error. still needs proper address handled
-		// nickToPrint += "!localhost";
+		std::string nickToPrint = addPropertyToNick(*it->first, it->second);
 		if (replyBase.size() + tmp.size() + nickToPrint.size() < MSG_MAX_LENGTH)
 			tmp.append(nickToPrint + " ");				
 		else 
@@ -131,7 +129,9 @@ rfc cmd_join(IServerCtrl & srv, const Message & msg)
 			continue;
 		}
 		reply	
-			<< ":" << client->getNick() << " "
+			<< ":" << client->getNick()
+			<< "!" << client->getUserName()
+			<< "@" << client->getHost() << " "
 			<< msg.command << " "
 			<< channels[i] << " " 
 			<< CRLF;
