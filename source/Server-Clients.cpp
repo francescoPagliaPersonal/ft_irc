@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 16:27:31 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/27 13:28:41 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/27 19:42:50 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,8 @@ void Server::_removeClient(Client* client)
 {
 	_epoll.del(client->getFD());
 	_removeClientFromChannels(client);
+	// TODO remove from _connections
+	// TODO remove open messages in queue?
 	_clients.erase(client->getFD());
 	delete client;
 }
