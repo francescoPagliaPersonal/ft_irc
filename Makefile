@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------- #
-# Makefile template v 3.0                                           2026-08-05 #
+# Makefile template v 3.1                                           2026-08-25 #
 # ---------------------------------------------------------------------------- #
 # Features:
 # - C, C++, and mixed projects (SRCLANG=auto|c|cpp|mixed)
@@ -21,6 +21,7 @@ PROG_NAME		:= ircserv
 
 # Makefile configuration
 MK_DIR			:= conf/
+JOBS			?= $(shell nproc --ignore=1)
 
 include $(MK_DIR)sources.mk
 

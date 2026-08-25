@@ -93,7 +93,7 @@ re:		fclean all
 # (make expands dependencies right away and does not adapt them on later change)
 build: prt $(LFT_DEP)
 	@printf "$(C_BAMBOO_GREEN)"
-	@$(MAKE) -j -Otarget $(BIN) MODE=$(MODE) PART=$(PART) SRCLANG=$(SRCLANG) --no-print-directory
+	@$(MAKE) -j$(JOBS) -Otarget $(BIN) MODE=$(MODE) PART=$(PART) SRCLANG=$(SRCLANG) --no-print-directory
 	@printf "$(C_RESET)"
 	@printf '\n'
 
