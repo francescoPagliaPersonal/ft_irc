@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:25:38 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/24 18:35:07 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/25 11:16:06 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,9 @@
 # define MAX_EVENTS 32
 # define TIMEOUT 1000
 # define CRLF "\r\n"
+# define COL_GREEN "\033[32m"
+# define COL_CYAN "\033[36m"
+# define COL_RESET "\033[0m"
 # define MSG_MAX_LENGTH 512
 # define MIN_TRAIL_LENGTH 32
 # define MAX_NICKLEN 32
