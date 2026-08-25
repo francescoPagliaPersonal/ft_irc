@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------- #
-# Makefile template v 3.0                                           2026-08-05 #
+# Makefile template v 3.1                                           2026-08-25 #
 # ---------------------------------------------------------------------------- #
 #
 #							   PROJECT BUILD TARGETS
@@ -93,7 +93,7 @@ re:		fclean all
 # (make expands dependencies right away and does not adapt them on later change)
 build: prt $(LFT_DEP)
 	@printf "$(C_BAMBOO_GREEN)"
-	@$(MAKE) $(BIN) MODE=$(MODE) PART=$(PART) SRCLANG=$(SRCLANG) --no-print-directory
+	@$(MAKE) -j -Otarget $(BIN) MODE=$(MODE) PART=$(PART) SRCLANG=$(SRCLANG) --no-print-directory
 	@printf "$(C_RESET)"
 	@printf '\n'
 
