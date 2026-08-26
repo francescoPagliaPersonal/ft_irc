@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:32:56 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/25 09:32:33 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/26 14:20:18 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ class Server : public IServerCtrl
 		Client* findClientByNick(const std::string &);
 		Channel* getChannelByTitle(std::string);
 		//		Channels
-		int addToChannel(Client*, const std::string&, const std::string&);
+		rfc addToChannel(Client*, const std::string&, const std::string&);
 		void removeFromChannel(Client*, const std::string&, const std::string&);
 		void broadcast(const std::string&, Channel*, Client*);
 		void broadcast(const std::string&, Channel*);
