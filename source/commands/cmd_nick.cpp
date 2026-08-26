@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_nick.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 13:54:12 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/25 10:01:47 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/26 14:27:51 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # include "IServerCtrl.hpp"
 # include "Client.hpp"
 #include "Message.hpp"
+#include "Response.hpp"
 #include "ft_irc.hpp"
 #include "irc.hpp"
 #include <string>
@@ -35,9 +36,8 @@ rfc cmd_nick(IServerCtrl & srv, const Message & msg)
 	Client *hasThisNick = srv.findClientByNick(newNick);
 	
 	if (hasThisNick != NULL && hasThisNick != client)
-	return (irc::NICKNAMEINUSE); // ERR_NICKCOLLISION
+		return (irc::NICKNAMEINUSE); // ERR_NICKCOLLISION
 	
-	std::string	response(":" + client->getID() + " " + msg.command);
 	client->setNick(newNick);
 
 	if (client->getRegistrationFlags() != REG_DONE)
@@ -51,7 +51,8 @@ rfc cmd_nick(IServerCtrl & srv, const Message & msg)
 	}
 	else {
 		// TODO we can most likely ditch this for only :newNick
-		response += " " + newNick + " :" + currNick + " has changed is nickname to " + newNick + CRLF;
+		std::string response = Response::senderMessage(msg, newNick, 
+												currNick + " has changed is nickname to " + newNick);
 		srv.sendMessage(*client, response);
 	}
 	return (irc::OK);

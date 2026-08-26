@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_privmsg.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 15:31:28 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/25 09:55:00 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/26 14:28:44 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,26 +18,7 @@
 #include "irc.hpp"
 #include <sstream>
 #include <vector>
-
-std::string replyNoNick(Client* client, int numeric)
-{
-	std::stringstream response;
-	response << ":CoolServer" << " " << numeric << " "
-	<< client->getNick() 
-	<< " :Erroneous input.\r\n" ;
-	return response.str();
-}
-
-std::string buildResponse(Client* sender, std::string recipient, std::string message )
-{
-	std::string reply;
-
-	// TODO (if we feel like it ;) ) split by `,` for PRIVMSG client,another,more hi
-	reply = ':' + sender->getID();
-	reply += " PRIVMSG " + recipient + " :";
-	reply = irc::chunkifyTrailing(reply, message);
-	return reply;
-}
+#include "Response.hpp"
 
 rfc cmd_privmsg(IServerCtrl& srv, const Message& msg)
 {
@@ -56,20 +37,20 @@ rfc cmd_privmsg(IServerCtrl& srv, const Message& msg)
 		{
 			Client* recipient = srv.findClientByNick(recipients[i]);
 			if (recipient == NULL)
-				srv.sendMessage(*sender, replyNoNick(sender, irc::NOSUCHNICK));
+				srv.sendMessage(*sender, Response::noOpt(msg, irc::NOSUCHNICK));
 			else
 			{
-				std::string reply = buildResponse(sender, recipients[i], msg.trailing);
+				std::string reply = Response::senderMessage(msg, recipients[i]);
 				srv.sendMessage(*recipient, reply);
 			}
 			continue;
 		}
 		Channel* channel = srv.getChannelByTitle(recipients[i]);
 		if (channel == NULL)
-				srv.sendMessage(*sender, replyNoNick(sender, irc::NOSUCHCHANNEL));
+			srv.sendMessage(*sender, Response::noOpt(msg, irc::NOSUCHCHANNEL));
 		else
 		{
-			std::string reply = buildResponse(sender, recipients[i], msg.trailing);
+			std::string reply = Response::senderMessage(msg, recipients[i]);
 			srv.broadcast(reply, channel, sender);
 		}
 
