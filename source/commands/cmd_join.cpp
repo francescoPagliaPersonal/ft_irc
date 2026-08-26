@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_join.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 14:24:29 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/25 09:57:44 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/26 09:12:16 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,8 @@ rfc cmd_join(IServerCtrl & srv, const Message & msg)
 	{
 		reply.str("");
 		reply.clear();
+		reply.seekg(0);
+		reply.seekp(0);
 
 		int ret = srv.addToChannel(client, channels[i], passwords[i]);
 		if (ret)
