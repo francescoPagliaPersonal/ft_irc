@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_nick.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 13:54:12 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/26 14:27:51 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/26 16:37:33 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
-# include "Command.hpp"
-# include "IServerCtrl.hpp"
-# include "Client.hpp"
+#include "Command.hpp"
+#include "IServerCtrl.hpp"
+#include "Client.hpp"
 #include "Message.hpp"
 #include "Response.hpp"
 #include "ft_irc.hpp"
@@ -37,11 +37,11 @@ rfc cmd_nick(IServerCtrl & srv, const Message & msg)
 	
 	if (hasThisNick != NULL && hasThisNick != client)
 		return (irc::NICKNAMEINUSE); // ERR_NICKCOLLISION
-	
-	client->setNick(newNick);
 
+	// user is still in registration process
 	if (client->getRegistrationFlags() != REG_DONE)
 	{
+		client->setNick(newNick);
 		client->setRegistrationFlags(REG_NICK);
 		if (DEBUG == debug::DETAILED)
 			std::cout << "[FD " << client->getFD()
@@ -49,10 +49,12 @@ rfc cmd_nick(IServerCtrl & srv, const Message & msg)
 		if (!client->getCap())
 			srv.tryCompleteRegistration(*client);
 	}
+	// regular change of nick
 	else {
-		// TODO we can most likely ditch this for only :newNick
-		std::string response = Response::senderMessage(msg, newNick, 
-												currNick + " has changed is nickname to " + newNick);
+		// TODO we can most likely ditch the trail for only :newNick
+		std::string response = Response::senderMessage(
+			msg, newNick, currNick + " has changed is nickname to " + newNick);
+		client->setNick(newNick);
 		srv.sendMessage(*client, response);
 	}
 	return (irc::OK);
