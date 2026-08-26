@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 14:24:29 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/26 16:04:19 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/26 16:13:09 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ std::string userListReply(const Message & msg, Channel* channel )
 	std::string replyBase;
 	
 	replyBase = Response::args(msg, irc::NAMREPLY, "= " + channel->getTitle() + " :");
+	replyBase.erase(replyBase.size() - 2, 2); // remove CRLF
 
 	std::map<Client*, bitMask>::const_iterator it = channelMembers.begin();
 	for (; it != channelMembers.end(); ++it)
