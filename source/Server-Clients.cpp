@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server-Clients.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 16:27:31 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/24 12:02:57 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/25 00:48:05 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,8 @@ void Server::_registerNewClient(int fd, const struct sockaddr_in& addr)
 		throw; // TODO currently this is a hard shutdown; wants sth else
 	}
 	_clients[fd] = tmp;
+	std::cout << "[Info] New connection from " << tmp->getHost()
+			<< " accepted at FD " << fd << '\n';
 }
 void Server::_removeClientFromChannels(Client * client)
 {

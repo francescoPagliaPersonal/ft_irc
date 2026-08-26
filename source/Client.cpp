@@ -3,29 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:52:36 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/24 12:14:41 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/25 00:38:59 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Client.hpp"
 
 #include <unistd.h>
+#include <arpa/inet.h>
 
 // -------------------------------------------------------------------------- //
 // CUSTOM CTOR & DTOR
 // -------------------------------------------------------------------------- //
 
 // Custom constructor to set up a new client with FD and ADDR.
-Client::Client(int fd, const struct sockaddr_in& addr)
+Client::Client(int fd, const sockaddr_in& addr)
 	: _fd(fd)
 	, _registrationFlags(0)
 	, _capRequested(false)
 	, _nick("*")
+	, _address(addr)
 {
-	(void) addr; // TODO do sth with the address
+	char buf[INET_ADDRSTRLEN];
+	if (inet_ntop(AF_INET, &_address.sin_addr, buf, sizeof(buf)) == NULL)
+		_host = "0.0.0.0";
+	else
+		_host = buf;
 }
 
 // Closes the client's FD if it is still open.
@@ -44,19 +50,3 @@ Client::~Client()
 // -------------------------------------------------------------------------- //
 // OCF
 // -------------------------------------------------------------------------- //
-
-Client::Client()
-	: _fd(-1)
-{}
-
-Client::Client(const Client& other)
-	: _fd(-1)
-{
-	(void) other;
-}
-
-Client Client::operator=(const Client& other)
-{
-	(void) other;
-	return (*this);
-}

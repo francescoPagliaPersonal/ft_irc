@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 13:54:12 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/24 18:23:00 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/25 10:01:47 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,17 +28,17 @@ rfc cmd_nick(IServerCtrl & srv, const Message & msg)
 	if (!(msg.flags & MSG_HAS_PARAMS))
 		return (irc::NONICKNAMEGIVEN);
 	
-	std::string tmpNick = msg.params[0];
-	if (!irc::isNameCompliant(tmpNick))
+	std::string newNick = msg.params[0];
+	if (!irc::isNameCompliant(newNick))
 		return (irc::ERRONEUSNICKNAME);
 	
-	Client *hasThisNick = srv.findClientByNick(tmpNick);
-	std::string	response(":" + currNick + " " + msg.command);
+	Client *hasThisNick = srv.findClientByNick(newNick);
 	
 	if (hasThisNick != NULL && hasThisNick != client)
-		return (irc::NICKNAMEINUSE); // ERR_NICKCOLLISION
+	return (irc::NICKNAMEINUSE); // ERR_NICKCOLLISION
 	
-	client->setNick(tmpNick);
+	std::string	response(":" + client->getID() + " " + msg.command);
+	client->setNick(newNick);
 
 	if (client->getRegistrationFlags() != REG_DONE)
 	{
@@ -50,7 +50,8 @@ rfc cmd_nick(IServerCtrl & srv, const Message & msg)
 			srv.tryCompleteRegistration(*client);
 	}
 	else {
-		response += " " + tmpNick + " :" + currNick + " has changed is nickname to " + tmpNick + CRLF;
+		// TODO we can most likely ditch this for only :newNick
+		response += " " + newNick + " :" + currNick + " has changed is nickname to " + newNick + CRLF;
 		srv.sendMessage(*client, response);
 	}
 	return (irc::OK);

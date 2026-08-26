@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 22:58:08 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/16 19:08:44 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/25 00:45:43 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ void Server::_handleListenEvent()
 		}
 		// 3) register new client
 		_registerNewClient(newFD, ipAddr);
-		std::cout << "[Info] New connection accepted at FD " << newFD << '\n';
 	}
 }
 

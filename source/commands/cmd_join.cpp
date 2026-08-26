@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_join.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 14:24:29 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/25 09:39:23 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/26 09:12:16 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,7 @@ std::string userListReply(Client *client, Channel* channel )
 	std::map<Client*, bitMask>::const_iterator it = channelMembers.begin();
 	for (; it != channelMembers.end(); ++it)
 	{
-		std::string nickToPrint = addPropertyToNick(*it->first, it->second);  // TODO: add Property to nick  
-		// FIXME nick reply needs 'nicklist_set_host'. the test below fixed the error. still needs proper address handled
-		// nickToPrint += "!localhost";
+		std::string nickToPrint = addPropertyToNick(*it->first, it->second);
 		if (replyBase.size() + tmp.size() + nickToPrint.size() < MSG_MAX_LENGTH)
 			tmp.append(nickToPrint + " ");				
 		else 
@@ -120,6 +118,8 @@ rfc cmd_join(IServerCtrl & srv, const Message & msg)
 	{
 		reply.str("");
 		reply.clear();
+		reply.seekg(0);
+		reply.seekp(0);
 
 		int ret = srv.addToChannel(client, channels[i], passwords[i]);
 		if (ret)
@@ -133,7 +133,7 @@ rfc cmd_join(IServerCtrl & srv, const Message & msg)
 			continue;
 		}
 		reply	
-			<< ":" << client->getNick() << " "
+			<< ":" << client->getID() << " "
 			<< msg.command << " "
 			<< channels[i] << " " 
 			<< CRLF;
