@@ -18,6 +18,7 @@
 
 std::string Response::_server;
 std::map<irc::rfc, std::string> Response::_numInfo;
+std::map<irc::rfc, Response::type> Response::_numType;
 
 /* The reply init currently lists only items that have a defined
    respond string.
@@ -30,7 +31,7 @@ void Response::init(const std::string &srv)
 {
 	Response::_server = srv;
 	
-	// REPLY CODES
+	// ------ REPLY CODES ------------------------------------------------------
 	// _numInfo[irc::OK] = "";
 	// _numInfo[irc::UMODEIS] = "";
 	_numInfo[irc::AWAY] = ":I'm away.";
@@ -47,7 +48,7 @@ void Response::init(const std::string &srv)
 	_numInfo[irc::ENDOFMOTD] = ":End of /MOTD command.";
 	_numInfo[irc::YOUREOPER] = ":You are now an IRC operator";
 
-	// ERROR CODES
+	// ------ ERROR CODES ------------------------------------------------------
 	_numInfo[irc::NOSUCHNICK] = ":No such nick.";
 	_numInfo[irc::NOSUCHCHANNEL] = ":No such channel.";
 	_numInfo[irc::CANNOTSENDTOCHAN] = ":Cannot send to channel.";
@@ -79,6 +80,32 @@ void Response::init(const std::string &srv)
 	_numInfo[irc::USERSDONTMATCH] = ":Cant change mode for other users.";
 	// _numInfo[irc::NOCONN] = "";
 	_numInfo[irc::MANYPARAMS] = ":Too many parameter given";
+
+	// ------ SPECIAL TYPES ----------------------------------------------------
+	_numType[irc::NOSUCHNICK] = PARAM0;
+	_numType[irc::NOSUCHCHANNEL] = PARAM0;
+	_numType[irc::TOOMANYCHANNELS] = PARAM0;
+	_numType[irc::INVALIDCAPCMD] = PARAM0;
+	_numType[irc::ERRONEUSNICKNAME] = PARAM0;
+	_numType[irc::NICKNAMEINUSE] = PARAM0;
+	_numType[irc::USERONCHANNEL] = PARAM0;
+	_numType[irc::UNKNOWNCOMMAND] = COMMAND;
+	_numType[irc::NEEDMOREPARAMS] = COMMAND;
+}
+
+std::string Response::handleNumeric(const Message& msg, irc::rfc code)
+{
+	std::map<irc::rfc, type>::iterator it;
+	it = _numType.find(code);
+	if (it == _numType.end())
+		return (noOpt(msg, code));
+	switch (it->second)
+	{
+		case PARAM0:
+			return (args(msg, code, msg.params[0]));
+		case COMMAND:
+			return (args(msg, code, msg.command));
+	}
 }
 
 std::string Response::noOpt(const Message & msg, irc::rfc code)

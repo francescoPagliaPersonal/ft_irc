@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandRegistry-handleProtocolErrors.cpp           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 16:52:31 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/26 14:14:58 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/26 17:51:52 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ bool CommandRegistry::handleProtocolErrors(IServerCtrl& srv, rfc numeric,
 	if (!msg.sender)
 		return (false);
 	if (numeric != irc::OK)
-		srv.sendMessage(*msg.sender, Response::noOpt(msg, numeric));
+		srv.sendMessage(*msg.sender, Response::handleNumeric(msg, numeric));
 	
 	return (true);
 }
