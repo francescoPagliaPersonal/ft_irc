@@ -111,8 +111,6 @@ std::string Response::args(const Message& msg, irc::rfc code, const std::string 
 std::string	Response::trailing(const Message& msg, irc::rfc code, const std::string & args, const std::string & trail)
 {
 	std::stringstream reply;
-	std::map<irc::rfc, std::string>::const_iterator it;
-	it = _numInfo.find(code);
 
 	reply 
 		<< ":" << Response::_server << " " 
