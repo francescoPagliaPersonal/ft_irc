@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_join.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 14:24:29 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/26 14:34:10 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/26 16:04:19 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ std::string userListReply(const Message & msg, Channel* channel )
 	std::string tmp;
 	std::string replyBase;
 	
-	replyBase = Response::args(msg, irc::NAMREPLY, channel->getTitle() + " :");
+	replyBase = Response::args(msg, irc::NAMREPLY, "= " + channel->getTitle() + " :");
 
 	std::map<Client*, bitMask>::const_iterator it = channelMembers.begin();
 	for (; it != channelMembers.end(); ++it)
