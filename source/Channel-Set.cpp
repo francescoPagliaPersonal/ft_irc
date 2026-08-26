@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 17:13:02 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/17 17:41:43 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/26 15:35:49 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void Channel::setPassword(const std::string& password)
 }
 
 // Set the channel's user limit.
-void Channel::setLimit(t_uint userLimit)
+void Channel::setLimit(irc::uint userLimit)
 {
 	_userLimit = userLimit;
 }

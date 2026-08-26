@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 17:36:18 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/25 09:32:00 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/26 15:34:24 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@
 // Send MSG to all members of CHANNEL, excluding SENDER.
 void Server::broadcast(const std::string& reply, Channel* channel, Client* client)
 {
-	std::map<Client*, t_uint8> channelMembers = channel->getMembersMap();
-	std::map<Client*, t_uint8>::const_iterator it = channelMembers.begin();
+	std::map<Client*, irc::uint8> channelMembers = channel->getMembersMap();
+	std::map<Client*, irc::uint8>::const_iterator it = channelMembers.begin();
 	for (; it != channelMembers.end(); ++it)
 	{
 		if (it->first != client)
@@ -29,8 +29,8 @@ void Server::broadcast(const std::string& reply, Channel* channel, Client* clien
 // Send MSG to all members of CHANNEL.
 void Server::broadcast(const std::string& reply, Channel* channel)
 {
-	std::map<Client*, t_uint8> channelMembers = channel->getMembersMap();
-	std::map<Client*, t_uint8>::const_iterator it = channelMembers.begin();
+	std::map<Client*, irc::uint8> channelMembers = channel->getMembersMap();
+	std::map<Client*, irc::uint8>::const_iterator it = channelMembers.begin();
 	for (; it != channelMembers.end(); ++it)
 	{
 		sendMessage(*it->first, reply);

@@ -6,15 +6,19 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/24 17:48:24 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/27 11:38:33 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/27 13:06:22 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef IRC_HPP
 # define IRC_HPP
 
+// -------------------------------------------------------------------------- //
+
 # include <string>
 # include <vector>
+
+// -------------------------------------------------------------------------- //
 
 namespace irc
 {
@@ -22,6 +26,19 @@ namespace irc
 	bool isNameCompliant(const std::string& );
 	std::vector<std::string> strSplit(std::string str, char ch, bool keepEmptyStr);
 	std::string chunkifyTrailing(const std::string & msgArgs, std::string msgTrailing);
+
+	typedef unsigned int		uint;
+	typedef unsigned char		uint8;
+	typedef unsigned long int	uint32;
+	
+	enum epollret 
+	{
+		RET_OK,
+		RET_EMPTY,
+		RET_CLOSE,
+		RET_HASOUTPUT,
+		RET_PARSEINPUT
+	};
 
 	enum rfc
 	{
@@ -77,7 +94,6 @@ namespace irc
 		USERSDONTMATCH,				// 502 ERR_USERSDONTMATCH
 		MANYPARAMS = 42001			// internal: too many parameters // TODO probably wrong place => parsing topic?
 	};
-
 
 } // end of namespace IRC
 

@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:25:38 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/25 11:16:06 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/26 15:37:49 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,6 @@
 
 # include <iostream>
 # include <stdexcept>
-# include <string>
-# include <vector>
 
 // -------------------------------------------------------------------------- //
 
@@ -55,20 +53,5 @@ namespace debug
 }
 
 // -------------------------------------------------------------------------- //
-
-enum e_pollret 
-{
-	RET_OK,
-	RET_EMPTY,
-	RET_CLOSE,
-	RET_HASOUTPUT,
-	RET_PARSEINPUT
-};
-
-// -------------------------------------------------------------------------- //
-
-typedef unsigned int		t_uint;
-typedef unsigned char		t_uint8;
-typedef unsigned long int	t_uint32;
 
 #endif

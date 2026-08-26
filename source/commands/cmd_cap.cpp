@@ -6,15 +6,15 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 13:54:12 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/24 18:15:53 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/26 15:42:15 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
-# include "Command.hpp"
-# include "IServerCtrl.hpp"
-# include "Client.hpp"
-# include "irc.hpp"
+#include "ft_irc.hpp"
+#include "Command.hpp"
+#include "IServerCtrl.hpp"
+#include "Client.hpp"
+#include "irc.hpp"
 
 /*
 	CAPABILITY NEGOTIATION of IRCv3

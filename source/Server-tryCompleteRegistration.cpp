@@ -6,11 +6,13 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 13:19:17 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/24 18:15:53 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/26 15:47:09 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ft_irc.hpp"
 #include "Server.hpp"
+
 #include <sstream>
 // #include <arpa/inet.h> // for the commented out block below
 

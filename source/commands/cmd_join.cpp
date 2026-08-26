@@ -10,17 +10,19 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ft_irc.hpp"
+#include "irc.hpp"
 #include "Channel.hpp"
-# include "Command.hpp"
-# include "IServerCtrl.hpp"
-# include "Client.hpp"
+#include "Command.hpp"
+#include "IServerCtrl.hpp"
+#include "Client.hpp"
 #include "Message.hpp"
-# include "irc.hpp"
+#include "Response.hpp"
+
 #include <cctype>
 #include <sstream>
 #include <string>
 #include <vector>
-#include "Response.hpp"
 
 std::string topicReply(const Message & msg, Channel * channel)
 {

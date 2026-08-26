@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:32:56 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/26 14:20:18 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/27 13:07:08 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,17 @@
 // -------------------------------------------------------------------------- //
 
 # include <csignal>
-#include <deque>
+# include <deque>
 # include <string>
 # include <map>
-#include "Message.hpp"
-# include "ft_irc.hpp"
+
 # include "IServerCtrl.hpp"
 # include "ListeningSocket.hpp"
-# include "Client.hpp"
-# include "CommandRegistry.hpp"
 # include "Epoll.hpp"
+# include "Client.hpp"
+# include "Message.hpp"
 # include "Channel.hpp"
+# include "CommandRegistry.hpp"
 
 // -------------------------------------------------------------------------- //
 

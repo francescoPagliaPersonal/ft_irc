@@ -6,10 +6,11 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 17:02:24 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/17 17:41:55 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/26 15:41:02 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ft_irc.hpp"
 #include "Client.hpp"
 
 #include <cerrno>
@@ -52,7 +53,7 @@ void printEscaped(std::ostream& os, const std::string& s)
 // -------------------------------------------------------------------------- //
 
 // Retrieve data via recv() once and write it to input buffer on success.
-e_pollret Client::receiveToBuffer()
+irc::epollret Client::receiveToBuffer()
 {
 	errno = 0;
 	char buf[BUF_SIZE + 1];
@@ -63,10 +64,10 @@ e_pollret Client::receiveToBuffer()
 		if (DEBUG)
 			std::cerr << "[Error] FD " << _fd << " recv(): "
 				<< errno << ", " << strerror(errno) << std::endl;
-		return (RET_CLOSE);
+		return (irc::RET_CLOSE);
 	}
 	else if (ret == 0) // client disconnected
-		return (RET_CLOSE);
+		return (irc::RET_CLOSE);
 	buf[ret] = '\0';
 	_bufIN.append(buf);
 	if (DEBUG == debug::DETAILED)
@@ -77,11 +78,11 @@ e_pollret Client::receiveToBuffer()
 		if (_bufIN.size() && _bufIN[_bufIN.size() - 1] != '\n')
 			std::cout << std::endl;
 	}
-	return (RET_PARSEINPUT);
+	return (irc::RET_PARSEINPUT);
 }
 
 // Send data from the output buffer once via send() and remove it on success.
-e_pollret Client::sendFromBuffer()
+irc::epollret Client::sendFromBuffer()
 {
 	errno = 0;
 	ssize_t ret = send(_fd, _bufOUT.c_str(), _bufOUT.size(), 0);
@@ -90,17 +91,17 @@ e_pollret Client::sendFromBuffer()
 		if (DEBUG)
 			std::cerr << "[Error] FD " << _fd << " send(): "
 				<< errno << ", " << strerror(errno) << std::endl;
-		return (RET_CLOSE);	
+		return (irc::RET_CLOSE);	
 	}
 	if (ret == static_cast<ssize_t>(_bufOUT.size()))
 	{
 		_bufOUT.clear();
-		return (RET_EMPTY);
+		return (irc::RET_EMPTY);
 	}
 	else
 	{
 		_bufOUT = _bufOUT.substr(ret);
-		return (RET_HASOUTPUT);
+		return (irc::RET_HASOUTPUT);
 	}
 }
 

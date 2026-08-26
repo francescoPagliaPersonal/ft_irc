@@ -3,21 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   IServerCtrl.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/14 19:25:52 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/26 14:20:08 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/27 13:05:48 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ISERVERCTRL_HPP
 # define ISERVERCTRL_HPP
 
-#include <string>
-#include <vector>
-#include <map>
-#include "ft_irc.hpp"
-#include "irc.hpp"
+// -------------------------------------------------------------------------- //
+
+# include <string>
+# include <vector>
+# include <map>
+
+# include "irc.hpp"
+
+// -------------------------------------------------------------------------- //
 
 class Client;
 class Channel;

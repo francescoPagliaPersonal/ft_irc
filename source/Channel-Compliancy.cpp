@@ -3,13 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   Channel-Compliancy.cpp                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/21 12:12:19 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/24 12:57:53 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/26 15:42:03 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ft_irc.hpp"
 #include "Channel.hpp"
 #include <deque>
 #include <map>

@@ -6,12 +6,14 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 10:05:02 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/17 17:45:52 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/26 15:47:03 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ft_irc.hpp"
 #include "Message.hpp"
 #include "Server.hpp"
+
 #include <deque>
 
 namespace {
