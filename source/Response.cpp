@@ -93,12 +93,38 @@ void Response::init(const std::string &srv)
 	_numType[irc::NEEDMOREPARAMS] = COMMAND;
 }
 
+/*
+	Build the default prefix string for numeric reply:
+	|:<serverName> <numericCode> <senderNick>|
+*/
+std::string Response::_buildNumericPrefix(const Message& msg, irc::rfc code)
+{
+	std::stringstream prefix;
+	prefix
+		<< ":" << Response::_server << " " 
+		<< code << " "
+		<< msg.sender->getNick();
+	return (prefix.str());
+}
+
+/*
+	Builds the correct string for a semi-automatic error reply numeric:
+	- default is:
+	:<serverName> CODE <senderNick> :<default trailing>
+	- variant PARAM0
+	:<serverName> CODE <senderNick> msg.params[0] :<default trailing>
+	- variant COMMAND 
+	:<serverName> CODE <senderNick> msg.command :<default trailing>
+*/
 std::string Response::handleNumeric(const Message& msg, irc::rfc code)
 {
 	std::map<irc::rfc, type>::iterator it;
+	// look up which method is needed for custom ARGS of the requested error
 	it = _numType.find(code);
+	// execute DEFAULT variant
 	if (it == _numType.end())
 		return (buildNumeric(msg, code));
+	// execute PARAM0 and COMMAND
 	switch (it->second)
 	{
 		case PARAM0:
@@ -108,64 +134,67 @@ std::string Response::handleNumeric(const Message& msg, irc::rfc code)
 	}
 }
 
+/*
+	Build a string in the form:
+	:<serverName> CODE <senderNick> :<default trailing>
+	The response is split in 512 bytes if needed.
+*/
 std::string Response::buildNumeric(const Message & msg, irc::rfc code)
 {
-	std::stringstream reply;
+	// retrieve default trailing message for code
 	std::map<irc::rfc, std::string>::const_iterator it;
 	it = _numInfo.find(code);
-
-	reply 
-		<< ":" << Response::_server << " " 
-		<< code << " "
-		<< msg.sender->getNick() ;
-	
+	// build default prefix for numeric reply
+	std::string reply(_buildNumericPrefix(msg, code));
+	// append default trailing, if any
 	if (it != _numInfo.end())
-		reply << " " << it->second;
-
-	reply << CRLF;
-
-	return reply.str();
+		reply.append(" " + it->second);
+	// finish
+	reply.append(CRLF);
+	return (reply);
 }
 
+/*
+	Build a string in the form:
+	:<serverName> CODE <senderNick> ARGS :<default trailing>
+	The response is split in 512 bytes if needed.
+*/
 std::string Response::buildNumeric(const Message& msg, irc::rfc code, const std::string & args)
 {
-	std::stringstream reply;
+	// retrieve default trailing message for code
 	std::map<irc::rfc, std::string>::const_iterator it;
 	it = _numInfo.find(code);
-
-	reply 
-		<< ":" << Response::_server << " " 
-		<< code << " "
-		<< msg.sender->getNick() << " "
-		<< args;
-	
+	// build default prefix for numeric reply
+	std::string reply(_buildNumericPrefix(msg, code));
+	// SPECIAL: append custom ARGS
+	reply.append(" " + args);
+	// append default trailing, if any
 	if (it != _numInfo.end())
-		reply << " " << it->second;
-
-	reply << CRLF;
-
-	return reply.str();
+		reply.append(" " + it->second);
+	// finish
+	reply.append(CRLF);
+	return (reply);
 }
 
+/*
+	Build a string in the form:
+	:<serverName> CODE <senderNick> ARGS :<custom TRAIL>
+	   The response is split in 512 bytes if needed.
+*/
 std::string	Response::buildNumeric(const Message& msg, irc::rfc code, const std::string & args, const std::string & trail)
 {
-	std::stringstream reply;
-
-	reply 
-		<< ":" << Response::_server << " " 
-		<< code << " "
-		<< msg.sender->getNick() << " "
-		<< args << " "
-		<< ":" << trail
-		<< CRLF;
-
-	return reply.str();
+	// build default prefix for numeric reply
+	std::string reply(_buildNumericPrefix(msg, code));
+	// SPECIAL: append custom ARGS and TRAIL and finish
+	reply.append(" " + args + " " + ":" + trail + CRLF);
+	return (reply);
 }
 
-/* build a string in the form:
-   :msg.sender->getID() COMMAND args :msg.trailing
-   the response is split in 512 bytes if needed.
- */
+/*
+	Build a string in the form:
+	:msg.sender->getID() COMMAND args :msg.trailing
+	The response is split in 512 bytes if needed.
+*/
 std::string	Response::buildRegular(const Message& msg, const std::string & args)
 {
 	std::string reply;
@@ -176,10 +205,11 @@ std::string	Response::buildRegular(const Message& msg, const std::string & args)
 	return reply;
 }
 
-/* build a string in the form:
-   :msg.sender->getID() COMMAND args :custom trailing
-   the response is split in 512 bytes if needed.
- */
+/*
+	Build a string in the form:
+	:msg.sender->getID() COMMAND args :custom trailing
+	The response is split in 512 bytes if needed.
+*/
 std::string	Response::buildRegular(const Message& msg, const std::string & args, const std::string & trailing)
 {
 	std::string reply;
