@@ -6,29 +6,40 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 18:00:05 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/24 18:22:43 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/27 11:39:35 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "CommandRegistry.hpp"
 #include "IServerCtrl.hpp"
+#include "irc.hpp"
+#include "Response.hpp"
 
 // -------------------------------------------------------------------------- //
 // OPERATION
 // -------------------------------------------------------------------------- //
 
-// Lookup MSG's command and execute it on SRV; returns a protocol numeric.
-rfc CommandRegistry::execute(IServerCtrl& srv, const Message& msg)
+// Lookup MSG's command and execute it on SRV; handles numeric code replies.
+void CommandRegistry::execute(IServerCtrl& srv, const Message& msg)
 {
 	Client *client = msg.sender;
+	irc::rfc code;
+
 	if (DEBUG)
 		std::cout << "[FD " << client->getFD() << "] Executing Command <"
 			<< msg.command << ">.\n";
+	// look up if requested command exists on the server
 	std::map<const std::string, const Command*>::iterator it;
-	it = _commands.find(msg.command);	
+	it = _commands.find(msg.command);
+	// set code for unknown command
 	if ( it == _commands.end())
-		return (irc::UNKNOWNCOMMAND);     // ERR_UNKNOWNCOMMAND
-	return (it->second->execute(srv, msg));
+		code = irc::UNKNOWNCOMMAND;     // ERR_UNKNOWNCOMMAND
+	// execute known command
+	else
+		code = it->second->execute(srv, msg);
+	// handle any registered error replies
+	if (code != irc::OK)
+		srv.sendMessage(*client, Response::handleNumeric(msg, code));
 }
 
 // -------------------------------------------------------------------------- //

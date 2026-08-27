@@ -78,7 +78,6 @@ void Response::init(const std::string &srv)
 	_numInfo[irc::NOOPERHOST] = ":No O-lines for your host.";
 	_numInfo[irc::UMODEUNKNOWNFLAG] = ":Unknown MODE flag.";
 	_numInfo[irc::USERSDONTMATCH] = ":Cant change mode for other users.";
-	// _numInfo[irc::NOCONN] = "";
 	_numInfo[irc::MANYPARAMS] = ":Too many parameter given";
 
 	// ------ SPECIAL TYPES ----------------------------------------------------

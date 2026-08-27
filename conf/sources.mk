@@ -30,7 +30,6 @@ SRC_MAN		:=  arg2password.cpp arg2port.cpp\
 				Message.cpp\
 				Command.cpp CommandRegistry.cpp\
 				CommandRegistry-RegisterCmds.cpp\
-				CommandRegistry-handleProtocolErrors.cpp\
 				Channel.cpp Channel-Get.cpp Channel-Set.cpp\
 				Channel-Operation.cpp Channel-Compliancy.cpp\
 				irc.cpp\

@@ -6,12 +6,13 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 16:32:42 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/24 18:14:10 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/27 11:42:00 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 #include "irc.hpp"
+#include "Response.hpp"
 
 // -------------------------------------------------------------------------- //
 // INTERFACE -- COMMANDS
@@ -25,20 +26,15 @@
 // disconnecting clients whose message handling fails.
 void Server::_executeCommands()
 {
-	rfc numeric = irc::OK;
-	bool keep = true;
-
 	if (DEBUG && !_msgsQueue.empty())
 		std::cout << "[Info] Processing message queue with "
 			<< _msgsQueue.size() << " messages...\n";
+	// process every command in the message queue
 	while (!_msgsQueue.empty())
 	{
 		Message& msg = _msgsQueue.front();
 		// TODO ensure POLICY and COMMAND errors are in line with PROTOCOL CODES
-		numeric = _cmdReg.execute(*this, msg);
-		keep = _cmdReg.handleProtocolErrors(*this, numeric, msg);
-		if (!keep)
-			_disconnectClient(msg.sender);
+		_cmdReg.execute(*this, msg);
 		_msgsQueue.pop_front();
 	}
 }
