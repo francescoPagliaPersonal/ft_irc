@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 14:24:29 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/27 11:07:12 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/27 13:15:58 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ rfc cmd_join(IServerCtrl & srv, const Message & msg)
 		rfc numeric = srv.addToChannel(client, channels[i], passwords[i]);
 		if (numeric)
 		{
-			srv.sendMessage(*client, Response::buildNumeric(msg, numeric, channels[i]));
+			srv.sendMessage(client, Response::buildNumeric(msg, numeric, channels[i]));
 			continue;
 		}
 		
@@ -108,11 +108,11 @@ rfc cmd_join(IServerCtrl & srv, const Message & msg)
 
 		// send the topic of the channel to the client
 					
-		srv.sendMessage(*client, topicReply(msg, channel));
+		srv.sendMessage(client, topicReply(msg, channel));
 		
 		// send the list of users to the client			
-		srv.sendMessage(*client, userListReply(msg, channel));
-		srv.sendMessage(*client, Response::buildNumeric(msg, irc::ENDOFNAMES, channel->getTitle()));
+		srv.sendMessage(client, userListReply(msg, channel));
+		srv.sendMessage(client, Response::buildNumeric(msg, irc::ENDOFNAMES, channel->getTitle()));
 	}
 	return irc::OK;
 }

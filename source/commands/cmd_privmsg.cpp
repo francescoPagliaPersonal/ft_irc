@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 15:31:28 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/27 11:07:12 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/27 13:17:00 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,17 +37,17 @@ rfc cmd_privmsg(IServerCtrl& srv, const Message& msg)
 		{
 			Client* recipient = srv.findClientByNick(recipients[i]);
 			if (recipient == NULL)
-				srv.sendMessage(*sender, Response::buildNumeric(msg, irc::NOSUCHNICK));
+				srv.sendMessage(sender, Response::buildNumeric(msg, irc::NOSUCHNICK));
 			else
 			{
 				std::string reply = Response::buildRegular(msg, recipients[i]);
-				srv.sendMessage(*recipient, reply);
+				srv.sendMessage(recipient, reply);
 			}
 			continue;
 		}
 		Channel* channel = srv.getChannelByTitle(recipients[i]);
 		if (channel == NULL)
-			srv.sendMessage(*sender, Response::buildNumeric(msg, irc::NOSUCHCHANNEL));
+			srv.sendMessage(sender, Response::buildNumeric(msg, irc::NOSUCHCHANNEL));
 		else
 		{
 			std::string reply = Response::buildRegular(msg, recipients[i]);

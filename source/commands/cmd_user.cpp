@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 13:54:12 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/26 15:41:55 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/27 13:16:20 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,6 @@ rfc cmd_user(IServerCtrl & srv, const Message & msg)
 		std::cout << "[FD " << client->getFD() 
 			<< "] UserName registration successfull.\n";
 	if (!client->getCap())
-			srv.tryCompleteRegistration(*client);
+			srv.tryCompleteRegistration(client);
 	return (irc::OK);
 }

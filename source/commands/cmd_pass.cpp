@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 11:42:55 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/27 13:07:39 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/27 13:16:20 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,6 @@ rfc cmd_pass(IServerCtrl & srv, const Message & msg)
 		std::cout << "[FD " << client->getFD() 
 			<< "] Server password correct.\n";
 	if (!client->getCap())
-			srv.tryCompleteRegistration(*client);
+			srv.tryCompleteRegistration(client);
 	return (irc::OK);
 }

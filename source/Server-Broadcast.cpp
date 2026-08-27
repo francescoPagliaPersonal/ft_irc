@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 17:36:18 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/26 15:34:24 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/27 13:13:30 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void Server::broadcast(const std::string& reply, Channel* channel, Client* clien
 	for (; it != channelMembers.end(); ++it)
 	{
 		if (it->first != client)
-			sendMessage(*it->first, reply);
+			sendMessage(it->first, reply);
 	}
 }
 
@@ -33,6 +33,6 @@ void Server::broadcast(const std::string& reply, Channel* channel)
 	std::map<Client*, irc::uint8>::const_iterator it = channelMembers.begin();
 	for (; it != channelMembers.end(); ++it)
 	{
-		sendMessage(*it->first, reply);
+		sendMessage(it->first, reply);
 	}
 }

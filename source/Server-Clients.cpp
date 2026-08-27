@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 16:27:31 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/26 15:46:54 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/27 13:13:09 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,12 @@ Client* Server::findClientByNick(const std::string & nick)
 }
 
 // Queue STR for sending to CLIENT and enable the EPOLLOUT interest.
-void Server::sendMessage(Client& client, const std::string& str)
+void Server::sendMessage(Client* client, const std::string& str)
 {
 	// TODO drop connection if bufOUT grows too much? or do we drop if kernel buffer stays full?
-	client.putReply2Buff(str);
+	client->putReply2Buff(str);
 	// TODO consider CATCH & disconnect
-	_epoll.mod(client.getFD(), DEF_EPOLL_FL | EPOLLOUT, &client);
+	_epoll.mod(client->getFD(), DEF_EPOLL_FL | EPOLLOUT, client);
 }
 
 // -------------------------------------------------------------------------- //

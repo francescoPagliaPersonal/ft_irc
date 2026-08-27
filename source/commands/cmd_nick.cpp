@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 13:54:12 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/27 11:07:17 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/27 13:16:20 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ rfc cmd_nick(IServerCtrl & srv, const Message & msg)
 			std::cout << "[FD " << client->getFD()
 				<< "] Nick registration successfull.\n";
 		if (!client->getCap())
-			srv.tryCompleteRegistration(*client);
+			srv.tryCompleteRegistration(client);
 	}
 	// regular change of nick
 	else {
@@ -55,7 +55,7 @@ rfc cmd_nick(IServerCtrl & srv, const Message & msg)
 		std::string response = Response::buildRegular(
 			msg, newNick, currNick + " has changed is nickname to " + newNick);
 		client->setNick(newNick);
-		srv.sendMessage(*client, response);
+		srv.sendMessage(client, response);
 	}
 	return (irc::OK);
 }

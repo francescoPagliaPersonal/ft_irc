@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 18:00:05 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/27 13:00:35 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/27 13:15:58 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void CommandRegistry::execute(IServerCtrl& srv, const Message& msg)
 		code = it->second->execute(srv, msg);
 	// handle any registered error replies
 	if (code != irc::OK)
-		srv.sendMessage(*client, Response::handleNumeric(msg, code));
+		srv.sendMessage(client, Response::handleNumeric(msg, code));
 }
 
 // -------------------------------------------------------------------------- //

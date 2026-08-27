@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:32:56 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/27 13:07:08 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/27 13:13:49 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ class Server : public IServerCtrl
 		// ---- Interface ----
 		std::string getPassword() const;
 		//		Clients
-		void tryCompleteRegistration(Client&);
-		void sendMessage(Client&, const std::string&);
+		void tryCompleteRegistration(Client*);
+		void sendMessage(Client*, const std::string&);
 		Client* findClientByNick(const std::string &);
 		Channel* getChannelByTitle(std::string);
 		//		Channels
@@ -83,7 +83,7 @@ class Server : public IServerCtrl
 		// ---- Channels ----
 		void _removeChannel(const std::string&);
 		void _removeChannel(Channel*);
-		void _removeClientFromChannels(Client *);
+		void _removeClientFromChannels(Client*);
 		Channel* _getOrCreateChannel(const std::string&, const std::string&);
 		Channel* _getChannel(const std::string&);
 		Channel* _addChannel(const std::string& key, const std::string& title, const std::string& pw);
