@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:25:38 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/26 15:37:49 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/27 22:08:16 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 
 # define MAX_CLIENTS 50000
 # define MAX_EVENTS 32
-# define TIMEOUT 1000
+# define TIMEOUT 2000
 # define CRLF "\r\n"
 # define COL_GREEN "\033[32m"
 # define COL_CYAN "\033[36m"
