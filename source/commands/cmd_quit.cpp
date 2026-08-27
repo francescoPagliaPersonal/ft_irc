@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/25 17:17:17 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/27 21:39:00 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/27 21:48:25 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,21 @@ void collectMembers(Client* client, std::set<Client*>* contacts)
 	joinedChannels = client->getChannelsList();
 	for (it = joinedChannels.begin(); it != joinedChannels.end(); it++)
 	{
+		// TODO remove these comments later on, when agreed upon
 		// this copies the whole map, potentially a lot of work
 		// channelMembers = (*it)->getMembersMap();
 		// let the channel do the work instead?
 		(*it)->getMembers(contacts);
+	}
+}
+
+void notifyContacts(IServerCtrl& srv, std::set<Client*>& contacts, const Message& msg)
+{
+	std::set<Client*>::const_iterator it;
+	for (it = contacts.begin(); it != contacts.end(); it++)
+	{
+		if (*it != msg.sender)
+			srv.sendMessage(*it, Response::buildRegular(msg, ""));
 	}
 }
 
@@ -43,14 +54,11 @@ rfc cmd_quit(IServerCtrl& srv, const Message& msg)
 	reply = Response::buildError(msg, "Closing link", "Quit");
 	srv.sendMessage(client, reply);
 	// 2) look for channels & collect clients
-	collectMembers(client, &contacts);
-	
-	
+	collectMembers(client, &contacts);	
 	// 3) broadcast QUIT to all clients
+	notifyContacts(srv, contacts, msg);
 	// 4) internal stuff
 	// TODO somehow handle disconnect
-	// this is the reply shown in the example rfc2812/#section-3.1.7
-	// reply = ":" + client->getNick() + " QUIT :" + msg.trailing + CRLF;
 	return (irc::OK);
 }
 
