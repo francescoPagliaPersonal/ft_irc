@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 14:24:29 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/27 13:15:58 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/27 13:20:23 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ rfc cmd_join(IServerCtrl & srv, const Message & msg)
 		
 		// TASKS:
 		// send a join msg to the whole channel
-		srv.broadcast(reply, channel);
+		srv.broadcast(channel, reply);
 
 		// send the topic of the channel to the client
 					

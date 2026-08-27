@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:32:56 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/27 13:13:49 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/27 13:19:33 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,8 @@ class Server : public IServerCtrl
 		//		Channels
 		rfc addToChannel(Client*, const std::string&, const std::string&);
 		void removeFromChannel(Client*, const std::string&, const std::string&);
-		void broadcast(const std::string&, Channel*, Client*);
-		void broadcast(const std::string&, Channel*);
+		void broadcast(Channel*, Client *, const std::string&);
+		void broadcast(Channel*, const std::string&);
 		// void broadcast(const std::string&, std::deque<Client*>, Client*);
 		
 	private:

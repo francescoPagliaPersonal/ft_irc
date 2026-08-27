@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/14 19:25:52 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/27 13:13:56 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/27 13:18:58 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ public:
 	virtual Client* findClientByNick(const std::string&) = 0;
 	// ---- Sending Messages To Clients
 	virtual void sendMessage(Client*, const std::string&) = 0;
-	virtual void broadcast(const std::string&, Channel*, Client *) = 0;
-	virtual void broadcast(const std::string&, Channel*) = 0;
+	virtual void broadcast(Channel*, Client *, const std::string&) = 0;
+	virtual void broadcast(Channel*, const std::string&) = 0;
 	// ---- Channel Manipulation
 	virtual rfc addToChannel(Client*, const std::string&, const std::string&) = 0;
 	virtual void removeFromChannel(Client*, const std::string&, const std::string&) = 0;

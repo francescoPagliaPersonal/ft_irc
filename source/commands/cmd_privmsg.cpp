@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 15:31:28 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/27 13:17:00 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/27 13:20:30 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ rfc cmd_privmsg(IServerCtrl& srv, const Message& msg)
 		else
 		{
 			std::string reply = Response::buildRegular(msg, recipients[i]);
-			srv.broadcast(reply, channel, sender);
+			srv.broadcast(channel, sender, reply);
 		}
 
 	}
