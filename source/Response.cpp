@@ -166,7 +166,8 @@ std::string Response::buildNumeric(const Message& msg, irc::rfc code, const std:
 	// build default prefix for numeric reply
 	std::string reply(_buildNumericPrefix(msg, code));
 	// SPECIAL: append custom ARGS
-	reply.append(" " + args);
+	if (!args.empty())
+		reply.append(" " + args);
 	// append default trailing, if any
 	if (it != _numInfo.end())
 		reply.append(" " + it->second);
@@ -184,8 +185,15 @@ std::string	Response::buildNumeric(const Message& msg, irc::rfc code, const std:
 {
 	// build default prefix for numeric reply
 	std::string reply(_buildNumericPrefix(msg, code));
-	// SPECIAL: append custom ARGS and TRAIL and finish
-	reply.append(" " + args + " " + ":" + trail + CRLF);
+	// SPECIAL: append custom ARGS
+	if (!args.empty())
+		reply.append(" " + args);
+	// SPECIAL: append custom ARGS
+	if (!trail.empty())
+		reply.append(" :" + trail);
+	// TODO else " :" needed w/o trail?
+	// finish
+	reply.append(CRLF);
 	return (reply);
 }
 
@@ -197,10 +205,16 @@ std::string	Response::buildNumeric(const Message& msg, irc::rfc code, const std:
 std::string	Response::buildRegular(const Message& msg, const std::string & args)
 {
 	std::string reply;
-
-	reply = ":" + msg.sender->getID() + " ";
-	reply += msg.command + " " + args + " :";
-	reply = irc::chunkifyTrailing(reply, msg.trailing);
+	// build default prefix for regular reply
+	reply = ":" + msg.sender->getID() + " " + msg.command;
+	// append custom args, then default trailing
+	if (!args.empty())
+		reply += " " + args;
+	if (!msg.trailing.empty())
+	{
+		reply += " :";
+		reply = irc::chunkifyTrailing(reply, msg.trailing);
+	}
 	return reply;
 }
 
@@ -212,9 +226,15 @@ std::string	Response::buildRegular(const Message& msg, const std::string & args)
 std::string	Response::buildRegular(const Message& msg, const std::string & args, const std::string & trailing)
 {
 	std::string reply;
-
-	reply = ":" + msg.sender->getID() + " ";
-	reply += msg.command + " " + args + " :";
-	reply = irc::chunkifyTrailing(reply, trailing);
+	// build default prefix for regular reply
+	reply = ":" + msg.sender->getID() + " " + msg.command;
+	// append custom args then custom trailing
+	if (!args.empty())
+		reply += " " + args;
+	if (!trailing.empty())
+	{
+		reply += " :";
+		reply = irc::chunkifyTrailing(reply, trailing);
+	}
 	return reply;
 }
