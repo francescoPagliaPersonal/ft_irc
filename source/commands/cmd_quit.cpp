@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/25 17:17:17 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/27 21:48:25 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/27 23:21:58 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,9 @@
 
 #include <deque>
 #include <set>
+
+namespace
+{
 
 void collectMembers(Client* client, std::set<Client*>* contacts)
 {
@@ -45,6 +48,8 @@ void notifyContacts(IServerCtrl& srv, std::set<Client*>& contacts, const Message
 	}
 }
 
+} // end of namespace
+
 rfc cmd_quit(IServerCtrl& srv, const Message& msg)
 {
 	std::string reply;
@@ -58,23 +63,7 @@ rfc cmd_quit(IServerCtrl& srv, const Message& msg)
 	// 3) broadcast QUIT to all clients
 	notifyContacts(srv, contacts, msg);
 	// 4) internal stuff
+	client->removeFromChannels();
 	// TODO somehow handle disconnect
 	return (irc::OK);
 }
-
-/*
-> 2026/08/27 20:02:14.392414  length=15 from=183 to=197
-QUIT :leaving\r
-< 2026/08/27 20:02:14.392635  length=53 from=3328 to=3380
-ERROR :Closing link: (mw@< 2026/08/27 20:02:14.392718  length=47 from=3179 to=3225
-1:2B7u.g0D.e0t.e1c)1 o[rQ!umiwt@:1 2l7e.a0v.i0n.g1] \rQ
-UIT :Quit: leaving\r
-
-> 2026/08/27 20:07:13.467037  length=15 from=255 to=269
-QUIT :leaving\r
-< 2026/08/27 20:07:13.467366  length=53 from=3538 to=3590
-ERROR :Closing lin< 2026/08/27 20:07:13.467479  length=47 from=3675 to=3721
-k::B u(gmDwe@t1e2c71.o0r.!0m.w1@)1 2[7Q.u0i.t0:. 1l eQaUvIiTn g:]Q\ru
-it: leaving\r
-
-*/
