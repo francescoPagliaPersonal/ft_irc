@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/25 17:17:17 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/27 19:55:16 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/27 21:39:00 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,57 @@
 #include "irc.hpp"
 #include "Response.hpp"
 
+#include <deque>
+#include <set>
+
+void collectMembers(Client* client, std::set<Client*>* contacts)
+{
+	std::deque<Channel*> joinedChannels;
+	std::deque<Channel*>::const_iterator it;
+	// std::map<Client*, bitMask> channelMembers;
+	joinedChannels = client->getChannelsList();
+	for (it = joinedChannels.begin(); it != joinedChannels.end(); it++)
+	{
+		// this copies the whole map, potentially a lot of work
+		// channelMembers = (*it)->getMembersMap();
+		// let the channel do the work instead?
+		(*it)->getMembers(contacts);
+	}
+}
+
 rfc cmd_quit(IServerCtrl& srv, const Message& msg)
 {
-	Client* client = msg.sender;
 	std::string reply;
-	// TODO first version needs new getFullUser()
-	// TODO figure out WHICH reply is fine... any seems to do
-	// this is the reply shown in the example rfc2812/#section-3.1.7
-	// although it comes w/o ERROR
+	std::set<Client*> contacts;
+	Client* client = msg.sender;
+	// 1) default reply back to sender
 	reply = Response::buildError(msg, "Closing link", "Quit");
-	// this is the reply as done by inspircd -- NEEDS clientIP merged
-	// reply = "ERROR :Closing link: (" + client->getNick()
-	// 	+ "@" + client->getHost() + ") [QUIT: "
-	// 	+ msg.trailing + "]" + CRLF;
 	srv.sendMessage(client, reply);
+	// 2) look for channels & collect clients
+	collectMembers(client, &contacts);
+	
+	
+	// 3) broadcast QUIT to all clients
+	// 4) internal stuff
+	// TODO somehow handle disconnect
+	// this is the reply shown in the example rfc2812/#section-3.1.7
+	// reply = ":" + client->getNick() + " QUIT :" + msg.trailing + CRLF;
 	return (irc::OK);
 }
+
+/*
+> 2026/08/27 20:02:14.392414  length=15 from=183 to=197
+QUIT :leaving\r
+< 2026/08/27 20:02:14.392635  length=53 from=3328 to=3380
+ERROR :Closing link: (mw@< 2026/08/27 20:02:14.392718  length=47 from=3179 to=3225
+1:2B7u.g0D.e0t.e1c)1 o[rQ!umiwt@:1 2l7e.a0v.i0n.g1] \rQ
+UIT :Quit: leaving\r
+
+> 2026/08/27 20:07:13.467037  length=15 from=255 to=269
+QUIT :leaving\r
+< 2026/08/27 20:07:13.467366  length=53 from=3538 to=3590
+ERROR :Closing lin< 2026/08/27 20:07:13.467479  length=47 from=3675 to=3721
+k::B u(gmDwe@t1e2c71.o0r.!0m.w1@)1 2[7Q.u0i.t0:. 1l eQaUvIiTn g:]Q\ru
+it: leaving\r
+
+*/
