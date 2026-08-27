@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:55:20 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/17 16:47:02 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/27 13:36:36 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int ListeningSocket::getPort() const
 }
 
 // Orchestrates the process of accepting a new connection from IPADDR.
-int ListeningSocket::acceptConnection(struct sockaddr_in& ipAddr)
+int ListeningSocket::acceptConnection(struct sockaddr_in& ipAddr) const
 {
 	socklen_t len;
 	int newFD;

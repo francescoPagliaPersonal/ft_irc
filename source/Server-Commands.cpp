@@ -6,10 +6,11 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 16:32:42 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/27 11:42:00 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/27 13:00:44 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ft_irc.hpp"
 #include "Server.hpp"
 #include "irc.hpp"
 #include "Response.hpp"

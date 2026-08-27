@@ -6,10 +6,11 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 09:16:39 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/17 17:42:10 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/26 15:41:43 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ft_irc.hpp"
 #include "Client.hpp"
 
 // Split the input buffer into raw message strings at CRLF and return them.

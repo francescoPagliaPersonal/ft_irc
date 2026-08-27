@@ -6,21 +6,23 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 14:24:29 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/27 11:07:12 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/27 13:20:23 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ft_irc.hpp"
+#include "irc.hpp"
 #include "Channel.hpp"
-# include "Command.hpp"
-# include "IServerCtrl.hpp"
-# include "Client.hpp"
+#include "Command.hpp"
+#include "IServerCtrl.hpp"
+#include "Client.hpp"
 #include "Message.hpp"
-# include "irc.hpp"
+#include "Response.hpp"
+
 #include <cctype>
 #include <sstream>
 #include <string>
 #include <vector>
-#include "Response.hpp"
 
 std::string topicReply(const Message & msg, Channel * channel)
 {
@@ -92,7 +94,7 @@ rfc cmd_join(IServerCtrl & srv, const Message & msg)
 		rfc numeric = srv.addToChannel(client, channels[i], passwords[i]);
 		if (numeric)
 		{
-			srv.sendMessage(*client, Response::buildNumeric(msg, numeric, channels[i]));
+			srv.sendMessage(client, Response::buildNumeric(msg, numeric, channels[i]));
 			continue;
 		}
 		
@@ -102,15 +104,15 @@ rfc cmd_join(IServerCtrl & srv, const Message & msg)
 		
 		// TASKS:
 		// send a join msg to the whole channel
-		srv.broadcast(reply, channel);
+		srv.broadcast(channel, reply);
 
 		// send the topic of the channel to the client
 					
-		srv.sendMessage(*client, topicReply(msg, channel));
+		srv.sendMessage(client, topicReply(msg, channel));
 		
 		// send the list of users to the client			
-		srv.sendMessage(*client, userListReply(msg, channel));
-		srv.sendMessage(*client, Response::buildNumeric(msg, irc::ENDOFNAMES, channel->getTitle()));
+		srv.sendMessage(client, userListReply(msg, channel));
+		srv.sendMessage(client, Response::buildNumeric(msg, irc::ENDOFNAMES, channel->getTitle()));
 	}
 	return irc::OK;
 }

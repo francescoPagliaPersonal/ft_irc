@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/13 10:19:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/21 16:58:17 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/27 13:33:06 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,22 +15,15 @@
 
 // -------------------------------------------------------------------------- //
 
-#include <deque>
+# include "irc.hpp"
+
+# include <deque>
 # include <string>
 # include <map>
-#include <vector>
-
-# include "ft_irc.hpp"
+# include <vector>
 
 // -------------------------------------------------------------------------- //
 
-
-
-// TODO need the right bit values
-// # define CH_INVITE
-// # define CH_TOPIC
-// # define CH_PASSWORD
-// # define CH_OPERATOR
 /*
 	MODE - Change the channel’s mode:
 	· i: Set/remove Invite-only channel
@@ -59,7 +52,7 @@ enum e_usrMask
 
 // -------------------------------------------------------------------------- //
 
-typedef t_uint8 bitMask;
+typedef irc::uint8 bitMask;
 class Client;
 
 class Channel
@@ -77,28 +70,28 @@ class Channel
 		std::string getTitle() const;		// used in debug & test functions
 		std::string getTopic() const;
 		std::string getPassword() const;
-		t_uint 		getLimit() const;
+		irc::uint 	getLimit() const;
 		bitMask		getModes() const;
 		std::map<Client*, bitMask>	getMembersMap() const;
 		
 		// ---- set
 		void setTopic(const std::string&);
 		void setPassword(const std::string&);
-		void setLimit(t_uint);
+		void setLimit(irc::uint);
 		void setInvite();
 
 		static bool isTitleCompliant(const std::string& channel);
 		static std::string title2key(std::string);
 
-		bool isMember(Client *);
-		bool passwordMatch(const std::string & pw);
-		bool belowChannelLimit();
-		bool joinGranted(Client *);
+		bool isMember(Client *) const;
+		bool passwordMatch(const std::string & pw) const;
+		bool belowChannelLimit() const;
+		bool joinGranted(Client *) const;
 		
 	private:
 		// ----
 		bitMask 							_modes;
-		t_uint								_userLimit;
+		irc::uint							_userLimit;
 		const std::string					_title; // RENAME cmd not required
 		std::string							_topic;
 		std::string							_password;

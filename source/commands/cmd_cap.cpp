@@ -6,15 +6,15 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 13:54:12 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/24 18:15:53 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/27 13:43:26 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
-# include "Command.hpp"
-# include "IServerCtrl.hpp"
-# include "Client.hpp"
-# include "irc.hpp"
+#include "ft_irc.hpp"
+#include "Command.hpp"
+#include "IServerCtrl.hpp"
+#include "Client.hpp"
+#include "irc.hpp"
 
 /*
 	CAPABILITY NEGOTIATION of IRCv3
@@ -30,7 +30,7 @@ rfc cmd_cap(IServerCtrl & srv, const Message & msg)
 	// TODO need more content? currently is empty stub to advance handshake
 	
 	Client *client = msg.sender;
-	if (msg.flags & MSG_HAS_PARAMS)
+	if (msg.flags & irc::MSG_HAS_PARAMS)
 	{
 		if (msg.params[0] == "LS")
 		{
@@ -38,11 +38,11 @@ rfc cmd_cap(IServerCtrl & srv, const Message & msg)
 				client->setCap(true);
 			std::string reply;
 			reply = ":CoolServ CAP " + client->getNick() + " LS :" + CRLF;
-			srv.sendMessage(*client, reply);
+			srv.sendMessage(client, reply);
 		}
 		else if (msg.params[0] == "END" && client->getCap())
 		{ // IF registration is NOT complete, cmd_* can still finish that step
-				srv.tryCompleteRegistration(*client);
+				srv.tryCompleteRegistration(client);
 				client->setCap(false);
 		}
 		else

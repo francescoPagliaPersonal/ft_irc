@@ -6,11 +6,13 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 13:19:17 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/24 18:15:53 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/27 13:27:22 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ft_irc.hpp"
 #include "Server.hpp"
+
 #include <sstream>
 // #include <arpa/inet.h> // for the commented out block below
 
@@ -21,13 +23,13 @@ void build00line(std::stringstream& ss, uint numeric, const std::string& nick)
 	ss  << ":CoolServ" << " 00" << numeric << ' ' << nick;
 }
 
-void buildWelcomeMessage(std::stringstream& ss, Client& client)
+void buildWelcomeMessage(std::stringstream& ss, Client* client)
 {
-	const std::string nick(client.getNick());
+	const std::string nick(client->getNick());
 	build00line(ss, irc::WELCOME, nick);
-	ss	<< " :Welcome to the 42 IRC " << client.getNick()
-		<< "!" << client.getUserName() << CRLF;
-		// << "@" << inet_ntoa(client.addr().sin_addr) << "\r\n";
+	ss	<< " :Welcome to the 42 IRC " << client->getNick()
+		<< "!" << client->getUserName() << CRLF;
+		// << "@" << inet_ntoa(client->addr().sin_addr) << "\r\n";
 	build00line(ss, irc::YOURHOST, nick);
 	ss	<< " :You host is CoolServ, calmly serving you ft_irc." << CRLF;
 	build00line(ss, irc::CREATED, nick);
@@ -42,9 +44,9 @@ void buildMotdLine(std::stringstream& ss, const std::string& nick, const std::st
 	ss << ":CoolServ " << irc::MOTD << ' ' << nick << ' ' << msg << CRLF;
 }
 
-void buildMessageOfTheDay(std::stringstream& ss, Client& client)
+void buildMessageOfTheDay(std::stringstream& ss, Client* client)
 {
-	const std::string nick(client.getNick());
+	const std::string nick(client->getNick());
 	ss	<< ":CoolServ " << irc::MOTDSTART << ' ' << nick
 		<< " :CoolServ presents daily wisdom" << CRLF;
 	// TODO consider ISUPPORT and LUSER (stats of inspircd)
@@ -58,11 +60,11 @@ void buildMessageOfTheDay(std::stringstream& ss, Client& client)
 } // end of namespace
 
 // Send the welcome message once the client finished the registration handshake.
-void Server::tryCompleteRegistration(Client& client)
+void Server::tryCompleteRegistration(Client* client) const
 {
-	if (client.getRegistrationFlags() != REG_DONE)
+	if (client->getRegistrationFlags() != REG_DONE)
 		return ;
-	std::cout << "[FD " << client.getFD() << "] User registration completed.\n";
+	std::cout << "[FD " << client->getFD() << "] User registration completed.\n";
 	std::stringstream ss;
 	buildWelcomeMessage(ss, client);
 	buildMessageOfTheDay(ss, client);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:32:56 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/26 14:20:18 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/27 13:29:45 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,17 @@
 // -------------------------------------------------------------------------- //
 
 # include <csignal>
-#include <deque>
+# include <deque>
 # include <string>
 # include <map>
-#include "Message.hpp"
-# include "ft_irc.hpp"
+
 # include "IServerCtrl.hpp"
 # include "ListeningSocket.hpp"
-# include "Client.hpp"
-# include "CommandRegistry.hpp"
 # include "Epoll.hpp"
+# include "Client.hpp"
+# include "Message.hpp"
 # include "Channel.hpp"
+# include "CommandRegistry.hpp"
 
 // -------------------------------------------------------------------------- //
 
@@ -45,15 +45,15 @@ class Server : public IServerCtrl
 		// ---- Interface ----
 		std::string getPassword() const;
 		//		Clients
-		void tryCompleteRegistration(Client&);
-		void sendMessage(Client&, const std::string&);
-		Client* findClientByNick(const std::string &);
-		Channel* getChannelByTitle(std::string);
+		void tryCompleteRegistration(Client*) const;
+		void sendMessage(Client*, const std::string&) const;
+		Client* findClientByNick(const std::string &) const;
+		Channel* getChannelByTitle(std::string) const;
 		//		Channels
 		rfc addToChannel(Client*, const std::string&, const std::string&);
 		void removeFromChannel(Client*, const std::string&, const std::string&);
-		void broadcast(const std::string&, Channel*, Client*);
-		void broadcast(const std::string&, Channel*);
+		void broadcast(Channel*, Client *, const std::string&) const;
+		void broadcast(Channel*, const std::string&) const;
 		// void broadcast(const std::string&, std::deque<Client*>, Client*);
 		
 	private:
@@ -83,9 +83,9 @@ class Server : public IServerCtrl
 		// ---- Channels ----
 		void _removeChannel(const std::string&);
 		void _removeChannel(Channel*);
-		void _removeClientFromChannels(Client *);
+		void _removeClientFromChannels(Client*);
 		Channel* _getOrCreateChannel(const std::string&, const std::string&);
-		Channel* _getChannel(const std::string&);
+		Channel* _getChannel(const std::string&) const;
 		Channel* _addChannel(const std::string& key, const std::string& title, const std::string& pw);
 		Channel* _addChannel(const std::string& title, const std::string& pw);
 		// ----

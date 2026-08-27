@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 22:58:08 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/25 00:45:43 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/26 15:39:19 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,29 +41,29 @@ void Server::_handleListenEvent()
 // Responsible for handling all epoll events on client FDs.
 void Server::_handleClientEvent(epoll_event& ev)
 {
-	e_pollret ret = RET_OK;
+	irc::epollret ret = irc::RET_OK;
 	Client* client = static_cast<Client*>(ev.data.ptr);
 	if (ev.events & (EPOLLHUP | EPOLLERR))
-		ret = RET_CLOSE;
+		ret = irc::RET_CLOSE;
 	else if (ev.events & EPOLLIN)
 		ret = client->receiveToBuffer();
 	else if (ev.events & EPOLLOUT)
 		ret = client->sendFromBuffer();
 	switch (ret)
 	{
-		case RET_EMPTY:
+		case irc::RET_EMPTY:
 			_epoll.mod(client->getFD(), DEF_EPOLL_FL, client);
 			break;
-		case RET_CLOSE:
+		case irc::RET_CLOSE:
 			_removeClient(client);
 			// TODO closing events needs validation, thus also the printout
 			std::cout << "[Warning] " << __FUNCTION__ << " removed a Client." << std::endl;
 			// TODO but also, are they the same for IN/OUT?
 			break;
-		case RET_HASOUTPUT:
+		case irc::RET_HASOUTPUT:
 			_epoll.mod(client->getFD(), DEF_EPOLL_FL | EPOLLOUT, client);
 			break;
-		case RET_PARSEINPUT:
+		case irc::RET_PARSEINPUT:
 			if (_processInputBuffer(client) == false)
 				_removeClient(client); // builds the interneal message array
 			break;

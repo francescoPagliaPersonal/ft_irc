@@ -6,10 +6,11 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 18:00:05 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/27 11:39:35 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/27 13:35:22 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ft_irc.hpp"
 #include "CommandRegistry.hpp"
 #include "IServerCtrl.hpp"
 #include "irc.hpp"
@@ -20,7 +21,7 @@
 // -------------------------------------------------------------------------- //
 
 // Lookup MSG's command and execute it on SRV; handles numeric code replies.
-void CommandRegistry::execute(IServerCtrl& srv, const Message& msg)
+void CommandRegistry::execute(IServerCtrl& srv, const Message& msg) const
 {
 	Client *client = msg.sender;
 	irc::rfc code;
@@ -29,7 +30,7 @@ void CommandRegistry::execute(IServerCtrl& srv, const Message& msg)
 		std::cout << "[FD " << client->getFD() << "] Executing Command <"
 			<< msg.command << ">.\n";
 	// look up if requested command exists on the server
-	std::map<const std::string, const Command*>::iterator it;
+	std::map<const std::string, const Command*>::const_iterator it;
 	it = _commands.find(msg.command);
 	// set code for unknown command
 	if ( it == _commands.end())
@@ -39,7 +40,7 @@ void CommandRegistry::execute(IServerCtrl& srv, const Message& msg)
 		code = it->second->execute(srv, msg);
 	// handle any registered error replies
 	if (code != irc::OK)
-		srv.sendMessage(*client, Response::handleNumeric(msg, code));
+		srv.sendMessage(client, Response::handleNumeric(msg, code));
 }
 
 // -------------------------------------------------------------------------- //

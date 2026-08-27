@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/13 10:59:59 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/24 11:46:22 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/27 13:09:52 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@
 // Custom constructor to create a channel with TITLE and password PW.
 Channel::Channel(const std::string& title, const std::string& pw)
 	: _modes(0)
-	, _userLimit(0)
+	, _userLimit(0) // TODO needs proper initialization
 	, _title(title)
-	, _topic("Welcome to this beautiful channel!")
+	, _topic("Welcome to this beautiful channel!") // TODO use a macro
 	, _password(pw)
 	, _members()
 {}

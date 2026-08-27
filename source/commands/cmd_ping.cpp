@@ -6,10 +6,11 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/16 20:13:56 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/24 18:15:53 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/27 13:15:58 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ft_irc.hpp"
 #include "Command.hpp"
 #include "IServerCtrl.hpp"
 #include "Client.hpp"
@@ -26,7 +27,7 @@ rfc cmd_ping(IServerCtrl& srv, const Message& msg)
 	else
 		token = msg.trailing;
 
-	srv.sendMessage(*client,
+	srv.sendMessage(client,
 		std::string(":CoolServ PONG CoolServ :") + token + CRLF);
 	return (irc::OK);
 }
