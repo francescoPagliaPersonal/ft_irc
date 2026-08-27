@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/26 10:50:10 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/26 17:46:25 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/27 11:07:17 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@ class Response
 {
 	public:
 	static void			init(const std::string &);
-	static std::string	noOpt(const Message&, irc::rfc);
-	static std::string	args(const Message&, irc::rfc, const std::string & args);
-	static std::string	trailing(const Message&, irc::rfc, const std::string & args, const std::string & trail);
-	static std::string	senderMessage(const Message&, const std::string & args);
-	static std::string	senderMessage(const Message&, const std::string & args, const std::string & trail);
+	static std::string	buildNumeric(const Message&, irc::rfc);
+	static std::string	buildNumeric(const Message&, irc::rfc, const std::string & args);
+	static std::string	buildNumeric(const Message&, irc::rfc, const std::string & args, const std::string & trail);
+	static std::string	buildRegular(const Message&, const std::string & args);
+	static std::string	buildRegular(const Message&, const std::string & args, const std::string & trail);
 	static std::string  handleNumeric(const Message&, irc::rfc);
 
 	private:

@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 14:24:29 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/26 16:13:09 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/27 11:07:12 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@
 std::string topicReply(const Message & msg, Channel * channel)
 {
 	if (channel->getTopic().empty())
-		return Response::args(msg, irc::NOTOPIC, channel->getTitle());
-	std::string reply = Response::trailing(msg, irc::TOPIC, 
+		return Response::buildNumeric(msg, irc::NOTOPIC, channel->getTitle());
+	std::string reply = Response::buildNumeric(msg, irc::TOPIC, 
 									channel->getTitle(),
 									channel->getTopic());
 	return reply;
@@ -51,7 +51,7 @@ std::string userListReply(const Message & msg, Channel* channel )
 	std::string tmp;
 	std::string replyBase;
 	
-	replyBase = Response::args(msg, irc::NAMREPLY, "= " + channel->getTitle() + " :");
+	replyBase = Response::buildNumeric(msg, irc::NAMREPLY, "= " + channel->getTitle() + " :");
 	replyBase.erase(replyBase.size() - 2, 2); // remove CRLF
 
 	std::map<Client*, bitMask>::const_iterator it = channelMembers.begin();
@@ -92,11 +92,11 @@ rfc cmd_join(IServerCtrl & srv, const Message & msg)
 		rfc numeric = srv.addToChannel(client, channels[i], passwords[i]);
 		if (numeric)
 		{
-			srv.sendMessage(*client, Response::args(msg, numeric, channels[i]));
+			srv.sendMessage(*client, Response::buildNumeric(msg, numeric, channels[i]));
 			continue;
 		}
 		
-		std::string reply = Response::senderMessage(msg, channels[i]);
+		std::string reply = Response::buildRegular(msg, channels[i]);
 		
 		Channel *channel = srv.getChannelByTitle(channels[i]);
 		
@@ -110,7 +110,7 @@ rfc cmd_join(IServerCtrl & srv, const Message & msg)
 		
 		// send the list of users to the client			
 		srv.sendMessage(*client, userListReply(msg, channel));
-		srv.sendMessage(*client, Response::args(msg, irc::ENDOFNAMES, channel->getTitle()));
+		srv.sendMessage(*client, Response::buildNumeric(msg, irc::ENDOFNAMES, channel->getTitle()));
 	}
 	return irc::OK;
 }

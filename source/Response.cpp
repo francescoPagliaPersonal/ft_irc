@@ -98,17 +98,17 @@ std::string Response::handleNumeric(const Message& msg, irc::rfc code)
 	std::map<irc::rfc, type>::iterator it;
 	it = _numType.find(code);
 	if (it == _numType.end())
-		return (noOpt(msg, code));
+		return (buildNumeric(msg, code));
 	switch (it->second)
 	{
 		case PARAM0:
-			return (args(msg, code, msg.params[0]));
+			return (buildNumeric(msg, code, msg.params[0]));
 		case COMMAND:
-			return (args(msg, code, msg.command));
+			return (buildNumeric(msg, code, msg.command));
 	}
 }
 
-std::string Response::noOpt(const Message & msg, irc::rfc code)
+std::string Response::buildNumeric(const Message & msg, irc::rfc code)
 {
 	std::stringstream reply;
 	std::map<irc::rfc, std::string>::const_iterator it;
@@ -127,7 +127,7 @@ std::string Response::noOpt(const Message & msg, irc::rfc code)
 	return reply.str();
 }
 
-std::string Response::args(const Message& msg, irc::rfc code, const std::string & args)
+std::string Response::buildNumeric(const Message& msg, irc::rfc code, const std::string & args)
 {
 	std::stringstream reply;
 	std::map<irc::rfc, std::string>::const_iterator it;
@@ -147,7 +147,7 @@ std::string Response::args(const Message& msg, irc::rfc code, const std::string 
 	return reply.str();
 }
 
-std::string	Response::trailing(const Message& msg, irc::rfc code, const std::string & args, const std::string & trail)
+std::string	Response::buildNumeric(const Message& msg, irc::rfc code, const std::string & args, const std::string & trail)
 {
 	std::stringstream reply;
 
@@ -166,7 +166,7 @@ std::string	Response::trailing(const Message& msg, irc::rfc code, const std::str
    :msg.sender->getID() COMMAND args :msg.trailing
    the response is split in 512 bytes if needed.
  */
-std::string	Response::senderMessage(const Message& msg, const std::string & args)
+std::string	Response::buildRegular(const Message& msg, const std::string & args)
 {
 	std::string reply;
 
@@ -180,7 +180,7 @@ std::string	Response::senderMessage(const Message& msg, const std::string & args
    :msg.sender->getID() COMMAND args :custom trailing
    the response is split in 512 bytes if needed.
  */
-std::string	Response::senderMessage(const Message& msg, const std::string & args, const std::string & trailing)
+std::string	Response::buildRegular(const Message& msg, const std::string & args, const std::string & trailing)
 {
 	std::string reply;
 
