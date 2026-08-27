@@ -217,6 +217,8 @@ std::string	Response::buildRegular(const Message& msg, const std::string & args)
 		reply += " :";
 		reply = irc::chunkifyTrailing(reply, msg.trailing);
 	}
+	else
+		reply.append(CRLF);
 	return reply;
 }
 
@@ -238,5 +240,7 @@ std::string	Response::buildRegular(const Message& msg, const std::string & args,
 		reply += " :";
 		reply = irc::chunkifyTrailing(reply, trailing);
 	}
+	else
+		reply.append(CRLF);
 	return reply;
 }
