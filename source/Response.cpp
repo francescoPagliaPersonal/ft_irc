@@ -217,7 +217,7 @@ std::string	Response::buildRegular(const Message& msg, const std::string & args)
 		reply += " :";
 		reply = irc::chunkifyTrailing(reply, msg.trailing);
 	}
-	return reply;
+	return (reply);
 }
 
 /*
@@ -238,5 +238,22 @@ std::string	Response::buildRegular(const Message& msg, const std::string & args,
 		reply += " :";
 		reply = irc::chunkifyTrailing(reply, trailing);
 	}
-	return reply;
+	return (reply);
+}
+
+std::string	Response::buildError(const Message& msg,
+								 const std::string& reason,
+								 const std::string& origin)
+{
+	std::string reply("ERROR");
+	Client* client = msg.sender;
+	// HACK protection for us
+	if (reason.empty() || origin.empty())
+		throw std::logic_error("We must give a reason and origin of the Error.");
+	reply.append(" :" + reason + ": (");
+	reply.append(client->getUserName() + "@" + client->getHost() + ")");
+	if (!msg.trailing.empty())
+		reply.append(" [" + origin + ": "+ msg.trailing + "]");
+	reply.append(CRLF);
+	return (reply);
 }

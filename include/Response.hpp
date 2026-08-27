@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/26 10:50:10 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/27 13:06:54 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/27 19:56:00 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ class Response
 		// ---- build any REGULAR response string
 		static std::string	buildRegular(const Message&, const std::string & args);
 		static std::string	buildRegular(const Message&, const std::string & args, const std::string & trail);
+		// ---- build special ERROR response string
+		static std::string	buildError(const Message&, const std::string& reason, const std::string& origin);
 		// ---- error handler for semi-automatic error replies
 		static std::string  handleNumeric(const Message&, irc::rfc);
 
