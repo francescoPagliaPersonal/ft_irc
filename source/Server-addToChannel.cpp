@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server-addToChannel.cpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/21 13:14:43 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/24 18:23:38 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/26 14:20:29 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 // Add CLIENT to the channel CHNAME, creating it first if it does not
 // exist yet; the channel password must match PW.
-int Server::addToChannel(Client* client,
+rfc Server::addToChannel(Client* client,
 						  const std::string& title,
 						  const std::string& pw = "")
 {

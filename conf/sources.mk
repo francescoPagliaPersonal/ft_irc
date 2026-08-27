@@ -17,6 +17,7 @@ NORM_HEADERS	:= include/$(PROG_NAME).hpp
 
 # Give File names relative to SRC_ROOT directory (.c and/or .cpp; mixed OK)
 SRC_MAN		:=  arg2password.cpp arg2port.cpp\
+				Response.cpp\
 				Server.cpp Server-CDTOR.cpp Server-Run.cpp Server-Handlers.cpp\
 				Server-Clients.cpp Server-Channels.cpp Server-Signals.cpp\
 				Server-Commands.cpp Server-procInputBuffer.cpp\
@@ -29,7 +30,6 @@ SRC_MAN		:=  arg2password.cpp arg2port.cpp\
 				Message.cpp\
 				Command.cpp CommandRegistry.cpp\
 				CommandRegistry-RegisterCmds.cpp\
-				CommandRegistry-handleProtocolErrors.cpp\
 				Channel.cpp Channel-Get.cpp Channel-Set.cpp\
 				Channel-Operation.cpp Channel-Compliancy.cpp\
 				irc.cpp\

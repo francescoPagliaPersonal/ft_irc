@@ -3,13 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   Server-CDTOR.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/10 00:45:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/25 11:54:26 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/26 14:22:12 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "Response.hpp"
 #include "Server.hpp"
 
 #include <sys/socket.h> // socket, connect, getsockname
@@ -38,6 +39,8 @@ Server::Server(int port, std::string pw)
 {
 	_epoll.add(_listener.getFD(), EPOLLIN);
 	_captureSignals();
+	//TODO: replace server hard coded label with official name.
+	Response::init("CoolServ");
 	// Client class
 	// CommandDispatch class
 	_cmdReg.registerCmds();
