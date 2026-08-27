@@ -77,7 +77,8 @@ void Response::init(const std::string &srv)
 	_numInfo[irc::BADCHANMASK] = ":Bad Channel Mask.";
 	_numInfo[irc::CHANOPRIVSNEEDED] = ":You're not channel operator.";
 	_numInfo[irc::NOOPERHOST] = ":No O-lines for your host.";
-	_numInfo[irc::UMODEUNKNOWNFLAG] = ":Unknown MODE flag.";
+	// _numInfo[irc::UMODEUNKNOWNFLAG] = ":Unknown MODE flag.";
+	_numInfo[irc::UMODEUNKNOWNFLAG] = ":User MODE is not supported."; // custom
 	_numInfo[irc::USERSDONTMATCH] = ":Cant change mode for other users.";
 	_numInfo[irc::MANYPARAMS] = ":Too many parameter given";
 

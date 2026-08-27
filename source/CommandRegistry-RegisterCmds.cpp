@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandRegistry-RegisterCmds.cpp                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 11:41:20 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/20 14:58:34 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/28 10:08:33 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,10 @@ void CommandRegistry::registerCmds()
 	invite->addPolicy(new AlreadyRegisteredPlcy(true));
 	invite->addPolicy(new ArgsLimitPlcy(2, 2));
 	_commands[invite->getName()] = invite;
-	
-	Command	*mode = new Command("MODE", cmd_mode);
+
+	Command *mode = new Command("MODE", cmd_mode);
 	mode->addPolicy(new AlreadyRegisteredPlcy(true));
-	mode->addPolicy(new ArgsLimitPlcy(1, 3));
+	// 8 params should allow each setting to be set in one call
+	mode->addPolicy(new ArgsLimitPlcy(1, 8));
 	_commands[mode->getName()] = mode;
 }
