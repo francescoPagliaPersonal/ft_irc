@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 09:01:01 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/24 18:34:05 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/27 13:43:26 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,27 +30,21 @@ namespace  {
 		str.erase(start + 1);
 	}
 
-
-	inline void allCaps(std::string & str) 
-	{
-		for (std::string::size_type i = 0; i < str.size(); ++i)
-			str[i] = std::toupper(static_cast<unsigned char>(str[i]));
-	}
 }
 
 // Count the total number of parameters and trailing part of MSG.
-int argCount(const Message & msg)
+int irc::argCount(const Message & msg)
 {
 	size_t count = 0;
-	// count += (msg.flags & MSG_HAS_PREFIX) != 0 ;
-	// count += (msg.flags & MSG_HAS_COMMAND) != 0;
-	count += (msg.flags & MSG_HAS_TRAILING) != 0;
+	// count += (msg.flags & irc::MSG_HAS_PREFIX) != 0 ;
+	// count += (msg.flags & irc::MSG_HAS_COMMAND) != 0;
+	count += (msg.flags & irc::MSG_HAS_TRAILING) != 0;
 	count += msg.params.size();
 	return count;
 }
 
 // Parse STR into a Message struct for CLIENT, setting its flags accordingly.
-Message string2Message(std::string str, Client *client) 
+Message irc::string2Message(std::string str, Client *client) 
 {
 	Message msg;
 	msg.flags = 0;
@@ -75,7 +69,7 @@ Message string2Message(std::string str, Client *client)
 			if (end == std::string::npos)
 				clear_trailing_char(msg.prefix, ' ');
 			str.erase(0, end);
-			msg.flags |= MSG_HAS_PREFIX;
+			msg.flags |= irc::MSG_HAS_PREFIX;
 		}
 		if (str.empty()) 
 			return msg;
@@ -90,7 +84,7 @@ Message string2Message(std::string str, Client *client)
 		clear_trailing_char(str, ' ');
 
 		if (!msg.trailing.empty())
-			msg.flags |= MSG_HAS_TRAILING;
+			msg.flags |= irc::MSG_HAS_TRAILING;
 	}
 
 	clear_leading_char(str, ' ');
@@ -105,7 +99,7 @@ Message string2Message(std::string str, Client *client)
 		allCaps(msg.command);
 		str.erase(0, pos);
 
-		msg.flags |= MSG_HAS_COMMAND;
+		msg.flags |= irc::MSG_HAS_COMMAND;
 	}
 	
 	// Extract all params 
@@ -124,7 +118,7 @@ Message string2Message(std::string str, Client *client)
 	}
 	
 	if (!msg.params.empty())
-		msg.flags |= MSG_HAS_PARAMS;
+		msg.flags |= irc::MSG_HAS_PARAMS;
 	
 	return msg;
 }

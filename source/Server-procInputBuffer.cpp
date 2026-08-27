@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 10:05:02 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/26 15:47:03 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/27 13:43:26 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ namespace {
 			std::cout << std::string(10, '-') <<std::endl;
 		std::cout
 			<< "Message #" << i  << '\n'
-			<< "Arg count: " << argCount(msgs)  << '\n'
+			<< "Arg count: " << irc::argCount(msgs)  << '\n'
 			<< "Prefix   : {" << msgs.prefix << "}" << '\n'
 			<< "Command  : {" << msgs.command << "}" << '\n';
 		for (size_t j = 0; j < msgs.params.size(); ++j)
@@ -74,8 +74,8 @@ bool Server::_processInputBuffer(Client *client)
 			_removeMsgsFromSuspicious(client);
 			return false;
 		}
-		Message tmp = string2Message(rawStrs[i], client);
-		if (tmp.flags & MSG_HAS_COMMAND)
+		Message tmp = irc::string2Message(rawStrs[i], client);
+		if (tmp.flags & irc::MSG_HAS_COMMAND)
 		{
 			_msgsQueue.push_back(tmp);
 			if (DEBUG == debug::DETAILED)

@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 13:54:12 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/27 13:16:20 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/27 13:43:26 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ rfc cmd_cap(IServerCtrl & srv, const Message & msg)
 	// TODO need more content? currently is empty stub to advance handshake
 	
 	Client *client = msg.sender;
-	if (msg.flags & MSG_HAS_PARAMS)
+	if (msg.flags & irc::MSG_HAS_PARAMS)
 	{
 		if (msg.params[0] == "LS")
 		{

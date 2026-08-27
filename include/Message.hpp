@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:38:21 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/27 13:06:37 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/27 13:43:10 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,6 @@
 # include <vector>
 
 # include "Client.hpp"
-
-// -------------------------------------------------------------------------- //
-
-enum e_msgflags
-{
-	MSG_HAS_PREFIX = 1 << 0,
-	MSG_HAS_COMMAND = 1 << 1,
-	MSG_HAS_PARAMS = 1 << 2,
-	MSG_HAS_TRAILING = 1 << 3
-};
 
 // -------------------------------------------------------------------------- //
 
@@ -46,7 +36,19 @@ struct Message
 
 // -------------------------------------------------------------------------- //
 
-Message	string2Message(std::string str, Client *client);
-int		argCount(const Message &);
+namespace irc
+{
+	// bitmask to indecate what message contains
+	enum e_msgflags
+	{
+		MSG_HAS_PREFIX = 1 << 0,
+		MSG_HAS_COMMAND = 1 << 1,
+		MSG_HAS_PARAMS = 1 << 2,
+		MSG_HAS_TRAILING = 1 << 3
+	};
+
+	Message	string2Message(std::string str, Client *client);
+	int		argCount(const Message &);
+}
 
 #endif
