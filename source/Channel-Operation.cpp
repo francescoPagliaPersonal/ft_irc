@@ -43,3 +43,27 @@ std::string Channel::title2key(std::string title)
 	irc::allCaps(title);
 	return title;
 }
+
+bool Channel::isChanOp(Client * client) const
+{
+	std::map<Client *, bitMask>::const_iterator it;
+	it = _members.find(client);
+	if (it == _members.end())
+		return false;
+	if (it->second & US_OPERATOR)
+		return true;
+	return false;
+}
+
+void Channel::setInvite(bool switcher)
+{
+	if (switcher)
+		_modes |= CH_INVITE;
+	else
+		_modes &= ~CH_INVITE;
+}
+
+void Channel::invite(Client * client)
+{
+	_invites.push_back(client);
+}

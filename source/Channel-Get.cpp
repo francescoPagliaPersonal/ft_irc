@@ -38,3 +38,9 @@ std::map<Client *, bitMask> Channel::getMembersMap() const
 {
 	return (_members);
 }
+
+
+bitMask Channel::getModes() const
+{
+	return _modes;
+}

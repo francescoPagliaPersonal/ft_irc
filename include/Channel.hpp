@@ -78,15 +78,17 @@ class Channel
 		void setTopic(const std::string&);
 		void setPassword(const std::string&);
 		void setLimit(irc::uint);
-		void setInvite();
+		void setInvite(bool);
 
 		static bool isTitleCompliant(const std::string& channel);
 		static std::string title2key(std::string);
 
 		bool isMember(Client *) const;
+		bool isChanOp(Client *) const;
 		bool passwordMatch(const std::string & pw) const;
 		bool belowChannelLimit() const;
 		bool joinGranted(Client *) const;
+		void invite(Client *);
 		
 	private:
 		// ----
