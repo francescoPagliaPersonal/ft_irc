@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/13 10:19:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/27 13:06:07 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/27 13:33:06 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,10 +83,10 @@ class Channel
 		static bool isTitleCompliant(const std::string& channel);
 		static std::string title2key(std::string);
 
-		bool isMember(Client *);
-		bool passwordMatch(const std::string & pw);
-		bool belowChannelLimit();
-		bool joinGranted(Client *);
+		bool isMember(Client *) const;
+		bool passwordMatch(const std::string & pw) const;
+		bool belowChannelLimit() const;
+		bool joinGranted(Client *) const;
 		
 	private:
 		// ----

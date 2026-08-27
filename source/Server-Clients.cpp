@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 16:27:31 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/27 13:13:09 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/27 13:28:41 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@
 // -------------------------------------------------------------------------- //
 
 // Lookup client by NICK and return its pointer. Returns NULL if nothing found.
-Client* Server::findClientByNick(const std::string & nick)
+Client* Server::findClientByNick(const std::string & nick) const
 {
-	std::map<int, Client *>::iterator it = _clients.begin();
+	std::map<int, Client *>::const_iterator it = _clients.begin();
 	while (it != _clients.end())
 	{
 
@@ -36,7 +36,7 @@ Client* Server::findClientByNick(const std::string & nick)
 }
 
 // Queue STR for sending to CLIENT and enable the EPOLLOUT interest.
-void Server::sendMessage(Client* client, const std::string& str)
+void Server::sendMessage(Client* client, const std::string& str) const 
 {
 	// TODO drop connection if bufOUT grows too much? or do we drop if kernel buffer stays full?
 	client->putReply2Buff(str);

@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:58:17 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/17 17:43:00 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/27 13:35:59 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ void Epoll::del(int fd) const
 }
 
 // Wait up to TIMEOUTMS for events and return the number of ready FDs.
-int Epoll::wait(struct epoll_event* ev, int maxEvents, int timeoutMS)
+int Epoll::wait(struct epoll_event* ev, int maxEvents, int timeoutMS) const
 {
 	int ready = ::epoll_wait(_fd, ev, maxEvents, timeoutMS);
 	if (ready == -1)

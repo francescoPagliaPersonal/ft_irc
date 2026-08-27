@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/21 12:12:19 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/26 15:42:03 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/27 13:33:35 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,15 +32,15 @@ bool Channel::isTitleCompliant(const std::string& channel)
 	return true;
 }
 
-bool Channel::isMember(Client* client)
+bool Channel::isMember(Client* client) const
 {
-	std::map<Client *, bitMask>::iterator it;
+	std::map<Client *, bitMask>::const_iterator it;
 	
 	it = _members.find(client);
 	return (it == _members.end() ? false : true);
 }
 
-bool Channel::passwordMatch(const std::string & pw)
+bool Channel::passwordMatch(const std::string & pw) const
 {
 	if (_password == pw)
 		return true;
@@ -49,7 +49,7 @@ bool Channel::passwordMatch(const std::string & pw)
 	return (_password.empty() && (pw == "x" || pw.empty()));
 }
 
-bool Channel::belowChannelLimit()
+bool Channel::belowChannelLimit() const
 {
 	if (!_userLimit)
 		return (true);
@@ -58,9 +58,9 @@ bool Channel::belowChannelLimit()
 	return (false);
 }
 
-bool Channel::joinGranted(Client *client)
+bool Channel::joinGranted(Client *client) const
 {
-	std::deque<Client*>::iterator it; ;
+	std::deque<Client*>::const_iterator it;
 	
 	if (!(_modes & CH_INVITE))
 		return true;

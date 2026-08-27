@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 13:19:17 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/27 13:14:51 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/27 13:27:22 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void buildMessageOfTheDay(std::stringstream& ss, Client* client)
 } // end of namespace
 
 // Send the welcome message once the client finished the registration handshake.
-void Server::tryCompleteRegistration(Client* client)
+void Server::tryCompleteRegistration(Client* client) const
 {
 	if (client->getRegistrationFlags() != REG_DONE)
 		return ;

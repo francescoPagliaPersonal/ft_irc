@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 16:19:04 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/16 18:02:42 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/27 13:36:40 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ class ListeningSocket
 		// ----
 		int getFD() const;
 		int getPort() const;
-		int acceptConnection(struct sockaddr_in&);
+		int acceptConnection(struct sockaddr_in&) const;
 	private:
 		// ----
 		int				_fd;	// the fd for the server's own listening socket
