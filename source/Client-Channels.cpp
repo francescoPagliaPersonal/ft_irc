@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 17:10:07 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/27 23:21:35 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/28 00:26:09 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,17 +35,6 @@ void Client::removeChannel(Channel* channel)
 			break ;
 		}
 	}
-}
-
-// Removes the client from all channels and clears the membership list.
-void Client::removeFromChannels()
-{
-	std::deque<Channel*>::iterator it;
-	for (it = _channels.begin(); it != _channels.end(); it++)
-	{
-		(*it)->removeClient(this);
-	}
-	_channels.clear();
 }
 
 // Check if the client is a member of CHANNEL.

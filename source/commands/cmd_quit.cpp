@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/25 17:17:17 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/27 23:21:58 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/28 00:25:49 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 namespace
 {
 
-void collectMembers(Client* client, std::set<Client*>* contacts)
+void processMemberships(Client* client, std::set<Client*>* contacts)
 {
 	std::deque<Channel*> joinedChannels;
 	std::deque<Channel*>::const_iterator it;
@@ -31,11 +31,15 @@ void collectMembers(Client* client, std::set<Client*>* contacts)
 	for (it = joinedChannels.begin(); it != joinedChannels.end(); it++)
 	{
 		// TODO remove these comments later on, when agreed upon
+		//		effeciency wise, this could even do the cleanup...
 		// this copies the whole map, potentially a lot of work
 		// channelMembers = (*it)->getMembersMap();
 		// let the channel do the work instead?
 		(*it)->getMembers(contacts);
+		(*it)->removeClient(client);
+		client->removeChannel((*it));
 	}
+
 }
 
 void notifyContacts(IServerCtrl& srv, std::set<Client*>& contacts, const Message& msg)
@@ -58,12 +62,11 @@ rfc cmd_quit(IServerCtrl& srv, const Message& msg)
 	// 1) default reply back to sender
 	reply = Response::buildError(msg, "Closing link", "Quit");
 	srv.sendMessage(client, reply);
-	// 2) look for channels & collect clients
-	collectMembers(client, &contacts);	
-	// 3) broadcast QUIT to all clients
+	// 2) collect clients of all subscriped channels and unregister with them
+	processMemberships(client, &contacts);	
+	// 3) broadcast QUIT to all relevant clients
 	notifyContacts(srv, contacts, msg);
 	// 4) internal stuff
-	client->removeFromChannels();
 	// TODO somehow handle disconnect
 	return (irc::OK);
 }
