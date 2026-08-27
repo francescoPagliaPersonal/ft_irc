@@ -15,6 +15,7 @@
 #include "ft_irc.hpp"
 #include "irc.hpp"
 #include <sstream>
+#include <string>
 
 std::string Response::_server;
 std::map<irc::rfc, std::string> Response::_numInfo;
@@ -131,6 +132,7 @@ std::string Response::handleNumeric(const Message& msg, irc::rfc code)
 		case COMMAND:
 			return (buildNumeric(msg, code, msg.command));
 	}
+	return std::string("");
 }
 
 /*
