@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 16:32:42 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/28 08:30:41 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/28 08:48:11 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void Server::_executeCommands()
 }
 
 // Remove all queued messages sent by CLIENT.
-void Server::_removeMsgsFromSuspicious(Client *client)
+void Server::_removeMsgsFrom(Client *client)
 {
 	std::deque<Message>::iterator it = _msgsQueue.begin();
 	while (it != _msgsQueue.end())

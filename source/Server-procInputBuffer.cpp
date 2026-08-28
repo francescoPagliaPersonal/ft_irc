@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 10:05:02 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/27 13:43:26 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/28 08:48:11 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ bool Server::_processInputBuffer(Client *client)
 					<< "Closing connection now." 
 					<< std::endl;
 			}
-			_removeMsgsFromSuspicious(client);
+			_removeMsgsFrom(client);
 			return false;
 		}
 		Message tmp = irc::string2Message(rawStrs[i], client);
