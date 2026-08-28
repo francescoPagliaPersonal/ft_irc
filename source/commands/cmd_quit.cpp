@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/25 17:17:17 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/28 08:01:21 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/28 08:11:32 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,6 @@ rfc cmd_quit(IServerCtrl& srv, const Message& msg)
 	// 3) broadcast QUIT to all relevant clients
 	notifyContacts(srv, contacts, msg);
 	// 4) internal stuff
-	// TODO somehow handle disconnect
+	client->setQuit(true);
 	return (irc::HASQUIT);
 }

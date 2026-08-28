@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 17:07:36 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/25 09:56:07 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/28 08:13:13 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,16 @@ std::string Client::getID() const
 bool Client::getCap() const
 {
 	return (_capRequested);
+}
+
+bool Client::hasQuit() const
+{
+	return (_hasQuit);
+}
+
+bool Client::isBufferOutFilled() const
+{
+	return (!_bufOUT.empty());
 }
 
 std::deque<Channel*> Client::getChannelsList() const
