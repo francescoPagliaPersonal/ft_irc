@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 16:57:46 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/28 19:33:01 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/28 19:40:00 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,18 +21,28 @@
 namespace
 {
 
+void printChannelModes(IServerCtrl& srv, Client* client,
+					   const Message& msg, Channel* channel)
+{
+	(void) channel;
+	srv.sendMessage(client,
+			Response::buildNumeric(msg, irc::CHANNELMODEIS,
+								   msg.params[0], "not handled yet"));
+}
+
 rfc handleChannelMode(IServerCtrl& srv, Client* client, const Message& msg)
 {
-	if (msg.params.size() == 1)
-	{
-		srv.sendMessage(client,
-			Response::buildNumeric(msg, irc::CHANNELMODEIS, msg.params[0], "not handled yet"));
-		return (irc::OK);
-	}
-
+	
 	Channel*	channel = srv.getChannelByTitle(msg.params[0]);
 	bool		switcher = false;
-
+	
+	if (channel == NULL)
+		return (irc::NOSUCHCHANNEL);
+	if (msg.params.size() == 1)
+	{
+		printChannelModes(srv, client, msg, channel);
+		return (irc::OK);
+	}
 	if (channel == NULL)
 		return (irc::NOSUCHCHANNEL);
 	if (!channel->isChanOp(client))
