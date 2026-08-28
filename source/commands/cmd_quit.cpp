@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/25 17:17:17 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/28 08:11:32 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/28 08:41:06 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,10 @@ void notifyContacts(IServerCtrl& srv, std::set<Client*>& contacts, const Message
 
 rfc cmd_quit(IServerCtrl& srv, const Message& msg)
 {
-	std::string reply;
 	std::set<Client*> contacts;
 	Client* client = msg.sender;
 	// 1) default reply back to sender
-	reply = Response::buildError(msg, "Closing link", "Quit");
-	srv.sendMessage(client, reply);
+	// => repurposed numeric, generic handler will do that instead
 	// 2) collect clients of all subscriped channels and unregister with them
 	processMemberships(client, &contacts);	
 	// 3) broadcast QUIT to all relevant clients

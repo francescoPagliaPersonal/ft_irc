@@ -119,6 +119,9 @@ std::string Response::_buildNumericPrefix(const Message& msg, irc::rfc code)
 std::string Response::handleNumeric(const Message& msg, irc::rfc code)
 {
 	std::map<irc::rfc, type>::iterator it;
+	// SPECIAL CASE: command QUIT
+	if (code == irc::HASQUIT)
+		return (buildError(msg, "Closing link", "Quit"));
 	// look up which method is needed for custom ARGS of the requested error
 	it = _numType.find(code);
 	// execute DEFAULT variant
