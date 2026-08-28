@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 16:57:46 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/28 11:44:20 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/28 19:33:01 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ rfc handleChannelMode(IServerCtrl& srv, Client* client, const Message& msg)
 	{
 		srv.sendMessage(client,
 			Response::buildNumeric(msg, irc::CHANNELMODEIS, msg.params[0], "not handled yet"));
+		return (irc::OK);
 	}
 
 	Channel*	channel = srv.getChannelByTitle(msg.params[0]);
