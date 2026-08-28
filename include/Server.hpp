@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:32:56 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/27 13:29:45 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/28 07:58:52 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@
 
 // -------------------------------------------------------------------------- //
 
-# define DEF_EPOLL_FL EPOLLIN | EPOLLERR | EPOLLHUP
+# define EPOLL_FL_DEFAULT EPOLLIN | EPOLLERR | EPOLLHUP
+# define EPOLL_FL_QUIT EPOLLOUT | EPOLLERR | EPOLLHUP
 
 // -------------------------------------------------------------------------- //
 
@@ -75,7 +76,7 @@ class Server : public IServerCtrl
 		// ---- Clients ----
 		void _registerNewClient(int, const sockaddr_in&);
 		void _removeClient(Client*);
-		void _disconnectClient(Client*);
+		void _prepareClientDisconnect(Client*);
 		// ---- Command Execution ----
 		void _executeCommands();
 		bool _processInputBuffer(Client*);

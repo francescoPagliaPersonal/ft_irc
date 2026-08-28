@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/25 17:17:17 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/28 00:25:49 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/28 08:01:21 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,5 +68,5 @@ rfc cmd_quit(IServerCtrl& srv, const Message& msg)
 	notifyContacts(srv, contacts, msg);
 	// 4) internal stuff
 	// TODO somehow handle disconnect
-	return (irc::OK);
+	return (irc::HASQUIT);
 }

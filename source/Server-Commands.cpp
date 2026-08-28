@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 16:32:42 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/27 13:00:44 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/28 07:59:27 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 // disconnecting clients whose message handling fails.
 void Server::_executeCommands()
 {
+	rfc numeric;
 	if (DEBUG && !_msgsQueue.empty())
 		std::cout << "[Info] Processing message queue with "
 			<< _msgsQueue.size() << " messages...\n";
@@ -35,8 +36,10 @@ void Server::_executeCommands()
 	{
 		Message& msg = _msgsQueue.front();
 		// TODO ensure POLICY and COMMAND errors are in line with PROTOCOL CODES
-		_cmdReg.execute(*this, msg);
+		numeric = _cmdReg.execute(*this, msg);
 		_msgsQueue.pop_front();
+		if (numeric == irc::HASQUIT)
+			_prepareClientDisconnect(msg.sender);
 	}
 }
 
