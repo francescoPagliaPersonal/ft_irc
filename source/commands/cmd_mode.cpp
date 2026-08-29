@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 16:57:46 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/29 12:30:36 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/29 12:35:09 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,7 +202,8 @@ std::string handleModeChange(Command::Data& data, bool switcher, char c, std::si
 void printChannelModes(Command::Data& data)
 {
 	std::string reply(data.channel->getTitle() + " +");
-	std::stringstream values;
+	std::string pw;
+	std::stringstream limit;
 	bitMask modes = data.channel->getModes();
 	if (modes & CH_INVITE)
 		reply.append("i");
@@ -211,17 +212,15 @@ void printChannelModes(Command::Data& data)
 	if (modes & CH_PASSWORD)
 	{
 		reply.append("k");
-		values << ' ' << data.channel->getPassword();
+		pw.append(" " + data.channel->getPassword());
 	}
 	if (modes & CH_LIMIT)
 	{
 		reply.append("l");
-		if (!values.str().empty())
-			values << ' ';
-		values << data.channel->getLimit();
+		limit << data.channel->getLimit();
 	}
 	data.srv.sendMessage(data.client,
-		Response::buildRegular(data.msg, reply + values.str())
+		Response::buildRegular(data.msg, reply + pw, limit.str())
 	);
 	// TODO decide if we want to store timestamp or create; MODE can return it
 }
