@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/13 10:19:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/29 08:46:42 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/29 12:38:45 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,8 @@ class Channel
 		void setInvite(bool);
 		void setTopicFlag(bool);
 		void setOperator(bool, Client*);
+		void addOperator(Client*);
+		void removeOperator(Client*);
 
 		static bool isTitleCompliant(const std::string& channel);
 		static std::string title2key(std::string);

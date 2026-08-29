@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 16:57:46 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/29 12:35:09 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/29 12:46:01 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,7 +179,24 @@ std::string handleModeChange(Command::Data& data, bool switcher, char c, std::si
 			data.channel->setPassword(data.msg.params[*iParams]);
 			break ;
 		case 'o':
+		{
+			if (++(*iParams) >= data.msg.params.size())
+			{
+				// TODO send error message;
+				break ;
+			}
+			Client* op = data.srv.findClientByNick(data.msg.params[*iParams]);
+			if (!op)
+			{
+				// TODO send error message;
+				break ;
+			}
+			if (switcher == true)
+				data.channel->addOperator(op);
+			else
+				data.channel->removeOperator(op);
 			break ;
+		}
 		case 'l':
 			if (switcher == false)
 			{
