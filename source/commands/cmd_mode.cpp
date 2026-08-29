@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 16:57:46 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/29 22:32:24 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/29 22:50:05 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -323,12 +323,12 @@ void buildReply(Command::Data& data, std::string& rpl, bitMask valueTokens, bitM
 	// ---- get updated values -------------------------------------------------
 	if (valueTokens)
 	{
-		if (valueTokens & CH_PASSWORD && !(added & CH_PASSWORD) && !(removed & CH_PASSWORD))
+		if (valueTokens & CH_PASSWORD && (now & CH_PASSWORD) && !(added & CH_PASSWORD))
 		{
 			plus += 'k';
 			values += ' ' + data.channel->getPassword();
 		}
-		if (valueTokens & CH_LIMIT && !(added & CH_LIMIT) && !(removed & CH_LIMIT))
+		if (valueTokens & CH_LIMIT && (now & CH_LIMIT) && !(added & CH_LIMIT))
 		{
 			plus += 'l';
 			std::ostringstream ss;
