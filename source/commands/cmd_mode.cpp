@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 16:57:46 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/29 22:09:47 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/29 22:15:37 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,6 +187,8 @@ bitMask handleModeChange(Command::Data& data, bool switcher, char c, std::size_t
 				// TODO send error message;
 				break ;
 			}
+			if (data.channel->getModes() & CH_PASSWORD)
+				break ;
 			data.channel->setPassword(data.msg.params[*iParams]);
 			valueToken = CH_PASSWORD;
 			break ;
