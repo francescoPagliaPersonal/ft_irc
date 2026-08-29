@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 16:57:46 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/29 22:15:37 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/29 22:23:37 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -255,7 +255,8 @@ void sendChannelModes(Command::Data& data)
 		limit << data.channel->getLimit();
 	}
 	data.srv.sendMessage(data.client,
-		Response::buildRegular(data.msg, reply + pw, limit.str())
+		Response::buildNumeric(data.msg, irc::CHANNELMODEIS,
+			reply + pw, limit.str())
 	);
 	// TODO decide if we want to store timestamp or create; MODE can return it
 }
