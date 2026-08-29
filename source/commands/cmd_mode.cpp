@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 16:57:46 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/29 09:52:07 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/29 10:10:53 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,18 @@ void sendUnknownMode(Command::Data&data, char c)
 	);
 }
 
-void handleModeChange(Command::Data& data, bool switcher, char c, std::size_t* iParams)
+void buildReply(Command::Data& data,
+							std::string& reply,
+							std::string& replyValues)
+{
+	(void) data;
+	// TODO compare changes in mode
+	// TODO build mode change string
+	reply.append(replyValues);
+	replyValues.clear();
+}
+
+std::string handleModeChange(Command::Data& data, bool switcher, char c, std::size_t* iParams)
 {
 	/*
 		some observations:
@@ -65,6 +76,7 @@ void handleModeChange(Command::Data& data, bool switcher, char c, std::size_t* i
 		data.channel->setInvite(switcher);
 	// TODO need to watch for key, limit, operator - need ARGS!
 	// TODO all modes with switcher & message & ignore duplicates
+	return ("");
 }
 
 /*
@@ -80,6 +92,7 @@ l: Set/remove the user limit for the channel.		+   needs ARG
 void processModeRequests(Command::Data& data)
 {
 	bool switcher = false;
+	std::string reply, replyValues;
 	// move through all params
 	for (std::size_t i = 1; i < data.msg.params.size(); i++)
 	{
@@ -104,9 +117,11 @@ void processModeRequests(Command::Data& data)
 			if (std::string(MODES).find(param[n]) == std::string::npos)
 				sendUnknownMode(data, param[n]);
 			else
-				handleModeChange(data, switcher, param[n], &i);
+				replyValues = handleModeChange(data, switcher, param[n], &i);
 		}
+	buildReply(data, reply, replyValues);
 	}
+	data.srv.broadcast(data.channel, reply);
 }
 
 rfc handleChannelMode(Command::Data& data)
