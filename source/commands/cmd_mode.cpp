@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 16:57:46 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/29 12:46:01 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/29 20:54:38 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 
 #include <sstream>
 #include <cstdlib>
+// TODO remove debug print
+#include <iostream>
 
 // -------------------------------------------------------------------------- //
 
@@ -33,13 +35,13 @@ namespace
 
 	rfc handleChannelMode(Command::Data& data);
 	void processModeRequests(Command::Data& data);
-	std::string handleModeChange(Command::Data& data, bool switcher, char c, std::size_t* iParams);
+	bitMask handleModeChange(Command::Data& data, bool switcher, char c, std::size_t* iParams);
 	
 	// output helper
 
-	void printChannelModes(Command::Data& data);
+	void sendChannelModes(Command::Data& data);
 	void sendUnknownMode(Command::Data&data, char c);
-	void buildReply(Command::Data& data, std::string& reply, std::string& replyValues);
+	void buildReply(Command::Data& data, std::string& rpl, bitMask valueTokens, bitMask old);
 }
 
 rfc cmd_mode(IServerCtrl& srv, const Message& msg)
@@ -89,7 +91,7 @@ rfc handleChannelMode(Command::Data& data)
 	// 2) mode query
 	if (data.msg.params.size() == 1)
 	{
-		printChannelModes(data);
+		sendChannelModes(data);
 		return (irc::OK);
 	}
 	// 3) OP validation
@@ -103,10 +105,13 @@ rfc handleChannelMode(Command::Data& data)
 void processModeRequests(Command::Data& data)
 {
 	bool switcher = false;
-	std::string reply, replyValues;
+	std::string reply(" ");
+	bitMask modes, valueTokens;
+	modes = data.channel->getModes();
 	// move through all params
 	for (std::size_t i = 1; i < data.msg.params.size(); i++)
 	{
+		valueTokens = 0;
 		const std::string& param = data.msg.params[i];
 		// validate starting point (just ignore string w/o +/-)
 		if (param.empty() || (param[0] != '+' && param[0] != '-'))
@@ -124,11 +129,13 @@ void processModeRequests(Command::Data& data)
 			if (std::string(MODES).find(param[n]) == std::string::npos)
 				sendUnknownMode(data, param[n]);
 			else
-				replyValues = handleModeChange(data, switcher, param[n], &i);
+				valueTokens |= handleModeChange(data, switcher, param[n], &i);
 		}
-	buildReply(data, reply, replyValues);
 	}
-	data.srv.broadcast(data.channel, reply);
+	buildReply(data, reply, valueTokens, modes);
+	if (reply.size() > 1) // contains a ' ' per default
+		data.srv.broadcast(data.channel,
+			Response::buildRegular(data.msg, data.channel->getTitle() + reply));
 }
 
 /*
@@ -153,18 +160,22 @@ l: Set/remove the user limit for the channel.		+   needs ARG
 
 		*/
 
-std::string handleModeChange(Command::Data& data, bool switcher, char c, std::size_t* iParams)
+bitMask handleModeChange(Command::Data& data, bool switcher, char c, std::size_t* iParams)
 {
-	// LAZY MODE -- every operation is run, duplicates are NOT ignored
-	//				except ops with args, which must guard their value themselves
+	bitMask valueToken = 0;
+	// ---------- LAZY MODE ----------
+	// every operation is run, duplicates are NOT ignored
+	// except ops with args, which must guard their value themselves
 	switch (c)
 	{
 		case 'i':
 			data.channel->setInvite(switcher);
 			break ;
+
 		case 't':
 			data.channel->setTopicFlag(switcher);
 			break ;
+
 		case 'k':
 			if (switcher == false)
 			{
@@ -177,7 +188,9 @@ std::string handleModeChange(Command::Data& data, bool switcher, char c, std::si
 				break ;
 			}
 			data.channel->setPassword(data.msg.params[*iParams]);
+			valueToken = CH_PASSWORD;
 			break ;
+
 		case 'o':
 		{
 			if (++(*iParams) >= data.msg.params.size())
@@ -197,6 +210,7 @@ std::string handleModeChange(Command::Data& data, bool switcher, char c, std::si
 				data.channel->removeOperator(op);
 			break ;
 		}
+
 		case 'l':
 			if (switcher == false)
 			{
@@ -209,14 +223,16 @@ std::string handleModeChange(Command::Data& data, bool switcher, char c, std::si
 				break ;
 			}
 			data.channel->setLimit(std::strtol(data.msg.params[*iParams].c_str(), NULL, 10));
+			valueToken = CH_LIMIT;
 			break ;
+
 	}
 	// TODO need to watch for key, limit, operator - need ARGS!
 	// TODO all modes with switcher & message & ignore duplicates
-	return ("");
+	return (valueToken);
 }
 
-void printChannelModes(Command::Data& data)
+void sendChannelModes(Command::Data& data)
 {
 	std::string reply(data.channel->getTitle() + " +");
 	std::string pw;
@@ -242,7 +258,7 @@ void printChannelModes(Command::Data& data)
 	// TODO decide if we want to store timestamp or create; MODE can return it
 }
 
-void sendUnknownMode(Command::Data&data, char c)
+void sendUnknownMode(Command::Data& data, char c)
 {
 	data.srv.sendMessage(
 		data.msg.sender,
@@ -255,13 +271,66 @@ void sendUnknownMode(Command::Data&data, char c)
 	);
 }
 
-void buildReply(Command::Data& data, std::string& reply, std::string& replyValues)
+void buildReply(Command::Data& data, std::string& rpl, bitMask valueTokens, bitMask old)
 {
-	(void) data;
-	// TODO compare changes in mode
-	// TODO build mode change string
-	reply.append(replyValues);
-	replyValues.clear();
+	bitMask changed, added, removed, now;
+	now = data.channel->getModes();
+	// TODO remove debug print
+	std::cout << '[' << __FUNCTION__ << "] old|now|valueTokens = "
+		<< std::hex << static_cast<unsigned int>(old) << '|'
+		<< std::hex << static_cast<unsigned int>(now) << '|'
+		<< std::hex << static_cast<unsigned int>(valueTokens) << '\n';
+	// ---- abort if no change -------------------------------------------------
+	if (old == now && valueTokens == 0)
+		return ;
+	// ---- prepare ------------------------------------------------------------
+	std::string values, plus, minus;
+	changed = old ^ now;		// shows the bits that flipped
+	added = changed & now;		// what went from 0 to 1
+	removed = changed & old; 	// what wend from 1 to 0
+	// ---- collect the ADDED ones ---------------------------------------------
+	if (added & CH_INVITE)		plus  += 'i';
+	if (added & CH_TOPIC)		plus  += 't';
+	if (added & CH_PASSWORD)
+	{
+		plus  += 'k';
+		values += ' ' + data.channel->getPassword();
+	}
+	if (added & CH_LIMIT)
+	{
+		plus  += 'l';
+		std::ostringstream ss;
+		ss << data.channel->getLimit();
+		values += ' ' + ss.str();
+	}
+	// ---- collect the REMOVED ones -------------------------------------------
+	if (removed & CH_INVITE)	minus += 'i';
+	if (removed & CH_TOPIC)		minus += 't';
+	if (removed & CH_PASSWORD)	minus += 'k';
+	if (removed & CH_LIMIT)		minus += 'l';
+	// ---- get updated values -------------------------------------------------
+	if (valueTokens)
+	{
+		if (valueTokens & CH_PASSWORD && !(added & CH_PASSWORD) && !(removed & CH_PASSWORD))
+		{
+			plus += 'k';
+			values += ' ' + data.channel->getPassword();
+		}
+		if (valueTokens & CH_LIMIT && !(added & CH_LIMIT) && !(removed & CH_LIMIT))
+		{
+			plus += 'l';
+			std::ostringstream ss;
+			ss << data.channel->getLimit();
+			values += ' ' + ss.str();
+		}
+	}
+	// ---- build the reply ----------------------------------------------------
+	if (!minus.empty())
+		rpl += '-' + minus;
+	if (!plus.empty())
+	{
+		rpl += '+' + plus + values;
+	}
 }
 
 } // end of namespace
