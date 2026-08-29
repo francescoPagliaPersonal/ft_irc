@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 16:57:46 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/29 12:09:45 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/29 12:11:17 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,6 +163,7 @@ std::string handleModeChange(Command::Data& data, bool switcher, char c, std::si
 			data.channel->setInvite(switcher);
 			break ;
 		case 't':
+			data.channel->setTopicFlag(switcher);
 			break ;
 		case 'k':
 			break ;
