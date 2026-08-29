@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 16:57:46 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/29 11:50:30 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/29 12:09:45 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,6 @@ void processModeRequests(Command::Data& data)
 		// validate starting point (just ignore string w/o +/-)
 		if (param.empty() || (param[0] != '+' && param[0] != '-'))
 			continue;
-		}
 		// consume one char at a time
 		for (std::size_t n = 0; n < param.size(); n++)
 		{
@@ -156,8 +155,22 @@ l: Set/remove the user limit for the channel.		+   needs ARG
 std::string handleModeChange(Command::Data& data, bool switcher, char c, std::size_t* iParams)
 {
 	(void) iParams;
-	if (c == 'i')
-		data.channel->setInvite(switcher);
+	// LAZY MODE -- every operation is run, duplicates are NOT ignored
+	//				except ops with args, which must guard their value themselves
+	switch (c)
+	{
+		case 'i':
+			data.channel->setInvite(switcher);
+			break ;
+		case 't':
+			break ;
+		case 'k':
+			break ;
+		case 'o':
+			break ;
+		case 'l':
+			break ;
+	}
 	// TODO need to watch for key, limit, operator - need ARGS!
 	// TODO all modes with switcher & message & ignore duplicates
 	return ("");
