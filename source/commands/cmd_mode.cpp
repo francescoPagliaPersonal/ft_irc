@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 16:57:46 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/29 22:50:05 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/29 22:59:31 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -322,7 +322,7 @@ void buildReply(Command::Data& data, std::string& rpl, bitMask valueTokens, bitM
 	if (removed & CH_LIMIT)		minus += 'l';
 	// ---- get updated values -------------------------------------------------
 	if (valueTokens)
-	{
+	{ // TODO the patch for PASSWORD is probably DEAD due to abort from above
 		if (valueTokens & CH_PASSWORD && (now & CH_PASSWORD) && !(added & CH_PASSWORD))
 		{
 			plus += 'k';
