@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 16:57:46 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/29 08:32:14 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/29 09:25:33 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ l: Set/remove the user limit for the channel.		+   needs ARG
 rfc processModeRequests(Command::Data& data)
 {
 	// move through all params
-	for (std::size_t i = 0; i < data.msg.params.size(); i++)
+	for (std::size_t i = 1; i < data.msg.params.size(); i++)
 	{
 		const std::string& param = data.msg.params[i];
 		// validate starting point
