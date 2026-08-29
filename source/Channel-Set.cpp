@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 17:13:02 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/29 08:49:03 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/29 12:14:53 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ void Channel::setTopic(const std::string& topic)
 // Set the channel's password and mode flag.
 void Channel::setPassword(const std::string& password)
 {
+	if ((_modes & CH_PASSWORD) != 0)
+		return ;
 	_password = password;
 	_modes |= CH_PASSWORD;
 }

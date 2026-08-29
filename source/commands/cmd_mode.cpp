@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 16:57:46 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/29 12:11:17 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/29 12:20:22 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,6 @@ l: Set/remove the user limit for the channel.		+   needs ARG
 
 std::string handleModeChange(Command::Data& data, bool switcher, char c, std::size_t* iParams)
 {
-	(void) iParams;
 	// LAZY MODE -- every operation is run, duplicates are NOT ignored
 	//				except ops with args, which must guard their value themselves
 	switch (c)
@@ -166,6 +165,17 @@ std::string handleModeChange(Command::Data& data, bool switcher, char c, std::si
 			data.channel->setTopicFlag(switcher);
 			break ;
 		case 'k':
+			if (switcher == false)
+			{
+				data.channel->removePassword();
+				break ;
+			}
+			if (++(*iParams) >= data.msg.params.size())
+			{
+				// TODO send error message;
+				break ;
+			}
+			data.channel->setPassword(data.msg.params[*iParams]);
 			break ;
 		case 'o':
 			break ;
