@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 16:57:46 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/29 11:27:42 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/29 11:50:30 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,11 +107,8 @@ void processModeRequests(Command::Data& data)
 	for (std::size_t i = 1; i < data.msg.params.size(); i++)
 	{
 		const std::string& param = data.msg.params[i];
-		// validate starting point
-		if (param.empty())
-		{
-			if ((param[0] != '+' && param[0] != '-'))
-				sendUnknownMode(data, param[0]);
+		// validate starting point (just ignore string w/o +/-)
+		if (param.empty() || (param[0] != '+' && param[0] != '-'))
 			continue;
 		}
 		// consume one char at a time
