@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 16:57:46 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/29 22:23:37 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/29 22:32:24 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,10 +94,13 @@ rfc handleChannelMode(Command::Data& data)
 		sendChannelModes(data);
 		return (irc::OK);
 	}
-	// 3) OP validation
+	// 3) validate member
+	if (!data.channel->isMember(data.client))
+		return (irc::NOTONCHANNEL);
+	// 4) OP validation
 	if (!data.channel->isChanOp(data.client))
 		return (irc::CHANOPRIVSNEEDED);
-	// 4) check all params
+	// 5) check all params
 	processModeRequests(data);
 	return (irc::OK);
 }
@@ -158,7 +161,13 @@ l: Set/remove the user limit for the channel.		+   needs ARG
 	- when sending +kl at the same time, the order doesn't matter
 		the values are taken as <key> <limit>, if limit is not a number -> 0
 
-		*/
+FURTHER NOTES
+
+- there is sth about Type C and earlier types
+  eg. RFC 2812 Type B clients will use `-k key` instead of `-k`
+  => i don't think we want to care
+
+*/
 
 bitMask handleModeChange(Command::Data& data, bool switcher, char c, std::size_t* iParams)
 {
