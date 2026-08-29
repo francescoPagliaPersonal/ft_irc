@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 17:13:52 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/27 23:23:59 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/29 23:24:31 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,22 @@ std::string Channel::title2key(std::string title)
 	title.erase(0,1);
 	irc::allCaps(title);
 	return title;
+}
+
+bool Channel::isChanOp(Client * client) const
+{
+	std::map<Client *, bitMask>::const_iterator it;
+	it = _members.find(client);
+	if (it == _members.end())
+		return false;
+	if (it->second & US_OPERATOR)
+		return true;
+	return false;
+}
+
+void Channel::invite(Client * client)
+{
+	_invites.push_back(client);
 }
 
 // Attempt to add each member of the channel to DEST.
