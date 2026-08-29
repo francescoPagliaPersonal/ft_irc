@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 16:57:46 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/29 09:29:26 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/29 09:45:20 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,19 @@ void printChannelModes(Command::Data& data)
 	// TODO query each bit and append to the output string if it exists
 	// std::string reply;
 	// TODO decide if we want to store timestamp or create; MODE can return it
+}
+
+void sendUnknownMode(Command::Data&data, char c)
+{
+	data.srv.sendMessage(
+		data.msg.sender,
+		Response::buildNumeric(
+			data.msg,
+			irc::UNKNOWNMODE,
+			std::string(1, c),
+			"is unknown mode char to me for " + data.channel->getTitle()
+		)
+	);
 }
 
 void handleModeChange(Command::Data& data, bool switcher, char c, std::size_t* iParams)
@@ -64,15 +77,19 @@ l: Set/remove the user limit for the channel.		+   needs ARG
 
 */
 
-rfc processModeRequests(Command::Data& data)
+void processModeRequests(Command::Data& data)
 {
 	// move through all params
 	for (std::size_t i = 1; i < data.msg.params.size(); i++)
 	{
 		const std::string& param = data.msg.params[i];
 		// validate starting point
-		if (param.empty() || (param[0] != '+' && param[0] != '-'))
-			return (irc::UNKNOWNMODE);
+		if (param.empty())
+		{
+			if ((param[0] != '+' && param[0] != '-'))
+				sendUnknownMode(data, param[0]);
+			continue;
+		}
 		// evaluate parameter content
 		if (param.size() == 1)
 			continue ;
@@ -82,13 +99,11 @@ rfc processModeRequests(Command::Data& data)
 		{
 			// look for registered modes modes
 			if (std::string(MODES).find(param[n]) == std::string::npos)
-				data.srv.sendMessage(data.msg.sender,
-					Response::buildNumeric(data.msg, irc::UNKNOWNMODE));
+				sendUnknownMode(data, param[n]);
 			else
 				handleModeChange(data, switcher, param[n], &i);
 		}
 	}
-	return (irc::OK);
 }
 
 rfc handleChannelMode(Command::Data& data)
@@ -109,7 +124,8 @@ rfc handleChannelMode(Command::Data& data)
 	if (!data.channel->isChanOp(data.client))
 		return (irc::CHANOPRIVSNEEDED);
 	// 4) check all params
-	return (processModeRequests(data));
+	processModeRequests(data);
+	return (irc::OK);
 }
 
 rfc handleIrssiLogon(Command::Data& data)
