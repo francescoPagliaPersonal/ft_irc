@@ -55,14 +55,6 @@ bool Channel::isChanOp(Client * client) const
 	return false;
 }
 
-void Channel::setInvite(bool switcher)
-{
-	if (switcher)
-		_modes |= CH_INVITE;
-	else
-		_modes &= ~CH_INVITE;
-}
-
 void Channel::invite(Client * client)
 {
 	_invites.push_back(client);

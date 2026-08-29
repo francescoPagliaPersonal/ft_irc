@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 17:13:02 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/29 12:41:09 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/29 21:57:25 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,14 @@ void Channel::removeLimit()
 {
 	_userLimit = MAX_CHANNELUSERS;
 	_modes &= ~CH_LIMIT;
+}
+
+void Channel::setInvite(bool switcher)
+{
+	if (switcher)
+		_modes |= CH_INVITE;
+	else
+		_modes &= ~CH_INVITE;
 }
 
 void Channel::setTopicFlag(bool switcher)
