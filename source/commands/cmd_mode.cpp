@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 16:57:46 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/29 20:54:38 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/29 22:08:15 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,8 @@ void processModeRequests(Command::Data& data)
 	buildReply(data, reply, valueTokens, modes);
 	if (reply.size() > 1) // contains a ' ' per default
 		data.srv.broadcast(data.channel,
-			Response::buildRegular(data.msg, data.channel->getTitle() + reply));
+			Response::buildRegular(data.msg,
+								   data.channel->getTitle() + reply, ""));
 }
 
 /*
