@@ -217,6 +217,8 @@ std::string	Response::buildRegular(const Message& msg, const std::string & args)
 		reply += " :";
 		reply = irc::chunkifyTrailing(reply, msg.trailing);
 	}
+	else
+		reply += CRLF;
 	return reply;
 }
 
