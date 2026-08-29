@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 16:57:46 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/29 09:45:20 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/29 09:52:07 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ l: Set/remove the user limit for the channel.		+   needs ARG
 
 void processModeRequests(Command::Data& data)
 {
+	bool switcher = false;
 	// move through all params
 	for (std::size_t i = 1; i < data.msg.params.size(); i++)
 	{
@@ -90,13 +91,15 @@ void processModeRequests(Command::Data& data)
 				sendUnknownMode(data, param[0]);
 			continue;
 		}
-		// evaluate parameter content
-		if (param.size() == 1)
-			continue ;
-		bool switcher = (param[0] == true);
 		// consume one char at a time
-		for (std::size_t n = 1; n < param.size(); n++)
+		for (std::size_t n = 0; n < param.size(); n++)
 		{
+			// get sign within the mode string
+			if ((param[n] == '+' || param[n] == '-'))
+			{
+				switcher = (param[n] == '+');
+				continue ;
+			}
 			// look for registered modes modes
 			if (std::string(MODES).find(param[n]) == std::string::npos)
 				sendUnknownMode(data, param[n]);
