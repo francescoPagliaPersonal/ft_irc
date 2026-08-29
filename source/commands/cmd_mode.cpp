@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 16:57:46 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/29 12:20:22 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/29 12:30:36 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include "Response.hpp"
 
 #include <sstream>
+#include <cstdlib>
 
 // -------------------------------------------------------------------------- //
 
@@ -180,6 +181,17 @@ std::string handleModeChange(Command::Data& data, bool switcher, char c, std::si
 		case 'o':
 			break ;
 		case 'l':
+			if (switcher == false)
+			{
+				data.channel->removeLimit();
+				break ;
+			}
+			if (++(*iParams) >= data.msg.params.size())
+			{
+				// TODO send error message;
+				break ;
+			}
+			data.channel->setLimit(std::strtol(data.msg.params[*iParams].c_str(), NULL, 10));
 			break ;
 	}
 	// TODO need to watch for key, limit, operator - need ARGS!
