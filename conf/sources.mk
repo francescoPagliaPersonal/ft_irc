@@ -45,7 +45,7 @@ SRC_BON		:=
 # Commands
 DIR_CMDS = commands/
 SRC_CMDS = cmd_cap.cpp cmd_nick.cpp cmd_pass.cpp cmd_user.cpp cmd_ping.cpp cmd_join.cpp\
-		   cmd_privmsg.cpp cmd_mode.cpp cmd_invite.cpp
+		   cmd_privmsg.cpp cmd_invite.cpp
 SRC_MAN   += $(addprefix $(DIR_CMDS),$(SRC_CMDS))
 
 # Policies

@@ -78,7 +78,6 @@ class Channel
 		void setTopic(const std::string&);
 		void setPassword(const std::string&);
 		void setLimit(irc::uint);
-		void setInvite(bool);
 
 		static bool isTitleCompliant(const std::string& channel);
 		static std::string title2key(std::string);

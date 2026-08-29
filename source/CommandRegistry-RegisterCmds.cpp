@@ -64,8 +64,4 @@ void CommandRegistry::registerCmds()
 	invite->addPolicy(new ArgsLimitPlcy(2, 2));
 	_commands[invite->getName()] = invite;
 	
-	Command	*mode = new Command("MODE", cmd_mode);
-	mode->addPolicy(new AlreadyRegisteredPlcy(true));
-	mode->addPolicy(new ArgsLimitPlcy(1, 3));
-	_commands[mode->getName()] = mode;
 }
