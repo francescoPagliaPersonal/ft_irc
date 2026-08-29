@@ -58,4 +58,10 @@ void CommandRegistry::registerCmds()
 	privmsg->addPolicy(new AlreadyRegisteredPlcy(true));
 	privmsg->addPolicy(new ArgsLimitPlcy(2, 2));
 	_commands[privmsg->getName()] = privmsg;
+
+	Command	*invite = new Command("INVITE", cmd_invite);
+	invite->addPolicy(new AlreadyRegisteredPlcy(true));
+	invite->addPolicy(new ArgsLimitPlcy(2, 2));
+	_commands[invite->getName()] = invite;
+	
 }

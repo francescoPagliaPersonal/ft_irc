@@ -60,6 +60,8 @@ rfc cmd_cap(IServerCtrl&, const Message&);
 rfc cmd_ping(IServerCtrl&, const Message&);
 rfc cmd_join(IServerCtrl&, const Message&);
 rfc cmd_privmsg(IServerCtrl&, const Message&);
+rfc cmd_invite(IServerCtrl&, const Message&);
+rfc cmd_mode(IServerCtrl&, const Message&);
 
 #endif
 
