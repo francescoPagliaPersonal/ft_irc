@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 16:57:46 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/29 10:10:53 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/29 10:34:23 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,35 @@
 #include "irc.hpp"
 #include "Response.hpp"
 
+#include <sstream>
+
 namespace
 {
 
 void printChannelModes(Command::Data& data)
 {
+	std::string reply(data.channel->getTitle() + " +");
+	std::stringstream values;
+	bitMask modes = data.channel->getModes();
+	if (modes & CH_INVITE)
+		reply.append("i");
+	if (modes & CH_TOPIC)
+		reply.append("t");
+	if (modes & CH_PASSWORD)
+	{
+		reply.append("k");
+		values << ' ' << data.channel->getPassword();
+	}
+	if (modes & CH_LIMIT)
+	{
+		reply.append("l");
+		if (!values.str().empty())
+			values << ' ';
+		values << data.channel->getLimit();
+	}
 	data.srv.sendMessage(data.client,
-			Response::buildNumeric(data.msg, irc::CHANNELMODEIS,
-								   data.msg.params[0], "not handled yet"));
-	// TODO query each bit and append to the output string if it exists
-	// std::string reply;
+		Response::buildRegular(data.msg, reply + values.str())
+	);
 	// TODO decide if we want to store timestamp or create; MODE can return it
 }
 
