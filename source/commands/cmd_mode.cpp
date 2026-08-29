@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 16:57:46 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/29 09:25:33 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/29 09:29:26 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ rfc processModeRequests(Command::Data& data)
 			return (irc::UNKNOWNMODE);
 		// evaluate parameter content
 		if (param.size() == 1)
-			return (irc::OK); // no reply needed from the looks of it
+			continue ;
 		bool switcher = (param[0] == true);
 		// consume one char at a time
 		for (std::size_t n = 1; n < param.size(); n++)
