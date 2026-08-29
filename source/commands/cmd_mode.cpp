@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 16:57:46 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/29 22:08:15 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/29 22:09:47 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,12 +106,11 @@ void processModeRequests(Command::Data& data)
 {
 	bool switcher = false;
 	std::string reply(" ");
-	bitMask modes, valueTokens;
+	bitMask modes, valueTokens = 0;
 	modes = data.channel->getModes();
 	// move through all params
 	for (std::size_t i = 1; i < data.msg.params.size(); i++)
 	{
-		valueTokens = 0;
 		const std::string& param = data.msg.params[i];
 		// validate starting point (just ignore string w/o +/-)
 		if (param.empty() || (param[0] != '+' && param[0] != '-'))
