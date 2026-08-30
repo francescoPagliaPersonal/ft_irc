@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/29 23:12:59 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/30 09:20:43 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/30 09:31:30 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,10 @@ bitMask handleModeChange(Command::Data& data, bool switcher, char c, std::size_t
 			Client* op = data.srv.findClientByNick(data.msg.params[*iParams]);
 			if (!op)
 			{
-				// TODO send error message;
+				data.srv.sendMessage(data.client,
+					Response::buildNumeric(data.msg, irc::NOSUCHNICK,
+						data.msg.params[*iParams])
+				);
 				break ;
 			}
 			if (switcher == true)
