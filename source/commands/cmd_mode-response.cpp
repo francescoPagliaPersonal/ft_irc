@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/29 23:04:12 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/30 10:55:56 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/30 11:11:45 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,35 @@
 #include <sstream>
 // TODO remove debug print
 #include <iostream>
+
+// -------------------------------------------------------------------------- //
+
+namespace
+{
+
+void removeNoOptFromOperator(std::deque<std::string>& addOP,
+							 std::deque<std::string>& remOP)
+{
+	if (addOP.empty() || remOP.empty())
+		return ;
+	std::deque<std::string>::iterator itAdd, itRem;
+	for (itAdd = addOP.begin(); itAdd != addOP.end(); itAdd++)
+	{
+		for (itRem = remOP.begin(); itRem != remOP.end(); itRem++)
+		{
+			if (*itAdd == *itRem)
+			{
+				remOP.erase(itRem);
+				itAdd = addOP.erase(itAdd);
+				break ;
+			}
+		}
+	}
+}
+
+} // end of namespace
+
+// -------------------------------------------------------------------------- //
 
 namespace helper
 {
@@ -116,6 +145,7 @@ void buildReply(Command::Data& data, std::string& rpl, bitMask valueTokens, bitM
 			values += ' ' + ss.str();
 		}
 	}
+	removeNoOptFromOperator(data.modeChOPadd, data.modeChOPrem);
 	// ---- build the reply ----------------------------------------------------
 	if (!minus.empty() || !data.modeChOPrem.empty())
 		rpl += '-' + minus;
