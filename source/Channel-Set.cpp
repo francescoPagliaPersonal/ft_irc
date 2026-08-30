@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 17:13:02 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/29 21:57:25 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/30 09:55:45 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,26 +72,23 @@ void Channel::setTopicFlag(bool switcher)
 		_modes &= ~CH_TOPIC;
 }
 
-void Channel::setOperator(bool switcher, Client* client)
-{
-	std::cerr << "[Warning] " << __FUNCTION__ << "not defined yet.\n";
-	(void) switcher; (void) client;
-}
-
-void Channel::addOperator(Client* client)
+bool Channel::setOperator(bool switcher, Client* client)
 {
 	std::map<Client*, bitMask>::iterator it;
 	it = _members.find(client);
-	if (it == _members.end())
-		return ;
-	it->second |= US_OPERATOR;
-}
-
-void Channel::removeOperator(Client* client)
-{
-	std::map<Client*, bitMask>::iterator it;
-	it = _members.find(client);
-	if (it == _members.end())
-		return ;
-	it->second &= ~US_OPERATOR;
+	// TODO this could be removed, if outside check remains
+	// if (it == _members.end())
+	// 	return (false);
+	if (switcher)
+	{
+		if (!(it->second & US_OPERATOR))
+			it->second |= US_OPERATOR;
+		else
+			return (false);
+	}
+	else if (it->second & US_OPERATOR)
+		it->second &= ~US_OPERATOR;
+	else
+		return (false);
+	return (true);
 }

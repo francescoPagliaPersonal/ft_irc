@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/29 23:12:59 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/30 09:42:35 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/30 09:57:47 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,10 +122,10 @@ bitMask handleModeChange(Command::Data& data, bool switcher, char c, std::size_t
 				);
 				break ;
 			}
-			if (switcher == true)
-				data.channel->addOperator(op);
-			else
-				data.channel->removeOperator(op);
+			// bool changed = data.channel->setOperator(switcher, op);
+			data.channel->setOperator(switcher, op);
+			// if (changed && switcher)
+			// else if (changed && !switcher)
 			break ;
 		}
 
