@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/29 23:12:59 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/29 23:18:46 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/30 09:20:43 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,26 @@ FURTHER NOTES
 
 */
 
+namespace
+{
+	bool canConsumeNextParam(Command::Data& data, std::size_t* iParams)
+	{
+		if (++(*iParams) >= data.msg.params.size())
+		{
+			data.srv.sendMessage(
+				data.client,
+				Response::buildNumeric(
+					data.msg,
+					// TODO ?? IRCv3 offers 696 + mode specific message
+					irc::NEEDMOREPARAMS,
+					data.msg.command + " " + data.channel->getTitle())
+			);
+			return (false);
+		}
+		return (true);
+	}
+} // end of namespace
+
 namespace helper
 {
 
@@ -72,11 +92,8 @@ bitMask handleModeChange(Command::Data& data, bool switcher, char c, std::size_t
 				data.channel->removePassword();
 				break ;
 			}
-			if (++(*iParams) >= data.msg.params.size())
-			{
-				// TODO send error message;
+			if (!canConsumeNextParam(data, iParams))
 				break ;
-			}
 			if (data.channel->getModes() & CH_PASSWORD)
 				break ;
 			data.channel->setPassword(data.msg.params[*iParams]);
@@ -85,11 +102,8 @@ bitMask handleModeChange(Command::Data& data, bool switcher, char c, std::size_t
 
 		case 'o':
 		{
-			if (++(*iParams) >= data.msg.params.size())
-			{
-				// TODO send error message;
+			if (!canConsumeNextParam(data, iParams))
 				break ;
-			}
 			Client* op = data.srv.findClientByNick(data.msg.params[*iParams]);
 			if (!op)
 			{
@@ -109,11 +123,8 @@ bitMask handleModeChange(Command::Data& data, bool switcher, char c, std::size_t
 				data.channel->removeLimit();
 				break ;
 			}
-			if (++(*iParams) >= data.msg.params.size())
-			{
-				// TODO send error message;
+			if (!canConsumeNextParam(data, iParams))
 				break ;
-			}
 			data.channel->setLimit(std::strtol(data.msg.params[*iParams].c_str(), NULL, 10));
 			valueToken = CH_LIMIT;
 			break ;
