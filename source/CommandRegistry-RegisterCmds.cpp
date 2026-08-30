@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 11:41:20 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/29 21:53:45 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/30 11:51:14 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ void CommandRegistry::registerCmds()
 
 	Command *mode = new Command("MODE", cmd_mode);
 	mode->addPolicy(new AlreadyRegisteredPlcy(true));
-	// 8 params should allow each setting to be set in one call
-	mode->addPolicy(new ArgsLimitPlcy(1, 8));
+	mode->addPolicy(new ArgsLimitPlcy(1, 6));
 	_commands[mode->getName()] = mode;
 }
