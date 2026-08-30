@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 16:57:46 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/29 23:18:51 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/30 12:35:44 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,11 +47,13 @@ namespace helper
 
 // -------------------------------------------------------------------------- //
 
+// Dispatch MODE to a channel, an irssi user-mode stub, or 501.
 rfc cmd_mode(IServerCtrl& srv, const Message& msg)
 {
 	Command::Data data(srv, msg, msg.sender);
-	// TODO this assumes, trailing is copied into param
+	// FIXME this assumes, trailing is copied into param
 	// we CANNOT get here w/o either params or trailing used! correct?
+	// the param[0] existed elsewhere too, don't remember what the solution was
 	if (msg.params[0][0] == '#' || msg.params[0][0] == '&')
 		return (handleChannelMode(data));
 	// TODO fine like that? if we have this as a DUMMY,
@@ -67,6 +69,7 @@ rfc cmd_mode(IServerCtrl& srv, const Message& msg)
 namespace
 {
 
+// Answer irssi's MODE NICK +i with a dummy 221 so NICKNAMEINUSE logon can finish.
 rfc handleIrssiLogon(Command::Data& data)
 {
 	if (data.msg.params.size() == 2 && data.msg.params[1] == "+i")
@@ -83,6 +86,7 @@ rfc handleIrssiLogon(Command::Data& data)
 		return (irc::UMODEUNKNOWNFLAG);
 }
 
+// Query the channel's modes, or apply MODE if the sender is a member and op.
 rfc handleChannelMode(Command::Data& data)
 {
 	
@@ -108,6 +112,7 @@ rfc handleChannelMode(Command::Data& data)
 	return (irc::OK);
 }
 
+// Traverse all mode letters in msg.param, apply each change, broadcast the MODE line.
 void processModeRequests(Command::Data& data)
 {
 	bool switcher = false;

@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/29 23:04:12 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/30 11:57:27 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/30 12:30:19 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,22 +17,19 @@
 #include "Response.hpp"
 
 #include <sstream>
-// TODO remove debug print
-#include <iostream>
 
 // -------------------------------------------------------------------------- //
 
 namespace
 {
 
+// Drop nicks that appear in both ADDOP and REMOP so a cancelled +/-o is not announced.
 void cancelOperatorNoop(std::deque<std::string>& addOP,
 							 std::deque<std::string>& remOP)
 {
 	if (addOP.empty() || remOP.empty())
 		return ;
 	std::deque<std::string>::iterator itAdd, itRem;
-	// for learning purposes
-	// for (itAdd = addOP.begin(); itAdd != addOP.end(); !found ? itAdd++ : itAdd)
 	itAdd = addOP.begin();
 	while (itAdd != addOP.end())
 	{
@@ -59,6 +56,7 @@ void cancelOperatorNoop(std::deque<std::string>& addOP,
 namespace helper
 {
 
+// Send 324 RPL_CHANNELMODEIS with the channel's current modes to the sender.
 void sendChannelModes(Command::Data& data)
 {
 	std::string reply(data.channel->getTitle() + " +");
@@ -87,6 +85,7 @@ void sendChannelModes(Command::Data& data)
 	// TODO decide if we want to store timestamp or create; MODE can return it
 }
 
+// Send 472 ERR_UNKNOWNMODE for the unknown letter C.
 void sendUnknownMode(Command::Data& data, char c)
 {
 	data.srv.sendMessage(
@@ -100,15 +99,11 @@ void sendUnknownMode(Command::Data& data, char c)
 	);
 }
 
+// Append the net MODE string to RPL from OLD flags, VALUETOKENS, and queued operator nicks.
 void buildReply(Command::Data& data, std::string& rpl, bitMask valueTokens, bitMask old)
 {
 	bitMask changed, added, removed, now;
 	now = data.channel->getModes();
-	// TODO remove debug print
-	std::cout << '[' << __FUNCTION__ << "] old|now|valueTokens = "
-		<< std::hex << static_cast<unsigned int>(old) << '|'
-		<< std::hex << static_cast<unsigned int>(now) << '|'
-		<< std::hex << static_cast<unsigned int>(valueTokens) << '\n';
 	// ---- abort if no change -------------------------------------------------
 	if (old == now && valueTokens == 0)
 		return ;

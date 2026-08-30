@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/29 23:12:59 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/30 10:19:34 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/30 12:31:06 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ FURTHER NOTES
 
 namespace
 {
+	// Steal the next MSG param for a mode that needs an argument; send 461 if none remain.
 	bool canConsumeNextParam(Command::Data& data, std::size_t* iParams)
 	{
 		if (++(*iParams) >= data.msg.params.size())
@@ -70,6 +71,7 @@ namespace
 namespace helper
 {
 
+// Apply mode letter C with SWITCHER to the channel, consuming an argument when needed.
 bitMask handleModeChange(Command::Data& data, bool switcher, char c, std::size_t* iParams)
 {
 	bitMask valueToken = 0;
@@ -124,7 +126,7 @@ bitMask handleModeChange(Command::Data& data, bool switcher, char c, std::size_t
 			}
 			bool changed = data.channel->setOperator(switcher, op);
 			if (changed)
-				valueToken = US_OPERATOR;
+				valueToken = US_OPERATOR; // this is not clean, but uncontested in buildReply
 			if (changed && switcher)
 				data.modeChOPadd.push_back(op->getNick());
 			else if (changed && !switcher)
@@ -145,8 +147,6 @@ bitMask handleModeChange(Command::Data& data, bool switcher, char c, std::size_t
 			break ;
 
 	}
-	// TODO need to watch for key, limit, operator - need ARGS!
-	// TODO all modes with switcher & message & ignore duplicates
 	return (valueToken);
 }
 
