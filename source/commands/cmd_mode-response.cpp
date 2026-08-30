@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/29 23:04:12 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/29 23:17:27 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/30 10:55:56 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void buildReply(Command::Data& data, std::string& rpl, bitMask valueTokens, bitM
 	if (old == now && valueTokens == 0)
 		return ;
 	// ---- prepare ------------------------------------------------------------
-	std::string values, plus, minus;
+	std::string values, plus, minus, addOP, remOP;
 	changed = old ^ now;		// shows the bits that flipped
 	added = changed & now;		// what went from 0 to 1
 	removed = changed & old; 	// what wend from 1 to 0
@@ -117,12 +117,25 @@ void buildReply(Command::Data& data, std::string& rpl, bitMask valueTokens, bitM
 		}
 	}
 	// ---- build the reply ----------------------------------------------------
-	if (!minus.empty())
+	if (!minus.empty() || !data.modeChOPrem.empty())
 		rpl += '-' + minus;
-	if (!plus.empty())
+	while (!data.modeChOPrem.empty())
 	{
-		rpl += '+' + plus + values;
+		rpl += "o";
+		remOP = ' ' + data.modeChOPrem.front();
+		data.modeChOPrem.pop_front();
 	}
+	if (!plus.empty() || !data.modeChOPadd.empty())
+	{
+		rpl += '+' + plus;
+	}
+	while (!data.modeChOPadd.empty())
+	{
+		rpl += "o";
+		addOP += ' ' + data.modeChOPadd.front();
+		data.modeChOPadd.pop_front();
+	}
+	rpl += remOP + values + addOP;
 }
 
 } // end of namespace HELPER

@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:15:32 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/29 08:18:30 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/30 10:13:14 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 # include <string>
 # include <vector>
+# include <deque>
 
 # include "Message.hpp"
 # include "irc.hpp"
@@ -45,6 +46,8 @@ class Command
 			const Message& msg;
 			Client* client;
 			Channel* channel;
+			std::deque<std::string> modeChOPadd;
+			std::deque<std::string> modeChOPrem;
 			// ----
 			Data(IServerCtrl&, const Message&, Client*);
 		};
