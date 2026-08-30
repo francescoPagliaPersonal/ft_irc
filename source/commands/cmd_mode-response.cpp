@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/29 23:04:12 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/30 11:32:16 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/30 11:38:28 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,7 @@ void buildReply(Command::Data& data, std::string& rpl, bitMask valueTokens, bitM
 	while (!data.modeChOPrem.empty())
 	{
 		rpl += "o";
-		remOP = ' ' + data.modeChOPrem.front();
+		remOP += ' ' + data.modeChOPrem.front();
 		data.modeChOPrem.pop_front();
 	}
 	if (!plus.empty() || !data.modeChOPadd.empty())
