@@ -89,10 +89,71 @@ test_invite_useronchannel() {
 	return "$rc"
 }
 
+test_invite_no_args() {
+	oneshot_expect " 461 " "PASS $PASSWORD" "NICK invw0" "USER invw0 0 * :x" "INVITE"
+}
+
+test_invite_one_arg() {
+	oneshot_expect " 461 " "PASS $PASSWORD" "NICK invw1" "USER invw1 0 * :x" "INVITE onlyone"
+}
+
+test_invite_swapped_args() {
+	if ! register_client iw1 aliceiw1; then
+		return 1
+	fi
+	if ! register_client iw2 bobiw1; then
+		irc_close iw1
+		return 1
+	fi
+	irc_send iw1 "JOIN #invw"
+	if ! irc_expect iw1 "JOIN #invw"; then
+		irc_close iw1
+		irc_close iw2
+		return 1
+	fi
+	irc_send iw1 "INVITE #invw bobiw1"
+	irc_expect_any iw1 " 401 " " 403 "
+	local rc=$?
+	irc_close iw1
+	irc_close iw2
+	return "$rc"
+}
+
+test_invite_mixed_case() {
+	if ! register_client iw3 aliceiw2; then
+		return 1
+	fi
+	if ! register_client iw4 bobiw2; then
+		irc_close iw3
+		return 1
+	fi
+	irc_send iw3 "JOIN #invx"
+	if ! irc_expect iw3 "JOIN #invx"; then
+		irc_close iw3
+		irc_close iw4
+		return 1
+	fi
+	irc_send iw3 "  invite   bobiw2   #invx"
+	if ! irc_expect iw3 " 341 "; then
+		irc_close iw3
+		irc_close iw4
+		return 1
+	fi
+	probe_alive iw3 invmix
+	local rc=$?
+	irc_close iw3
+	irc_close iw4
+	return "$rc"
+}
+
 test "invite_ok" test_invite_ok
 test "invite_nosuchnick" test_invite_nosuchnick
 test "invite_nosuchchannel" test_invite_nosuchchannel
 test "invite_notonchannel" test_invite_notonchannel
 test "invite_useronchannel" test_invite_useronchannel
+test "invite_no_args" test_invite_no_args
+test "invite_one_arg" test_invite_one_arg
+test "invite_swapped_args" test_invite_swapped_args
+test "invite_mixed_case" test_invite_mixed_case
 
 group_end

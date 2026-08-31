@@ -66,9 +66,75 @@ test_join_broadcast() {
 	return "$rc"
 }
 
+test_join_no_args() {
+	oneshot_expect " 461 " "PASS $PASSWORD" "NICK jnone" "USER jnone 0 * :x" "JOIN"
+}
+
+test_join_too_short() {
+	oneshot_expect " 476 " "PASS $PASSWORD" "NICK jshort" "USER jshort 0 * :x" "JOIN #ab"
+}
+
+test_join_too_long() {
+	local ch
+	ch="#$(printf '%*s' 32 '' | tr ' ' 'x')"
+	oneshot_expect " 476 " "PASS $PASSWORD" "NICK jlongc" "USER jlongc 0 * :x" "JOIN $ch"
+}
+
+test_join_too_many_channels() {
+	if ! register_client jt jfour; then
+		return 1
+	fi
+	irc_send jt "JOIN #jok1,#jok2,#jok3,#jok4"
+	irc_expect jt " 405 "
+	local rc=$?
+	irc_close jt
+	return "$rc"
+}
+
+test_join_trailing_comma() {
+	if ! register_client jc2 jtrc; then
+		return 1
+	fi
+	irc_send jc2 "JOIN #jtrc,"
+	if ! irc_expect_any jc2 " 353 " " 476 "; then
+		irc_close jc2
+		return 1
+	fi
+	probe_alive jc2 jtrca
+	local rc=$?
+	irc_close jc2
+	return "$rc"
+}
+
+test_join_empty_slot() {
+	if ! register_client je jemp; then
+		return 1
+	fi
+	irc_send je "JOIN #jemp,,#jxxx"
+	if ! irc_expect je " 476 "; then
+		irc_close je
+		return 1
+	fi
+	probe_alive je jempa
+	local rc=$?
+	irc_close je
+	return "$rc"
+}
+
+test_join_zero() {
+	oneshot_expect " 476 " "PASS $PASSWORD" "NICK jzero" "USER jzero 0 * :x" "JOIN 0"
+}
+
 test "join_creates_op" test_join_creates_op
 test "second_is_regular" test_second_is_regular
 test "bad_mask" test_bad_mask
 test "join_broadcast" test_join_broadcast
+test "join_no_args" test_join_no_args
+test "join_too_short" test_join_too_short
+test "join_too_long" test_join_too_long
+test "join_too_many_channels" test_join_too_many_channels
+test "join_trailing_comma" test_join_trailing_comma
+test "join_empty_slot" test_join_empty_slot
+test "join_zero" test_join_zero
 
 group_end

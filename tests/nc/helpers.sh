@@ -271,8 +271,10 @@ _timed_out() {
 # kill nc as soon as the expected (or forbidden) text shows up. NC_TIMEOUT
 # is only the deadline for silence / no-match.
 
-irc_open() {
+# Extra args are nc flags inserted before -w (e.g. -C).
+_irc_open() {
 	local id="$1"
+	shift
 	local dir="$RUNDIR/cli_$id"
 	local fd
 	irc_close "$id"
@@ -283,9 +285,20 @@ irc_open() {
 	# RDWR open does not block; then nc can attach as reader.
 	exec {fd}<>"$dir/in"
 	echo "$fd" >"$dir/wfd"
-	$NC -C -w 60 "$HOST" "$PORT" <"$dir/in" >"$dir/out" &
+	$NC "$@" -w 60 "$HOST" "$PORT" <"$dir/in" >"$dir/out" &
 	echo $! >"$dir/pid"
 	echo "$id" >>"$RUNDIR/clients"
+}
+
+irc_open() {
+	_irc_open "$1" -C
+}
+
+# Exact bytes: nc will not rewrite LF to CRLF. Mark the session as raw
+# so probe_alive writes CRLF itself.
+irc_open_raw() {
+	_irc_open "$1"
+	touch "$RUNDIR/cli_$1/raw"
 }
 
 irc_send() {
@@ -310,6 +323,41 @@ irc_recv() {
 	cat "$RUNDIR/cli_$id/out" 2>/dev/null || true
 }
 
+client_pid_alive() {
+	local id="$1"
+	local pid
+	pid=$(cat "$RUNDIR/cli_$id/pid" 2>/dev/null) || return 1
+	kill -0 "$pid" 2>/dev/null
+}
+
+# True once this client's nc has exited (server closed the socket).
+wait_client_gone() {
+	local id="$1"
+	local start
+	start=$(_now)
+	while client_pid_alive "$id"; do
+		if _timed_out "$start" "$NC_TIMEOUT" "$(_now)"; then
+			FAIL_HINT="nc still connected (expected disconnect)"
+			LAST_GOT=$(irc_recv "$id")
+			return 1
+		fi
+		sleep "$NC_POLL"
+	done
+	return 0
+}
+
+# Prove the session still parses. Raw sessions get an explicit CRLF.
+probe_alive() {
+	local id="$1"
+	local token="${2:-alive}"
+	if [ -f "$RUNDIR/cli_$id/raw" ]; then
+		irc_write "$id" "PING :${token}"$'\r\n' || return 1
+	else
+		irc_send "$id" "PING :${token}" || return 1
+	fi
+	irc_expect "$id" "PONG CoolServ :${token}"
+}
+
 # Return as soon as every needle is present in the capture; else wait NC_TIMEOUT.
 irc_expect() {
 	local id="$1"
@@ -329,6 +377,10 @@ irc_expect() {
 		if [ "$ok" -eq 1 ]; then
 			LAST_GOT=$(cat "$file")
 			return 0
+		fi
+		if ! server_alive; then
+			LAST_GOT=$(cat "$file" 2>/dev/null || true)
+			return 1
 		fi
 		if _timed_out "$start" "$NC_TIMEOUT" "$(_now)"; then
 			LAST_GOT=$(cat "$file" 2>/dev/null || true)
@@ -353,6 +405,10 @@ irc_expect_any() {
 				return 0
 			fi
 		done
+		if ! server_alive; then
+			LAST_GOT=$(cat "$file" 2>/dev/null || true)
+			return 1
+		fi
 		if _timed_out "$start" "$NC_TIMEOUT" "$(_now)"; then
 			LAST_GOT=$(cat "$file" 2>/dev/null || true)
 			return 1
@@ -556,6 +612,15 @@ test() {
 		GROUP_OK=$((GROUP_OK + 1))
 		TOTAL_OK=$((TOTAL_OK + 1))
 	else
+		# Valgrind can stay alive while it dumps a crash. Empty capture is
+		# the usual sign; wait a bit before calling it a protocol FAIL.
+		if [ -z "${LAST_GOT:-}" ] && server_alive; then
+			local g=0
+			while [ "$g" -lt 30 ] && server_alive; do
+				sleep 0.1
+				g=$((g + 1))
+			done
+		fi
 		if ! server_alive; then
 			handle_dead_server
 			local hs=$?

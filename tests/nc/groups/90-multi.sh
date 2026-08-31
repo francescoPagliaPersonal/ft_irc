@@ -107,8 +107,29 @@ test_disconnect_one_other_still_works() {
 	return "$rc"
 }
 
+test_junk_isolation() {
+	if ! register_client xh alex8; then
+		return 1
+	fi
+	if ! register_client xi alex9; then
+		irc_close xh
+		return 1
+	fi
+	irc_send xh $'   \r'
+	irc_send xh ":nobody"
+	irc_send xh "FOOBAR"
+	irc_write xh "$(printf '%*s' 513 '' | tr ' ' 'Z')"
+	wait_client_gone xh || true
+	probe_alive xi isolated
+	local rc=$?
+	irc_close xh
+	irc_close xi
+	return "$rc"
+}
+
 test "two_clients_ping" test_two_clients_ping
 test "three_clients" test_three_clients
 test "disconnect_one_other_still_works" test_disconnect_one_other_still_works
+test "junk_isolation" test_junk_isolation
 
 group_end
