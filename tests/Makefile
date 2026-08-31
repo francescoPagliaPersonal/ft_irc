@@ -26,7 +26,8 @@ TEST_SRC	:= main.cpp \
 				test_irc_helpers.cpp \
 				test_channel.cpp \
 				test_join.cpp \
-				test_invite.cpp
+				test_invite.cpp \
+				test_framing.cpp
 
 MODE		?= reg
 OBJ_DIR		:= build/$(MODE)/
