@@ -1,6 +1,7 @@
 ircserv
 en.subject.*
 docs/
+tests/nc/.run/
 
 # Prerequisites
 *.d

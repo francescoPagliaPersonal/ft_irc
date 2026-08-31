@@ -52,6 +52,11 @@ valb:		PART := bon
 valb:		build
 	$(EXEC_VALG)
 
+testsnc:	MODE := val
+testsnc:	PART := man
+testsnc:	build
+	$(NC_TESTS)
+
 print:
 	@printf "$(C_SAKURA_BLOSSOM)"
 	@printf '%s\n' '---BUILDING---'
@@ -126,4 +131,4 @@ norm:
 .PHONY:	all bonus clean fclean re \
 		run runb asan asanb val valb \
 		print build libft norm \
-		nc chat
+		nc chat testsnc

@@ -48,3 +48,19 @@ define EXEC_VALG
 	@$(EXEC_V_STR)
 	@$(END_STR)
 endef
+
+# Live nc suite: export Makefile data, then run tests/nc/run.sh (never EXEC).
+define NC_TESTS
+	@printf '$(C_AUTUMN_ORANGE)  executing: '
+	@printf '$(C_FUJI_WHITE)tests/nc/run.sh$(C_RESET)\n'
+	@printf '$(C_FUJI_GRAY3)°°°°°°°°°°°°\n$(C_RESET)'
+	@HOST="$(HOST)" PORT="$(PORT)" PASSWORD="$(PASSWORD)" \
+		BIN="$(BIN)" VALGRIND_FLAGS="$(VALGRIND_FLAGS)" \
+		C_RESET="$(C_RESET)" C_BOLD="$(C_BOLD)" C_DIM="$(C_DIM)" \
+		C_AUTUMN_RED="$(C_AUTUMN_RED)" C_AUTUMN_GREEN="$(C_AUTUMN_GREEN)" \
+		C_AUTUMN_ORANGE="$(C_AUTUMN_ORANGE)" C_AUTUMN_YELLOW="$(C_AUTUMN_YELLOW)" \
+		C_BAMBOO_GREEN="$(C_BAMBOO_GREEN)" C_FUJI_WHITE="$(C_FUJI_WHITE)" \
+		C_FUJI_GRAY3="$(C_FUJI_GRAY3)" C_SAKURA_BLOSSOM="$(C_SAKURA_BLOSSOM)" \
+		C_WINTER_BLUE="$(C_WINTER_BLUE)" C_SPRING_GREEN="$(C_SPRING_GREEN)" \
+		bash tests/nc/run.sh
+endef
