@@ -10,6 +10,7 @@
 
 CXX			:= c++
 PROG_NAME	:= ircserv
+JOBS		?= $(shell nproc --ignore=1)
 
 include ../../conf/sources.mk
 
@@ -51,7 +52,7 @@ VALGRIND_FLAGS	:= --leak-check=full \
 				--show-error-list=yes \
 				--track-origins=yes --track-fds=yes
 
-.PHONY: all asan val clean fclean run runval
+.PHONY: all asan val clean fclean run runval build
 
 all:
 	@$(MAKE) run MODE=reg
@@ -61,6 +62,10 @@ asan:
 
 val:
 	@$(MAKE) runval MODE=val
+
+# Second make call so MODE is set before OBJ/flags expand, and compile in parallel.
+build:
+	@$(MAKE) -j$(JOBS) -Otarget $(BIN) MODE=$(MODE) --no-print-directory
 
 $(BIN): $(PROD_OBJ) $(TEST_OBJ)
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) $(PROD_OBJ) $(TEST_OBJ) -o $@
@@ -73,10 +78,10 @@ $(OBJ_DIR)harness/%.o: %.cpp
 	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -MMD -MP -c $< -o $@
 
-run: $(BIN)
+run: build
 	./$(BIN)
 
-runval: $(BIN)
+runval: build
 	valgrind $(VALGRIND_FLAGS) ./$(BIN)
 
 clean:
