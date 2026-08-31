@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test_policies.cpp                                  :+:      :+:    :+:   */
+/*   test_policies.cpp                                  :+:      ::::::::   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/24 10:48:00 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/31 09:35:15 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/31 09:40:00 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ namespace
 {
 	int	g_dummy_calls = 0;
 
-	int	dummy_cmd(IServerCtrl &, const Message &)
+	rfc	dummy_cmd(IServerCtrl &, const Message &)
 	{
 		++g_dummy_calls;
 		return (irc::OK);
