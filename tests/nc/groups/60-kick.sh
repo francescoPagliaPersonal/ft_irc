@@ -9,6 +9,11 @@ test_kick_by_op() {
 		return 1
 	fi
 	irc_send ka "JOIN #kck1"
+	if ! irc_expect ka " 353 " "@alicek1" " 366 "; then
+		irc_close ka
+		irc_close kb
+		return 1
+	fi
 	irc_send kb "JOIN #kck1"
 	if ! irc_expect kb "JOIN #kck1"; then
 		irc_close ka
@@ -37,6 +42,11 @@ test_kick_non_op() {
 		return 1
 	fi
 	irc_send kc "JOIN #kck2"
+	if ! irc_expect kc " 353 " "@alicek2" " 366 "; then
+		irc_close kc
+		irc_close kd
+		return 1
+	fi
 	irc_send kd "JOIN #kck2"
 	if ! irc_expect kd "JOIN #kck2"; then
 		irc_close kc

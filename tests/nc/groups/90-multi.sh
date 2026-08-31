@@ -10,13 +10,22 @@ test_two_clients_ping() {
 	fi
 	irc_send xa "PING :one"
 	irc_send xb "PING :two"
-	if ! irc_expect xa "PONG"; then
+	if ! irc_expect xa "PONG CoolServ :one"; then
 		irc_close xa
 		irc_close xb
 		return 1
 	fi
-	irc_expect xb "PONG"
+	if ! irc_expect xb "PONG CoolServ :two"; then
+		irc_close xa
+		irc_close xb
+		return 1
+	fi
+	assert_not_contains "$(irc_recv xa)" ":two"
 	local rc=$?
+	if [ "$rc" -eq 0 ]; then
+		assert_not_contains "$(irc_recv xb)" ":one"
+		rc=$?
+	fi
 	irc_close xa
 	irc_close xb
 	return "$rc"
@@ -36,9 +45,21 @@ test_three_clients() {
 		return 1
 	fi
 	irc_send xc "JOIN #mlt1"
+	if ! irc_expect xc " 366 "; then
+		irc_close xc
+		irc_close xd
+		irc_close xe
+		return 1
+	fi
 	irc_send xd "JOIN #mlt1"
+	if ! irc_expect xd " 366 "; then
+		irc_close xc
+		irc_close xd
+		irc_close xe
+		return 1
+	fi
 	irc_send xe "JOIN #mlt1"
-	if ! irc_expect xe "JOIN #mlt1"; then
+	if ! irc_expect xe " 366 "; then
 		irc_close xc
 		irc_close xd
 		irc_close xe
@@ -51,7 +72,13 @@ test_three_clients() {
 		irc_close xe
 		return 1
 	fi
-	irc_expect xe "PRIVMSG #mlt1 :hi all"
+	if ! irc_expect xe "PRIVMSG #mlt1 :hi all"; then
+		irc_close xc
+		irc_close xd
+		irc_close xe
+		return 1
+	fi
+	assert_not_contains "$(irc_recv xc)" "PRIVMSG #mlt1 :hi all"
 	local rc=$?
 	irc_close xc
 	irc_close xd
@@ -68,8 +95,13 @@ test_disconnect_one_other_still_works() {
 		return 1
 	fi
 	irc_close xf
+	irc_send xg "PRIVMSG alex6 :gone"
+	if ! irc_expect xg " 401 "; then
+		irc_close xg
+		return 1
+	fi
 	irc_send xg "PING :stillhere"
-	irc_expect xg "PONG"
+	irc_expect xg "PONG CoolServ :stillhere"
 	local rc=$?
 	irc_close xg
 	return "$rc"

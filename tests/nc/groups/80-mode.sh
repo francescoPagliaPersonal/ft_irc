@@ -108,6 +108,11 @@ test_mode_o_give_take() {
 		return 1
 	fi
 	irc_send mh "JOIN #mod4"
+	if ! irc_expect mh " 353 " "@alicem4" " 366 "; then
+		irc_close mh
+		irc_close mi
+		return 1
+	fi
 	irc_send mi "JOIN #mod4"
 	if ! irc_expect mi "JOIN #mod4"; then
 		irc_close mh

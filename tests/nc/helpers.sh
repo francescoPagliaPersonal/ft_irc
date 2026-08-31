@@ -275,6 +275,7 @@ irc_open() {
 	local id="$1"
 	local dir="$RUNDIR/cli_$id"
 	local fd
+	irc_close "$id"
 	rm -rf "$dir"
 	mkdir -p "$dir"
 	mkfifo "$dir/in"
@@ -399,7 +400,7 @@ irc_close() {
 }
 
 close_all_clients() {
-	local id
+	local id d pid fd
 	if [ -f "$RUNDIR/clients" ]; then
 		while IFS= read -r id; do
 			[ -n "$id" ] || continue
@@ -407,6 +408,25 @@ close_all_clients() {
 		done <"$RUNDIR/clients"
 		rm -f "$RUNDIR/clients"
 	fi
+	# Catch leftovers whose id never made it into the clients list.
+	for d in "$RUNDIR"/cli_*; do
+		[ -d "$d" ] || continue
+		pid=$(cat "$d/pid" 2>/dev/null) || true
+		if [ -n "${pid:-}" ]; then
+			kill "$pid" 2>/dev/null || true
+			wait "$pid" 2>/dev/null || true
+		fi
+		fd=$(cat "$d/wfd" 2>/dev/null) || true
+		if [ -n "${fd:-}" ]; then
+			eval "exec ${fd}>&-" 2>/dev/null || true
+		fi
+	done
+}
+
+wipe_rundir() {
+	close_all_clients
+	rm -rf "$RUNDIR"
+	mkdir -p "$RUNDIR"
 }
 
 register_client() {

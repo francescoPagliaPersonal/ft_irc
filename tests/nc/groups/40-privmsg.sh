@@ -25,6 +25,11 @@ test_privmsg_channel_others() {
 		return 1
 	fi
 	irc_send pc "JOIN #pmsg"
+	if ! irc_expect pc "JOIN #pmsg"; then
+		irc_close pc
+		irc_close pd
+		return 1
+	fi
 	irc_send pd "JOIN #pmsg"
 	if ! irc_expect pd "JOIN #pmsg"; then
 		irc_close pc

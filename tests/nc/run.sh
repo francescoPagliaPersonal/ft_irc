@@ -7,9 +7,7 @@ NC_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 trap '' PIPE
 require_env
-mkdir -p "$RUNDIR"
-rm -rf "$RUNDIR"
-mkdir -p "$RUNDIR"
+wipe_rundir
 
 on_int() {
 	INTERRUPTED=1
