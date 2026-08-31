@@ -15,25 +15,10 @@
 #include "Response.hpp"
 #include "client_fixture.hpp"
 #include "fake_server.hpp"
-#include "irc.hpp"
 #include "harness.hpp"
+#include "test_cmd_helper.hpp"
 
 #include <string>
-
-namespace
-{
-	std::string	lastTo(const FakeServer &srv, Client *c)
-	{
-		if (srv.sent.empty())
-			return (std::string());
-		for (size_t i = srv.sent.size(); i > 0; --i)
-		{
-			if (srv.sent[i - 1].first == c)
-				return (srv.sent[i - 1].second);
-		}
-		return (std::string());
-	}
-}
 
 TEST(pass_ok)
 {
@@ -402,4 +387,37 @@ TEST(registration_delayed_by_cap)
 	reg.execute(srv, irc::string2Message("CAP END", &tc.client));
 	CHECK_EQ(srv.completeCalls, 1);
 	CHECK(!tc.client.getCap());
+}
+
+TEST(privmsg_unknown_channel)
+{
+	CommandRegistry	reg;
+	FakeServer		srv;
+	TestClient		tc;
+
+	reg.registerCmds();
+	registerClient(srv, tc, "alice");
+	reg.execute(srv, irc::string2Message("PRIVMSG #nope :hello", &tc.client));
+	CHECK_EQ(lastTo(srv, &tc.client),
+		std::string(":CoolServ 403 alice :No such channel.\r\n"));
+}
+
+TEST(privmsg_to_channel_broadcast)
+{
+	CommandRegistry	reg;
+	FakeServer		srv;
+	TestClient		alice;
+	TestClient		bob;
+
+	reg.registerCmds();
+	registerClient(srv, alice, "alice");
+	registerClient(srv, bob, "bob");
+	reg.execute(srv, irc::string2Message("JOIN #chan", &alice.client));
+	reg.execute(srv, irc::string2Message("JOIN #chan", &bob.client));
+	srv.sent.clear();
+	reg.execute(srv, irc::string2Message("PRIVMSG #chan :hello",
+			&alice.client));
+	CHECK(sentContains(srv, &bob.client,
+		":alice!user@0.0.0.0 PRIVMSG #chan :hello\r\n"));
+	CHECK(!sentContains(srv, &alice.client, "PRIVMSG #chan"));
 }

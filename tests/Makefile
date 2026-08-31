@@ -22,7 +22,11 @@ TEST_SRC	:= main.cpp \
 				test_args.cpp \
 				test_message.cpp \
 				test_policies.cpp \
-				test_commands.cpp
+				test_commands.cpp \
+				test_irc_helpers.cpp \
+				test_channel.cpp \
+				test_join.cpp \
+				test_invite.cpp
 
 MODE		?= reg
 OBJ_DIR		:= build/$(MODE)/
