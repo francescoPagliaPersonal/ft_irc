@@ -74,7 +74,7 @@ class Channel
 		irc::uint 	getLimit() const;
 		bitMask		getModes() const;
 		std::map<Client*, bitMask>	getMembersMap() const;
-		void getMembers(std::set<Client*>*) const;
+		void pushMembersToSet(std::set<Client *> *) const;
 		
 		// ---- set
 		void setTopic(const std::string&);

@@ -63,11 +63,12 @@ void Channel::invite(Client * client)
 }
 
 // Attempt to add each member of the channel to DEST.
-void Channel::getMembers(std::set<Client*>* dest) const
+
+void Channel::pushMembersToSet(std::set<Client *> * setName) const
 {
 	std::map<Client*, bitMask>::const_iterator it;
 	for (it = _members.begin(); it != _members.end(); it++)
 	{
-		dest->insert(it->first);
+		setName->insert(it->first);
 	}
 }

@@ -35,7 +35,7 @@ void processMemberships(Client* client, std::set<Client*>* contacts)
 		// this copies the whole map, potentially a lot of work
 		// channelMembers = (*it)->getMembersMap();
 		// let the channel do the work instead?
-		(*it)->getMembers(contacts);
+		(*it)->pushMembersToSet(contacts);
 		(*it)->removeClient(client);
 		client->removeChannel((*it));
 	}
