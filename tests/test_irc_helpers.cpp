@@ -42,9 +42,40 @@ TEST(is_name_compliant_nick_rules)
 {
 	CHECK(irc::isNameCompliant("alice"));
 	CHECK(irc::isNameCompliant(""));
+	CHECK(irc::isNameCompliant("Alice32"));
+	CHECK(irc::isNameCompliant(std::string(32, 'a')));
 	CHECK(!irc::isNameCompliant("a.b"));
 	CHECK(!irc::isNameCompliant("a*b"));
 	CHECK(!irc::isNameCompliant("#nick"));
+	CHECK(!irc::isNameCompliant("*star"));
 	CHECK(!irc::isNameCompliant(
 		"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
+}
+
+TEST(strsplit_drops_empty_when_not_kept)
+{
+	std::vector<std::string>	parts;
+
+	parts = irc::strSplit(",#a,#b,", ',', false);
+	CHECK_EQ(parts.size(), 2u);
+	CHECK_EQ(parts[0], std::string("#a"));
+	CHECK_EQ(parts[1], std::string("#b"));
+}
+
+TEST(strsplit_no_delimiter)
+{
+	std::vector<std::string>	parts;
+
+	parts = irc::strSplit("#only", ',', false);
+	CHECK_EQ(parts.size(), 1u);
+	CHECK_EQ(parts[0], std::string("#only"));
+}
+
+TEST(strsplit_double_comma_kept)
+{
+	std::vector<std::string>	parts;
+
+	parts = irc::strSplit("a,,b", ',', true);
+	CHECK_EQ(parts.size(), 3u);
+	CHECK_EQ(parts[1], std::string(""));
 }

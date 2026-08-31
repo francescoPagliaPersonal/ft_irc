@@ -173,3 +173,42 @@ TEST(message_argcount_trailing_only)
 	CHECK_EQ(msg.trailing, std::string("lag"));
 	CHECK_EQ(irc::argCount(msg), 1);
 }
+
+TEST(message_command_only)
+{
+	TestClient	tc;
+	Message		msg = irc::string2Message("PING", &tc.client);
+
+	CHECK(msg.flags & irc::MSG_HAS_COMMAND);
+	CHECK(!(msg.flags & irc::MSG_HAS_PARAMS));
+	CHECK(!(msg.flags & irc::MSG_HAS_TRAILING));
+	CHECK_EQ(msg.command, std::string("PING"));
+	CHECK_EQ(irc::argCount(msg), 0);
+}
+
+TEST(message_prefix_and_trailing)
+{
+	TestClient	tc;
+	Message		msg = irc::string2Message(":src PRIVMSG dest :hi there",
+			&tc.client);
+
+	CHECK(msg.flags & irc::MSG_HAS_PREFIX);
+	CHECK(msg.flags & irc::MSG_HAS_TRAILING);
+	CHECK_EQ(msg.prefix, std::string("src"));
+	CHECK_EQ(msg.command, std::string("PRIVMSG"));
+	CHECK_EQ(msg.params.size(), 1u);
+	CHECK_EQ(msg.params[0], std::string("dest"));
+	CHECK_EQ(msg.trailing, std::string("hi there"));
+	CHECK_EQ(irc::argCount(msg), 2);
+}
+
+TEST(message_param_and_trailing_both_count)
+{
+	TestClient	tc;
+	Message		msg = irc::string2Message("PING token :trail", &tc.client);
+
+	CHECK_EQ(msg.params.size(), 1u);
+	CHECK_EQ(msg.params[0], std::string("token"));
+	CHECK_EQ(msg.trailing, std::string("trail"));
+	CHECK_EQ(irc::argCount(msg), 2);
+}

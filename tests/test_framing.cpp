@@ -119,6 +119,53 @@ TEST(framing_crlf_only)
 	CHECK_EQ(msgs[0], std::string(""));
 }
 
+TEST(framing_oversized_clears_leftover)
+{
+	SocketTestClient			stc;
+	std::vector<std::string>	msgs;
+
+	msgs = stc.feedRecvSplit(repeatChar('x', 513));
+	CHECK_EQ(msgs.size(), 1u);
+	msgs = stc.feedRecvSplit("PING a\r\n");
+	CHECK_EQ(msgs.size(), 1u);
+	CHECK_EQ(msgs[0], std::string("PING a"));
+}
+
+TEST(framing_double_crlf)
+{
+	SocketTestClient			stc;
+	std::vector<std::string>	msgs;
+
+	msgs = stc.feedRecvSplit("PING a\r\n\r\n");
+	CHECK_EQ(msgs.size(), 2u);
+	CHECK_EQ(msgs[0], std::string("PING a"));
+	CHECK_EQ(msgs[1], std::string(""));
+}
+
+TEST(framing_cr_without_lf_is_leftover)
+{
+	SocketTestClient			stc;
+	std::vector<std::string>	msgs;
+
+	msgs = stc.feedRecvSplit("PING a\r");
+	CHECK(msgs.empty());
+	msgs = stc.feedRecvSplit("\n");
+	CHECK_EQ(msgs.size(), 1u);
+	CHECK_EQ(msgs[0], std::string("PING a"));
+}
+
+TEST(framing_512_with_crlf_is_one_message)
+{
+	SocketTestClient			stc;
+	std::vector<std::string>	msgs;
+	std::string					payload;
+
+	payload = repeatChar('x', 510) + "\r\n";
+	msgs = stc.feedRecvSplit(payload);
+	CHECK_EQ(msgs.size(), 1u);
+	CHECK_EQ(msgs[0].size(), 510u);
+}
+
 TEST(framing_partial_through_registry)
 {
 	SocketTestClient			stc;

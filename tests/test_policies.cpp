@@ -105,3 +105,29 @@ TEST(command_policy_blocks_handler)
 		irc::OK);
 	CHECK_EQ(g_dummy_calls, 1);
 }
+
+TEST(args_limit_trailing_counts)
+{
+	FakeServer		srv;
+	TestClient		tc;
+	ArgsLimitPlcy	plcy(2, 2);
+	Message			ok = irc::string2Message("FOO dest :text", &tc.client);
+	Message			few = irc::string2Message("FOO :text", &tc.client);
+
+	CHECK_EQ(plcy.check(ok, srv), irc::OK);
+	CHECK_EQ(plcy.check(few, srv), irc::NEEDMOREPARAMS);
+}
+
+TEST(command_registered_policy_blocks_before_args)
+{
+	FakeServer	srv;
+	TestClient	tc;
+	Command		cmd("PRIV", dummy_cmd);
+
+	g_dummy_calls = 0;
+	cmd.addPolicy(new AlreadyRegisteredPlcy(true));
+	cmd.addPolicy(new ArgsLimitPlcy(2, 2));
+	CHECK_EQ(cmd.execute(srv, irc::string2Message("PRIV", &tc.client)),
+		irc::NOTREGISTERED);
+	CHECK_EQ(g_dummy_calls, 0);
+}

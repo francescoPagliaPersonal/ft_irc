@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/24 10:48:00 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/31 09:40:00 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/31 11:20:00 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -420,4 +420,214 @@ TEST(privmsg_to_channel_broadcast)
 	CHECK(sentContains(srv, &bob.client,
 		":alice!user@0.0.0.0 PRIVMSG #chan :hello\r\n"));
 	CHECK(!sentContains(srv, &alice.client, "PRIVMSG #chan"));
+}
+
+TEST(pass_need_more_params)
+{
+	CommandRegistry	reg;
+	FakeServer		srv;
+	TestClient		tc;
+
+	reg.registerCmds();
+	reg.execute(srv, irc::string2Message("PASS", &tc.client));
+	CHECK_EQ(lastTo(srv, &tc.client),
+		std::string(":CoolServ 461 * PASS :Not enough parameters.\r\n"));
+}
+
+TEST(pass_too_many_params)
+{
+	CommandRegistry	reg;
+	FakeServer		srv;
+	TestClient		tc;
+
+	reg.registerCmds();
+	reg.execute(srv, irc::string2Message("PASS a b", &tc.client));
+	CHECK_EQ(lastTo(srv, &tc.client),
+		std::string(":CoolServ 42001 * :Too many parameter given\r\n"));
+}
+
+TEST(nick_max_length_ok)
+{
+	CommandRegistry	reg;
+	FakeServer		srv;
+	TestClient		tc;
+	std::string		nick(32, 'a');
+
+	reg.registerCmds();
+	reg.execute(srv, irc::string2Message("NICK " + nick, &tc.client));
+	CHECK_EQ(tc.client.getNick(), nick);
+	CHECK(tc.client.getRegistrationFlags() & REG_NICK);
+}
+
+TEST(nick_star_rejected)
+{
+	CommandRegistry	reg;
+	FakeServer		srv;
+	TestClient		tc;
+
+	reg.registerCmds();
+	reg.execute(srv, irc::string2Message("NICK *", &tc.client));
+	CHECK_EQ(lastTo(srv, &tc.client),
+		std::string(":CoolServ 432 * * :Erroneus nickname.\r\n"));
+}
+
+TEST(nick_change_after_registration)
+{
+	CommandRegistry	reg;
+	FakeServer		srv;
+	TestClient		tc;
+
+	reg.registerCmds();
+	registerClient(srv, tc, "alice");
+	reg.execute(srv, irc::string2Message("NICK bob", &tc.client));
+	CHECK_EQ(tc.client.getNick(), std::string("bob"));
+	CHECK_EQ(lastTo(srv, &tc.client),
+		std::string(":alice!user@0.0.0.0 NICK bob "
+			":alice has changed is nickname to bob\r\n"));
+}
+
+TEST(nick_same_as_own_after_registration)
+{
+	CommandRegistry	reg;
+	FakeServer		srv;
+	TestClient		tc;
+
+	reg.registerCmds();
+	registerClient(srv, tc, "alice");
+	srv.sent.clear();
+	reg.execute(srv, irc::string2Message("NICK alice", &tc.client));
+	CHECK_EQ(tc.client.getNick(), std::string("alice"));
+	CHECK_EQ(lastTo(srv, &tc.client),
+		std::string(":alice!user@0.0.0.0 NICK alice "
+			":alice has changed is nickname to alice\r\n"));
+}
+
+TEST(user_without_trailing_is_need_more)
+{
+	CommandRegistry	reg;
+	FakeServer		srv;
+	TestClient		tc;
+
+	reg.registerCmds();
+	reg.execute(srv, irc::string2Message("USER ident 0 *", &tc.client));
+	CHECK_EQ(lastTo(srv, &tc.client),
+		std::string(":CoolServ 461 * USER :Not enough parameters.\r\n"));
+	CHECK(!(tc.client.getRegistrationFlags() & REG_USER));
+}
+
+TEST(user_four_params_no_colon)
+{
+	CommandRegistry	reg;
+	FakeServer		srv;
+	TestClient		tc;
+
+	reg.registerCmds();
+	reg.execute(srv, irc::string2Message("USER ident 0 * real", &tc.client));
+	CHECK_EQ(tc.client.getUserName(), std::string("ident"));
+	CHECK(tc.client.getRealName().empty());
+	CHECK(tc.client.getRegistrationFlags() & REG_USER);
+}
+
+TEST(ping_need_more_params)
+{
+	CommandRegistry	reg;
+	FakeServer		srv;
+	TestClient		tc;
+
+	reg.registerCmds();
+	reg.execute(srv, irc::string2Message("PING", &tc.client));
+	CHECK_EQ(lastTo(srv, &tc.client),
+		std::string(":CoolServ 461 * PING :Not enough parameters.\r\n"));
+}
+
+TEST(ping_prefers_param_over_trailing)
+{
+	CommandRegistry	reg;
+	FakeServer		srv;
+	TestClient		tc;
+
+	reg.registerCmds();
+	reg.execute(srv, irc::string2Message("PING token :trail", &tc.client));
+	CHECK_EQ(lastTo(srv, &tc.client),
+		std::string(":CoolServ PONG CoolServ :token\r\n"));
+}
+
+TEST(cap_ls_after_registered_does_not_set_cap)
+{
+	CommandRegistry	reg;
+	FakeServer		srv;
+	TestClient		tc;
+
+	reg.registerCmds();
+	registerClient(srv, tc, "alice");
+	reg.execute(srv, irc::string2Message("CAP LS", &tc.client));
+	CHECK(!tc.client.getCap());
+	CHECK_EQ(lastTo(srv, &tc.client),
+		std::string(":CoolServ CAP alice LS :\r\n"));
+}
+
+TEST(privmsg_not_on_channel)
+{
+	CommandRegistry	reg;
+	FakeServer		srv;
+	TestClient		alice;
+	TestClient		bob;
+
+	reg.registerCmds();
+	registerClient(srv, alice, "alice");
+	registerClient(srv, bob, "bob");
+	reg.execute(srv, irc::string2Message("JOIN #chan", &alice.client));
+	srv.sent.clear();
+	reg.execute(srv, irc::string2Message("PRIVMSG #chan :hello", &bob.client));
+	CHECK_EQ(lastTo(srv, &bob.client),
+		std::string(":CoolServ 404 bob #chan :Cannot send to channel.\r\n"));
+	CHECK(!sentContains(srv, &alice.client, "PRIVMSG"));
+}
+
+TEST(privmsg_to_self)
+{
+	CommandRegistry	reg;
+	FakeServer		srv;
+	TestClient		tc;
+
+	reg.registerCmds();
+	registerClient(srv, tc, "alice");
+	reg.execute(srv, irc::string2Message("PRIVMSG alice :hello", &tc.client));
+	CHECK_EQ(srv.sent.size(), 1u);
+	CHECK_EQ(srv.sent[0].first, &tc.client);
+	CHECK_EQ(srv.sent[0].second,
+		std::string(":alice!user@0.0.0.0 PRIVMSG alice :hello\r\n"));
+}
+
+TEST(privmsg_multiple_nicks)
+{
+	CommandRegistry	reg;
+	FakeServer		srv;
+	TestClient		alice;
+	TestClient		bob;
+	TestClient		carol;
+
+	reg.registerCmds();
+	registerClient(srv, alice, "alice");
+	registerClient(srv, bob, "bob");
+	registerClient(srv, carol, "carol");
+	reg.execute(srv, irc::string2Message("PRIVMSG bob,carol :hi",
+			&alice.client));
+	CHECK(sentContains(srv, &bob.client,
+		":alice!user@0.0.0.0 PRIVMSG bob :hi\r\n"));
+	CHECK(sentContains(srv, &carol.client,
+		":alice!user@0.0.0.0 PRIVMSG carol :hi\r\n"));
+}
+
+TEST(privmsg_missing_target)
+{
+	CommandRegistry	reg;
+	FakeServer		srv;
+	TestClient		tc;
+
+	reg.registerCmds();
+	registerClient(srv, tc, "alice");
+	reg.execute(srv, irc::string2Message("PRIVMSG :hello", &tc.client));
+	CHECK_EQ(lastTo(srv, &tc.client),
+		std::string(":CoolServ 461 alice PRIVMSG :Not enough parameters.\r\n"));
 }

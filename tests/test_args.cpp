@@ -64,3 +64,19 @@ TEST(arg2password_missing_classes)
 	CHECK_THROW(arg2password("ab.."), std::invalid_argument);
 	CHECK_THROW(arg2password("12.."), std::invalid_argument);
 }
+
+TEST(arg2port_negative_and_dot)
+{
+	CHECK_THROW(arg2port("-1"), std::out_of_range);
+	CHECK_THROW(arg2port("6667.0"), std::invalid_argument);
+}
+
+TEST(arg2port_leading_whitespace_accepted)
+{
+	CHECK_EQ(arg2port(" 6667"), 6667);
+}
+
+TEST(arg2password_longer_valid)
+{
+	CHECK_EQ(arg2password("Hello1!"), std::string("Hello1!"));
+}

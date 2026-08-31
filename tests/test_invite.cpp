@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/31 10:33:00 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/31 10:33:00 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/31 11:20:00 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,48 @@ TEST(invite_success)
 		std::string(":CoolServ 341 alice bob #chan\r\n"));
 }
 
+TEST(invite_requires_registration)
+{
+	CommandRegistry	reg;
+	FakeServer		srv;
+	TestClient		tc;
+
+	reg.registerCmds();
+	reg.execute(srv, irc::string2Message("INVITE bob #chan", &tc.client));
+	CHECK_EQ(lastTo(srv, &tc.client),
+		std::string(":CoolServ 451 * :You have not registered\r\n"));
+}
+
+TEST(invite_need_more_params)
+{
+	CommandRegistry	reg;
+	FakeServer		srv;
+	TestClient		tc;
+
+	reg.registerCmds();
+	registerClient(srv, tc, "alice");
+	reg.execute(srv, irc::string2Message("INVITE bob", &tc.client));
+	CHECK_EQ(lastTo(srv, &tc.client),
+		std::string(":CoolServ 461 alice INVITE :Not enough parameters.\r\n"));
+}
+
+TEST(invite_success_exact_invitee_line)
+{
+	CommandRegistry	reg;
+	FakeServer		srv;
+	TestClient		alice;
+	TestClient		bob;
+
+	reg.registerCmds();
+	registerClient(srv, alice, "alice");
+	registerClient(srv, bob, "bob");
+	reg.execute(srv, irc::string2Message("JOIN #chan", &alice.client));
+	srv.sent.clear();
+	reg.execute(srv, irc::string2Message("INVITE bob #chan", &alice.client));
+	CHECK(sentContains(srv, &bob.client,
+		":alice!user@0.0.0.0 INVITE bob #chan\r\n"));
+}
+
 /* needs MODE
 TEST(invite_non_op_on_invite_only)
 {
@@ -144,3 +186,25 @@ TEST(invite_then_join_on_invite_only)
 	CHECK(srv.getChannelByTitle("#chan")->isMember(&bob.client));
 }
 */
+
+TEST(invite_regular_member_on_open_channel)
+{
+	CommandRegistry	reg;
+	FakeServer		srv;
+	TestClient		alice;
+	TestClient		bob;
+	TestClient		carol;
+
+	reg.registerCmds();
+	registerClient(srv, alice, "alice");
+	registerClient(srv, bob, "bob");
+	registerClient(srv, carol, "carol");
+	reg.execute(srv, irc::string2Message("JOIN #chan", &alice.client));
+	reg.execute(srv, irc::string2Message("JOIN #chan", &bob.client));
+	srv.sent.clear();
+	reg.execute(srv, irc::string2Message("INVITE carol #chan", &bob.client));
+	CHECK_EQ(lastTo(srv, &alice.client).find("INVITE"), std::string::npos);
+	CHECK(sentContains(srv, &carol.client, " INVITE carol #chan"));
+	CHECK_EQ(lastTo(srv, &bob.client),
+		std::string(":CoolServ 341 bob carol #chan\r\n"));
+}
