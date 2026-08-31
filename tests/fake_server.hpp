@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/24 10:48:00 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/24 10:48:00 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/31 09:08:03 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 # include "Client.hpp"
 # include "IServerCtrl.hpp"
-# include "ft_irc.hpp"
 
 # include <map>
 # include <string>

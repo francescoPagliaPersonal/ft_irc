@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/24 10:48:00 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/24 10:48:00 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/31 09:35:15 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "Message.hpp"
 #include "client_fixture.hpp"
 #include "fake_server.hpp"
-#include "ft_irc.hpp"
+#include "irc.hpp"
 #include "harness.hpp"
 #include "policies/AlreadyRegisteredPlcy.hpp"
 #include "policies/ArgsLimitPlcy.hpp"
@@ -26,7 +26,7 @@ namespace
 	int	dummy_cmd(IServerCtrl &, const Message &)
 	{
 		++g_dummy_calls;
-		return (rfc::OK);
+		return (irc::OK);
 	}
 }
 
@@ -35,9 +35,9 @@ TEST(args_limit_ok)
 	FakeServer		srv;
 	TestClient		tc;
 	ArgsLimitPlcy	plcy(1, 1);
-	Message			msg = string2Message("PASS secret", &tc.client);
+	Message			msg = irc::string2Message("PASS secret", &tc.client);
 
-	CHECK_EQ(plcy.check(msg, srv), rfc::OK);
+	CHECK_EQ(plcy.check(msg, srv), irc::OK);
 }
 
 TEST(args_limit_too_few)
@@ -45,9 +45,9 @@ TEST(args_limit_too_few)
 	FakeServer		srv;
 	TestClient		tc;
 	ArgsLimitPlcy	plcy(1, 1);
-	Message			msg = string2Message("PASS", &tc.client);
+	Message			msg = irc::string2Message("PASS", &tc.client);
 
-	CHECK_EQ(plcy.check(msg, srv), rfc::FEWPARAMS);
+	CHECK_EQ(plcy.check(msg, srv), irc::NEEDMOREPARAMS);
 }
 
 TEST(args_limit_too_many)
@@ -55,9 +55,9 @@ TEST(args_limit_too_many)
 	FakeServer		srv;
 	TestClient		tc;
 	ArgsLimitPlcy	plcy(1, 1);
-	Message			msg = string2Message("PASS a b", &tc.client);
+	Message			msg = irc::string2Message("PASS a b", &tc.client);
 
-	CHECK_EQ(plcy.check(msg, srv), rfc::MANYPARAMS);
+	CHECK_EQ(plcy.check(msg, srv), irc::MANYPARAMS);
 }
 
 TEST(already_registered_requires_done)
@@ -67,16 +67,16 @@ TEST(already_registered_requires_done)
 	AlreadyRegisteredPlcy	need_reg(true);
 	AlreadyRegisteredPlcy	need_unreg(false);
 
-	CHECK_EQ(need_reg.check(string2Message("PRIVMSG x :y", &tc.client), srv),
-		rfc::NOTREG);
-	CHECK_EQ(need_unreg.check(string2Message("PASS x", &tc.client), srv),
-		rfc::OK);
+	CHECK_EQ(need_reg.check(irc::string2Message("PRIVMSG x :y", &tc.client), srv),
+		irc::NOTREGISTERED);
+	CHECK_EQ(need_unreg.check(irc::string2Message("PASS x", &tc.client), srv),
+		irc::OK);
 
 	tc.client.setRegistrationFlags(REG_DONE);
-	CHECK_EQ(need_reg.check(string2Message("PRIVMSG x :y", &tc.client), srv),
-		rfc::OK);
-	CHECK_EQ(need_unreg.check(string2Message("PASS x", &tc.client), srv),
-		rfc::ALREADYREG);
+	CHECK_EQ(need_reg.check(irc::string2Message("PRIVMSG x :y", &tc.client), srv),
+		irc::OK);
+	CHECK_EQ(need_unreg.check(irc::string2Message("PASS x", &tc.client), srv),
+		irc::ALREADYREGISTERED);
 }
 
 TEST(already_registered_partial_is_not_done)
@@ -86,8 +86,8 @@ TEST(already_registered_partial_is_not_done)
 	AlreadyRegisteredPlcy	need_reg(true);
 
 	tc.client.setRegistrationFlags(REG_PASSWD);
-	CHECK_EQ(need_reg.check(string2Message("PRIVMSG x :y", &tc.client), srv),
-		rfc::NOTREG);
+	CHECK_EQ(need_reg.check(irc::string2Message("PRIVMSG x :y", &tc.client), srv),
+		irc::NOTREGISTERED);
 }
 
 TEST(command_policy_blocks_handler)
@@ -98,10 +98,10 @@ TEST(command_policy_blocks_handler)
 
 	g_dummy_calls = 0;
 	cmd.addPolicy(new ArgsLimitPlcy(1, 1));
-	CHECK_EQ(cmd.execute(srv, string2Message("FOO", &tc.client)),
-		rfc::FEWPARAMS);
+	CHECK_EQ(cmd.execute(srv, irc::string2Message("FOO", &tc.client)),
+		irc::NEEDMOREPARAMS);
 	CHECK_EQ(g_dummy_calls, 0);
-	CHECK_EQ(cmd.execute(srv, string2Message("FOO bar", &tc.client)),
-		rfc::OK);
+	CHECK_EQ(cmd.execute(srv, irc::string2Message("FOO bar", &tc.client)),
+		irc::OK);
 	CHECK_EQ(g_dummy_calls, 1);
 }
