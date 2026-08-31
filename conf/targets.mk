@@ -52,10 +52,11 @@ valb:		PART := bon
 valb:		build
 	$(EXEC_VALG)
 
-testsnc:	MODE := val
-testsnc:	PART := man
-testsnc:	build
-	$(NC_TESTS)
+tests:		MODE := val
+tests:		PART := man
+tests:		build
+	@$(MAKE) -C tests/unit build MODE=val
+	$(TESTS_MENU)
 
 print:
 	@printf "$(C_SAKURA_BLOSSOM)"
@@ -128,10 +129,7 @@ norm:
 	$(addprefix $(SRC_ROOT),$(filter %.c,$(SRC_MAN) $(SRC_BON))) \
 	$(NORM_HEADERS)
 
-test:
-	@$(MAKE) -C tests/unit
-
 .PHONY:	all bonus clean fclean re \
 		run runb asan asanb val valb \
 		print build libft norm \
-		nc chat test testsnc
+		nc chat tests

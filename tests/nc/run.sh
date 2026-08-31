@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Main live nc suite. Invoked by `make testsnc` with HOST/PORT/PASSWORD/BIN/VALGRIND_FLAGS.
+# Main live nc suite. Invoked from `make tests` (menu) with HOST/PORT/PASSWORD/BIN/VALGRIND_FLAGS.
 
 NC_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=helpers.sh
