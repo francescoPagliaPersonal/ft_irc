@@ -18,6 +18,84 @@
 # include <string>
 # include <vector>
 # include <cstddef>
+# include <cstdlib>
+# include <unistd.h>
+
+namespace testout
+{
+	inline bool	&colorEnabled()
+	{
+		static bool	initialized = false;
+		static bool	enabled = false;
+
+		if (!initialized)
+		{
+			const char	*no_color;
+
+			initialized = true;
+			no_color = std::getenv("NO_COLOR");
+			enabled = isatty(STDOUT_FILENO)
+				&& (no_color == 0 || no_color[0] == '\0');
+		}
+		return (enabled);
+	}
+
+	inline const char	*reset()
+	{
+		if (colorEnabled())
+			return ("\033[0m");
+		return ("");
+	}
+
+	inline const char	*bold()
+	{
+		if (colorEnabled())
+			return ("\033[1m");
+		return ("");
+	}
+
+	inline const char	*dim()
+	{
+		if (colorEnabled())
+			return ("\033[2m");
+		return ("");
+	}
+
+	inline const char	*banner()
+	{
+		if (colorEnabled())
+			return ("\033[38;2;255;158;100m");
+		return ("");
+	}
+
+	inline const char	*title()
+	{
+		if (colorEnabled())
+			return ("\033[38;2;235;219;178m");
+		return ("");
+	}
+
+	inline const char	*rule()
+	{
+		if (colorEnabled())
+			return ("\033[38;2;147;137;117m");
+		return ("");
+	}
+
+	inline const char	*pass()
+	{
+		if (colorEnabled())
+			return ("\033[38;2;152;195;121m");
+		return ("");
+	}
+
+	inline const char	*fail()
+	{
+		if (colorEnabled())
+			return ("\033[38;2;223;113;113m");
+		return ("");
+	}
+}
 
 struct TestFailure
 {

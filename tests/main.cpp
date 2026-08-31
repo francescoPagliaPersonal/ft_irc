@@ -61,12 +61,17 @@ namespace
 
 	void	printRule()
 	{
-		std::cout << "°°°°°°°°°°°°\n";
+		std::cout << testout::rule() << "°°°°°°°°°°°°"
+			<< testout::reset() << "\n";
 	}
 
 	void	printBanner()
 	{
-		std::cout << "   ft_irc  unit tests\n";
+		std::cout << testout::banner() << "   "
+			<< testout::title() << testout::bold()
+			<< "ft_irc" << testout::reset()
+			<< testout::banner() << "  unit tests"
+			<< testout::reset() << "\n";
 		printRule();
 		std::cout << "\n";
 	}
@@ -75,8 +80,10 @@ namespace
 	{
 		for (size_t i = 0; i < failures.size(); ++i)
 		{
-			std::cout << "        " << failures[i].file << ":"
-				<< failures[i].line << "  " << failures[i].message;
+			std::cout << testout::dim() << testout::fail()
+				<< "        " << failures[i].file << ":"
+				<< failures[i].line << "  " << failures[i].message
+				<< testout::reset();
 			if (!failures[i].message.empty()
 				&& failures[i].message[failures[i].message.size() - 1] != '\n')
 				std::cout << "\n";
@@ -93,11 +100,13 @@ namespace
 		if (failCount() != before)
 		{
 			++suite_failed;
-			std::cout << "  FAIL  " << test.name << "\n";
+			std::cout << "  " << testout::fail() << "FAIL"
+				<< testout::reset() << "  " << test.name << "\n";
 			printFailureDetails(failMessages());
 			return (false);
 		}
-		std::cout << "  PASS  " << test.name << "\n";
+		std::cout << "  " << testout::pass() << "PASS"
+			<< testout::reset() << "  " << test.name << "\n";
 		return (true);
 	}
 
@@ -110,7 +119,10 @@ namespace
 
 		if (cases.empty())
 			return ;
-		std::cout << "── " << title << "  (" << cases.size() << ") ──\n";
+		std::cout << testout::banner() << "── "
+			<< testout::title() << title
+			<< testout::banner() << "  (" << cases.size() << ") ──"
+			<< testout::reset() << "\n";
 		suite_failed = 0;
 		for (size_t i = 0; i < cases.size(); ++i)
 			runTest(*cases[i], suite_failed);
@@ -190,8 +202,19 @@ int	main()
 	printBanner();
 	printSuites(suites, total_failed, total_tests);
 	printRule();
-	std::cout << "  " << (total_tests - static_cast<size_t>(total_failed))
-		<< " passed, " << total_failed << " failed, "
-		<< total_tests << " total\n";
+	if (total_failed == 0)
+	{
+		std::cout << testout::pass() << "  "
+			<< (total_tests - static_cast<size_t>(total_failed))
+			<< " passed, " << total_failed << " failed, "
+			<< total_tests << " total" << testout::reset() << "\n";
+	}
+	else
+	{
+		std::cout << testout::fail() << "  "
+			<< (total_tests - static_cast<size_t>(total_failed))
+			<< " passed, " << total_failed << " failed, "
+			<< total_tests << " total" << testout::reset() << "\n";
+	}
 	return (failCount() ? 1 : 0);
 }
