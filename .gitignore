@@ -3,6 +3,7 @@ en.subject.*
 docs/
 .cursor/
 test_irc
+tests/nc/.run/
 
 # Prerequisites
 *.d
