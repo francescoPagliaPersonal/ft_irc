@@ -9,12 +9,11 @@ test_privmsg_nick() {
 		return 1
 	fi
 	irc_send pa "PRIVMSG bobp1 :hello bob"
-	sleep "$IRC_WAIT"
-	local out
-	out=$(irc_recv pb)
+	irc_expect pb "PRIVMSG bobp1 :hello bob"
+	local rc=$?
 	irc_close pa
 	irc_close pb
-	assert_contains "$out" "PRIVMSG bobp1 :hello bob"
+	return "$rc"
 }
 
 test_privmsg_channel_others() {
@@ -27,23 +26,27 @@ test_privmsg_channel_others() {
 	fi
 	irc_send pc "JOIN #pmsg"
 	irc_send pd "JOIN #pmsg"
-	sleep "$IRC_WAIT"
+	if ! irc_expect pd "JOIN #pmsg"; then
+		irc_close pc
+		irc_close pd
+		return 1
+	fi
 	irc_send pc "PRIVMSG #pmsg :chan hello"
-	sleep "$IRC_WAIT"
-	local bout aout
-	bout=$(irc_recv pd)
-	aout=$(irc_recv pc)
+	if ! irc_expect pd "PRIVMSG #pmsg :chan hello"; then
+		irc_close pc
+		irc_close pd
+		return 1
+	fi
+	assert_not_contains "$(irc_recv pc)" "PRIVMSG #pmsg :chan hello"
+	local rc=$?
 	irc_close pc
 	irc_close pd
-	assert_contains "$bout" "PRIVMSG #pmsg :chan hello" \
-		&& assert_not_contains "$aout" "PRIVMSG #pmsg :chan hello"
+	return "$rc"
 }
 
 test_nosuchnick() {
-	local out
-	out=$(oneshot "PASS $PASSWORD" "NICK alicep3" "USER alicep3 0 * :x" \
-		"PRIVMSG nosuch :hi")
-	assert_contains "$out" " 401 "
+	oneshot_expect " 401 " "PASS $PASSWORD" "NICK alicep3" "USER alicep3 0 * :x" \
+		"PRIVMSG nosuch :hi"
 }
 
 test_not_on_channel() {
@@ -51,12 +54,15 @@ test_not_on_channel() {
 		return 1
 	fi
 	irc_send pe "JOIN #nmem"
-	sleep "$IRC_WAIT"
-	local out
-	out=$(oneshot "PASS $PASSWORD" "NICK alicep4" "USER alicep4 0 * :x" \
-		"PRIVMSG #nmem :nope")
+	if ! irc_expect pe "JOIN #nmem"; then
+		irc_close pe
+		return 1
+	fi
+	oneshot_expect " 404 " "PASS $PASSWORD" "NICK alicep4" "USER alicep4 0 * :x" \
+		"PRIVMSG #nmem :nope"
+	local rc=$?
 	irc_close pe
-	assert_contains "$out" " 404 "
+	return "$rc"
 }
 
 test "privmsg_nick" test_privmsg_nick

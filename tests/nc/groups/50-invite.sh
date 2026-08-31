@@ -9,29 +9,32 @@ test_invite_ok() {
 		return 1
 	fi
 	irc_send ia "JOIN #inv1"
-	sleep "$IRC_WAIT"
+	if ! irc_expect ia "JOIN #inv1"; then
+		irc_close ia
+		irc_close ib
+		return 1
+	fi
 	irc_send ia "INVITE bobi1 #inv1"
-	sleep "$IRC_WAIT"
-	local aout bout
-	aout=$(irc_recv ia)
-	bout=$(irc_recv ib)
+	if ! irc_expect ia " 341 "; then
+		irc_close ia
+		irc_close ib
+		return 1
+	fi
+	irc_expect ib "INVITE"
+	local rc=$?
 	irc_close ia
 	irc_close ib
-	assert_contains "$aout" " 341 " && assert_contains "$bout" "INVITE"
+	return "$rc"
 }
 
 test_invite_nosuchnick() {
-	local out
-	out=$(oneshot "PASS $PASSWORD" "NICK alicei2" "USER alicei2 0 * :x" \
-		"JOIN #inv2" "INVITE ghosty #inv2")
-	assert_contains "$out" " 401 "
+	oneshot_expect " 401 " "PASS $PASSWORD" "NICK alicei2" "USER alicei2 0 * :x" \
+		"JOIN #inv2" "INVITE ghosty #inv2"
 }
 
 test_invite_nosuchchannel() {
-	local out
-	out=$(oneshot "PASS $PASSWORD" "NICK alicei3" "USER alicei3 0 * :x" \
-		"INVITE alicei3 #zzzz")
-	assert_contains "$out" " 403 "
+	oneshot_expect " 403 " "PASS $PASSWORD" "NICK alicei3" "USER alicei3 0 * :x" \
+		"INVITE alicei3 #zzzz"
 }
 
 test_invite_notonchannel() {
@@ -48,15 +51,19 @@ test_invite_notonchannel() {
 		return 1
 	fi
 	irc_send ic "JOIN #inv3"
-	sleep "$IRC_WAIT"
+	if ! irc_expect ic "JOIN #inv3"; then
+		irc_close ic
+		irc_close id
+		irc_close ie
+		return 1
+	fi
 	irc_send id "INVITE caroli4 #inv3"
-	sleep "$IRC_WAIT"
-	local out
-	out=$(irc_recv id)
+	irc_expect id " 442 "
+	local rc=$?
 	irc_close ic
 	irc_close id
 	irc_close ie
-	assert_contains "$out" " 442 "
+	return "$rc"
 }
 
 test_invite_useronchannel() {
@@ -69,14 +76,17 @@ test_invite_useronchannel() {
 	fi
 	irc_send if "JOIN #inv4"
 	irc_send ig "JOIN #inv4"
-	sleep "$IRC_WAIT"
+	if ! irc_expect ig "JOIN #inv4"; then
+		irc_close if
+		irc_close ig
+		return 1
+	fi
 	irc_send if "INVITE bobi5 #inv4"
-	sleep "$IRC_WAIT"
-	local out
-	out=$(irc_recv if)
+	irc_expect if " 443 "
+	local rc=$?
 	irc_close if
 	irc_close ig
-	assert_contains "$out" " 443 "
+	return "$rc"
 }
 
 test "invite_ok" test_invite_ok

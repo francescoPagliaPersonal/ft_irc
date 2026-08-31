@@ -9,16 +9,23 @@ test_mode_i_join_denied() {
 		return 1
 	fi
 	irc_send ma "JOIN #mod1"
-	sleep "$IRC_WAIT"
+	if ! irc_expect ma "JOIN #mod1"; then
+		irc_close ma
+		irc_close mb
+		return 1
+	fi
 	irc_send ma "MODE #mod1 +i"
-	sleep "$IRC_WAIT"
+	if ! irc_expect ma "MODE #mod1 +i"; then
+		irc_close ma
+		irc_close mb
+		return 1
+	fi
 	irc_send mb "JOIN #mod1"
-	sleep "$IRC_WAIT"
-	local out
-	out=$(irc_recv mb)
+	irc_expect mb " 473 "
+	local rc=$?
 	irc_close ma
 	irc_close mb
-	assert_contains "$out" " 473 "
+	return "$rc"
 }
 
 test_mode_k_bad_key() {
@@ -30,16 +37,23 @@ test_mode_k_bad_key() {
 		return 1
 	fi
 	irc_send mc "JOIN #mod2"
-	sleep "$IRC_WAIT"
+	if ! irc_expect mc "JOIN #mod2"; then
+		irc_close mc
+		irc_close md
+		return 1
+	fi
 	irc_send mc "MODE #mod2 +k secret"
-	sleep "$IRC_WAIT"
+	if ! irc_expect mc "MODE #mod2 +k"; then
+		irc_close mc
+		irc_close md
+		return 1
+	fi
 	irc_send md "JOIN #mod2 wrong"
-	sleep "$IRC_WAIT"
-	local out
-	out=$(irc_recv md)
+	irc_expect md " 475 "
+	local rc=$?
 	irc_close mc
 	irc_close md
-	assert_contains "$out" " 475 "
+	return "$rc"
 }
 
 test_mode_l_full() {
@@ -56,18 +70,33 @@ test_mode_l_full() {
 		return 1
 	fi
 	irc_send me "JOIN #mod3"
-	sleep "$IRC_WAIT"
+	if ! irc_expect me "JOIN #mod3"; then
+		irc_close me
+		irc_close mf
+		irc_close mg
+		return 1
+	fi
 	irc_send me "MODE #mod3 +l 2"
+	if ! irc_expect me "MODE #mod3 +l"; then
+		irc_close me
+		irc_close mf
+		irc_close mg
+		return 1
+	fi
 	irc_send mf "JOIN #mod3"
-	sleep "$IRC_WAIT"
+	if ! irc_expect mf "JOIN #mod3"; then
+		irc_close me
+		irc_close mf
+		irc_close mg
+		return 1
+	fi
 	irc_send mg "JOIN #mod3"
-	sleep "$IRC_WAIT"
-	local out
-	out=$(irc_recv mg)
+	irc_expect mg " 471 "
+	local rc=$?
 	irc_close me
 	irc_close mf
 	irc_close mg
-	assert_contains "$out" " 471 "
+	return "$rc"
 }
 
 test_mode_o_give_take() {
@@ -80,14 +109,17 @@ test_mode_o_give_take() {
 	fi
 	irc_send mh "JOIN #mod4"
 	irc_send mi "JOIN #mod4"
-	sleep "$IRC_WAIT"
+	if ! irc_expect mi "JOIN #mod4"; then
+		irc_close mh
+		irc_close mi
+		return 1
+	fi
 	irc_send mh "MODE #mod4 +o bobm4"
-	sleep "$IRC_WAIT"
-	local out
-	out=$(irc_recv mi)
+	irc_expect mi "MODE #mod4 +o bobm4"
+	local rc=$?
 	irc_close mh
 	irc_close mi
-	assert_contains "$out" "MODE #mod4 +o bobm4"
+	return "$rc"
 }
 
 test "mode_i_join_denied" test_mode_i_join_denied

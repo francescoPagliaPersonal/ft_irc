@@ -10,13 +10,16 @@ test_two_clients_ping() {
 	fi
 	irc_send xa "PING :one"
 	irc_send xb "PING :two"
-	sleep "$IRC_WAIT"
-	local aout bout
-	aout=$(irc_recv xa)
-	bout=$(irc_recv xb)
+	if ! irc_expect xa "PONG"; then
+		irc_close xa
+		irc_close xb
+		return 1
+	fi
+	irc_expect xb "PONG"
+	local rc=$?
 	irc_close xa
 	irc_close xb
-	assert_contains "$aout" "PONG" && assert_contains "$bout" "PONG"
+	return "$rc"
 }
 
 test_three_clients() {
@@ -35,17 +38,25 @@ test_three_clients() {
 	irc_send xc "JOIN #mlt1"
 	irc_send xd "JOIN #mlt1"
 	irc_send xe "JOIN #mlt1"
-	sleep "$IRC_WAIT"
+	if ! irc_expect xe "JOIN #mlt1"; then
+		irc_close xc
+		irc_close xd
+		irc_close xe
+		return 1
+	fi
 	irc_send xc "PRIVMSG #mlt1 :hi all"
-	sleep "$IRC_WAIT"
-	local dout eout
-	dout=$(irc_recv xd)
-	eout=$(irc_recv xe)
+	if ! irc_expect xd "PRIVMSG #mlt1 :hi all"; then
+		irc_close xc
+		irc_close xd
+		irc_close xe
+		return 1
+	fi
+	irc_expect xe "PRIVMSG #mlt1 :hi all"
+	local rc=$?
 	irc_close xc
 	irc_close xd
 	irc_close xe
-	assert_contains "$dout" "PRIVMSG #mlt1 :hi all" \
-		&& assert_contains "$eout" "PRIVMSG #mlt1 :hi all"
+	return "$rc"
 }
 
 test_disconnect_one_other_still_works() {
@@ -57,13 +68,11 @@ test_disconnect_one_other_still_works() {
 		return 1
 	fi
 	irc_close xf
-	sleep "$IRC_WAIT"
 	irc_send xg "PING :stillhere"
-	sleep "$IRC_WAIT"
-	local out
-	out=$(irc_recv xg)
+	irc_expect xg "PONG"
+	local rc=$?
 	irc_close xg
-	assert_contains "$out" "PONG"
+	return "$rc"
 }
 
 test "two_clients_ping" test_two_clients_ping

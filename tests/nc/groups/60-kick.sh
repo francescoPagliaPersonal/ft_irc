@@ -10,16 +10,22 @@ test_kick_by_op() {
 	fi
 	irc_send ka "JOIN #kck1"
 	irc_send kb "JOIN #kck1"
-	sleep "$IRC_WAIT"
+	if ! irc_expect kb "JOIN #kck1"; then
+		irc_close ka
+		irc_close kb
+		return 1
+	fi
 	irc_send ka "KICK #kck1 bobk1 :out"
-	sleep "$IRC_WAIT"
-	local aout bout
-	aout=$(irc_recv ka)
-	bout=$(irc_recv kb)
+	if ! irc_expect ka "KICK #kck1 bobk1"; then
+		irc_close ka
+		irc_close kb
+		return 1
+	fi
+	irc_expect kb "KICK #kck1 bobk1"
+	local rc=$?
 	irc_close ka
 	irc_close kb
-	assert_contains "$aout" "KICK #kck1 bobk1" \
-		&& assert_contains "$bout" "KICK #kck1 bobk1"
+	return "$rc"
 }
 
 test_kick_non_op() {
@@ -32,21 +38,22 @@ test_kick_non_op() {
 	fi
 	irc_send kc "JOIN #kck2"
 	irc_send kd "JOIN #kck2"
-	sleep "$IRC_WAIT"
+	if ! irc_expect kd "JOIN #kck2"; then
+		irc_close kc
+		irc_close kd
+		return 1
+	fi
 	irc_send kd "KICK #kck2 alicek2 :nope"
-	sleep "$IRC_WAIT"
-	local out
-	out=$(irc_recv kd)
+	irc_expect kd " 482 "
+	local rc=$?
 	irc_close kc
 	irc_close kd
-	assert_contains "$out" " 482 "
+	return "$rc"
 }
 
 test_kick_not_on_channel() {
-	local out
-	out=$(oneshot "PASS $PASSWORD" "NICK alicek3" "USER alicek3 0 * :x" \
-		"KICK #kck3 nobody :x")
-	assert_contains "$out" " 442 " || assert_contains "$out" " 403 "
+	oneshot_expect_any " 442 " " 403 " "PASS $PASSWORD" "NICK alicek3" \
+		"USER alicek3 0 * :x" "KICK #kck3 nobody :x"
 }
 
 test "kick_by_op" test_kick_by_op

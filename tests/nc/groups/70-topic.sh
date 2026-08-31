@@ -5,13 +5,15 @@ test_topic_set_view() {
 		return 1
 	fi
 	irc_send ta "JOIN #top1"
-	sleep "$IRC_WAIT"
+	if ! irc_expect ta "JOIN #top1"; then
+		irc_close ta
+		return 1
+	fi
 	irc_send ta "TOPIC #top1 :hello topic"
-	sleep "$IRC_WAIT"
-	local out
-	out=$(irc_recv ta)
+	irc_expect ta " 332 " "hello topic"
+	local rc=$?
 	irc_close ta
-	assert_contains "$out" " 332 " && assert_contains "$out" "hello topic"
+	return "$rc"
 }
 
 test_topic_empty() {
@@ -19,13 +21,15 @@ test_topic_empty() {
 		return 1
 	fi
 	irc_send tb "JOIN #top2"
-	sleep "$IRC_WAIT"
+	if ! irc_expect tb "JOIN #top2"; then
+		irc_close tb
+		return 1
+	fi
 	irc_send tb "TOPIC #top2"
-	sleep "$IRC_WAIT"
-	local out
-	out=$(irc_recv tb)
+	irc_expect tb " 331 "
+	local rc=$?
 	irc_close tb
-	assert_contains "$out" " 331 "
+	return "$rc"
 }
 
 test_topic_non_op_plus_t() {
@@ -37,17 +41,29 @@ test_topic_non_op_plus_t() {
 		return 1
 	fi
 	irc_send tc "JOIN #top3"
-	sleep "$IRC_WAIT"
+	if ! irc_expect tc "JOIN #top3"; then
+		irc_close tc
+		irc_close td
+		return 1
+	fi
 	irc_send tc "MODE #top3 +t"
+	if ! irc_expect tc "MODE #top3 +t"; then
+		irc_close tc
+		irc_close td
+		return 1
+	fi
 	irc_send td "JOIN #top3"
-	sleep "$IRC_WAIT"
+	if ! irc_expect td "JOIN #top3"; then
+		irc_close tc
+		irc_close td
+		return 1
+	fi
 	irc_send td "TOPIC #top3 :hijack"
-	sleep "$IRC_WAIT"
-	local out
-	out=$(irc_recv td)
+	irc_expect td " 482 "
+	local rc=$?
 	irc_close tc
 	irc_close td
-	assert_contains "$out" " 482 "
+	return "$rc"
 }
 
 test "topic_set_view" test_topic_set_view

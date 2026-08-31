@@ -7,11 +7,10 @@ test_join_creates_op() {
 		return 1
 	fi
 	irc_send jo "JOIN #jop1"
-	local out
-	out=$(irc_recv jo)
+	irc_expect jo " 353 " "@alicej1" " 366 "
+	local rc=$?
 	irc_close jo
-	assert_contains "$out" " 353 " && assert_contains "$out" "@alicej1" \
-		&& assert_contains "$out" " 366 "
+	return "$rc"
 }
 
 test_second_is_regular() {
@@ -23,20 +22,26 @@ test_second_is_regular() {
 		return 1
 	fi
 	irc_send ja "JOIN #jop2"
-	sleep "$IRC_WAIT"
+	if ! irc_expect ja " 353 "; then
+		irc_close ja
+		irc_close jb
+		return 1
+	fi
 	irc_send jb "JOIN #jop2"
-	local out
-	out=$(irc_recv jb)
+	if ! irc_expect jb " 353 " "bobjoin" " 366 "; then
+		irc_close ja
+		irc_close jb
+		return 1
+	fi
+	assert_not_contains "$LAST_GOT" "@bobjoin"
+	local rc=$?
 	irc_close ja
 	irc_close jb
-	assert_contains "$out" " 353 " && assert_contains "$out" "bobjoin" \
-		&& assert_not_contains "$out" "@bobjoin"
+	return "$rc"
 }
 
 test_bad_mask() {
-	local out
-	out=$(oneshot "PASS $PASSWORD" "NICK badmask" "USER badmask 0 * :x" "JOIN nohash")
-	assert_contains "$out" " 476 "
+	oneshot_expect " 476 " "PASS $PASSWORD" "NICK badmask" "USER badmask 0 * :x" "JOIN nohash"
 }
 
 test_join_broadcast() {
@@ -48,14 +53,17 @@ test_join_broadcast() {
 		return 1
 	fi
 	irc_send jc "JOIN #jbc1"
-	sleep "$IRC_WAIT"
+	if ! irc_expect jc "JOIN #jbc1"; then
+		irc_close jc
+		irc_close jd
+		return 1
+	fi
 	irc_send jd "JOIN #jbc1"
-	sleep "$IRC_WAIT"
-	local out
-	out=$(irc_recv jc)
+	irc_expect jc "davej" "JOIN #jbc1"
+	local rc=$?
 	irc_close jc
 	irc_close jd
-	assert_contains "$out" "davej" && assert_contains "$out" "JOIN #jbc1"
+	return "$rc"
 }
 
 test "join_creates_op" test_join_creates_op

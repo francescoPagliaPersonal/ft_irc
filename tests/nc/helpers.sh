@@ -2,7 +2,8 @@
 
 NC_DIR="${NC_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)}"
 RUNDIR="${NC_DIR}/.run"
-IRC_WAIT="${IRC_WAIT:-1.2}"
+NC_TIMEOUT="${NC_TIMEOUT:-1}"
+NC_POLL="${NC_POLL:-0.01}"
 
 : "${C_RESET:=\033[0m}"
 : "${C_BOLD:=\033[1m}"
@@ -251,11 +252,24 @@ evaluate_valgrind() {
 	return 0
 }
 
-# --- nc I/O -----------------------------------------------------------------
+# --- time -------------------------------------------------------------------
 
-irc() {
-	$NC -C -w 8 "$HOST" "$PORT"
+_now() {
+	if [ -n "${EPOCHREALTIME:-}" ]; then
+		printf '%s' "$EPOCHREALTIME"
+	else
+		date +%s.%N
+	fi
 }
+
+_timed_out() {
+	awk -v s="$1" -v t="$2" -v n="$3" 'BEGIN { exit ((n - s) >= t) ? 0 : 1 }'
+}
+
+# --- nc I/O -----------------------------------------------------------------
+# nc stays open and writes into a capture file. Tests poll that file and
+# kill nc as soon as the expected (or forbidden) text shows up. NC_TIMEOUT
+# is only the deadline for silence / no-match.
 
 irc_open() {
 	local id="$1"
@@ -271,7 +285,6 @@ irc_open() {
 	$NC -C -w 60 "$HOST" "$PORT" <"$dir/in" >"$dir/out" &
 	echo $! >"$dir/pid"
 	echo "$id" >>"$RUNDIR/clients"
-	sleep 0.2
 }
 
 irc_send() {
@@ -282,10 +295,90 @@ irc_send() {
 	printf '%s\n' "$*" >&"$fd" 2>/dev/null || return 1
 }
 
+# Write bytes as-is (no extra newline). For framing tests.
+irc_write() {
+	local id="$1"
+	shift
+	local fd
+	fd=$(cat "$RUNDIR/cli_$id/wfd" 2>/dev/null) || return 1
+	printf '%s' "$*" >&"$fd" 2>/dev/null || return 1
+}
+
 irc_recv() {
 	local id="$1"
-	sleep "$IRC_WAIT"
 	cat "$RUNDIR/cli_$id/out" 2>/dev/null || true
+}
+
+# Return as soon as every needle is present in the capture; else wait NC_TIMEOUT.
+irc_expect() {
+	local id="$1"
+	shift
+	local file="$RUNDIR/cli_$id/out"
+	local start n ok
+	FAIL_HINT="expected to contain: $*"
+	start=$(_now)
+	while true; do
+		ok=1
+		for n in "$@"; do
+			if ! grep -q -- "$n" "$file" 2>/dev/null; then
+				ok=0
+				break
+			fi
+		done
+		if [ "$ok" -eq 1 ]; then
+			LAST_GOT=$(cat "$file")
+			return 0
+		fi
+		if _timed_out "$start" "$NC_TIMEOUT" "$(_now)"; then
+			LAST_GOT=$(cat "$file" 2>/dev/null || true)
+			return 1
+		fi
+		sleep "$NC_POLL"
+	done
+}
+
+# Return as soon as any needle is present; else wait NC_TIMEOUT.
+irc_expect_any() {
+	local id="$1"
+	shift
+	local file="$RUNDIR/cli_$id/out"
+	local start n
+	FAIL_HINT="expected one of: $*"
+	start=$(_now)
+	while true; do
+		for n in "$@"; do
+			if grep -q -- "$n" "$file" 2>/dev/null; then
+				LAST_GOT=$(cat "$file")
+				return 0
+			fi
+		done
+		if _timed_out "$start" "$NC_TIMEOUT" "$(_now)"; then
+			LAST_GOT=$(cat "$file" 2>/dev/null || true)
+			return 1
+		fi
+		sleep "$NC_POLL"
+	done
+}
+
+# Fail as soon as needle appears. Pass only after NC_TIMEOUT with no match.
+irc_expect_absent() {
+	local id="$1"
+	local needle="$2"
+	local file="$RUNDIR/cli_$id/out"
+	local start
+	FAIL_HINT="expected NOT to contain: ${needle}"
+	start=$(_now)
+	while true; do
+		if grep -q -- "$needle" "$file" 2>/dev/null; then
+			LAST_GOT=$(cat "$file")
+			return 1
+		fi
+		if _timed_out "$start" "$NC_TIMEOUT" "$(_now)"; then
+			LAST_GOT=$(cat "$file" 2>/dev/null || true)
+			return 0
+		fi
+		sleep "$NC_POLL"
+	done
 }
 
 irc_close() {
@@ -323,8 +416,38 @@ register_client() {
 	irc_send "$id" "PASS $PASSWORD"
 	irc_send "$id" "NICK $nick"
 	irc_send "$id" "USER $nick 0 * :$nick"
-	sleep "$IRC_WAIT"
-	grep -q " 001 " "$RUNDIR/cli_$id/out"
+	irc_expect "$id" " 001 "
+}
+
+# Send commands on a throwaway client; return when needle(s) match.
+oneshot_expect() {
+	local needle="$1"
+	shift
+	local id="_os"
+	irc_open "$id"
+	local c
+	for c in "$@"; do
+		irc_send "$id" "$c" || { irc_close "$id"; return 1; }
+	done
+	irc_expect "$id" "$needle"
+	local rc=$?
+	irc_close "$id"
+	return "$rc"
+}
+
+oneshot_expect_any() {
+	local id="_os"
+	local n1="$1" n2="$2"
+	shift 2
+	irc_open "$id"
+	local c
+	for c in "$@"; do
+		irc_send "$id" "$c" || { irc_close "$id"; return 1; }
+	done
+	irc_expect_any "$id" "$n1" "$n2"
+	local rc=$?
+	irc_close "$id"
+	return "$rc"
 }
 
 # --- assertions / test runner ----------------------------------------------
@@ -448,8 +571,4 @@ group_end() {
 		printf ', %s crash' "$GROUP_CRASH"
 	fi
 	printf '%b\n' "$(cb "$C_RESET")"
-}
-
-oneshot() {
-	( printf '%s\n' "$@"; sleep "$IRC_WAIT" ) | irc
 }

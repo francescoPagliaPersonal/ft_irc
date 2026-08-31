@@ -1,46 +1,36 @@
 group_begin "AUTH"
 
 test_pass_ok() {
-	local out
-	out=$(oneshot "PASS $PASSWORD" "NICK aliceok" "USER aliceok 0 * :Alice")
-	assert_contains "$out" " 001 "
+	oneshot_expect " 001 " "PASS $PASSWORD" "NICK aliceok" "USER aliceok 0 * :Alice"
 }
 
 test_pass_mismatch() {
-	local out
-	out=$(oneshot "PASS wrongpw" "NICK alicebad" "USER alicebad 0 * :Alice")
-	assert_contains "$out" " 464 "
+	oneshot_expect " 464 " "PASS wrongpw" "NICK alicebad" "USER alicebad 0 * :Alice"
 }
 
 test_nick_in_use() {
-	local out
 	if ! register_client a1 aliceuse; then
 		FAIL_HINT="first client did not get 001"
 		LAST_GOT=$(irc_recv a1)
 		return 1
 	fi
-	out=$(oneshot "PASS $PASSWORD" "NICK aliceuse" "USER otheru 0 * :Other")
+	oneshot_expect " 433 " "PASS $PASSWORD" "NICK aliceuse" "USER otheru 0 * :Other"
+	local rc=$?
 	irc_close a1
-	assert_contains "$out" " 433 "
+	return "$rc"
 }
 
 test_second_user() {
-	local out
-	out=$(oneshot "PASS $PASSWORD" "NICK alicereg" "USER alicereg 0 * :A" \
-		"USER alicereg 0 * :again")
-	assert_contains "$out" " 462 "
+	oneshot_expect " 462 " "PASS $PASSWORD" "NICK alicereg" "USER alicereg 0 * :A" \
+		"USER alicereg 0 * :again"
 }
 
 test_join_before_register() {
-	local out
-	out=$(oneshot "JOIN #lobby")
-	assert_contains "$out" " 451 "
+	oneshot_expect " 451 " "JOIN #lobby"
 }
 
 test_nick_erroneous() {
-	local out
-	out=$(oneshot "PASS $PASSWORD" "NICK #badnick")
-	assert_contains "$out" " 432 "
+	oneshot_expect " 432 " "PASS $PASSWORD" "NICK #badnick"
 }
 
 test "pass_ok" test_pass_ok
