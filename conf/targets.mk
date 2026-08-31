@@ -123,7 +123,10 @@ norm:
 	$(addprefix $(SRC_ROOT),$(filter %.c,$(SRC_MAN) $(SRC_BON))) \
 	$(NORM_HEADERS)
 
+test:
+	@$(MAKE) -C tests/unit
+
 .PHONY:	all bonus clean fclean re \
 		run runb asan asanb val valb \
 		print build libft norm \
-		nc chat
+		nc chat test
