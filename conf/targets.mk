@@ -124,7 +124,7 @@ norm:
 	$(NORM_HEADERS)
 
 test:
-	@$(MAKE) -C tests
+	@$(MAKE) -C tests/unit
 
 .PHONY:	all bonus clean fclean re \
 		run runb asan asanb val valb \

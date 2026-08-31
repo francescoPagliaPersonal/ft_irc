@@ -4,17 +4,17 @@
 #   make          compile -g -O0 and run
 #   make asan     AddressSanitizer build and run
 #   make val      Valgrind build and run
-#   make clean    remove tests/build/
+#   make clean    remove tests/unit/build/
 #   make fclean   also remove test_irc
 # ---------------------------------------------------------------------------- #
 
 CXX			:= c++
 PROG_NAME	:= ircserv
 
-include ../conf/sources.mk
+include ../../conf/sources.mk
 
-SRC_ROOT	:= ../source/
-INC_PATHS	:= ../include/
+SRC_ROOT	:= ../../source/
+INC_PATHS	:= ../../include/
 
 PROD_SRC	:= $(filter-out main.cpp,$(SRC_MAN))
 
