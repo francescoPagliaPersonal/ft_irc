@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 16:57:46 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/30 12:35:44 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/01 14:22:24 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,9 @@
 
 namespace
 {
-	// compatibility fix
-
-	rfc handleIrssiLogon(Command::Data& data);
-
 	// main operation
-
+	
+	rfc handleUserMode(Command::Data& data);
 	rfc handleChannelMode(Command::Data& data);
 	void processModeRequests(Command::Data& data);
 }
@@ -56,12 +53,10 @@ rfc cmd_mode(IServerCtrl& srv, const Message& msg)
 	// the param[0] existed elsewhere too, don't remember what the solution was
 	if (msg.params[0][0] == '#' || msg.params[0][0] == '&')
 		return (handleChannelMode(data));
-	// TODO fine like that? if we have this as a DUMMY,
-	//		 irssi will register the correct nick on NICKNAMEINUSE
 	else if (msg.params[0] == data.client->getNick())
-		return (handleIrssiLogon(data));
+		return (handleUserMode(data));
 	else
-		return (irc::UMODEUNKNOWNFLAG);
+		return (irc::USERSDONTMATCH);
 }
 
 // -------------------------------------------------------------------------- //
@@ -70,20 +65,11 @@ namespace
 {
 
 // Answer irssi's MODE NICK +i with a dummy 221 so NICKNAMEINUSE logon can finish.
-rfc handleIrssiLogon(Command::Data& data)
+rfc handleUserMode(Command::Data& data)
 {
-	if (data.msg.params.size() == 2 && data.msg.params[1] == "+i")
-	{
-		// either of those stubs fixes the irssi NICKNAMEINUSE interface update issue
-		// error message does NOT
-		data.srv.sendMessage(data.client,
-			Response::buildNumeric(data.msg, irc::UMODEIS, "", "not supported"));
-			// Response::buildNumeric(msg, irc::UMODEIS, "+i"));
-			// Response::buildRegular(msg, client->getNick(), msg.params[1]));
-		return (irc::OK);
-	}
-	else
-		return (irc::UMODEUNKNOWNFLAG);
+	data.srv.sendMessage(data.client,
+		Response::buildNumeric(data.msg, irc::UMODEIS, "", "not supported"));
+	return (irc::OK);
 }
 
 // Query the channel's modes, or apply MODE if the sender is a member and op.
