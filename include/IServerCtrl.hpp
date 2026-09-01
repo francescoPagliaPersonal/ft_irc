@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/14 19:25:52 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/27 13:28:14 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/01 09:12:02 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <string>
 # include <vector>
 # include <map>
+# include <set>
 
 # include "irc.hpp"
 
@@ -42,6 +43,7 @@ public:
 	virtual void sendMessage(Client*, const std::string&) const = 0;
 	virtual void broadcast(Channel*, Client *, const std::string&) const = 0;
 	virtual void broadcast(Channel*, const std::string&) const = 0;
+	virtual void broadcast(std::set<Client*>&, const std::string&) const = 0;
 	// ---- Channel Manipulation
 	virtual rfc addToChannel(Client*, const std::string&, const std::string&) = 0;
 	virtual void removeFromChannel(Client*, const std::string&, const std::string&) = 0;

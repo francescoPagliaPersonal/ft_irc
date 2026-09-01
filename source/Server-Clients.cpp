@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 16:27:31 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/27 13:28:41 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/01 09:29:50 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,11 @@ Client* Server::findClientByNick(const std::string & nick) const
 // Queue STR for sending to CLIENT and enable the EPOLLOUT interest.
 void Server::sendMessage(Client* client, const std::string& str) const 
 {
+	if (!client->isBufferOutFilled() && !client->hasQuit())
+		_epoll.mod(client->getFD(), EPOLL_FL_DEFAULT | EPOLLOUT, client);
 	// TODO drop connection if bufOUT grows too much? or do we drop if kernel buffer stays full?
 	client->putReply2Buff(str);
 	// TODO consider CATCH & disconnect
-	_epoll.mod(client->getFD(), DEF_EPOLL_FL | EPOLLOUT, client);
 }
 
 // -------------------------------------------------------------------------- //
@@ -65,7 +66,7 @@ void Server::_registerNewClient(int fd, const struct sockaddr_in& addr)
 	// register epoll fd
 	try
 	{
-		_epoll.add(fd, DEF_EPOLL_FL, tmp);
+		_epoll.add(fd, EPOLL_FL_DEFAULT, tmp);
 	}
 	catch (const std::exception& e)
 	{
@@ -95,16 +96,20 @@ void Server::_removeClient(Client* client)
 {
 	_epoll.del(client->getFD());
 	_removeClientFromChannels(client);
+	// TODO remove from _connections
 	_clients.erase(client->getFD());
 	delete client;
 }
 
 // Disconnects a client: remove all pending msgs, channels then client itself.
-void Server::_disconnectClient(Client* client)
+void Server::_prepareClientDisconnect(Client* client)
 {
 	// TODO finish this (channels, what else?)
 	std::cout << "[Warning] Client removal requested for FD " << client->getFD()
-		<< ". NOT FULLY IMPLEMENTED yet.\n";
-	_removeMsgsFromSuspicious(client);
-	_removeClient(client);
+		<< ". Verify implementation.\n";
+	_removeMsgsFrom(client);
+	_epoll.mod(client->getFD(), EPOLL_FL_QUIT, client);
+
+	// HACK only for testing!!
+	// _removeClient(client);
 }

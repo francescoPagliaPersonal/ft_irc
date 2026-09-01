@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 18:00:05 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/27 13:35:22 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/28 07:55:27 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 // -------------------------------------------------------------------------- //
 
 // Lookup MSG's command and execute it on SRV; handles numeric code replies.
-void CommandRegistry::execute(IServerCtrl& srv, const Message& msg) const
+rfc CommandRegistry::execute(IServerCtrl& srv, const Message& msg) const
 {
 	Client *client = msg.sender;
 	irc::rfc code;
@@ -41,6 +41,7 @@ void CommandRegistry::execute(IServerCtrl& srv, const Message& msg) const
 	// handle any registered error replies
 	if (code != irc::OK)
 		srv.sendMessage(client, Response::handleNumeric(msg, code));
+	return (code);
 }
 
 // -------------------------------------------------------------------------- //

@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 17:08:53 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/19 11:59:35 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/28 08:10:47 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,9 @@ void Client::setRealName(const std::string & str)
 void Client::setCap(bool requested)
 {
 	_capRequested = requested;
+}
+
+void Client::setQuit(bool connected)
+{
+	_hasQuit = connected;
 }

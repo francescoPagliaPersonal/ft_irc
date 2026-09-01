@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 16:32:42 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/27 13:00:44 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/28 08:48:11 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 // disconnecting clients whose message handling fails.
 void Server::_executeCommands()
 {
+	rfc numeric;
 	if (DEBUG && !_msgsQueue.empty())
 		std::cout << "[Info] Processing message queue with "
 			<< _msgsQueue.size() << " messages...\n";
@@ -35,13 +36,17 @@ void Server::_executeCommands()
 	{
 		Message& msg = _msgsQueue.front();
 		// TODO ensure POLICY and COMMAND errors are in line with PROTOCOL CODES
-		_cmdReg.execute(*this, msg);
-		_msgsQueue.pop_front();
+		numeric = _cmdReg.execute(*this, msg);
+		if (numeric == irc::HASQUIT)
+			_prepareClientDisconnect(msg.sender);
+		else
+			_msgsQueue.pop_front();
+
 	}
 }
 
 // Remove all queued messages sent by CLIENT.
-void Server::_removeMsgsFromSuspicious(Client *client)
+void Server::_removeMsgsFrom(Client *client)
 {
 	std::deque<Message>::iterator it = _msgsQueue.begin();
 	while (it != _msgsQueue.end())
