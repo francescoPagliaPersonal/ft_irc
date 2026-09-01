@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 16:57:46 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/09/01 17:57:24 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/01 18:09:06 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ namespace helper
 
 	void sendChannelModes(Command::Data& data);
 	void sendUnknownMode(Command::Data&data, char c);
-	void buildReply(Command::Data& data, std::string& rpl, bool specialConsideration, bitMask old);
+	std::string buildReply(Command::Data& data, bool specialConsideration, bitMask old);
 }
 
 // -------------------------------------------------------------------------- //
@@ -115,7 +115,7 @@ void processModeRequests(Command::Data& data)
 {
 	bool switcher = false;						// true for add (+) modes
 	bool specialConsideration = false;			// mode change w/o bitMask
-	std::string reply(" ");						// takes the success reply msg
+	std::string reply;							// takes the success reply msg
 	const std::string& modes(data.msg.params[1]);	// shorthand
 	bitMask modesSet;							// flags on begin & special flag
 	std::size_t argsPos = 1;					// start pos for args consumption
@@ -143,9 +143,9 @@ void processModeRequests(Command::Data& data)
 			specialConsideration = helper::handleModeChange(data, switcher, modes[n], &argsPos);
 	}
 	// 3) build the reply string on a successful mode change
-	helper::buildReply(data, reply, specialConsideration, modesSet);
+	reply = helper::buildReply(data, specialConsideration, modesSet);
 	// 4) broadcast the reply
-	if (reply.size() > 1) // contains a ' ' per default
+	if (reply.size())
 		data.srv.broadcast(data.channel,
 			Response::buildRegular(data.msg,
 								   data.channel->getTitle() + reply, ""));

@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/29 23:04:12 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/01 18:05:03 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/01 18:08:08 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,14 +100,15 @@ void sendUnknownMode(Command::Data& data, char c)
 }
 
 // Append the net MODE string to RPL from OLD flags, VALUETOKENS, and queued operator nicks.
-void buildReply(Command::Data& data, std::string& rpl, bool specialConsideration, bitMask old)
+std::string buildReply(Command::Data& data, bool specialConsideration, bitMask old)
 {
 	bitMask changed, added, removed, now;
 	static irc::uint lastLimit;
+	std::string reply(" ");
 	now = data.channel->getModes();
 	// ---- abort if no change -------------------------------------------------
 	if (old == now && !specialConsideration)
-		return ;
+		return ("");
 	// ---- prepare ------------------------------------------------------------
 	std::string values, plus, minus, addOP, remOP;
 	changed = old ^ now;		// shows the bits that flipped
@@ -148,24 +149,25 @@ void buildReply(Command::Data& data, std::string& rpl, bool specialConsideration
 	}
 	// ---- build the reply ----------------------------------------------------
 	if (!minus.empty() || !data.modeChOPrem.empty())
-		rpl += '-' + minus;
+		reply += '-' + minus;
 	while (!data.modeChOPrem.empty())
 	{
-		rpl += "o";
+		reply += "o";
 		remOP += ' ' + data.modeChOPrem.front();
 		data.modeChOPrem.pop_front();
 	}
 	if (!plus.empty() || !data.modeChOPadd.empty())
 	{
-		rpl += '+' + plus;
+		reply += '+' + plus;
 	}
 	while (!data.modeChOPadd.empty())
 	{
-		rpl += "o";
+		reply += "o";
 		addOP += ' ' + data.modeChOPadd.front();
 		data.modeChOPadd.pop_front();
 	}
-	rpl += remOP + values + addOP;
+	reply += remOP + values + addOP;
+	return (reply);
 }
 
 } // end of namespace HELPER
