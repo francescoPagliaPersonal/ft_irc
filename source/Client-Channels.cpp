@@ -6,11 +6,12 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 17:10:07 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/18 11:53:22 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/28 00:26:09 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Client.hpp"
+#include "Channel.hpp"
 
 // -------------------------------------------------------------------------- //
 // CHANNEL INTERACTION

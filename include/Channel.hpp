@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/13 10:19:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/30 09:53:20 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/01 09:59:28 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <string>
 # include <map>
 # include <vector>
+# include <set>
 
 // -------------------------------------------------------------------------- //
 
@@ -73,6 +74,7 @@ class Channel
 		irc::uint 	getLimit() const;
 		bitMask		getModes() const;
 		std::map<Client*, bitMask>	getMembersMap() const;
+		void pushMembersToSet(std::set<Client *> *) const;
 		
 		// ---- set
 		void setTopic(const std::string&);

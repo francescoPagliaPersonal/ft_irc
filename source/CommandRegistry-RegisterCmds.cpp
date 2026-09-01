@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 11:41:20 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/30 11:51:14 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/01 10:00:01 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,11 @@ void CommandRegistry::registerCmds()
 	invite->addPolicy(new AlreadyRegisteredPlcy(true));
 	invite->addPolicy(new ArgsLimitPlcy(2, 2));
 	_commands[invite->getName()] = invite;
+
+	Command *quit = new Command("QUIT", cmd_quit);
+	quit->addPolicy(new AlreadyRegisteredPlcy(true));
+	quit->addPolicy(new ArgsLimitPlcy(0, 1));
+	_commands[quit->getName()] = quit;
 
 	Command *mode = new Command("MODE", cmd_mode);
 	mode->addPolicy(new AlreadyRegisteredPlcy(true));

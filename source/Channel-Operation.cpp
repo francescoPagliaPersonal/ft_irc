@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 17:13:52 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/28 10:22:22 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/29 23:24:31 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ void Channel::addClient(Client* client, bitMask privileges = 0)
 void Channel::removeClient(Client* client)
 {
 	_members.erase(client);
+	// TODO we need to rework the the whole ADD/REMOVE logic
+	// TODO Server::removeFromChannel was supposed to be the interface; Server::addToChannel works fine
 }
 
 // Check if the channel has no members left.
@@ -58,4 +60,15 @@ bool Channel::isChanOp(Client * client) const
 void Channel::invite(Client * client)
 {
 	_invites.push_back(client);
+}
+
+// Attempt to add each member of the channel to DEST.
+
+void Channel::pushMembersToSet(std::set<Client *> * setName) const
+{
+	std::map<Client*, bitMask>::const_iterator it;
+	for (it = _members.begin(); it != _members.end(); it++)
+	{
+		setName->insert(it->first);
+	}
 }

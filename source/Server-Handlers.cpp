@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 22:58:08 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/26 15:39:19 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/28 07:58:37 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void Server::_handleClientEvent(epoll_event& ev)
 	switch (ret)
 	{
 		case irc::RET_EMPTY:
-			_epoll.mod(client->getFD(), DEF_EPOLL_FL, client);
+			_epoll.mod(client->getFD(), EPOLL_FL_DEFAULT, client);
 			break;
 		case irc::RET_CLOSE:
 			_removeClient(client);
@@ -61,7 +61,7 @@ void Server::_handleClientEvent(epoll_event& ev)
 			// TODO but also, are they the same for IN/OUT?
 			break;
 		case irc::RET_HASOUTPUT:
-			_epoll.mod(client->getFD(), DEF_EPOLL_FL | EPOLLOUT, client);
+			_epoll.mod(client->getFD(), EPOLL_FL_DEFAULT | EPOLLOUT, client);
 			break;
 		case irc::RET_PARSEINPUT:
 			if (_processInputBuffer(client) == false)
