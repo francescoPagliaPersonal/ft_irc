@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 16:57:46 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/09/01 17:35:37 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/01 17:57:24 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ namespace helper
 
 	void sendChannelModes(Command::Data& data);
 	void sendUnknownMode(Command::Data&data, char c);
-	void buildReply(Command::Data& data, std::string& rpl, bitMask specialConsideration, bitMask old);
+	void buildReply(Command::Data& data, std::string& rpl, bool specialConsideration, bitMask old);
 }
 
 // -------------------------------------------------------------------------- //
@@ -114,9 +114,10 @@ rfc handleChannelMode(Command::Data& data)
 void processModeRequests(Command::Data& data)
 {
 	bool switcher = false;						// true for add (+) modes
+	bool specialConsideration = false;			// mode change w/o bitMask
 	std::string reply(" ");						// takes the success reply msg
 	const std::string& modes(data.msg.params[1]);	// shorthand
-	bitMask modesSet, specialConsideration = 0;	// flags on begin & special flag
+	bitMask modesSet;							// flags on begin & special flag
 	std::size_t argsPos = 1;					// start pos for args consumption
 
 	modesSet = data.channel->getModes();
@@ -139,7 +140,7 @@ void processModeRequests(Command::Data& data)
 		if (std::string(MODES).find(modes[n]) == std::string::npos)
 			helper::sendUnknownMode(data, modes[n]);
 		else
-			specialConsideration |= helper::handleModeChange(data, switcher, modes[n], &argsPos);
+			specialConsideration = helper::handleModeChange(data, switcher, modes[n], &argsPos);
 	}
 	// 3) build the reply string on a successful mode change
 	helper::buildReply(data, reply, specialConsideration, modesSet);

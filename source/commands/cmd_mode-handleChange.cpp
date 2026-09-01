@@ -72,9 +72,10 @@ namespace helper
 {
 
 // Apply mode letter C with SWITCHER to the channel, consuming an argument when needed.
-bitMask handleModeChange(Command::Data& data, bool switcher, char c, std::size_t* iParams)
+// Returns TRUE, if a mode was changed, that cannot be detected from the bitMask.
+bool handleModeChange(Command::Data& data, bool switcher, char c, std::size_t* iParams)
 {
-	bitMask valueToken = 0;
+	bool specialConsideration = false;
 	// ---------- LAZY MODE ----------
 	// every operation is run, duplicates are NOT ignored
 	// except ops with args, which must guard their value themselves
@@ -100,10 +101,11 @@ bitMask handleModeChange(Command::Data& data, bool switcher, char c, std::size_t
 						Response::buildNumeric(data.msg, irc::KEYSET));
 				break ;
 			}
+			// password set fails silently
+			// TODO we could also just send KEYSET
 			if (data.channel->getModes() & CH_PASSWORD)
 				break ;
 			data.channel->setPassword(data.msg.params[*iParams]);
-			valueToken = CH_PASSWORD;
 			break ;
 
 		case 'o':
@@ -130,11 +132,13 @@ bitMask handleModeChange(Command::Data& data, bool switcher, char c, std::size_t
 			}
 			bool changed = data.channel->setOperator(switcher, op);
 			if (changed)
-				valueToken = US_OPERATOR; // this is not clean, but uncontested in buildReply
-			if (changed && switcher)
-				data.modeChOPadd.push_back(op->getNick());
-			else if (changed && !switcher)
-				data.modeChOPrem.push_back(op->getNick());
+			{
+				specialConsideration = true;
+				if (switcher)
+					data.modeChOPadd.push_back(op->getNick());
+				else if (!switcher)
+					data.modeChOPrem.push_back(op->getNick());
+			}
 			break ;
 		}
 
@@ -147,11 +151,11 @@ bitMask handleModeChange(Command::Data& data, bool switcher, char c, std::size_t
 			if (!canConsumeNextParam(data, iParams))
 				break ;
 			data.channel->setLimit(std::strtol(data.msg.params[*iParams].c_str(), NULL, 10));
-			valueToken = CH_LIMIT;
+			specialConsideration = true;
 			break ;
 
 	}
-	return (valueToken);
+	return (specialConsideration);
 }
 
 } // end of namespace HELPER

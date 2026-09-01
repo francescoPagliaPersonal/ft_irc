@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/29 23:04:12 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/30 12:30:19 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/01 18:05:03 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,12 +100,13 @@ void sendUnknownMode(Command::Data& data, char c)
 }
 
 // Append the net MODE string to RPL from OLD flags, VALUETOKENS, and queued operator nicks.
-void buildReply(Command::Data& data, std::string& rpl, bitMask valueTokens, bitMask old)
+void buildReply(Command::Data& data, std::string& rpl, bool specialConsideration, bitMask old)
 {
 	bitMask changed, added, removed, now;
+	static irc::uint lastLimit;
 	now = data.channel->getModes();
 	// ---- abort if no change -------------------------------------------------
-	if (old == now && valueTokens == 0)
+	if (old == now && !specialConsideration)
 		return ;
 	// ---- prepare ------------------------------------------------------------
 	std::string values, plus, minus, addOP, remOP;
@@ -123,8 +124,9 @@ void buildReply(Command::Data& data, std::string& rpl, bitMask valueTokens, bitM
 	if (added & CH_LIMIT)
 	{
 		plus  += 'l';
+		lastLimit = data.channel->getLimit();
 		std::ostringstream ss;
-		ss << data.channel->getLimit();
+		ss << lastLimit;
 		values += ' ' + ss.str();
 	}
 	// ---- collect the REMOVED ones -------------------------------------------
@@ -133,22 +135,17 @@ void buildReply(Command::Data& data, std::string& rpl, bitMask valueTokens, bitM
 	if (removed & CH_PASSWORD)	minus += 'k';
 	if (removed & CH_LIMIT)		minus += 'l';
 	// ---- get updated values -------------------------------------------------
-	if (valueTokens)
-	{ // TODO the patch for PASSWORD is probably DEAD due to abort from above
-		if (valueTokens & CH_PASSWORD && (now & CH_PASSWORD) && !(added & CH_PASSWORD))
-		{
-			plus += 'k';
-			values += ' ' + data.channel->getPassword();
-		}
-		if (valueTokens & CH_LIMIT && (now & CH_LIMIT) && !(added & CH_LIMIT))
+	if (specialConsideration )
+	{
+		if ((now & CH_LIMIT) && !(added & CH_LIMIT))
 		{
 			plus += 'l';
 			std::ostringstream ss;
 			ss << data.channel->getLimit();
 			values += ' ' + ss.str();
 		}
+		cancelOperatorNoop(data.modeChOPadd, data.modeChOPrem);
 	}
-	cancelOperatorNoop(data.modeChOPadd, data.modeChOPrem);
 	// ---- build the reply ----------------------------------------------------
 	if (!minus.empty() || !data.modeChOPrem.empty())
 		rpl += '-' + minus;
