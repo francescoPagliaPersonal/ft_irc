@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 16:57:46 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/09/01 14:22:24 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/01 17:35:37 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ namespace helper
 
 	void sendChannelModes(Command::Data& data);
 	void sendUnknownMode(Command::Data&data, char c);
-	void buildReply(Command::Data& data, std::string& rpl, bitMask valueTokens, bitMask old);
+	void buildReply(Command::Data& data, std::string& rpl, bitMask specialConsideration, bitMask old);
 }
 
 // -------------------------------------------------------------------------- //
@@ -98,37 +98,52 @@ rfc handleChannelMode(Command::Data& data)
 	return (irc::OK);
 }
 
+/*
+
+	MODE INPUT STRING
+
+	must always be: MODE <+/-commandLettersInAnyOrder> <arguments for commands>
+	there is basically only a command string that can be followed by arguments
+	irssi will transform any /mode input to match that!!
+			/mode +i -i +i -i +i -i +i -i +k -i +i -i +l 42
+	becomes MODE #world +i-i+i-i+i-i+i-i+ki-i+l -i 42\r\n
+
+*/
+
 // Traverse all mode letters in msg.param, apply each change, broadcast the MODE line.
 void processModeRequests(Command::Data& data)
 {
-	bool switcher = false;
-	std::string reply(" ");
-	bitMask modes, valueTokens = 0;
-	modes = data.channel->getModes();
-	// move through all params
-	for (std::size_t i = 1; i < data.msg.params.size(); i++)
+	bool switcher = false;						// true for add (+) modes
+	std::string reply(" ");						// takes the success reply msg
+	const std::string& modes(data.msg.params[1]);	// shorthand
+	bitMask modesSet, specialConsideration = 0;	// flags on begin & special flag
+	std::size_t argsPos = 1;					// start pos for args consumption
+
+	modesSet = data.channel->getModes();
+	// 1) validate starting point (just ignore string w/o +/-)
+	if (modes[0] != '+' && modes[0] != '-')
 	{
-		const std::string& param = data.msg.params[i];
-		// validate starting point (just ignore string w/o +/-)
-		if (param.empty() || (param[0] != '+' && param[0] != '-'))
-			continue;
-		// consume one char at a time
-		for (std::size_t n = 0; n < param.size(); n++)
-		{
-			// get sign within the mode string
-			if ((param[n] == '+' || param[n] == '-'))
-			{
-				switcher = (param[n] == '+');
-				continue ;
-			}
-			// look for registered modes modes
-			if (std::string(MODES).find(param[n]) == std::string::npos)
-				helper::sendUnknownMode(data, param[n]);
-			else
-				valueTokens |= helper::handleModeChange(data, switcher, param[n], &i);
-		}
+		helper::sendUnknownMode(data, modes[0]);
+		return ;
 	}
-	helper::buildReply(data, reply, valueTokens, modes);
+	// 2) consume one char at a time
+	for (std::size_t n = 0; n < modes.size(); n++)
+	{
+		// get sign within the mode string
+		if ((modes[n] == '+' || modes[n] == '-'))
+		{
+			switcher = (modes[n] == '+');
+			continue ;
+		}
+		// look for registered modes modes
+		if (std::string(MODES).find(modes[n]) == std::string::npos)
+			helper::sendUnknownMode(data, modes[n]);
+		else
+			specialConsideration |= helper::handleModeChange(data, switcher, modes[n], &argsPos);
+	}
+	// 3) build the reply string on a successful mode change
+	helper::buildReply(data, reply, specialConsideration, modesSet);
+	// 4) broadcast the reply
 	if (reply.size() > 1) // contains a ' ' per default
 		data.srv.broadcast(data.channel,
 			Response::buildRegular(data.msg,
