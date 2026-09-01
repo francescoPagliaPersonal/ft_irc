@@ -69,6 +69,7 @@ void Response::init(const std::string &srv)
 	_numInfo[irc::NEEDMOREPARAMS] = ":Not enough parameters.";
 	_numInfo[irc::ALREADYREGISTERED] = ":You may not reregister.";
 	_numInfo[irc::PASSWDMISMATCH] = ":Password incorrect.";
+	_numInfo[irc::KEYSET] = ":Channel key already set";
 	_numInfo[irc::CHANNELISFULL] = ":Cannot join channel (+l).";
 	_numInfo[irc::UNKNOWNMODE] = ":is unknown mode char to me.";
 	_numInfo[irc::INVITEONLYCHAN] = ":Cannot join channel (+i).";

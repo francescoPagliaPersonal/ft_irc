@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/29 23:12:59 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/01 17:38:07 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/01 17:49:06 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,11 @@ bitMask handleModeChange(Command::Data& data, bool switcher, char c, std::size_t
 			break ;
 			if (switcher == false)
 			{
-				data.channel->removePassword();
+				if (data.msg.params[*iParams] == data.channel->getPassword())
+					data.channel->removePassword();
+				else
+					data.srv.sendMessage(data.client,
+						Response::buildNumeric(data.msg, irc::KEYSET));
 				break ;
 			}
 			if (data.channel->getModes() & CH_PASSWORD)
