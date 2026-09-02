@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 16:27:31 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/02 17:10:00 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/02 17:33:04 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void Server::_removeClient(Client* client)
 	_epoll.del(client->getFD());
 	removeClientFromAllChannels(client, &contacts);
 	std::stringstream test;
-	test << ":" << client->getID() << " QUIT :Sudden disconnection" << CRLF;
+	test << ":" << client->getID() << " QUIT :Connection closed." << CRLF;
 	broadcast(contacts, test.str());
 	// TODO remove from _connections
 	_clients.erase(client->getFD());
