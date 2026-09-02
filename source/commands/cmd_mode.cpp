@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 16:57:46 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/09/01 18:09:06 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/02 07:15:08 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,7 @@ namespace helper
 rfc cmd_mode(IServerCtrl& srv, const Message& msg)
 {
 	Command::Data data(srv, msg, msg.sender);
-	// FIXME this assumes, trailing is copied into param
-	// we CANNOT get here w/o either params or trailing used! correct?
-	// the param[0] existed elsewhere too, don't remember what the solution was
+	// param[0] is guaranteed to exist because of the policy
 	if (msg.params[0][0] == '#' || msg.params[0][0] == '&')
 		return (handleChannelMode(data));
 	else if (msg.params[0] == data.client->getNick())
