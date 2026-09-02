@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   Server-Clients.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 16:27:31 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/01 09:29:50 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/02 17:10:00 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_irc.hpp"
 #include "Channel.hpp"
 #include "Server.hpp"
-
+#include <sstream>
 #include <cstddef>
 #include <deque>
 
@@ -77,25 +77,16 @@ void Server::_registerNewClient(int fd, const struct sockaddr_in& addr)
 	std::cout << "[Info] New connection from " << tmp->getHost()
 			<< " accepted at FD " << fd << '\n';
 }
-void Server::_removeClientFromChannels(Client * client)
-{
-	std::deque<Channel *> channels = client->getChannelsList();
-	for (size_t i = 0; i < channels.size(); ++i)
-	{
-		std::map<std::string, Channel*>::iterator it;
-		it = _channels.find(Channel::title2key(channels[i]->getTitle()));
-		if (it == _channels.end())
-			continue;
-		it->second->removeClient(client);
-		client->removeChannel(it->second);
-	}
-}
-
 // Remove a client and deregister FD.
 void Server::_removeClient(Client* client)
 {
+	std::set<Client*> contacts;
+	
 	_epoll.del(client->getFD());
-	_removeClientFromChannels(client);
+	removeClientFromAllChannels(client, &contacts);
+	std::stringstream test;
+	test << ":" << client->getID() << " QUIT :Sudden disconnection" << CRLF;
+	broadcast(contacts, test.str());
 	// TODO remove from _connections
 	_clients.erase(client->getFD());
 	delete client;
