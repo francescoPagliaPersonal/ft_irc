@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/29 23:12:59 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/01 18:02:55 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/02 11:45:49 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,10 +101,12 @@ bool handleModeChange(Command::Data& data, bool switcher, char c, std::size_t* i
 						Response::buildNumeric(data.msg, irc::KEYSET));
 				break ;
 			}
-			// password set fails silently
-			// TODO we could also just send KEYSET
 			if (data.channel->getModes() & CH_PASSWORD)
+			{	// our reply it not done by inspircd (silent fail)
+				data.srv.sendMessage(data.client,
+					Response::buildNumeric(data.msg, irc::KEYSET));
 				break ;
+			}
 			data.channel->setPassword(data.msg.params[*iParams]);
 			break ;
 
@@ -121,9 +123,9 @@ bool handleModeChange(Command::Data& data, bool switcher, char c, std::size_t* i
 				);
 				break ;
 			}
-			// TODO ?? inspircd doesnt print this at all, silent fail
 			if (!data.channel->isMember(op))
 			{
+				// our reply it not done by inspircd (silent fail)
 				data.srv.sendMessage(data.client,
 					Response::buildNumeric(data.msg, irc::USERNOTINCHANNEL,
 						data.msg.params[*iParams] + " " + data.channel->getTitle())
