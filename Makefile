@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------- #
-# Makefile template v 3.1                                           2026-08-25 #
+# Makefile template v 3.1                                           2026-09-02 #
 # ---------------------------------------------------------------------------- #
 # Features:
 # - C, C++, and mixed projects (SRCLANG=auto|c|cpp|mixed)
@@ -18,6 +18,7 @@
 
 # Name of the executable
 PROG_NAME		:= ircserv
+PROG_NAME_BONUS ?= ircbot
 
 # Makefile configuration
 MK_DIR			:= conf/

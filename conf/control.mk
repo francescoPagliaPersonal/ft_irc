@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------- #
-# Makefile template v 3.0                                           2026-08-05 #
+# Makefile template v 3.1                                           2026-09-02 #
 # ---------------------------------------------------------------------------- #
 #
 #								PROJECT CONTROL
@@ -34,8 +34,8 @@ endif
 endif
 
 # for executable targets
-EXEC_STR	= ./$(BIN) $(RUN_ARGS_$(MODE))
-EXEC_V_STR	= valgrind $(VALGRIND_FLAGS) ./$(BIN) $(RUN_ARGS_$(MODE))
+EXEC_STR	= ./$(BIN) $(if $(filter bon,$(PART)),localhost )$(RUN_ARGS_$(MODE))
+EXEC_V_STR	= valgrind $(VALGRIND_FLAGS) ./$(BIN) $(if $(filter bon,$(PART)),localhost )$(RUN_ARGS_$(MODE))
 END_STR		:= printf '$(C_FUJI_GRAY3)::::::::::::\n$(C_RESET)'
 
 define EXEC

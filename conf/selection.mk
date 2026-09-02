@@ -17,7 +17,8 @@ SRCLANG	?= auto
 # NOTE: must be recursive (=), because MODE/PART are target-specific and change.
 OBJ_DIR	= build/$(MODE)/$(PART)/
 BIN_DIR	= bin/$(MODE)/$(PART)/
-BIN		= $(BIN_DIR)$(PROG_NAME)
+PNAME	= $(if $(filter bon,$(PART)),$(PROG_NAME_BONUS),$(PROG_NAME))
+BIN		= $(BIN_DIR)$(PNAME)
 
 # Choose sources based on PART.
 # NOTE: cannot use make directives (ifeq)
