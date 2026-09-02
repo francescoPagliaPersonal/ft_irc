@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 18:07:43 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/24 18:08:38 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/30 10:04:59 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,15 @@ Command::~Command()
 		delete _policies[i];
 	}
 }
+
+Command::Data::Data(IServerCtrl& s, const Message& m, Client* c)
+	: srv(s)
+	, msg(m)
+	, client(c)
+	, channel(NULL)
+	, modeChOPadd()
+	, modeChOPrem()
+{}
 
 // -------------------------------------------------------------------------- //
 // OPERATION

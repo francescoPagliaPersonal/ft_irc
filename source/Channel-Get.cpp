@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 17:12:46 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/28 10:22:40 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/29 10:24:33 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,10 @@ std::map<Client *, bitMask> Channel::getMembersMap() const
 	return (_members);
 }
 
+irc::uint Channel::getLimit() const
+{
+	return (_userLimit);
+}
 
 bitMask Channel::getModes() const
 {

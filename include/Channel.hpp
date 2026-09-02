@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/13 10:19:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/27 21:38:11 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/01 09:59:28 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,13 @@ class Channel
 		
 		// ---- set
 		void setTopic(const std::string&);
+		void removePassword();
 		void setPassword(const std::string&);
 		void setLimit(irc::uint);
+		void removeLimit();
+		void setInvite(bool);
+		void setTopicFlag(bool);
+		bool setOperator(bool, Client*);
 
 		static bool isTitleCompliant(const std::string& channel);
 		static std::string title2key(std::string);

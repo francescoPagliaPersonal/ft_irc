@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/21 12:12:19 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/27 13:33:35 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/30 12:05:51 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,6 @@ bool Channel::passwordMatch(const std::string & pw) const
 
 bool Channel::belowChannelLimit() const
 {
-	if (!_userLimit)
-		return (true);
 	if (_members.size() < _userLimit)
 		return (true);
 	return (false);

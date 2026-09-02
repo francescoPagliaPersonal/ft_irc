@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_invite.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 16:10:11 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/27 16:10:43 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/08/29 22:58:36 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,20 @@ rfc cmd_invite(IServerCtrl& srv, const Message& msg)
 	if (channel->isMember(invitee))
 		return irc::USERONCHANNEL;
 	if (!sender->isChannelMember(channel))
-		return irc::NOTONCHANNEL;
+	{
+		srv.sendMessage(sender,
+			Response::buildNumeric(msg, irc::NOTONCHANNEL, channel->getTitle())
+		);
+		return irc::OK;
+	}
 	if ((channel->getModes() & CH_INVITE) && !channel->isChanOp(sender))
-		return irc::CHANOPRIVSNEEDED;
+	{
+		srv.sendMessage(sender,
+			Response::buildNumeric(msg, irc::CHANOPRIVSNEEDED,
+								   channel->getTitle())
+		);
+		return irc::OK;
+	}
 
 	channel->invite(invitee);
 	//:dan-!d@localhost INVITE Wiz #test 
