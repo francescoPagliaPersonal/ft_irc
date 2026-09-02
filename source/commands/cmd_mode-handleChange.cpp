@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/29 23:12:59 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/02 11:45:49 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/02 12:35:46 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ namespace helper
 // Returns TRUE, if a mode was changed, that cannot be detected from the bitMask.
 bool handleModeChange(Command::Data& data, bool switcher, char c, std::size_t* iParams)
 {
-	bool specialConsideration = false;
+	bool modeOP = false;
 	// ---------- LAZY MODE ----------
 	// every operation is run, duplicates are NOT ignored
 	// except ops with args, which must guard their value themselves
@@ -135,7 +135,7 @@ bool handleModeChange(Command::Data& data, bool switcher, char c, std::size_t* i
 			bool changed = data.channel->setOperator(switcher, op);
 			if (changed)
 			{
-				specialConsideration = true;
+				modeOP = true;
 				if (switcher)
 					data.modeChOPadd.push_back(op->getNick());
 				else if (!switcher)
@@ -153,11 +153,10 @@ bool handleModeChange(Command::Data& data, bool switcher, char c, std::size_t* i
 			if (!canConsumeNextParam(data, iParams))
 				break ;
 			data.channel->setLimit(std::strtol(data.msg.params[*iParams].c_str(), NULL, 10));
-			specialConsideration = true;
 			break ;
 
 	}
-	return (specialConsideration);
+	return (modeOP);
 }
 
 } // end of namespace HELPER

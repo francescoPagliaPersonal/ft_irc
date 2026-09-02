@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 17:13:02 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/30 09:55:45 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/02 12:21:16 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,9 @@ void Channel::removePassword()
 // Set the channel's user limit and mode flag.
 void Channel::setLimit(irc::uint userLimit)
 {
-	if (userLimit <= MAX_CHANNELUSERS)
+	if (userLimit == 0)
+		return ;
+	else if (userLimit <= MAX_CHANNELUSERS)
 		_userLimit = userLimit;
 	else
 		_userLimit = MAX_CHANNELUSERS;

@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/29 23:04:12 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/02 11:41:46 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/02 12:37:35 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,14 +100,14 @@ void sendUnknownMode(Command::Data& data, char c)
 }
 
 // Append the net MODE string to RPL from OLD flags, VALUETOKENS, and queued operator nicks.
-std::string buildReply(Command::Data& data, bool specialConsideration, bitMask old)
+std::string buildReply(Command::Data& data, bool modeOP, bitMask old)
 {
 	bitMask changed, added, removed, now;
-	static irc::uint lastLimit;
 	std::string reply(" ");
+	irc::uint32 currLimit = data.channel->getLimit();
 	now = data.channel->getModes();
 	// ---- abort if no change -------------------------------------------------
-	if (old == now && !specialConsideration)
+	if (old == now && !modeOP && data.prevLimit == currLimit)
 		return ("");
 	// ---- prepare ------------------------------------------------------------
 	std::string values, plus, minus, addOP, remOP;
@@ -122,32 +122,21 @@ std::string buildReply(Command::Data& data, bool specialConsideration, bitMask o
 		plus  += 'k';
 		values += ' ' + data.channel->getPassword();
 	}
-	if (added & CH_LIMIT)
-	{
-		plus  += 'l';
-		lastLimit = data.channel->getLimit();
-		std::ostringstream ss;
-		ss << lastLimit;
-		values += ' ' + ss.str();
-	}
 	// ---- collect the REMOVED ones -------------------------------------------
 	if (removed & CH_INVITE)	minus += 'i';
 	if (removed & CH_TOPIC)		minus += 't';
 	if (removed & CH_PASSWORD)	minus += 'k';
 	if (removed & CH_LIMIT)		minus += 'l';
 	// ---- get updated values -------------------------------------------------
-	if (specialConsideration )
+	if (now & CH_LIMIT && data.prevLimit != currLimit)
 	{
-		if ((now & CH_LIMIT) && !(added & CH_LIMIT) && lastLimit != data.channel->getLimit())
-		{
-			plus += 'l';
-			lastLimit = data.channel->getLimit();
-			std::ostringstream ss;
-			ss << lastLimit;
-			values += ' ' + ss.str();
-		}
-		cancelOperatorNoop(data.modeChOPadd, data.modeChOPrem);
+		plus += 'l';
+		std::ostringstream ss;
+		ss << currLimit;
+		values += ' ' + ss.str();
 	}
+	if (modeOP)
+		cancelOperatorNoop(data.modeChOPadd, data.modeChOPrem);
 	// ---- build the reply ----------------------------------------------------
 	if (!minus.empty() || !data.modeChOPrem.empty())
 		reply += '-' + minus;
