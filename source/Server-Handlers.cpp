@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 22:58:08 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/28 07:58:37 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/02 14:19:16 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,18 +54,19 @@ void Server::_handleClientEvent(epoll_event& ev)
 		case irc::RET_EMPTY:
 			_epoll.mod(client->getFD(), EPOLL_FL_DEFAULT, client);
 			break;
-		case irc::RET_CLOSE:
+		case irc::RET_CLOSE: // TODO distignuish to a QUIT?
 			_removeClient(client);
 			// TODO closing events needs validation, thus also the printout
 			std::cout << "[Warning] " << __FUNCTION__ << " removed a Client." << std::endl;
 			// TODO but also, are they the same for IN/OUT?
 			break;
 		case irc::RET_HASOUTPUT:
+			// FIXME this is redundant, is it not?
 			_epoll.mod(client->getFD(), EPOLL_FL_DEFAULT | EPOLLOUT, client);
 			break;
-		case irc::RET_PARSEINPUT:
+		case irc::RET_PARSEINPUT: // builds the interneal message array
 			if (_processInputBuffer(client) == false)
-				_removeClient(client); // builds the interneal message array
+				_removeClient(client);
 			break;
 		default: ;
 	}
