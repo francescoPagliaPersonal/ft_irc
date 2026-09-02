@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server-CDTOR.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/10 00:45:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/26 15:40:09 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/02 17:21:58 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ Server::~Server()
 	while (!_clients.empty())
 		_removeClient(_clients.begin()->second);
 	while (!_channels.empty())
-		_removeChannel(_channels.begin()->second);
+		_deleteChannel(_channels.begin()->second);
 }
 
 // -------------------------------------------------------------------------- //

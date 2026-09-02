@@ -45,20 +45,10 @@ void Server::removeFromChannel(Client* client, const std::string& title,
 // -------------------------------------------------------------------------- //
 
 // Remove a channel by channel pointer.
-void Server::_removeChannel(Channel* channel)
+void Server::_deleteChannel(Channel* channel)
 {
 	_channels.erase(Channel::title2key(channel->getTitle()));
 	delete channel;
-}
-
-// Remove a channel by title.
-void Server::_removeChannel(const std::string& title)
-{
-	Channel* channel;
-
-	channel = _getChannel(Channel::title2key(title));
-	if (channel)
-		_removeChannel(channel);
 }
 
 // Lookup a channel by name and return its pointer, or NULL if not found.

@@ -81,8 +81,7 @@ class Server : public IServerCtrl
 		bool _processInputBuffer(Client*);
 		void _removeMsgsFrom(Client*);
 		// ---- Channels ----
-		void _removeChannel(const std::string&);
-		void _removeChannel(Channel*);
+		void	_deleteChannel(Channel*);
 		void _removeClientFromChannels(Client*);
 		Channel* _getOrCreateChannel(const std::string&, const std::string&);
 		Channel* _getChannel(const std::string&) const;
