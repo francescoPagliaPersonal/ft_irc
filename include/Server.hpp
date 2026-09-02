@@ -62,7 +62,7 @@ class Server : public IServerCtrl
 		ListeningSocket			_listener;	// server's own listening socket
 		std::map<int, Client*>	_clients;	// map of all Clients, sorted by FD
 		std::deque<Message>		_msgsQueue; // holds all incoming messages/loop
-		std::map<std::string, Channel*> _channels; // Channels sorted by title
+		std::map<std::string, Channel*> _channels; // Channels sorted by key
 		Epoll					_epoll;		// isolated kernel epoll wrapper
 		CommandRegistry			_cmdReg;	// command orchestrator
 		// ---- Signals ---
