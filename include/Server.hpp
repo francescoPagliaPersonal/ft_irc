@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:32:56 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/01 09:16:31 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/02 14:19:53 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ class Server : public IServerCtrl
 		void _registerNewClient(int, const sockaddr_in&);
 		void _removeClient(Client*);
 		void _prepareClientDisconnect(Client*);
+		void _housekeeping();
 		// ---- Command Execution ----
 		void _executeCommands();
 		bool _processInputBuffer(Client*);

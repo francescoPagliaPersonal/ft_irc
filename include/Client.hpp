@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 16:22:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/28 08:12:37 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/02 15:25:13 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 // -------------------------------------------------------------------------- //
 
 # define BUF_SIZE 4095
+# define BUF_NOCHANGE_LIMIT 2
 
 // -------------------------------------------------------------------------- //
 
@@ -43,14 +44,14 @@ class Client
 		// ----
 		Client(int, const sockaddr_in&);
 		~Client();
-		// ----
-		int getFD() const;
 		// ---- Buffer ----
 		irc::epollret receiveToBuffer();
 		irc::epollret sendFromBuffer();
 		std::vector<std::string> getRawStrings();
 		void putReply2Buff(const std::string&);
+		void eraseBufOut();
 		// ---- Get ----
+		int getFD() const;
 		int	getRegistrationFlags() const;
 		std::string	getNick() const;
 		std::string	getUserName() const;
@@ -61,6 +62,7 @@ class Client
 		bool getCap() const;
 		bool hasQuit() const;
 		bool isBufferOutFilled() const;
+		bool hasTimedOut() const;
 		// ---- Set ----
 		bool setRegistrationFlags(int flags);
 		void setNick(const std::string & str);
@@ -88,6 +90,7 @@ class Client
 		const sockaddr_in& 	 _address;			 // original client IPv4 data
 		std::string			 _host;				 // clients hostname (IP) as string
 		std::deque<Channel*> _channels;			 // channels the client is registered to
+		irc::uint8			 _noBuffChange;		 // counts how many times _bufOUT didn't change
 		// ----
 		Client();
 		Client(const Client&);

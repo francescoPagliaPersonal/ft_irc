@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 17:02:24 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/28 08:26:25 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/02 15:22:25 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,11 +91,12 @@ irc::epollret Client::sendFromBuffer()
 		if (DEBUG)
 			std::cerr << "[Error] FD " << _fd << " send(): "
 				<< errno << ", " << strerror(errno) << std::endl;
-		return (irc::RET_CLOSE);	
+		return (irc::RET_CLOSE); // TODO should this become a "QUIT" trigger instead?
 	}
 	if (ret == static_cast<ssize_t>(_bufOUT.size()))
 	{
 		_bufOUT.clear();
+		_noBuffChange = 0;
 		if (_hasQuit)
 			return (irc::RET_CLOSE);
 		else
@@ -104,6 +105,8 @@ irc::epollret Client::sendFromBuffer()
 	else
 	{
 		_bufOUT = _bufOUT.substr(ret);
+		_noBuffChange++;
+		std::cout << '[' << __FUNCTION__ << "] kernel buffer doesn't have enough space.\n";
 		return (irc::RET_HASOUTPUT);
 	}
 }
@@ -115,4 +118,9 @@ void	Client::putReply2Buff(const std::string& str)
 	_bufOUT.append(str);
 	if (DEBUG)
 		std::cout << "[FD " << _fd << "] Appending to output buffer:\n" << str;
+}
+
+void Client::eraseBufOut()
+{
+	_bufOUT.erase();
 }
