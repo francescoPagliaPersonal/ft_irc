@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 16:27:31 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/02 17:33:04 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/03 10:31:28 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,13 +81,15 @@ void Server::_registerNewClient(int fd, const struct sockaddr_in& addr)
 void Server::_removeClient(Client* client)
 {
 	std::set<Client*> contacts;
-	
-	_epoll.del(client->getFD());
-	removeClientFromAllChannels(client, &contacts);
-	std::stringstream test;
-	test << ":" << client->getID() << " QUIT :Connection closed." << CRLF;
-	broadcast(contacts, test.str());
+	if (!client->hasQuit())
+	{
+		removeClientFromAllChannels(client, &contacts);
+		std::stringstream reply;
+		reply << ":" << client->getID() << " QUIT :Connection closed." << CRLF;
+		broadcast(contacts, reply.str());
+	}
 	// TODO remove from _connections
+	_epoll.del(client->getFD());
 	_clients.erase(client->getFD());
 	delete client;
 }
