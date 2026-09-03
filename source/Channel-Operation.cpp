@@ -44,8 +44,6 @@ void Channel::removeClient(Client* client)
 		++_chanOps;
 	}
 	
-	// TODO we need to rework the the whole ADD/REMOVE logic
-	// TODO Server::removeFromChannel was supposed to be the interface; Server::addToChannel works fine
 }
 
 // Check if the channel has no members left.
