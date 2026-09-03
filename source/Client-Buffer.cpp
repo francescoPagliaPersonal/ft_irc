@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 17:02:24 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/03 15:34:04 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/03 15:48:47 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,8 @@ irc::epollret Client::receiveToBuffer()
 		if (_bufIN.size() && _bufIN[_bufIN.size() - 1] != '\n')
 			std::cout << std::endl;
 	}
+	if (_bufIN.size() >= MAX_BUF_SIZE)
+		return (irc::RET_CLOSE);
 	return (irc::RET_PARSEINPUT);
 }
 
