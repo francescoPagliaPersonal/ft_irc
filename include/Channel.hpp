@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/13 10:19:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/01 09:59:28 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/02 14:06:52 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ class Channel
 		// ----
 		bitMask 							_modes;
 		irc::uint							_userLimit;
+		irc::uint							_chanOps;
 		const std::string					_title; // RENAME cmd not required
 		std::string							_topic;
 		std::string							_password;
