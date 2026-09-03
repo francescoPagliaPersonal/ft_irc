@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 16:22:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/03 13:11:30 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/03 15:41:53 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ class Client
 		bool toBeKilled() const;
 		std::size_t inSize() const;		// temporary debug functions
 		std::size_t outSize() const;	// temporary debug functions
+		std::time_t getSpamTime() const;
+		irc::uint getSpamCount() const;
 		// ---- Set ----
 		bool setRegistrationFlags(int flags);
 		void setNick(const std::string & str);
@@ -73,6 +75,9 @@ class Client
 		void setRealName(const std::string & str);
 		void setCap(bool);
 		void setQuit(bool);
+		void setSpamTime(std::time_t);
+		void setSpamCount(irc::uint);
+		void incrementSpamCount ();
 		// ---- Channels ----
 		bool isChannelMember(Channel*) const;
 		void addChannel(Channel*);
@@ -94,7 +99,8 @@ class Client
 		const sockaddr_in& 	 _address;			 // original client IPv4 data
 		std::string			 _host;				 // clients hostname (IP) as string
 		std::deque<Channel*> _channels;			 // channels the client is registered to
-		time_t				 _lastSend;			 // time of last send()
+		time_t				 _lastSpamTime;	 	 // time of last msg processed in msgs queue
+		irc::uint			 _spamCount;		 // counts appends within a time
 		// ----
 		Client();
 		Client(const Client&);

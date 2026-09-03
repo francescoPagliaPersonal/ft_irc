@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 22:58:08 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/02 16:22:04 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/03 15:47:52 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,9 @@ void Server::_handleClientEvent(epoll_event& ev)
 			else
 				_epoll.mod(client->getFD(), EPOLLERR | EPOLLHUP, client);
 			break;
-		case irc::RET_CLOSE: // TODO distignuish to a QUIT?
+		case irc::RET_CLOSE: // this is a forceful disconnect, never a QUIT
 			_removeClient(client);
 			// TODO closing events needs validation, thus also the printout
-			std::cout << "[Warning] " << __FUNCTION__ << " removed a Client." << std::endl;
 			// TODO but also, are they the same for IN/OUT?
 			break;
 		case irc::RET_HASOUTPUT:

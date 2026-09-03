@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 10:05:02 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/28 08:48:11 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/03 15:43:36 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ bool Server::_processInputBuffer(Client *client)
 	std::vector<std::string> rawStrs = client->getRawStrings();
 	for (size_t i = 0; i < rawStrs.size(); ++i)
 	{
+		// 1. violation event --- message too long
 		if (rawStrs[i].size() > MSG_MAX_LENGTH)
 		{
 			if (DEBUG)
@@ -74,6 +75,18 @@ bool Server::_processInputBuffer(Client *client)
 			_removeMsgsFrom(client);
 			return false;
 		}
+		// 2. violation event --- spammer
+		time_t now = time(NULL);
+		if (now - client->getSpamTime() <= SPAM_TRHESHOLD_TIME)
+		{
+			if (client->getSpamCount() > SPAM_THRESHOLD_MSGS)
+				return (false);
+			client->incrementSpamCount();
+		}
+		else
+			client->setSpamCount(0);
+		client->setSpamTime(now);
+		// normal event
 		Message tmp = irc::string2Message(rawStrs[i], client);
 		if (tmp.flags & irc::MSG_HAS_COMMAND)
 		{

@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 17:02:24 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/03 13:12:41 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/03 15:34:04 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ void	Client::putReply2Buff(const std::string& str)
 	_bufOUT.append(str);
 	if (DEBUG)
 		std::cout << "[FD " << _fd << "] Appending to output buffer:\n" << str;
-	// 1) check for UNRESPONSIVE client
+	// check for UNRESPONSIVE client
 	if (_bufOUT.size() >= MAX_BUF_SIZE)
 	{
 		_toBeKilled = true;
@@ -125,7 +125,6 @@ void	Client::putReply2Buff(const std::string& str)
 					  << "' (FD " << _fd << ") will be disconnected"
 					  << " due to a full outgoing buffer.\n";
 	}
-	// TODO 2) check for abusive client (many calls in short time)
 }
 
 void Client::eraseBufOut()
