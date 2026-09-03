@@ -53,7 +53,7 @@ void Server::removeClientFromAllChannels(Client * client, std::set<Client*>* con
 // PRIVATE -- CHANNELS
 // -------------------------------------------------------------------------- //
 
-// Remove a channel by channel pointer.
+// Delete a channel by channel pointer.
 void Server::_deleteChannel(Channel* channel)
 {
 	_channels.erase(Channel::title2key(channel->getTitle()));
