@@ -36,7 +36,7 @@ void Server::removeClientFromChannel(Client* client, Channel& channel, std::set<
 	client->removeChannel((&channel));
 }
 
-
+// Remove CLIENT from all registered channels, collect members in set CONTACTS.
 void Server::removeClientFromAllChannels(Client * client, std::set<Client*>* contacts)
 {
 	std::deque<Channel*> joinedChannels;
