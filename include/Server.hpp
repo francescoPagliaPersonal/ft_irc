@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:32:56 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/03 16:07:15 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/03 16:46:26 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ class Server : public IServerCtrl
 		void _handleClientEvent(epoll_event&);
 		// ---- Clients ----
 		bool _appendToIPrecords(Client*);
+		void _removeFromIPrecords(Client*);
 		void _registerNewClient(int, const sockaddr_in&);
 		void _deleteClient(Client*);
 		void _prepareClientDisconnect(Client*);

@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 16:27:31 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/03 16:23:16 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/03 17:05:51 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ void Server::sendMessage(Client* client, const std::string& str) const
 // PRIVATE -- CLIENTS
 // -------------------------------------------------------------------------- //
 
+// Try to append a client to the _IPrecords table based on the
+// defined MAX_CLIENT_ON_IP limit.
 bool Server::_appendToIPrecords(Client* client)
 {
 	std::map<std::string, std::deque<Client *> >::iterator it;
@@ -64,6 +66,25 @@ bool Server::_appendToIPrecords(Client* client)
 	}
 	_IPrecords[IPV4].push_back(client);
 	return true;
+}
+
+// Remove a client from the _IPrecords table.
+void Server::_removeFromIPrecords(Client* client)
+{
+	std::map<std::string, std::deque<Client*> >::iterator ip;
+	ip = _IPrecords.find(client->getHost());
+	if (ip == _IPrecords.end())
+		return ;
+	
+	std::deque<Client*>::iterator it;
+	for (it = ip->second.begin(); it != ip->second.end(); ++it )
+	{
+		if (*it == client)
+		{
+			ip->second.erase(it);
+			break ;	
+		}
+	}
 }
 
 // Creates new client and registers FD with epoll.
@@ -90,6 +111,7 @@ void Server::_registerNewClient(int fd, const struct sockaddr_in& addr)
 		delete tmp;
 		throw; // TODO currently this is a hard shutdown; wants sth else
 	}
+	_clients[fd] = tmp;
 	if (!_appendToIPrecords(tmp))
 	{
 		sendMessage(tmp, 
@@ -98,8 +120,6 @@ void Server::_registerNewClient(int fd, const struct sockaddr_in& addr)
 		_epoll.mod(fd, EPOLL_FL_QUIT, tmp);
 		return ;	
 	}
-	
-	_clients[fd] = tmp;
 	std::cout << "[Info] New connection from " << tmp->getHost()
 			<< " accepted at FD " << fd << '\n';
 }
@@ -115,6 +135,7 @@ void Server::_deleteClient(Client* client)
 		broadcast(contacts, reply.str());
 	}
 	// TODO remove from _connections
+	_removeFromIPrecords(client);
 	_epoll.del(client->getFD());
 	_clients.erase(client->getFD());
 	delete client;
