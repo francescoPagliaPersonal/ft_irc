@@ -25,7 +25,7 @@ Channel* Server::getChannelByTitle(std::string title) const
 	return _getChannel(Channel::title2key(title));
 }
 
-// Remove CLIENT from the channel CHNAME and clean up empty channels.
+// Remove CLIENT from CHANNEL, delete empty CHANNEL, export members to CONTACTS.
 void Server::removeClientFromChannel(Client* client, Channel& channel, std::set<Client*>* contacts)
 {
 	channel.removeClient(client);
