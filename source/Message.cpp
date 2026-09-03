@@ -64,7 +64,7 @@ Message irc::string2Message(std::string str, Client *client)
 	if (str[0] == ':') 
 	{
 		std::string::size_type end = str.find_first_of(' ');
-		if (end > 1 && end != std::string::npos) 
+		if (end > 1) 
 		{
 			msg.prefix = str.substr(1, end - 1);
 			if (end == std::string::npos)
@@ -94,7 +94,7 @@ Message irc::string2Message(std::string str, Client *client)
 		return msg;
 	// Extract command
 	std::string::size_type pos = str.find_first_of(' ');
-	if (pos && pos != std::string::npos)
+	if (pos)
 	{
 		msg.command = str.substr(0, pos);
 		allCaps(msg.command);
@@ -110,7 +110,7 @@ Message irc::string2Message(std::string str, Client *client)
 		
 		// Find end of param
 		std::string::size_type end_pos = str.find_first_of(' ');
-		if (end_pos && end_pos != std::string::npos)
+		if (end_pos)
 		{
 			std::string tmp = str.substr(0, end_pos);
 			msg.params.push_back(tmp);
