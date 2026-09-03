@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_privmsg.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 15:31:28 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/27 13:43:26 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/03 13:05:46 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,11 @@ rfc cmd_privmsg(IServerCtrl& srv, const Message& msg)
 			srv.sendMessage(sender, Response::buildNumeric(msg, irc::NOSUCHCHANNEL));
 		else
 		{
+			if (!channel->isMember(sender))
+				return irc::NOTONCHANNEL;
 			std::string reply = Response::buildRegular(msg, recipients[i]);
 			srv.broadcast(channel, sender, reply);
 		}
-
 	}
 	
 	return (irc::OK);
