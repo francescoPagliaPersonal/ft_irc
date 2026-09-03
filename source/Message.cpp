@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 09:01:01 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/09/03 12:07:07 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/03 12:41:26 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ Message irc::string2Message(std::string str, Client *client)
 	Message msg;
 	msg.flags = 0;
 	msg.sender = client;
-	// bool trailSign = false;
 	
 	// Clear spaces at beggining
 	// if the message is empty is returned as is and the flags will say so!
@@ -84,8 +83,7 @@ Message irc::string2Message(std::string str, Client *client)
 		str.erase(trailing_pos);
 		clear_trailing_char(str, ' ');
 
-		if (!msg.trailing.empty())
-			msg.flags |= irc::MSG_HAS_TRAILING;
+		msg.flags |= irc::MSG_HAS_TRAILING;
 	}
 
 	clear_leading_char(str, ' ');
