@@ -6,13 +6,14 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 16:27:31 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/03 10:48:03 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/03 16:23:16 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_irc.hpp"
 #include "Channel.hpp"
 #include "Server.hpp"
+#include "Response.hpp"
 #include <sstream>
 #include <cstddef>
 #include <deque>
@@ -49,6 +50,22 @@ void Server::sendMessage(Client* client, const std::string& str) const
 // PRIVATE -- CLIENTS
 // -------------------------------------------------------------------------- //
 
+bool Server::_appendToIPrecords(Client* client)
+{
+	std::map<std::string, std::deque<Client *> >::iterator it;
+	std::string IPV4 = client->getHost();
+	it = _IPrecords.find(IPV4);
+	if (it != _IPrecords.end())
+	{
+		if (it->second.size() >= MAX_CLIENT_ON_IP)
+			return false;
+		it->second.push_back(client);
+		return true;
+	}
+	_IPrecords[IPV4].push_back(client);
+	return true;
+}
+
 // Creates new client and registers FD with epoll.
 void Server::_registerNewClient(int fd, const struct sockaddr_in& addr)
 {
@@ -73,6 +90,15 @@ void Server::_registerNewClient(int fd, const struct sockaddr_in& addr)
 		delete tmp;
 		throw; // TODO currently this is a hard shutdown; wants sth else
 	}
+	if (!_appendToIPrecords(tmp))
+	{
+		sendMessage(tmp, 
+				"ERROR: too many connection from IP " + tmp->getHost() + CRLF);
+		tmp->setQuit(true);
+		_epoll.mod(fd, EPOLL_FL_QUIT, tmp);
+		return ;	
+	}
+	
 	_clients[fd] = tmp;
 	std::cout << "[Info] New connection from " << tmp->getHost()
 			<< " accepted at FD " << fd << '\n';
