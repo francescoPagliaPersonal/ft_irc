@@ -96,6 +96,10 @@ void Response::init(const std::string &srv)
 	_numType[irc::UNKNOWNCOMMAND] = COMMAND;
 	_numType[irc::NEEDMOREPARAMS] = COMMAND;
 }
+std::string Response::getServerName()
+{
+	return _server;
+}
 
 /*
 	Build the default prefix string for numeric reply:
