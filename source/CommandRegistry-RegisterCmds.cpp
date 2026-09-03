@@ -73,4 +73,9 @@ void CommandRegistry::registerCmds()
 	mode->addPolicy(new AlreadyRegisteredPlcy(true));
 	mode->addPolicy(new ArgsLimitPlcy(1, 9));
 	_commands[mode->getName()] = mode;
+
+	Command *topic = new Command("TOPIC", cmd_topic);
+	topic->addPolicy(new AlreadyRegisteredPlcy(true));
+	topic->addPolicy(new ArgsLimitPlcy(1, 2));
+	_commands[topic->getName()] = topic;
 }
