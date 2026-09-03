@@ -21,6 +21,7 @@
 Channel::Channel(const std::string& title, const std::string& pw)
 	: _modes(pw.empty() ? 0 : CH_PASSWORD)
 	, _userLimit(MAX_CHANNELUSERS)
+	, _chanOps(0)
 	, _title(title)
 	, _topic("")
 	, _password(pw)

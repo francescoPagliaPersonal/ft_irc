@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server-Handlers.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 22:58:08 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/28 07:58:37 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/03 10:47:55 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void Server::_handleClientEvent(epoll_event& ev)
 			_epoll.mod(client->getFD(), EPOLL_FL_DEFAULT, client);
 			break;
 		case irc::RET_CLOSE:
-			_removeClient(client);
+			_deleteClient(client);
 			// TODO closing events needs validation, thus also the printout
 			std::cout << "[Warning] " << __FUNCTION__ << " removed a Client." << std::endl;
 			// TODO but also, are they the same for IN/OUT?
@@ -65,7 +65,7 @@ void Server::_handleClientEvent(epoll_event& ev)
 			break;
 		case irc::RET_PARSEINPUT:
 			if (_processInputBuffer(client) == false)
-				_removeClient(client); // builds the interneal message array
+				_deleteClient(client); // builds the interneal message array
 			break;
 		default: ;
 	}

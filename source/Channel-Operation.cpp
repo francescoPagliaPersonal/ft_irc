@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   Channel-Operation.cpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 17:13:52 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/29 23:24:31 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/02 14:40:32 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Channel.hpp"
+#include "Client.hpp"
 #include "irc.hpp"
 
 // -------------------------------------------------------------------------- //
@@ -21,14 +22,28 @@
 void Channel::addClient(Client* client, bitMask privileges = 0)
 {
 	_members[client] = privileges;
+	if (privileges & US_OPERATOR)
+		++_chanOps;
 }
 
 // Remove CLIENT from the channel's member list.
 void Channel::removeClient(Client* client)
 {
+	std::map<Client *, bitMask>::iterator member;
+	
+	member = _members.find(client);
+	if (member == _members.end())
+		return ;
+	if (member->second & US_OPERATOR)
+		--_chanOps;
 	_members.erase(client);
-	// TODO we need to rework the the whole ADD/REMOVE logic
-	// TODO Server::removeFromChannel was supposed to be the interface; Server::addToChannel works fine
+
+	if (!_members.empty() && _chanOps == 0)
+	{
+		_members.begin()->second |= US_OPERATOR;
+		++_chanOps;
+	}
+	
 }
 
 // Check if the channel has no members left.
