@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 14:24:29 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/09/03 11:31:49 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/03 11:54:48 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include "Response.hpp"
 
 #include <sstream>
+#include <iostream>
 
 namespace {
 
@@ -45,7 +46,7 @@ rfc cmd_topic(IServerCtrl & srv, const Message & msg)
 	if (!channel->isMember(client))
 		return irc::NOTONCHANNEL;
 	
-	if (irc::argCount(msg) == 1)
+	if (irc::argCount(msg) == 1 && !(msg.flags & irc::MSG_HAS_TRAILING))
 	{
 		if (channel->getTopic().empty())
 			return irc::NOTOPIC;
@@ -54,7 +55,7 @@ rfc cmd_topic(IServerCtrl & srv, const Message & msg)
 	{
 		if (channel->getModes() & CH_TOPIC && !channel->isChanOp(client))
 			return irc::CHANOPRIVSNEEDED;
-		if (msg.trailing == ":")
+		if (msg.trailing.empty())
 			channel->setTopic("");
 		else
 			channel->setTopic(msg.trailing);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Message.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 09:01:01 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/27 13:43:26 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/03 12:07:07 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ Message irc::string2Message(std::string str, Client *client)
 	Message msg;
 	msg.flags = 0;
 	msg.sender = client;
+	// bool trailSign = false;
 	
 	// Clear spaces at beggining
 	// if the message is empty is returned as is and the flags will say so!
@@ -63,7 +64,7 @@ Message irc::string2Message(std::string str, Client *client)
 	if (str[0] == ':') 
 	{
 		std::string::size_type end = str.find_first_of(' ');
-		if (end > 1) 
+		if (end > 1 && end != std::string::npos) 
 		{
 			msg.prefix = str.substr(1, end - 1);
 			if (end == std::string::npos)
@@ -93,7 +94,7 @@ Message irc::string2Message(std::string str, Client *client)
 		return msg;
 	// Extract command
 	std::string::size_type pos = str.find_first_of(' ');
-	if (pos)
+	if (pos && pos != std::string::npos)
 	{
 		msg.command = str.substr(0, pos);
 		allCaps(msg.command);
@@ -109,7 +110,7 @@ Message irc::string2Message(std::string str, Client *client)
 		
 		// Find end of param
 		std::string::size_type end_pos = str.find_first_of(' ');
-		if (end_pos > 0)
+		if (end_pos && end_pos != std::string::npos)
 		{
 			std::string tmp = str.substr(0, end_pos);
 			msg.params.push_back(tmp);
