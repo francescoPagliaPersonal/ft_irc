@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 16:27:31 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/03 10:31:28 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/03 10:48:03 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void Server::_registerNewClient(int fd, const struct sockaddr_in& addr)
 			<< " accepted at FD " << fd << '\n';
 }
 // Remove a client and deregister FD.
-void Server::_removeClient(Client* client)
+void Server::_deleteClient(Client* client)
 {
 	std::set<Client*> contacts;
 	if (!client->hasQuit())
@@ -104,5 +104,5 @@ void Server::_prepareClientDisconnect(Client* client)
 	_epoll.mod(client->getFD(), EPOLL_FL_QUIT, client);
 
 	// HACK only for testing!!
-	// _removeClient(client);
+	// _deleteClient(client);
 }

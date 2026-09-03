@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:32:56 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/02 17:25:11 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/03 10:47:55 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ class Server : public IServerCtrl
 		void _handleClientEvent(epoll_event&);
 		// ---- Clients ----
 		void _registerNewClient(int, const sockaddr_in&);
-		void _removeClient(Client*);
+		void _deleteClient(Client*);
 		void _prepareClientDisconnect(Client*);
 		// ---- Command Execution ----
 		void _executeCommands();
