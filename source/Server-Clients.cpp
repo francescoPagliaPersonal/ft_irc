@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 16:27:31 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/02 16:20:23 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/03 12:58:16 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,8 @@ void Server::_removeClientFromChannels(Client * client)
 // Remove a client and deregister FD.
 void Server::_removeClient(Client* client)
 {
+	std::cout << "[Info] Connection to " << client->getHost()
+			  << " is being closed on FD " << client->getFD() << ".\n";
 	_epoll.del(client->getFD());
 	_removeClientFromChannels(client);
 	// TODO remove from _connections
@@ -112,19 +114,4 @@ void Server::_prepareClientDisconnect(Client* client)
 
 	// HACK only for testing!!
 	// _removeClient(client);
-}
-
-void Server::_housekeeping()
-{
-	std::map<int, Client*>::iterator it;
-	for (it = _clients.begin(); it != _clients.end(); it++)
-	{
-		Client* client = it->second;
-		if (client->hasTimedOut())
-		{
-			client->setQuit(true);
-			_prepareClientDisconnect(client);
-			client->eraseBufOut();
-		}
-	}
 }

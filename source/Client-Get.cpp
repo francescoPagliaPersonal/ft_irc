@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 17:07:36 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/02 14:23:43 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/03 12:46:57 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,17 @@ std::deque<Channel*> Client::getChannelsList() const
 	return _channels;
 }
 
-bool Client::hasTimedOut() const
+bool Client::toBeKilled() const
 {
-	if (_noBuffChange >= BUF_NOCHANGE_LIMIT)
-		return (true);
-	return (false);
+	return (_toBeKilled);
+}
+
+std::size_t Client::inSize() const
+{
+	return (_bufIN.size());
+}
+
+std::size_t Client::outSize() const
+{
+	return (_bufOUT.size());
 }

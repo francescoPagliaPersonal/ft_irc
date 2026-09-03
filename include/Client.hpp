@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 16:22:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/02 15:25:13 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/03 13:11:30 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,12 @@
 
 # include <vector>
 # include <deque>
+# include <ctime>
 
 // -------------------------------------------------------------------------- //
 
-# define BUF_SIZE 4095
-# define BUF_NOCHANGE_LIMIT 2
+# define BUF_SIZE 4095			// size for the receive buffer
+# define MAX_BUF_SIZE 512000	// max size for IN/OUT buffer in Byte
 
 // -------------------------------------------------------------------------- //
 
@@ -62,7 +63,9 @@ class Client
 		bool getCap() const;
 		bool hasQuit() const;
 		bool isBufferOutFilled() const;
-		bool hasTimedOut() const;
+		bool toBeKilled() const;
+		std::size_t inSize() const;		// temporary debug functions
+		std::size_t outSize() const;	// temporary debug functions
 		// ---- Set ----
 		bool setRegistrationFlags(int flags);
 		void setNick(const std::string & str);
@@ -84,13 +87,14 @@ class Client
 		unsigned char 		 _registrationFlags; // FIXME needs type from newer ft_irc.hpp on Channels branch
 		bool				 _capRequested;		 // track if client requested CAP
 		bool				 _hasQuit;			 // track if a client sent QUIT
+		bool				 _toBeKilled;		 // forceful disconnect pending
 		std::string			 _nick;				 // client's nick name
 		std::string			 _userName;			 // client's user name
 		std::string			 _realName;			 // client's real name
 		const sockaddr_in& 	 _address;			 // original client IPv4 data
 		std::string			 _host;				 // clients hostname (IP) as string
 		std::deque<Channel*> _channels;			 // channels the client is registered to
-		irc::uint8			 _noBuffChange;		 // counts how many times _bufOUT didn't change
+		time_t				 _lastSend;			 // time of last send()
 		// ----
 		Client();
 		Client(const Client&);

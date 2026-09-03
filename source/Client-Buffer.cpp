@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 17:02:24 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/02 15:22:25 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/03 13:12:41 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,6 @@ irc::epollret Client::sendFromBuffer()
 	if (ret == static_cast<ssize_t>(_bufOUT.size()))
 	{
 		_bufOUT.clear();
-		_noBuffChange = 0;
 		if (_hasQuit)
 			return (irc::RET_CLOSE);
 		else
@@ -105,7 +104,6 @@ irc::epollret Client::sendFromBuffer()
 	else
 	{
 		_bufOUT = _bufOUT.substr(ret);
-		_noBuffChange++;
 		std::cout << '[' << __FUNCTION__ << "] kernel buffer doesn't have enough space.\n";
 		return (irc::RET_HASOUTPUT);
 	}
@@ -118,6 +116,16 @@ void	Client::putReply2Buff(const std::string& str)
 	_bufOUT.append(str);
 	if (DEBUG)
 		std::cout << "[FD " << _fd << "] Appending to output buffer:\n" << str;
+	// 1) check for UNRESPONSIVE client
+	if (_bufOUT.size() >= MAX_BUF_SIZE)
+	{
+		_toBeKilled = true;
+		if (DEBUG >= debug::DETAILED)
+			std::cout << "[Info] Client '" << _nick
+					  << "' (FD " << _fd << ") will be disconnected"
+					  << " due to a full outgoing buffer.\n";
+	}
+	// TODO 2) check for abusive client (many calls in short time)
 }
 
 void Client::eraseBufOut()
