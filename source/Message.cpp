@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 09:01:01 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/09/03 12:41:26 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/04 10:26:49 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,18 +102,6 @@ Message irc::string2Message(std::string str, Client *client)
 	}
 	
 	// Extract all params 
-	while (!str.empty()) 
-	{
-		clear_leading_char(str, ' ');
-		
-		// Find end of param
-		std::string::size_type end_pos = str.find_first_of(' ');
-		if (end_pos)
-		{
-			std::string tmp = str.substr(0, end_pos);
-			msg.params.push_back(tmp);
-			str.erase(0, end_pos);
-		}
 	while (!str.empty()) 
 	{
 		clear_leading_char(str, ' ');	
