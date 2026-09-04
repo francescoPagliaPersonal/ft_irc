@@ -74,7 +74,7 @@ void Server::_removeFromIPrecords(Client* client)
 	std::map<std::string, std::deque<Client*> >::iterator ip;
 	ip = _IPrecords.find(client->getHost());
 	if (ip == _IPrecords.end())
-		return ;
+		throw std::runtime_error("looked for a host that was never registered");
 	
 	std::deque<Client*>::iterator it;
 	for (it = ip->second.begin(); it != ip->second.end(); ++it )
@@ -82,9 +82,12 @@ void Server::_removeFromIPrecords(Client* client)
 		if (*it == client)
 		{
 			ip->second.erase(it);
-			break ;	
+			return ;	
 		}
 	}
+	// any client is in iprecords EXCEPT those that are blocked due to MAX IP
+	// EVERY client goes through this function via _deleteClient
+	// thus, there are acceptable no-shows => the not allowed clients
 }
 
 // Creates new client and registers FD with epoll.
