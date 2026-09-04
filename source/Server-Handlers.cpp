@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 22:58:08 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/04 13:58:57 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/04 18:50:30 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,11 @@ void Server::_handleListenEvent()
 		if (newFD < 0)
 			return ;
 		// 2) check for max clients
-		if (_clients.size() >= MAX_CLIENTS)
+		if (_clients.size() >= _maxClients)
 		{
+			// TODO: fix message after we set the server name globaly.
+			std::string reply = "ERROR: too many connection. ";
+			send(newFD, reply.c_str(), reply.size(), 0);
 			::close(newFD); // TODO info msg
 			break ; // needs to break, to allow loop to empty queue
 		}

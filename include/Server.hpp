@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:32:56 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/04 13:55:32 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/04 18:50:44 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 # include "Message.hpp"
 # include "Channel.hpp"
 # include "CommandRegistry.hpp"
+#include "irc.hpp"
 
 // -------------------------------------------------------------------------- //
 
@@ -70,7 +71,9 @@ class Server : public IServerCtrl
 		CommandRegistry			_cmdReg;	// command orchestrator
 		std::time_t				_startTime; // start time of the server
 		std::map<std::string, std::deque<Client*> >
-								_IPrecords; // map of clients that share same IP  
+								_IPrecords; // map of clients that share same IP 
+		irc::uint				_maxClients; // max number of clients that can register
+		
 		// ---- Signals ---
 		static volatile std::sig_atomic_t _isAlive;	// server state
 		static void signalHandler(int);

@@ -6,14 +6,19 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/10 00:45:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/04 13:55:40 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/04 18:50:36 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_irc.hpp"
 #include "Response.hpp"
 #include "Server.hpp"
+#include "irc.hpp"
 
+#include <cstring>
+#include <errno.h>
+#include <stdexcept>
+#include <sys/resource.h>
 #include <sys/socket.h> // socket, connect, getsockname
 #include <arpa/inet.h>	// inet_addr, inet_ntop
 #include <netinet/in.h> // AF_INET, sockaddr_in, htons
@@ -22,6 +27,26 @@
 namespace {
 	std::string retrieveServerAddress();
 	void printNetworkUsageInfo(const std::string&, int, const std::string&);
+
+	irc::uint32 getFDLimit()
+	{
+		errno = 0;
+		struct rlimit	rlm;
+		// retrieve system limits for FDs
+		if (getrlimit(RLIMIT_NOFILE, &rlm) == -1)
+			throw std::runtime_error(std::strerror(errno));
+		// check soft limit (_cur)
+		if (rlm.rlim_cur - RESERVED_FDS < MIN_CLIENTS)
+			throw std::runtime_error("Error not enough socket to run an IRC server.");
+		// calculate max FDs: either system limit OR our max allowed
+		irc::uint maxFD = rlm.rlim_cur - RESERVED_FDS - 1;
+		maxFD = maxFD < MAX_CLIENTS ? maxFD : MAX_CLIENTS;
+		if (DEBUG)
+			std::cout << "[Info] current FD limit: " << rlm.rlim_cur << "\n"
+					<< "[Info] current client limit: " << maxFD
+					<< std::endl;
+		return (maxFD);
+	}
 }
 
 // -------------------------------------------------------------------------- //
@@ -37,6 +62,7 @@ Server::Server(int port, std::string pw)
 	, _clients()
 	, _epoll()
 	, _cmdReg()
+	, _maxClients(getFDLimit())
 {
 	_epoll.add(_listener.getFD(), EPOLLIN);
 	_captureSignals();
