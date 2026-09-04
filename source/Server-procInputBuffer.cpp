@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 10:05:02 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/09/03 15:43:36 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/04 06:55:38 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,8 @@ bool Server::_processInputBuffer(Client *client)
 			return false;
 		}
 		// 2. violation event --- spammer
-		time_t now = time(NULL);
-		if (now - client->getSpamTime() <= SPAM_TRHESHOLD_TIME)
+		std::time_t now = time(NULL);
+		if (std::difftime(now, client->getSpamTime()) <= SPAM_TRHESHOLD_TIME)
 		{
 			if (client->getSpamCount() > SPAM_THRESHOLD_MSGS)
 				return (false);
@@ -86,7 +86,7 @@ bool Server::_processInputBuffer(Client *client)
 		else
 			client->setSpamCount(0);
 		client->setSpamTime(now);
-		// normal event
+		// 3. normal event --- build the msg and attach to queue
 		Message tmp = irc::string2Message(rawStrs[i], client);
 		if (tmp.flags & irc::MSG_HAS_COMMAND)
 		{
