@@ -152,8 +152,14 @@ void Server::_deleteClient(Client* client)
 		reply << ":" << client->getID() << " QUIT :Connection closed." << CRLF;
 		broadcast(contacts, reply.str());
 	}
-	// TODO remove from _connections
-	_removeFromIPrecords(client);
+	try
+	{
+		_removeFromIPrecords(client);
+	}
+	catch (const std::exception& e)
+	{
+		std::cerr << e.what() << std::endl;
+	}
 	_epoll.del(client->getFD());
 	_clients.erase(client->getFD());
 	delete client;
