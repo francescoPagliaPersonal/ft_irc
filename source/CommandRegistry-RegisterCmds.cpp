@@ -73,4 +73,9 @@ void CommandRegistry::registerCmds()
 	mode->addPolicy(new AlreadyRegisteredPlcy(true));
 	mode->addPolicy(new ArgsLimitPlcy(1, 9));
 	_commands[mode->getName()] = mode;
+
+	Command *kick = new Command("KICK", cmd_kick);
+	kick->addPolicy(new AlreadyRegisteredPlcy(true));
+	kick->addPolicy(new ArgsLimitPlcy(2, 3));
+	_commands[kick->getName()] = kick;
 }

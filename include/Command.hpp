@@ -80,6 +80,7 @@ rfc cmd_privmsg(IServerCtrl&, const Message&);
 rfc cmd_invite(IServerCtrl&, const Message&);
 rfc cmd_mode(IServerCtrl&, const Message&);
 rfc cmd_quit(IServerCtrl&, const Message&);
+rfc cmd_kick(IServerCtrl&, const Message&);
 
 #endif
 
