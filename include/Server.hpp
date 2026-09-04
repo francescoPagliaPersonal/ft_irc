@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:32:56 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/03 16:46:26 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/04 14:14:31 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # include "Message.hpp"
 # include "Channel.hpp"
 # include "CommandRegistry.hpp"
+#include "irc.hpp"
 
 // -------------------------------------------------------------------------- //
 
@@ -67,7 +68,9 @@ class Server : public IServerCtrl
 		Epoll					_epoll;		// isolated kernel epoll wrapper
 		CommandRegistry			_cmdReg;	// command orchestrator
 		std::map<std::string, std::deque<Client*> >
-								_IPrecords; // map of clients that share same IP  
+								_IPrecords; // map of clients that share same IP 
+		irc::uint				_maxClients; // max number of clients that can register
+		
 		// ---- Signals ---
 		static volatile std::sig_atomic_t _isAlive;	// server state
 		static void signalHandler(int);
