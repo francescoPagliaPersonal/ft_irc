@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:25:38 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/03 16:13:11 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/04 14:28:51 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,13 @@
 # include <stdexcept>
 
 // -------------------------------------------------------------------------- //
-
+/* We consider to resever in the program at least 5 FDs following this criteria:
+ * 0 1 2 stdio
+ * 3 server listener
+ * 4 reserved client to return closing event without impacting the server.
+ */
+# define RESERVED_FDS 5
+# define MIN_CLIENTS 5
 # define MAX_CLIENTS 50000
 # define MAX_EVENTS 32
 # define TIMEOUT 2000
