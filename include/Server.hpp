@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:32:56 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/03 10:47:55 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/03 16:46:26 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ class Server : public IServerCtrl
 		std::map<std::string, Channel*> _channels; // Channels sorted by key
 		Epoll					_epoll;		// isolated kernel epoll wrapper
 		CommandRegistry			_cmdReg;	// command orchestrator
+		std::map<std::string, std::deque<Client*> >
+								_IPrecords; // map of clients that share same IP  
 		// ---- Signals ---
 		static volatile std::sig_atomic_t _isAlive;	// server state
 		static void signalHandler(int);
@@ -74,6 +76,8 @@ class Server : public IServerCtrl
 		void _handleListenEvent();
 		void _handleClientEvent(epoll_event&);
 		// ---- Clients ----
+		bool _appendToIPrecords(Client*);
+		void _removeFromIPrecords(Client*);
 		void _registerNewClient(int, const sockaddr_in&);
 		void _deleteClient(Client*);
 		void _prepareClientDisconnect(Client*);
