@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:25:38 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/04 13:54:31 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/04 14:29:39 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@
 # define MAX_CLIENT_ON_IP 5
 # define SPAM_THRESHOLD_MSGS 42
 # define SPAM_TRHESHOLD_TIME 4.0
+# define HOUSEKEEPING_INTERVAL 2
 
 # ifndef DEBUG
 #  define DEBUG 0 // TODO set this to zero later and ctl via makefile
