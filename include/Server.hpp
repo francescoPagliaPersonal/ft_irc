@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:32:56 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/02 14:19:53 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/04 06:59:48 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 // -------------------------------------------------------------------------- //
 
 # include <csignal>
+# include <ctime>
 # include <deque>
 # include <string>
 # include <map>
@@ -45,6 +46,7 @@ class Server : public IServerCtrl
 		void run();
 		// ---- Interface ----
 		std::string getPassword() const;
+		std::string getStartTime() const;
 		//		Clients
 		void tryCompleteRegistration(Client*) const;
 		void sendMessage(Client*, const std::string&) const;
@@ -65,6 +67,7 @@ class Server : public IServerCtrl
 		std::map<std::string, Channel*> _channels; // Channels sorted by title
 		Epoll					_epoll;		// isolated kernel epoll wrapper
 		CommandRegistry			_cmdReg;	// command orchestrator
+		std::time_t				_startTime; // start time of the server
 		// ---- Signals ---
 		static volatile std::sig_atomic_t _isAlive;	// server state
 		static void signalHandler(int);
