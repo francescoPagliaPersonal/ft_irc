@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:15:32 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/02 12:33:36 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/04 10:24:30 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ rfc cmd_invite(IServerCtrl&, const Message&);
 rfc cmd_mode(IServerCtrl&, const Message&);
 rfc cmd_quit(IServerCtrl&, const Message&);
 rfc cmd_topic(IServerCtrl&, const Message&);
+rfc cmd_kick(IServerCtrl&, const Message&);
 
 #endif
 
