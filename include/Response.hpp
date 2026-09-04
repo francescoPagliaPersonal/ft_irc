@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/26 10:50:10 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/27 19:56:00 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/03 11:06:25 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ class Response
 		static std::string	buildError(const Message&, const std::string& reason, const std::string& origin);
 		// ---- error handler for semi-automatic error replies
 		static std::string  handleNumeric(const Message&, irc::rfc);
+		static std::string	getServerName();
 
 	private:
 		// ---- custom type for handle semi-automatic error responses

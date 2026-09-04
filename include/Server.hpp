@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:32:56 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/04 07:16:35 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/04 13:55:32 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,8 @@ class Server : public IServerCtrl
 		Channel* getChannelByTitle(std::string) const;
 		//		Channels
 		rfc addToChannel(Client*, const std::string&, const std::string&);
-		void removeFromChannel(Client*, const std::string&, const std::string&);
+		void removeClientFromChannel(Client*, Channel&, std::set<Client*>* );
+		void removeClientFromAllChannels(Client *, std::set<Client*>* );
 		void broadcast(Channel*, Client *, const std::string&) const;
 		void broadcast(Channel*, const std::string&) const;
 		void broadcast(std::set<Client*>&, const std::string&) const;
@@ -64,10 +65,12 @@ class Server : public IServerCtrl
 		ListeningSocket			_listener;	// server's own listening socket
 		std::map<int, Client*>	_clients;	// map of all Clients, sorted by FD
 		std::deque<Message>		_msgsQueue; // holds all incoming messages/loop
-		std::map<std::string, Channel*> _channels; // Channels sorted by title
+		std::map<std::string, Channel*> _channels; // Channels sorted by key
 		Epoll					_epoll;		// isolated kernel epoll wrapper
 		CommandRegistry			_cmdReg;	// command orchestrator
 		std::time_t				_startTime; // start time of the server
+		std::map<std::string, std::deque<Client*> >
+								_IPrecords; // map of clients that share same IP  
 		// ---- Signals ---
 		static volatile std::sig_atomic_t _isAlive;	// server state
 		static void signalHandler(int);
@@ -76,8 +79,10 @@ class Server : public IServerCtrl
 		void _handleListenEvent();
 		void _handleClientEvent(epoll_event&);
 		// ---- Clients ----
+		bool _appendToIPrecords(Client*);
+		void _removeFromIPrecords(Client*);
 		void _registerNewClient(int, const sockaddr_in&);
-		void _removeClient(Client*);
+		void _deleteClient(Client*);
 		void _prepareClientDisconnect(Client*);
 		void _housekeeping();
 		// ---- Command Execution ----
@@ -85,8 +90,8 @@ class Server : public IServerCtrl
 		bool _processInputBuffer(Client*);
 		void _removeMsgsFrom(Client*);
 		// ---- Channels ----
-		void _removeChannel(const std::string&);
-		void _removeChannel(Channel*);
+
+		void	_deleteChannel(Channel*);
 		void _removeClientFromChannels(Client*);
 		Channel* _getOrCreateChannel(const std::string&, const std::string&);
 		Channel* _getChannel(const std::string&) const;

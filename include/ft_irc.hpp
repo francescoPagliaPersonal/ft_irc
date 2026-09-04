@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:25:38 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/03 16:11:04 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/04 13:54:31 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@
 # define MAX_CHANJOIN 3
 # define MAX_TOPICLEN 300
 # define MAX_CHANNELUSERS 500
+# define MAX_CLIENT_ON_IP 5
 # define SPAM_THRESHOLD_MSGS 42
 # define SPAM_TRHESHOLD_TIME 4.0
 

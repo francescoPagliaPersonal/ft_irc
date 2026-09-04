@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/13 10:59:59 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/30 12:02:32 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/03 12:55:42 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,9 @@
 Channel::Channel(const std::string& title, const std::string& pw)
 	: _modes(pw.empty() ? 0 : CH_PASSWORD)
 	, _userLimit(MAX_CHANNELUSERS)
+	, _chanOps(0)
 	, _title(title)
-	, _topic("Welcome to this beautiful channel!") // TODO use a macro
+	, _topic("")
 	, _password(pw)
 	, _members()
 {}
