@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server-CDTOR.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/10 00:45:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/04 14:53:34 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/04 15:47:11 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,15 +32,20 @@ namespace {
 	{
 		errno = 0;
 		struct rlimit	rlm;
+		// retrieve system limits for FDs
 		if (getrlimit(RLIMIT_NOFILE, &rlm) == -1)
 			throw std::runtime_error(std::strerror(errno));
+		// check soft limit (_cur)
 		if (rlm.rlim_cur - RESERVED_FDS < MIN_CLIENTS)
 			throw std::runtime_error("Error not enough socket to run an IRC server.");
+		// calculate max FDs: either system limit OR our max allowed
+		irc::uint maxFD = rlm.rlim_cur - RESERVED_FDS - 1;
+		maxFD = maxFD < MAX_CLIENTS ? maxFD : MAX_CLIENTS;
 		if (DEBUG)
 			std::cout << "[Info] current FD limit: " << rlm.rlim_cur << "\n"
-					<< "[Info] current client limit: " << rlm.rlim_cur - RESERVED_FDS - 1
+					<< "[Info] current client limit: " << maxFD
 					<< std::endl;
-		return rlm.rlim_cur - RESERVED_FDS -1;
+		return (maxFD);
 	}
 }
 
