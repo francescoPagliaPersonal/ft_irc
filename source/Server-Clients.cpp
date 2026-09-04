@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 16:27:31 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/03 17:05:51 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/04 10:02:19 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,11 @@ bool Server::_appendToIPrecords(Client* client)
 		return true;
 	}
 	_IPrecords[IPV4].push_back(client);
+	if (DEBUG)
+	{
+		std::cout << "\n[HOST " << IPV4 << "]"
+			<< " A new host has been recorded.\n" << std::endl;
+	}
 	return true;
 }
 
@@ -82,12 +87,22 @@ void Server::_removeFromIPrecords(Client* client)
 		if (*it == client)
 		{
 			ip->second.erase(it);
-			return ;	
+			break ;	
 		}
 	}
 	// any client is in iprecords EXCEPT those that are blocked due to MAX IP
 	// EVERY client goes through this function via _deleteClient
 	// thus, there are acceptable no-shows => the not allowed clients
+	if (ip->second.empty())
+	{
+		_IPrecords.erase(ip);
+		if (DEBUG)
+		{
+			std::cout << "\n[HOST " << client->getHost() << "]"
+				<< " Has been removed from the server.\n" << std::endl;
+		}
+	}
+		
 }
 
 // Creates new client and registers FD with epoll.
