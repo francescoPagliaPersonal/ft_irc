@@ -114,6 +114,13 @@ Message irc::string2Message(std::string str, Client *client)
 			msg.params.push_back(tmp);
 			str.erase(0, end_pos);
 		}
+	while (!str.empty()) 
+	{
+		clear_leading_char(str, ' ');	
+		// Find end of param; always > 0, npos just gives us the whole string
+		std::string::size_type end_pos = str.find_first_of(' ');
+		msg.params.push_back(str.substr(0, end_pos));
+		str.erase(0, end_pos);
 	}
 	
 	if (!msg.params.empty())
