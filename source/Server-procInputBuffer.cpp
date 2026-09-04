@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 10:05:02 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/09/04 06:55:38 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/04 12:02:33 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,10 @@ bool Server::_processInputBuffer(Client *client)
 			client->incrementSpamCount();
 		}
 		else
+		{
 			client->setSpamCount(0);
-		client->setSpamTime(now);
+			client->setSpamTime(now);
+		}
 		// 3. normal event --- build the msg and attach to queue
 		Message tmp = irc::string2Message(rawStrs[i], client);
 		if (tmp.flags & irc::MSG_HAS_COMMAND)
