@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:42:26 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/04 07:03:18 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/04 07:18:03 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,13 @@ std::string Server::getPassword() const
 }
 
 // Return server start time.
-std::string Server::getStartTime() const
+std::time_t Server::getStartTime() const
+{
+	return (_startTime);
+}
+
+// Return server start time as string.
+std::string Server::_getStartTimeString() const
 {
 	struct tm *local = std::localtime(&_startTime);
 	char buf[20];

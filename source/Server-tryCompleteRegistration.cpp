@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 13:19:17 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/04 07:08:11 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/04 07:18:28 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void Server::tryCompleteRegistration(Client* client) const
 		return ;
 	std::cout << "[FD " << client->getFD() << "] User registration completed.\n";
 	std::stringstream ss;
-	buildWelcomeMessage(ss, client, getStartTime());
+	buildWelcomeMessage(ss, client, _getStartTimeString());
 	buildMessageOfTheDay(ss, client);
 	sendMessage(client, ss.str());
 }
