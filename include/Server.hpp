@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:32:56 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/04 18:50:44 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/04 19:44:36 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <deque>
 # include <string>
 # include <map>
+# include <set>
 
 # include "IServerCtrl.hpp"
 # include "ListeningSocket.hpp"
@@ -73,6 +74,7 @@ class Server : public IServerCtrl
 		std::map<std::string, std::deque<Client*> >
 								_IPrecords; // map of clients that share same IP 
 		irc::uint				_maxClients; // max number of clients that can register
+		std::set<Client*>		_toRemove;	// lists clients to remove forcefully
 		
 		// ---- Signals ---
 		static volatile std::sig_atomic_t _isAlive;	// server state
@@ -88,6 +90,7 @@ class Server : public IServerCtrl
 		void _deleteClient(Client*);
 		void _prepareClientDisconnect(Client*);
 		void _housekeeping();
+		void _addToRemove(Client*);
 		// ---- Command Execution ----
 		void _executeCommands();
 		bool _processInputBuffer(Client*);

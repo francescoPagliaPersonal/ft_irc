@@ -39,6 +39,12 @@ enum e_clientReg
 	REG_DONE = REG_PASSWD | REG_USER | REG_NICK
 };
 
+enum e_buffer
+{
+	BUF_IN,
+	BUF_OUT
+};
+
 class Client
 {
 	public:
@@ -63,6 +69,7 @@ class Client
 		bool getCap() const;
 		bool hasQuit() const;
 		bool isBufferOutFilled() const;
+		bool isBufferFull(e_buffer) const;
 		bool toBeKilled() const;
 		std::time_t getSpamTime() const;
 		irc::uint getSpamCount() const;

@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 17:07:36 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/04 19:35:25 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/04 19:37:51 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,18 @@ bool Client::hasQuit() const
 bool Client::isBufferOutFilled() const
 {
 	return (!_bufOUT.empty());
+}
+
+bool Client::isBufferFull(e_buffer which) const
+{
+	if (which == BUF_IN)
+	{
+		if (_bufIN.size() > MAX_BUF_SIZE)
+			return (true);
+	}
+	else if (_bufOUT.size() > MAX_BUF_SIZE)
+		return (true);
+	return (false);
 }
 
 std::deque<Channel*> Client::getChannelsList() const
