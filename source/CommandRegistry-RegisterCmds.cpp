@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandRegistry-RegisterCmds.cpp                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 11:41:20 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/09/02 07:19:19 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/04 10:24:42 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,11 @@ void CommandRegistry::registerCmds()
 	mode->addPolicy(new ArgsLimitPlcy(1, 9));
 	_commands[mode->getName()] = mode;
 
+	Command *topic = new Command("TOPIC", cmd_topic);
+	topic->addPolicy(new AlreadyRegisteredPlcy(true));
+	topic->addPolicy(new ArgsLimitPlcy(1, 2));
+	_commands[topic->getName()] = topic;
+	
 	Command *kick = new Command("KICK", cmd_kick);
 	kick->addPolicy(new AlreadyRegisteredPlcy(true));
 	kick->addPolicy(new ArgsLimitPlcy(2, 3));

@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/13 10:59:59 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/02 14:21:13 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/03 12:55:42 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ Channel::Channel(const std::string& title, const std::string& pw)
 	, _userLimit(MAX_CHANNELUSERS)
 	, _chanOps(0)
 	, _title(title)
-	, _topic("Welcome to this beautiful channel!") // TODO use a macro
+	, _topic("")
 	, _password(pw)
 	, _members()
 {}
