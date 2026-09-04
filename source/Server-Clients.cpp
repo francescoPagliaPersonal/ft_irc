@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 16:27:31 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/04 13:58:01 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/04 19:34:55 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,7 @@ void Server::sendMessage(Client* client, const std::string& str) const
 {
 	if (!client->isBufferOutFilled() && !client->hasQuit())
 		_epoll.mod(client->getFD(), EPOLL_FL_DEFAULT | EPOLLOUT, client);
-	// TODO drop connection if bufOUT grows too much? or do we drop if kernel buffer stays full?
 	client->putReply2Buff(str);
-	// TODO consider CATCH & disconnect
 }
 
 // -------------------------------------------------------------------------- //
