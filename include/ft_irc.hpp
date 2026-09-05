@@ -24,6 +24,7 @@
  * 3 server listener
  * 4 reserved client to return closing event without impacting the server.
  */
+# define SERVER_NAME "irc.CoolServ.42"
 # define RESERVED_FDS 5
 # define MIN_CLIENTS 5
 # define MAX_CLIENTS 50000
