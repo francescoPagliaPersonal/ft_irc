@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/03 11:38:33 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/04 19:24:35 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/05 15:53:14 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,23 +17,21 @@
 
 #include <map>
 
+// Periodically checks for clients to be removed and sends PING to clients
 void Server::_housekeeping()
 {
 	// -- prepare current time
 	static std::time_t lastRemoval = std::time(NULL);
 	static std::time_t lastPing = std::time(NULL);
 	std::time_t now = std::time(NULL);
-	// -- find clients to disconnect
-	// TODO evaluate: some list more efficient -> BUT can it be set where needed?
+	// -- remove conspicuous clients
 	if (std::difftime(now, lastRemoval) >= INTERVAL_REMOVE)
 	{
-		std::map<int, Client*>::iterator it = _clients.begin();
-		while (it != _clients.end())
+		while (_toRemove.size())
 		{
-			Client* client = it->second;
-			it++;
-			if (client->toBeKilled())
-				_deleteClient(client);
+			Client* client = *(_toRemove.begin());
+			_deleteClient(client);
+			_toRemove.erase(client);
 		}
 		lastRemoval = now;
 	}

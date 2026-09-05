@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 16:27:31 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/04 19:44:36 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/05 15:50:09 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,22 @@ Client* Server::findClientByNick(const std::string & nick) const
 }
 
 // Queue STR for sending to CLIENT and enable the EPOLLOUT interest.
-void Server::sendMessage(Client* client, const std::string& str) const 
+void Server::sendMessage(Client* client, const std::string& str) const
 {
+	if (client->toBeRemoved())
+		return ;
 	if (!client->isBufferOutFilled() && !client->hasQuit())
 		_epoll.mod(client->getFD(), EPOLL_FL_DEFAULT | EPOLLOUT, client);
 	client->putReply2Buff(str);
+	// check for clients that don't empty their buffer fast enough
+	if (client->isBufferFull(BUF_OUT))
+	{
+		_addToRemove(client);
+		if (DEBUG >= debug::DETAILED)
+			std::cout << "[Info] Client '" << client->getNick()
+					  << "' (FD " << client->getFD() << ") will be disconnected"
+					  << " due to a full outgoing buffer.\n";
+	}
 }
 
 // -------------------------------------------------------------------------- //
@@ -179,7 +190,8 @@ void Server::_prepareClientDisconnect(Client* client)
 }
 
 // Inserts a CLIENT that is to be removed into the set of clients to be removed.
-void Server::_addToRemove(Client* client)
+void Server::_addToRemove(Client* client) const // with the mutable attribute it has to be const
 {
 	_toRemove.insert(client);
+	client->setRemove(true);
 }
