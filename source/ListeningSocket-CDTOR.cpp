@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "ListeningSocket.hpp"
+#include "ft_irc.hpp"
 
 #include <sys/socket.h>		// socket, setsockopt, bind, listen, accept
 #include <netinet/in.h>		// struct sockaddr_in
@@ -28,7 +29,7 @@
 // -------------------------------------------------------------------------- //
 
 
-	// Helper to create a raw listening socket for the server.
+// Helper to create a raw listening socket for the server.
 int ListeningSocket::_createNewSocket()
 {
 	int fd;
@@ -53,20 +54,7 @@ int ListeningSocket::_createNewSocket()
 	return (fd);
 }
 
-// Helper to bind the raw listening socket to a network adddress and port.
-void bindAddrToFD(int fd, unsigned short port)
-{
-	// 3) bind the new socket to any network adress
-	struct sockaddr_in ipAddr;
-	std::memset(&ipAddr, 0, sizeof (ipAddr));
-	ipAddr.sin_family = AF_INET;
-	// convert little-endian numbers to big-endian
-	ipAddr.sin_port = htons(port);
-	ipAddr.sin_addr.s_addr = htonl(INADDR_ANY);
-	if (::bind(fd, reinterpret_cast<struct sockaddr*>(&ipAddr), sizeof(ipAddr)) < 0)
-		throw std::runtime_error(
-			std::string("Error on bind(): ") + std::strerror(errno));
-}
+
 
 // Helper to configure the FD of the listening socket.
 void ListeningSocket::_configureFD()
@@ -98,6 +86,15 @@ void ListeningSocket::_bindAddrToFD()
 			std::string("Error on bind(): ") + std::strerror(errno));
 }
 
+void ListeningSocket::_setHostName()
+{
+
+	struct hostent* hostByName = gethostbyaddr((char*)&_ipAddr.sin_addr.s_addr, sizeof(_ipAddr.sin_addr.s_addr), AF_INET);
+	if (hostByName == NULL)
+		_hostName = SERVER_NAME;
+	else
+		_hostName = hostByName->h_name;
+}
 // -------------------------------------------------------------------------- //
 // CUSTOM CTOR
 // -------------------------------------------------------------------------- //
@@ -110,6 +107,7 @@ ListeningSocket::ListeningSocket(unsigned short port)
 	_fd = _createNewSocket();
 	_bindAddrToFD();
 	_configureFD();
+	_setHostName();
 }
 
 // Close the listening socket's FD.

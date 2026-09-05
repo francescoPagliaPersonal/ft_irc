@@ -36,6 +36,11 @@ int ListeningSocket::getPort() const
 	return (_port);
 }
 
+std::string ListeningSocket::getHostName() const
+{
+	return (_hostName);
+}
+
 // Orchestrates the process of accepting a new connection from IPADDR.
 int ListeningSocket::acceptConnection(struct sockaddr_in& ipAddr) const
 {
