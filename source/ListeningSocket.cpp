@@ -13,7 +13,6 @@
 #include "ListeningSocket.hpp"
 
 #include <sys/socket.h>		// socket, setsockopt, bind, listen, accept
-#include <netinet/in.h>		// struct sockaddr_in
 #include <fcntl.h>			// fcntl
 
 #include <cerrno>
