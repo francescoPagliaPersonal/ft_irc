@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 10:05:02 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/09/04 12:02:33 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/05 16:11:07 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,14 +73,17 @@ bool Server::_processInputBuffer(Client *client)
 					<< std::endl;
 			}
 			_removeMsgsFrom(client);
-			return false;
+			return (false);
 		}
 		// 2. violation event --- spammer
 		std::time_t now = time(NULL);
 		if (std::difftime(now, client->getSpamTime()) <= SPAM_TRHESHOLD_TIME)
 		{
 			if (client->getSpamCount() > SPAM_THRESHOLD_MSGS)
+			{
+				_removeMsgsFrom(client);
 				return (false);
+			}
 			client->incrementSpamCount();
 		}
 		else
@@ -106,5 +109,5 @@ bool Server::_processInputBuffer(Client *client)
 			<< "added " << rawStrs.size() << " strings for a total of "
 			<< _msgsQueue.size() << " messages\n";
 	}
-	return true;
+	return (true);
 }

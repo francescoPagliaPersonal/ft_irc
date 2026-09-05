@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 22:58:08 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/04 18:50:30 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/05 16:10:29 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void Server::_handleClientEvent(epoll_event& ev)
 				_epoll.mod(client->getFD(), EPOLLERR | EPOLLHUP, client);
 			break;
 		case irc::RET_CLOSE: // this is a forceful disconnect, never a QUIT
-			_deleteClient(client);
+			_addToRemove(client);
 			break;
 		case irc::RET_HASOUTPUT:
 			// FIXME this is redundant, is it not?
@@ -69,10 +69,7 @@ void Server::_handleClientEvent(epoll_event& ev)
 			break;
 		case irc::RET_PARSEINPUT: // builds the interneal message array
 			if (_processInputBuffer(client) == false)
-			{
-				_prepareClientDisconnect(client);
-				_deleteClient(client);
-			}
+				_addToRemove(client);
 			break;
 		default: ;
 	}
