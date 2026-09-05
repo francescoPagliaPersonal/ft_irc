@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/03 11:38:33 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/05 15:53:14 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/05 16:17:45 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ void Server::_housekeeping()
 		while (_toRemove.size())
 		{
 			Client* client = *(_toRemove.begin());
-			_deleteClient(client);
 			_toRemove.erase(client);
+			_deleteClient(client);
 		}
 		lastRemoval = now;
 	}
