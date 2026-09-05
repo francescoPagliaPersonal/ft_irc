@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "Response.hpp"
 #include "ft_irc.hpp"
 #include "Command.hpp"
 #include "IServerCtrl.hpp"
@@ -27,7 +28,8 @@ rfc cmd_ping(IServerCtrl& srv, const Message& msg)
 	else
 		token = msg.trailing;
 
+	std::string srvName = Response::getServerName();
 	srv.sendMessage(client,
-		std::string(":CoolServ PONG CoolServ :") + token + CRLF);
+		std::string(":" + srvName + " PONG " + srvName + " :") + token + CRLF);
 	return (irc::OK);
 }
