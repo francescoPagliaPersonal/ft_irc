@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:32:56 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/04 20:01:49 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/05 16:26:16 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ class Server : public IServerCtrl
 		void _addToRemove(Client*) const;
 		// ---- Command Execution ----
 		void _executeCommands();
-		bool _processInputBuffer(Client*);
+		irc::epollret _processInputBuffer(Client*);
 		void _removeMsgsFrom(Client*);
 		// ---- Channels ----
 
