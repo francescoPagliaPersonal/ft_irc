@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 09:28:34 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/06 20:40:07 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/06 20:52:35 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 
 #include <unistd.h> // sleep()
 
-void	Bot::run()
+void Bot::run()
 {
 	struct epoll_event	ev;
 
@@ -65,6 +65,7 @@ void	Bot::run()
 	// 5) Stay alive with dummy loop
 	while (true)
 	{
-		sleep(2);
+		// sleep(2);
+		_spamUser();
 	}
 }

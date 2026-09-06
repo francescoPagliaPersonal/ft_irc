@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 08:12:43 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/06 20:42:43 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/06 20:56:06 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,4 +31,18 @@ void Bot::_registerWith(const std::string& name)
 		std::cerr << "Error sending registration: " << std::strerror(errno) << std::endl;
 	else
 		std::cout << "Sent:\n" << msg;
+}
+
+void Bot::_spamUser(const std::string& nick)
+{
+	std::string msg;
+	msg.append("PRIVMSG " + nick + " :" + SPAM_MSG_42 + CRLF);
+	::send(_fd, msg.c_str(), msg.size(), 0);
+}
+
+void Bot::_spamChannel(const std::string& channel)
+{
+	std::string msg;
+	msg.append("PRIVMSG " + channel + " :" + SPAM_MSG_CH + CRLF);
+	::send(_fd, msg.c_str(), msg.size(), 0);
 }
