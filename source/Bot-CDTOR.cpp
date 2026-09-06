@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 08:20:34 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/02 09:28:02 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/06 20:42:31 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,9 @@ void connectAddrToFD(int fd, unsigned int srvAdrNetOrder, unsigned short port)
 
 Bot::Bot(const unsigned int server,
 		 const unsigned short port,
-		 const std::string&)
+		 const std::string& pw)
 	: _fd(-1)
+	, _pw(pw)
 {
 	_fd = createNewSocket();
 	configureFD(_fd);

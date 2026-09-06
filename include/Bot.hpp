@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 07:22:22 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/02 08:41:48 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/06 20:42:27 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,12 @@ class Bot
 		void run();
 	private:
 		// ----
-		int _fd;
+		int _fd;			// socket with connection to server
+		std::string _pw;	// server password
 		Epoll _epoll;
-		// ====
+		// ----
+		void _registerWith(const std::string&);
+		// ----
 		Bot();
 		Bot(const Bot&);
 		Bot& operator=(const Bot&);

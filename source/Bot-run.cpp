@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 09:28:34 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/02 09:56:08 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/06 20:40:07 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@
 #include <iostream>
 #include <stdexcept>
 
-// Educational dummy: no loop. Just wait once to see if non-blocking
-// connect succeeded. Shows why epoll + SO_ERROR is needed.
+#include <unistd.h> // sleep()
+
 void	Bot::run()
 {
 	struct epoll_event	ev;
@@ -57,4 +57,14 @@ void	Bot::run()
 		std::cout << "Connect failed: " << std::strerror(err) << std::endl;
 	else
 		std::cout << "Connect succeeded." << std::endl;
+
+	// 4) Register with server: NICK and USER commands
+	if (err == 0)
+		_registerWith("bot");
+
+	// 5) Stay alive with dummy loop
+	while (true)
+	{
+		sleep(2);
+	}
 }
