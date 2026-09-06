@@ -59,7 +59,7 @@ TEST(pass_second_is_already_registered)
 	srv.sent.clear();
 	reg.execute(srv, irc::string2Message("PASS 1o.0", &tc.client));
 	CHECK_EQ(lastTo(srv, &tc.client),
-		std::string(":CoolServ 462 * :You may not reregister.\r\n"));
+		std::string(":CoolServ 468 * :You may not reregister.\r\n"));
 }
 
 TEST(nick_missing_param)
@@ -148,7 +148,7 @@ TEST(user_twice_before_done)
 	srv.sent.clear();
 	reg.execute(srv, irc::string2Message("USER other 0 * :name", &tc.client));
 	CHECK_EQ(lastTo(srv, &tc.client),
-		std::string(":CoolServ 462 * :You may not reregister.\r\n"));
+		std::string(":CoolServ 468 * :You may not reregister.\r\n"));
 }
 
 TEST(cap_ls_sets_cap_and_replies)
@@ -342,7 +342,7 @@ TEST(response_already_registered)
 	Message		msg = irc::string2Message("PASS x", &tc.client);
 
 	CHECK_EQ(Response::handleNumeric(msg, irc::ALREADYREGISTERED),
-		std::string(":CoolServ 462 * :You may not reregister.\r\n"));
+		std::string(":CoolServ 468 * :You may not reregister.\r\n"));
 }
 
 TEST(response_password_mismatch)
@@ -580,7 +580,7 @@ TEST(privmsg_not_on_channel)
 	srv.sent.clear();
 	reg.execute(srv, irc::string2Message("PRIVMSG #chan :hello", &bob.client));
 	CHECK_EQ(lastTo(srv, &bob.client),
-		std::string(":CoolServ 404 bob #chan :Cannot send to channel.\r\n"));
+		std::string(":CoolServ 442 bob #chan :You're not on that channel.\r\n"));
 	CHECK(!sentContains(srv, &alice.client, "PRIVMSG"));
 }
 

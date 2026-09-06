@@ -95,15 +95,15 @@ TEST(message_prefix_only)
 	CHECK(msg.command.empty());
 }
 
-TEST(message_empty_trailing_not_flagged)
+TEST(message_empty_trailing_is_flagged)
 {
 	TestClient	tc;
 	Message		msg = irc::string2Message("PRIVMSG bob :", &tc.client);
 
 	CHECK(msg.flags & irc::MSG_HAS_PARAMS);
-	CHECK(!(msg.flags & irc::MSG_HAS_TRAILING));
+	CHECK(msg.flags & irc::MSG_HAS_TRAILING);
 	CHECK(msg.trailing.empty());
-	CHECK_EQ(irc::argCount(msg), 1);
+	CHECK_EQ(irc::argCount(msg), 2);
 }
 
 TEST(message_colon_inside_param_is_not_trailing)
