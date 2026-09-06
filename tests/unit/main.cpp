@@ -28,6 +28,7 @@ namespace
 		"channel",
 		"join",
 		"invite",
+		"mode",
 		"framing",
 		0
 	};

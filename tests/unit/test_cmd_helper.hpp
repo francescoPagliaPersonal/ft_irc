@@ -14,6 +14,8 @@
 # define TEST_CMD_HELPER_HPP
 
 # include "Client.hpp"
+# include "CommandRegistry.hpp"
+# include "Message.hpp"
 # include "client_fixture.hpp"
 # include "fake_server.hpp"
 
@@ -50,6 +52,12 @@ inline void	registerClient(FakeServer &srv, TestClient &tc,
 	tc.client.setUserName("user");
 	tc.client.setRegistrationFlags(REG_DONE);
 	srv.nicks[nick] = &tc.client;
+}
+
+inline void	joinChannel(CommandRegistry &reg, FakeServer &srv,
+				TestClient &tc, const std::string &chan)
+{
+	reg.execute(srv, irc::string2Message("JOIN " + chan, &tc.client));
 }
 
 #endif
