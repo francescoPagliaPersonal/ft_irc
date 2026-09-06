@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 22:58:08 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/05 16:27:09 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/06 21:47:37 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,7 @@ void Server::_handleClientEvent(epoll_event& ev)
 			break;
 		case irc::RET_PARSEINPUT: // builds the interneal message array
 			if (_processInputBuffer(client) == irc::RET_CLOSE)
-			{
-				_removeMsgsFrom(client);
 				_addToRemove(client);
-			}
 			break;
 		default: ;
 	}
