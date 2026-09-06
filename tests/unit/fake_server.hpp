@@ -20,7 +20,9 @@
 # include "ft_irc.hpp"
 # include "irc.hpp"
 
+# include <deque>
 # include <map>
+# include <set>
 # include <string>
 # include <utility>
 # include <vector>
@@ -104,6 +106,14 @@ public:
 			sendMessage(it->first, reply);
 	}
 
+	void	broadcast(std::set<Client*> &contacts,
+				const std::string &reply) const
+	{
+		for (std::set<Client*>::iterator it = contacts.begin();
+			 it != contacts.end(); ++it)
+			sendMessage(*it, reply);
+	}
+
 	rfc	addToChannel(Client *client, const std::string &title,
 				const std::string &pw)
 	{
@@ -139,18 +149,26 @@ public:
 		return (irc::OK);
 	}
 
-	void	removeFromChannel(Client *client, const std::string &title,
-				const std::string &)
+	void	removeClientFromChannel(Client *client, Channel &channel,
+				std::set<Client*> *contacts)
 	{
-		std::string	mapKey = Channel::title2key(title);
-		Channel		*channel = _getChannel(mapKey);
+		channel.removeClient(client);
+		client->removeChannel(&channel);
+		if (channel.isEmpty())
+			_removeChannel(Channel::title2key(channel.getTitle()));
+		else if (contacts)
+			channel.pushMembersToSet(contacts);
+	}
 
-		if (!channel)
-			return ;
-		channel->removeClient(client);
-		client->removeChannel(channel);
-		if (channel->isEmpty())
-			_removeChannel(mapKey);
+	void	removeClientFromAllChannels(Client *client,
+				std::set<Client*> *contacts)
+	{
+		std::deque<Channel*>	joined;
+		std::deque<Channel*>::iterator	it;
+
+		joined = client->getChannelsList();
+		for (it = joined.begin(); it != joined.end(); ++it)
+			removeClientFromChannel(client, **it, contacts);
 	}
 
 	Channel	*getChannelByTitle(std::string title) const
