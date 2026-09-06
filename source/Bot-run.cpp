@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 09:28:34 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/06 20:52:35 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/06 21:02:53 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,18 +54,23 @@ void Bot::run()
 
 	// 3) print result
 	if (err != 0)
+	{
 		std::cout << "Connect failed: " << std::strerror(err) << std::endl;
+		return ;
+	}
 	else
 		std::cout << "Connect succeeded." << std::endl;
 
-	// 4) Register with server: NICK and USER commands
-	if (err == 0)
-		_registerWith("bot");
+	// 4) Register with server and join a default channel
+	_registerWith("bot");
+	_joinChannel(SPAM_CHANNEL);
+	sleep(3);
 
 	// 5) Stay alive with dummy loop
 	while (true)
 	{
 		// sleep(2);
-		_spamUser();
+		_spamUser(SPAM_USER);
+		_spamChannel(SPAM_CHANNEL);
 	}
 }

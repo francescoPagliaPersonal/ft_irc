@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 07:22:22 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/06 20:55:50 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/06 21:02:30 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,9 @@ class Bot
 		Epoll _epoll;
 		// ----
 		void _registerWith(const std::string&);
-		void _spamUser(const std::string& = SPAM_USER);
-		void _spamChannel(const std::string& = SPAM_CHANNEL);
+		void _joinChannel(const std::string&);
+		void _spamUser(const std::string&);
+		void _spamChannel(const std::string&);
 		// ----
 		Bot();
 		Bot(const Bot&);
