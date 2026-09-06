@@ -126,12 +126,11 @@ TEST(fake_add_to_channel_duplicate)
 		irc::USERONCHANNEL);
 }
 
-/* needs getLimit
 TEST(channel_get_limit_default)
 {
 	Channel	ch("#test", "");
 
-	CHECK_EQ(ch.getLimit(), static_cast<irc::uint>(0));
+	CHECK_EQ(ch.getLimit(), static_cast<irc::uint>(MAX_CHANNELUSERS));
 }
 
 TEST(channel_get_limit_after_set)
@@ -141,7 +140,6 @@ TEST(channel_get_limit_after_set)
 	ch.setLimit(10);
 	CHECK_EQ(ch.getLimit(), static_cast<irc::uint>(10));
 }
-*/
 
 /* needs MODE
 TEST(channel_join_granted_invite_only)
