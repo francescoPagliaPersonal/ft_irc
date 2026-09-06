@@ -11,6 +11,8 @@
 /* ************************************************************************** */
 
 #include "Channel.hpp"
+#include "CommandRegistry.hpp"
+#include "Message.hpp"
 #include "client_fixture.hpp"
 #include "fake_server.hpp"
 #include "ft_irc.hpp"
@@ -85,8 +87,7 @@ TEST(channel_topic_default_and_clear)
 {
 	Channel	ch("#test", "");
 
-	CHECK_EQ(ch.getTopic(),
-		std::string("Welcome to this beautiful channel!"));
+	CHECK_EQ(ch.getTopic(), std::string(""));
 	ch.setTopic("");
 	CHECK_EQ(ch.getTopic(), std::string(""));
 }
@@ -141,7 +142,6 @@ TEST(channel_get_limit_after_set)
 	CHECK_EQ(ch.getLimit(), static_cast<irc::uint>(10));
 }
 
-/* needs MODE
 TEST(channel_join_granted_invite_only)
 {
 	CommandRegistry	reg;
@@ -158,7 +158,6 @@ TEST(channel_join_granted_invite_only)
 	reg.execute(srv, irc::string2Message("INVITE bob #chan", &alice.client));
 	CHECK(srv.getChannelByTitle("#chan")->joinGranted(&bob.client));
 }
-*/
 
 TEST(channel_title2key_ampersand)
 {

@@ -83,7 +83,7 @@ TEST(invite_inviter_not_on_channel)
 	srv.sent.clear();
 	reg.execute(srv, irc::string2Message("INVITE carol #chan", &alice.client));
 	CHECK_EQ(lastTo(srv, &alice.client),
-		std::string(":CoolServ 442 alice :You're not on that channel.\r\n"));
+		std::string(":CoolServ 442 alice #chan :You're not on that channel.\r\n"));
 }
 
 TEST(invite_success)
@@ -146,7 +146,6 @@ TEST(invite_success_exact_invitee_line)
 		":alice!user@0.0.0.0 INVITE bob #chan\r\n"));
 }
 
-/* needs MODE
 TEST(invite_non_op_on_invite_only)
 {
 	CommandRegistry	reg;
@@ -160,12 +159,12 @@ TEST(invite_non_op_on_invite_only)
 	registerClient(srv, bob, "bob");
 	registerClient(srv, carol, "carol");
 	reg.execute(srv, irc::string2Message("JOIN #chan", &alice.client));
-	reg.execute(srv, irc::string2Message("MODE #chan +i", &alice.client));
 	reg.execute(srv, irc::string2Message("JOIN #chan", &bob.client));
+	reg.execute(srv, irc::string2Message("MODE #chan +i", &alice.client));
 	srv.sent.clear();
 	reg.execute(srv, irc::string2Message("INVITE carol #chan", &bob.client));
 	CHECK_EQ(lastTo(srv, &bob.client),
-		std::string(":CoolServ 482 bob :You're not channel operator.\r\n"));
+		std::string(":CoolServ 482 bob #chan :You're not channel operator.\r\n"));
 }
 
 TEST(invite_then_join_on_invite_only)
@@ -185,7 +184,6 @@ TEST(invite_then_join_on_invite_only)
 	reg.execute(srv, irc::string2Message("JOIN #chan", &bob.client));
 	CHECK(srv.getChannelByTitle("#chan")->isMember(&bob.client));
 }
-*/
 
 TEST(invite_regular_member_on_open_channel)
 {

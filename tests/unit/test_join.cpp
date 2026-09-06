@@ -60,8 +60,8 @@ TEST(join_create_channel)
 	CHECK(ch->isMember(&tc.client));
 	CHECK(ch->isChanOp(&tc.client));
 	CHECK(sentContains(srv, &tc.client, " JOIN #chan"));
-	CHECK(sentContains(srv, &tc.client, " 332 "));
-	CHECK(sentContains(srv, &tc.client, "Welcome to this beautiful channel!"));
+	CHECK(sentContains(srv, &tc.client, " 331 "));
+	CHECK(!sentContains(srv, &tc.client, " 332 "));
 	CHECK(sentContains(srv, &tc.client, " 353 "));
 	CHECK(sentContains(srv, &tc.client, "@alice"));
 	CHECK(sentContains(srv, &tc.client, " 366 "));
@@ -79,7 +79,7 @@ TEST(join_create_channel_exact_replies)
 	CHECK(sentContains(srv, &tc.client,
 		":alice!user@0.0.0.0 JOIN #chan\r\n"));
 	CHECK(sentContains(srv, &tc.client,
-		":CoolServ 332 alice #chan :Welcome to this beautiful channel!\r\n"));
+		":CoolServ 331 alice #chan :No topic is set\r\n"));
 	CHECK(sentContains(srv, &tc.client,
 		":CoolServ 353 alice = #chan :@alice \r\n"));
 	CHECK(sentContains(srv, &tc.client,
@@ -101,7 +101,8 @@ TEST(join_second_client_broadcast)
 	reg.execute(srv, irc::string2Message("JOIN #chan", &bob.client));
 	CHECK(sentContains(srv, &alice.client, " JOIN #chan"));
 	CHECK(sentContains(srv, &bob.client, " JOIN #chan"));
-	CHECK(sentContains(srv, &bob.client, " 332 "));
+	CHECK(sentContains(srv, &bob.client, " 331 "));
+	CHECK(!sentContains(srv, &bob.client, " 332 "));
 	CHECK(sentContains(srv, &bob.client, " 353 "));
 	CHECK(sentContains(srv, &bob.client, " 366 "));
 }
@@ -383,7 +384,6 @@ TEST(join_password_set_later)
 		std::string(":CoolServ 475 bob #later :Cannot join channel (+k).\r\n"));
 }
 
-/* needs MODE
 TEST(join_invite_only_without_invite)
 {
 	CommandRegistry	reg;
@@ -420,4 +420,3 @@ TEST(join_after_invite_on_invite_only)
 	reg.execute(srv, irc::string2Message("JOIN #chan", &bob.client));
 	CHECK(srv.getChannelByTitle("#chan")->isMember(&bob.client));
 }
-*/
