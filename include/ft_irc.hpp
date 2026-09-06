@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:25:38 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/04 19:05:41 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/06 21:24:29 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@
 # define MAX_CLIENT_ON_IP 5
 # define SPAM_THRESHOLD_MSGS 42
 # define SPAM_TRHESHOLD_TIME 4.0
-# define INTERVAL_REMOVE 2
 # define INTERVAL_PING 90
 
 # ifndef DEBUG
