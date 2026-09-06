@@ -31,6 +31,7 @@ TEST_SRC	:= main.cpp \
 				test_mode.cpp \
 				test_quit.cpp \
 				test_topic.cpp \
+				test_kick.cpp \
 				test_framing.cpp
 
 MODE		?= reg

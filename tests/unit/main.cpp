@@ -30,6 +30,8 @@ namespace
 		"invite",
 		"mode",
 		"quit",
+		"topic",
+		"kick",
 		"framing",
 		0
 	};
