@@ -69,6 +69,7 @@ void Response::init(const std::string &srv)
 	_numInfo[irc::NEEDMOREPARAMS] = ":Not enough parameters.";
 	_numInfo[irc::ALREADYREGISTERED] = ":You may not reregister.";
 	_numInfo[irc::PASSWDMISMATCH] = ":Password incorrect.";
+	_numInfo[irc::KEYSET] = ":Channel key already set";
 	_numInfo[irc::CHANNELISFULL] = ":Cannot join channel (+l).";
 	_numInfo[irc::UNKNOWNMODE] = ":is unknown mode char to me.";
 	_numInfo[irc::INVITEONLYCHAN] = ":Cannot join channel (+i).";
@@ -77,7 +78,8 @@ void Response::init(const std::string &srv)
 	_numInfo[irc::BADCHANMASK] = ":Bad Channel Mask.";
 	_numInfo[irc::CHANOPRIVSNEEDED] = ":You're not channel operator.";
 	_numInfo[irc::NOOPERHOST] = ":No O-lines for your host.";
-	_numInfo[irc::UMODEUNKNOWNFLAG] = ":Unknown MODE flag.";
+	// _numInfo[irc::UMODEUNKNOWNFLAG] = ":Unknown MODE flag.";
+	_numInfo[irc::UMODEUNKNOWNFLAG] = ":User MODE is not supported."; // custom
 	_numInfo[irc::USERSDONTMATCH] = ":Cant change mode for other users.";
 	_numInfo[irc::MANYPARAMS] = ":Too many parameter given";
 
@@ -89,8 +91,14 @@ void Response::init(const std::string &srv)
 	_numType[irc::ERRONEUSNICKNAME] = PARAM0;
 	_numType[irc::NICKNAMEINUSE] = PARAM0;
 	_numType[irc::USERONCHANNEL] = PARAM0;
+	_numType[irc::NOTONCHANNEL] = PARAM0;
+	_numType[irc::CHANOPRIVSNEEDED] = PARAM0;
 	_numType[irc::UNKNOWNCOMMAND] = COMMAND;
 	_numType[irc::NEEDMOREPARAMS] = COMMAND;
+}
+std::string Response::getServerName()
+{
+	return _server;
 }
 
 /*
@@ -119,6 +127,9 @@ std::string Response::_buildNumericPrefix(const Message& msg, irc::rfc code)
 std::string Response::handleNumeric(const Message& msg, irc::rfc code)
 {
 	std::map<irc::rfc, type>::iterator it;
+	// SPECIAL CASE: command QUIT
+	if (code == irc::HASQUIT)
+		return (buildError(msg, "Closing link", "Quit"));
 	// look up which method is needed for custom ARGS of the requested error
 	it = _numType.find(code);
 	// execute DEFAULT variant
@@ -219,7 +230,7 @@ std::string	Response::buildRegular(const Message& msg, const std::string & args)
 	}
 	else
 		reply.append(CRLF);
-	return reply;
+	return (reply);
 }
 
 /*
@@ -242,5 +253,22 @@ std::string	Response::buildRegular(const Message& msg, const std::string & args,
 	}
 	else
 		reply.append(CRLF);
-	return reply;
+	return (reply);
+}
+
+std::string	Response::buildError(const Message& msg,
+								 const std::string& reason,
+								 const std::string& origin)
+{
+	std::string reply("ERROR");
+	Client* client = msg.sender;
+	// HACK protection for us
+	if (reason.empty() || origin.empty())
+		throw std::logic_error("We must give a reason and origin of the Error.");
+	reply.append(" :" + reason + ": (");
+	reply.append(client->getUserName() + "@" + client->getHost() + ")");
+	if (!msg.trailing.empty())
+		reply.append(" [" + origin + ": "+ msg.trailing + "]");
+	reply.append(CRLF);
+	return (reply);
 }

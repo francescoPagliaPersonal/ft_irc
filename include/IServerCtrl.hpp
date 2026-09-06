@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   IServerCtrl.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/14 19:25:52 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/27 13:28:14 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/02 17:21:34 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <string>
 # include <vector>
 # include <map>
+# include <set>
 
 # include "irc.hpp"
 
@@ -42,9 +43,11 @@ public:
 	virtual void sendMessage(Client*, const std::string&) const = 0;
 	virtual void broadcast(Channel*, Client *, const std::string&) const = 0;
 	virtual void broadcast(Channel*, const std::string&) const = 0;
+	virtual void broadcast(std::set<Client*>&, const std::string&) const = 0;
 	// ---- Channel Manipulation
 	virtual rfc addToChannel(Client*, const std::string&, const std::string&) = 0;
-	virtual void removeFromChannel(Client*, const std::string&, const std::string&) = 0;
+	virtual void removeClientFromChannel(Client*, Channel&, std::set<Client*>* ) = 0;
+	virtual	void removeClientFromAllChannels(Client *, std::set<Client*>* ) = 0;
 	virtual Channel * getChannelByTitle(std::string) const = 0;
 	// ---- Operation
 	// virtual void disconnectClient(Client&, const std::string&) = 0;

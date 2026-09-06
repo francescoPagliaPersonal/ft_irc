@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_irc.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:25:38 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/26 15:37:49 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/04 14:28:51 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,16 @@
 # include <stdexcept>
 
 // -------------------------------------------------------------------------- //
-
+/* We consider to resever in the program at least 5 FDs following this criteria:
+ * 0 1 2 stdio
+ * 3 server listener
+ * 4 reserved client to return closing event without impacting the server.
+ */
+# define RESERVED_FDS 5
+# define MIN_CLIENTS 5
 # define MAX_CLIENTS 50000
 # define MAX_EVENTS 32
-# define TIMEOUT 1000
+# define TIMEOUT 2000
 # define CRLF "\r\n"
 # define COL_GREEN "\033[32m"
 # define COL_CYAN "\033[36m"
@@ -35,6 +41,7 @@
 # define MAX_CHANJOIN 3
 # define MAX_TOPICLEN 300
 # define MAX_CHANNELUSERS 500
+# define MAX_CLIENT_ON_IP 5
 
 # ifndef DEBUG
 #  define DEBUG 0 // TODO set this to zero later and ctl via makefile

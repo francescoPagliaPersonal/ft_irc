@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:32:56 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/27 13:29:45 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/04 14:14:31 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,12 @@
 # include "Message.hpp"
 # include "Channel.hpp"
 # include "CommandRegistry.hpp"
+#include "irc.hpp"
 
 // -------------------------------------------------------------------------- //
 
-# define DEF_EPOLL_FL EPOLLIN | EPOLLERR | EPOLLHUP
+# define EPOLL_FL_DEFAULT EPOLLIN | EPOLLERR | EPOLLHUP
+# define EPOLL_FL_QUIT EPOLLOUT | EPOLLERR | EPOLLHUP
 
 // -------------------------------------------------------------------------- //
 
@@ -51,20 +53,24 @@ class Server : public IServerCtrl
 		Channel* getChannelByTitle(std::string) const;
 		//		Channels
 		rfc addToChannel(Client*, const std::string&, const std::string&);
-		void removeFromChannel(Client*, const std::string&, const std::string&);
+		void removeClientFromChannel(Client*, Channel&, std::set<Client*>* );
+		void removeClientFromAllChannels(Client *, std::set<Client*>* );
 		void broadcast(Channel*, Client *, const std::string&) const;
 		void broadcast(Channel*, const std::string&) const;
-		// void broadcast(const std::string&, std::deque<Client*>, Client*);
-		
+		void broadcast(std::set<Client*>&, const std::string&) const;
 	private:
 		// ----
 		std::string				_pw;		// connection password
 		ListeningSocket			_listener;	// server's own listening socket
 		std::map<int, Client*>	_clients;	// map of all Clients, sorted by FD
 		std::deque<Message>		_msgsQueue; // holds all incoming messages/loop
-		std::map<std::string, Channel*> _channels; // Channels sorted by title
+		std::map<std::string, Channel*> _channels; // Channels sorted by key
 		Epoll					_epoll;		// isolated kernel epoll wrapper
 		CommandRegistry			_cmdReg;	// command orchestrator
+		std::map<std::string, std::deque<Client*> >
+								_IPrecords; // map of clients that share same IP 
+		irc::uint				_maxClients; // max number of clients that can register
+		
 		// ---- Signals ---
 		static volatile std::sig_atomic_t _isAlive;	// server state
 		static void signalHandler(int);
@@ -73,21 +79,24 @@ class Server : public IServerCtrl
 		void _handleListenEvent();
 		void _handleClientEvent(epoll_event&);
 		// ---- Clients ----
+		bool _appendToIPrecords(Client*);
+		void _removeFromIPrecords(Client*);
 		void _registerNewClient(int, const sockaddr_in&);
-		void _removeClient(Client*);
-		void _disconnectClient(Client*);
+		void _deleteClient(Client*);
+		void _prepareClientDisconnect(Client*);
 		// ---- Command Execution ----
 		void _executeCommands();
 		bool _processInputBuffer(Client*);
-		void _removeMsgsFromSuspicious(Client*);
+		void _removeMsgsFrom(Client*);
 		// ---- Channels ----
-		void _removeChannel(const std::string&);
-		void _removeChannel(Channel*);
+
+		void	_deleteChannel(Channel*);
 		void _removeClientFromChannels(Client*);
 		Channel* _getOrCreateChannel(const std::string&, const std::string&);
 		Channel* _getChannel(const std::string&) const;
 		Channel* _addChannel(const std::string& key, const std::string& title, const std::string& pw);
 		Channel* _addChannel(const std::string& title, const std::string& pw);
+
 		// ----
 		Server();
 		Server(const Server&);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server-Handlers.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 22:58:08 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/26 15:39:19 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/04 14:55:00 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,11 @@ void Server::_handleListenEvent()
 		if (newFD < 0)
 			return ;
 		// 2) check for max clients
-		if (_clients.size() >= MAX_CLIENTS)
+		if (_clients.size() >= _maxClients)
 		{
+			// TODO: fix message after we set the server name globaly.
+			std::string reply = "ERROR: too many connection. ";
+			send(newFD, reply.c_str(), reply.size(), 0);
 			::close(newFD); // TODO info msg
 			break ; // needs to break, to allow loop to empty queue
 		}
@@ -52,20 +55,20 @@ void Server::_handleClientEvent(epoll_event& ev)
 	switch (ret)
 	{
 		case irc::RET_EMPTY:
-			_epoll.mod(client->getFD(), DEF_EPOLL_FL, client);
+			_epoll.mod(client->getFD(), EPOLL_FL_DEFAULT, client);
 			break;
 		case irc::RET_CLOSE:
-			_removeClient(client);
+			_deleteClient(client);
 			// TODO closing events needs validation, thus also the printout
 			std::cout << "[Warning] " << __FUNCTION__ << " removed a Client." << std::endl;
 			// TODO but also, are they the same for IN/OUT?
 			break;
 		case irc::RET_HASOUTPUT:
-			_epoll.mod(client->getFD(), DEF_EPOLL_FL | EPOLLOUT, client);
+			_epoll.mod(client->getFD(), EPOLL_FL_DEFAULT | EPOLLOUT, client);
 			break;
 		case irc::RET_PARSEINPUT:
 			if (_processInputBuffer(client) == false)
-				_removeClient(client); // builds the interneal message array
+				_deleteClient(client); // builds the interneal message array
 			break;
 		default: ;
 	}

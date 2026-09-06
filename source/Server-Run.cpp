@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/11 12:06:37 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/26 15:40:44 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/08/27 22:06:29 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,9 @@ void Server::run()
 		int readyFDs = _epoll.wait(ev, MAX_EVENTS, TIMEOUT);
 		if (readyFDs != 0 && DEBUG && ev->events & EPOLLIN)
 			std::cout << std::endl;
+		if (DEBUG == debug::DETAILED)
+			std::cout << "[Server] Event or timout triggered. Ready FDs: "
+					  << readyFDs << std::endl;
 		// 1) epoll() stuff
 		for (int i = 0; i < readyFDs; i++)
 		{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Message.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 09:01:01 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/27 13:43:26 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/04 10:26:49 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,7 @@ Message irc::string2Message(std::string str, Client *client)
 		str.erase(trailing_pos);
 		clear_trailing_char(str, ' ');
 
-		if (!msg.trailing.empty())
-			msg.flags |= irc::MSG_HAS_TRAILING;
+		msg.flags |= irc::MSG_HAS_TRAILING;
 	}
 
 	clear_leading_char(str, ' ');
@@ -105,16 +104,11 @@ Message irc::string2Message(std::string str, Client *client)
 	// Extract all params 
 	while (!str.empty()) 
 	{
-		clear_leading_char(str, ' ');
-		
-		// Find end of param
+		clear_leading_char(str, ' ');	
+		// Find end of param; always > 0, npos just gives us the whole string
 		std::string::size_type end_pos = str.find_first_of(' ');
-		if (end_pos > 0)
-		{
-			std::string tmp = str.substr(0, end_pos);
-			msg.params.push_back(tmp);
-			str.erase(0, end_pos);
-		}
+		msg.params.push_back(str.substr(0, end_pos));
+		str.erase(0, end_pos);
 	}
 	
 	if (!msg.params.empty())

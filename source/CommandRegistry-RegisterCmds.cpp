@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 11:41:20 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/20 14:58:34 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/04 10:24:42 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,5 +63,24 @@ void CommandRegistry::registerCmds()
 	invite->addPolicy(new AlreadyRegisteredPlcy(true));
 	invite->addPolicy(new ArgsLimitPlcy(2, 2));
 	_commands[invite->getName()] = invite;
+
+	Command *quit = new Command("QUIT", cmd_quit);
+	quit->addPolicy(new AlreadyRegisteredPlcy(true));
+	quit->addPolicy(new ArgsLimitPlcy(0, 1));
+	_commands[quit->getName()] = quit;
+
+	Command *mode = new Command("MODE", cmd_mode);
+	mode->addPolicy(new AlreadyRegisteredPlcy(true));
+	mode->addPolicy(new ArgsLimitPlcy(1, 9));
+	_commands[mode->getName()] = mode;
+
+	Command *topic = new Command("TOPIC", cmd_topic);
+	topic->addPolicy(new AlreadyRegisteredPlcy(true));
+	topic->addPolicy(new ArgsLimitPlcy(1, 2));
+	_commands[topic->getName()] = topic;
 	
+	Command *kick = new Command("KICK", cmd_kick);
+	kick->addPolicy(new AlreadyRegisteredPlcy(true));
+	kick->addPolicy(new ArgsLimitPlcy(2, 3));
+	_commands[kick->getName()] = kick;
 }

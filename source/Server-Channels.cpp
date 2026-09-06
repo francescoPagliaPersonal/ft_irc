@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server-Channels.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 13:55:04 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/27 13:29:35 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/02 17:21:58 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,40 +25,39 @@ Channel* Server::getChannelByTitle(std::string title) const
 	return _getChannel(Channel::title2key(title));
 }
 
-// Remove CLIENT from the channel CHNAME and clean up empty channels.
-void Server::removeFromChannel(Client* client, const std::string& title,
-							   const std::string& reason)
+// Remove CLIENT from CHANNEL, delete empty CHANNEL, export members to CONTACTS.
+void Server::removeClientFromChannel(Client* client, Channel& channel, std::set<Client*>* contacts)
 {
-	// TODO does the client or the server check IF client is a member?
-	Channel* channel = _getChannel(Channel::title2key(title));
-	if (!channel)
-		return ;
-	channel->removeClient(client);
-	client->removeChannel(channel);
-	if (channel->isEmpty())
-		_removeChannel(channel);
-	(void) reason; // TODO depends on what the protocol needs...no idea right now
+	channel.removeClient(client);
+	if (channel.isEmpty())
+		_deleteChannel(&channel);
+	else
+		channel.pushMembersToSet(contacts);
+	client->removeChannel((&channel));
+}
+
+// Remove CLIENT from all registered channels, collect members in set CONTACTS.
+void Server::removeClientFromAllChannels(Client * client, std::set<Client*>* contacts)
+{
+	std::deque<Channel*> joinedChannels;
+	std::deque<Channel*>::iterator it;
+	joinedChannels = client->getChannelsList();
+	for (it = joinedChannels.begin(); it != joinedChannels.end(); ++it)
+	{
+		Channel & channel = *(*it);
+		removeClientFromChannel(client, channel, contacts);
+	}
 }
 
 // -------------------------------------------------------------------------- //
 // PRIVATE -- CHANNELS
 // -------------------------------------------------------------------------- //
 
-// Remove a channel by channel pointer.
-void Server::_removeChannel(Channel* channel)
+// Delete a channel by channel pointer.
+void Server::_deleteChannel(Channel* channel)
 {
 	_channels.erase(Channel::title2key(channel->getTitle()));
 	delete channel;
-}
-
-// Remove a channel by title.
-void Server::_removeChannel(const std::string& title)
-{
-	Channel* channel;
-
-	channel = _getChannel(Channel::title2key(title));
-	if (channel)
-		_removeChannel(channel);
 }
 
 // Lookup a channel by name and return its pointer, or NULL if not found.

@@ -3,17 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   Server-Clients.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 16:27:31 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/27 13:28:41 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/04 10:02:19 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_irc.hpp"
 #include "Channel.hpp"
 #include "Server.hpp"
-
+#include "Response.hpp"
+#include <sstream>
 #include <cstddef>
 #include <deque>
 
@@ -38,15 +39,71 @@ Client* Server::findClientByNick(const std::string & nick) const
 // Queue STR for sending to CLIENT and enable the EPOLLOUT interest.
 void Server::sendMessage(Client* client, const std::string& str) const 
 {
+	if (!client->isBufferOutFilled() && !client->hasQuit())
+		_epoll.mod(client->getFD(), EPOLL_FL_DEFAULT | EPOLLOUT, client);
 	// TODO drop connection if bufOUT grows too much? or do we drop if kernel buffer stays full?
 	client->putReply2Buff(str);
 	// TODO consider CATCH & disconnect
-	_epoll.mod(client->getFD(), DEF_EPOLL_FL | EPOLLOUT, client);
 }
 
 // -------------------------------------------------------------------------- //
 // PRIVATE -- CLIENTS
 // -------------------------------------------------------------------------- //
+
+// Try to append a client to the _IPrecords table based on the
+// defined MAX_CLIENT_ON_IP limit.
+bool Server::_appendToIPrecords(Client* client)
+{
+	std::map<std::string, std::deque<Client *> >::iterator it;
+	std::string IPV4 = client->getHost();
+	it = _IPrecords.find(IPV4);
+	if (it != _IPrecords.end())
+	{
+		if (it->second.size() >= MAX_CLIENT_ON_IP)
+			return false;
+		it->second.push_back(client);
+		return true;
+	}
+	_IPrecords[IPV4].push_back(client);
+	if (DEBUG)
+	{
+		std::cout << "\n[HOST " << IPV4 << "]"
+			<< " A new host has been recorded.\n" << std::endl;
+	}
+	return true;
+}
+
+// Remove a client from the _IPrecords table.
+void Server::_removeFromIPrecords(Client* client)
+{
+	std::map<std::string, std::deque<Client*> >::iterator ip;
+	ip = _IPrecords.find(client->getHost());
+	if (ip == _IPrecords.end())
+		throw std::runtime_error("looked for a host that was never registered");
+	
+	std::deque<Client*>::iterator it;
+	for (it = ip->second.begin(); it != ip->second.end(); ++it )
+	{
+		if (*it == client)
+		{
+			ip->second.erase(it);
+			break ;	
+		}
+	}
+	// any client is in iprecords EXCEPT those that are blocked due to MAX IP
+	// EVERY client goes through this function via _deleteClient
+	// thus, there are acceptable no-shows => the not allowed clients
+	if (ip->second.empty())
+	{
+		_IPrecords.erase(ip);
+		if (DEBUG)
+		{
+			std::cout << "\n[HOST " << client->getHost() << "]"
+				<< " Has been removed from the server.\n" << std::endl;
+		}
+	}
+		
+}
 
 // Creates new client and registers FD with epoll.
 void Server::_registerNewClient(int fd, const struct sockaddr_in& addr)
@@ -65,7 +122,7 @@ void Server::_registerNewClient(int fd, const struct sockaddr_in& addr)
 	// register epoll fd
 	try
 	{
-		_epoll.add(fd, DEF_EPOLL_FL, tmp);
+		_epoll.add(fd, EPOLL_FL_DEFAULT, tmp);
 	}
 	catch (const std::exception& e)
 	{
@@ -73,38 +130,50 @@ void Server::_registerNewClient(int fd, const struct sockaddr_in& addr)
 		throw; // TODO currently this is a hard shutdown; wants sth else
 	}
 	_clients[fd] = tmp;
+	if (!_appendToIPrecords(tmp))
+	{
+		sendMessage(tmp, 
+				"ERROR: too many connection from IP " + tmp->getHost() + CRLF);
+		tmp->setQuit(true);
+		_epoll.mod(fd, EPOLL_FL_QUIT, tmp);
+		return ;	
+	}
 	std::cout << "[Info] New connection from " << tmp->getHost()
 			<< " accepted at FD " << fd << '\n';
 }
-void Server::_removeClientFromChannels(Client * client)
-{
-	std::deque<Channel *> channels = client->getChannelsList();
-	for (size_t i = 0; i < channels.size(); ++i)
-	{
-		std::map<std::string, Channel*>::iterator it;
-		it = _channels.find(Channel::title2key(channels[i]->getTitle()));
-		if (it == _channels.end())
-			continue;
-		it->second->removeClient(client);
-		client->removeChannel(it->second);
-	}
-}
-
 // Remove a client and deregister FD.
-void Server::_removeClient(Client* client)
+void Server::_deleteClient(Client* client)
 {
+	std::set<Client*> contacts;
+	if (!client->hasQuit())
+	{
+		removeClientFromAllChannels(client, &contacts);
+		std::stringstream reply;
+		reply << ":" << client->getID() << " QUIT :Connection closed." << CRLF;
+		broadcast(contacts, reply.str());
+	}
+	try
+	{
+		_removeFromIPrecords(client);
+	}
+	catch (const std::exception& e)
+	{
+		std::cerr << e.what() << std::endl;
+	}
 	_epoll.del(client->getFD());
-	_removeClientFromChannels(client);
 	_clients.erase(client->getFD());
 	delete client;
 }
 
 // Disconnects a client: remove all pending msgs, channels then client itself.
-void Server::_disconnectClient(Client* client)
+void Server::_prepareClientDisconnect(Client* client)
 {
 	// TODO finish this (channels, what else?)
 	std::cout << "[Warning] Client removal requested for FD " << client->getFD()
-		<< ". NOT FULLY IMPLEMENTED yet.\n";
-	_removeMsgsFromSuspicious(client);
-	_removeClient(client);
+		<< ". Verify implementation.\n";
+	_removeMsgsFrom(client);
+	_epoll.mod(client->getFD(), EPOLL_FL_QUIT, client);
+
+	// HACK only for testing!!
+	// _deleteClient(client);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/13 10:19:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/27 13:33:06 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/02 14:06:52 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <string>
 # include <map>
 # include <vector>
+# include <set>
 
 // -------------------------------------------------------------------------- //
 
@@ -73,11 +74,17 @@ class Channel
 		irc::uint 	getLimit() const;
 		bitMask		getModes() const;
 		std::map<Client*, bitMask>	getMembersMap() const;
+		void pushMembersToSet(std::set<Client *> *) const;
 		
 		// ---- set
 		void setTopic(const std::string&);
+		void removePassword();
 		void setPassword(const std::string&);
 		void setLimit(irc::uint);
+		void removeLimit();
+		void setInvite(bool);
+		void setTopicFlag(bool);
+		bool setOperator(bool, Client*);
 
 		static bool isTitleCompliant(const std::string& channel);
 		static std::string title2key(std::string);
@@ -93,6 +100,7 @@ class Channel
 		// ----
 		bitMask 							_modes;
 		irc::uint							_userLimit;
+		irc::uint							_chanOps;
 		const std::string					_title; // RENAME cmd not required
 		std::string							_topic;
 		std::string							_password;
