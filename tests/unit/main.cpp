@@ -29,6 +29,7 @@ namespace
 		"join",
 		"invite",
 		"mode",
+		"quit",
 		"framing",
 		0
 	};

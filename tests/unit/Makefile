@@ -29,6 +29,8 @@ TEST_SRC	:= main.cpp \
 				test_join.cpp \
 				test_invite.cpp \
 				test_mode.cpp \
+				test_quit.cpp \
+				test_topic.cpp \
 				test_framing.cpp
 
 MODE		?= reg
