@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 09:28:34 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/07 13:05:56 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/07 15:38:14 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 
 void Bot::run()
 {
-	while (_isAlive)
+	while (_keepRunning)
 	{
 		// Retry failed connections with a fresh socket until connection is made.
 		// 1) wait until kernel finishes handshake
@@ -35,7 +35,7 @@ void Bot::run()
 		//    Must check SO_ERROR next to distinguish.
 		// 2) after handshake ask kernel for result
 		// 3) if there was no connection, wait a bit and try again
-		while (!_hasConn)
+		while (_keepRunning && !_hasConn)
 		{
 			int ready = _awaitHandshake();
 			if (ready == 0)
@@ -45,11 +45,14 @@ void Bot::run()
 			sleep(3);
 			_connect();
 		}
-		// 3) register with server and join a default channel
-		_registerWith("bot");
-		_joinChannel(SPAM_CHANNEL);
+		if (_keepRunning)
+		{
+			// 3) register with server and join a default channel
+			_registerWith("bot");
+			_joinChannel(SPAM_CHANNEL);
+		}
 		// 4) Stay alive with dummy loop
-		while (_hasConn)
+		while (_keepRunning && _hasConn)
 		{
 			// sleep(2);
 			_spamUser(SPAM_USER);

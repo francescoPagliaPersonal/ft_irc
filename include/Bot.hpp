@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 07:22:22 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/07 13:01:04 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/07 15:01:34 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "Epoll.hpp"
 
+# include <csignal>		// sig_atomic_t
 # include <string>
 
 # define SPAM_MSG_42 "42 is the answer to the Ultimate Question of Life, the Universe, and Everything."
@@ -37,8 +38,11 @@ class Bot
 		unsigned short _port;
 		std::string _pw;	// server password
 		Epoll _epoll;
-		bool _isAlive;
 		bool _hasConn;
+		// ----
+		static volatile std::sig_atomic_t _keepRunning;
+		static void signalHandler(int);
+		static bool _captureSignals();
 		// ----
 		void _connect();
 		int _awaitHandshake() const;
