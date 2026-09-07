@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 08:20:34 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/06 20:42:31 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/07 12:23:34 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,11 +83,23 @@ Bot::Bot(const unsigned int server,
 		 const unsigned short port,
 		 const std::string& pw)
 	: _fd(-1)
+	, _server(server)
+	, _port(port)
 	, _pw(pw)
 {
+	_connect();
+}
+
+void Bot::_connect()
+{
+	if (_fd >= 0)
+	{
+		_epoll.del(_fd);
+		::close(_fd);
+	}
 	_fd = createNewSocket();
 	configureFD(_fd);
-	connectAddrToFD(_fd, server, port);
+	connectAddrToFD(_fd, _server, _port);
 	_epoll.add(_fd, EPOLLOUT);
 }
 
