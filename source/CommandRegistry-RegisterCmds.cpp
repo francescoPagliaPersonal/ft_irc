@@ -83,4 +83,9 @@ void CommandRegistry::registerCmds()
 	kick->addPolicy(new AlreadyRegisteredPlcy(true));
 	kick->addPolicy(new ArgsLimitPlcy(2, 3));
 	_commands[kick->getName()] = kick;
+
+	Command *part = new Command("PART", cmd_part);
+	part->addPolicy(new AlreadyRegisteredPlcy(true));
+	part->addPolicy(new ArgsLimitPlcy(1, 2));
+	_commands[part->getName()] = part;
 }

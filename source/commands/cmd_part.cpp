@@ -1,0 +1,55 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cmd_part.cpp                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/09/07 16:34:48 by fpaglia           #+#    #+#             */
+/*   Updated: 2026/09/07 16:34:50 by fpaglia          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "Channel.hpp"
+#include "Command.hpp"
+#include "Message.hpp"
+#include "Response.hpp"
+#include "irc.hpp"
+#include "IServerCtrl.hpp"
+
+
+rfc cmd_part(IServerCtrl & srv, const Message & msg)
+{
+	Client *client = msg.sender;
+	std::vector<std::string>	channels;
+	std::string reply;
+	std::set<Client *> Members;
+
+	channels = irc::strSplit(msg.params[0], ',', false);
+
+	for (size_t i = 0; i < channels.size(); ++i)
+	{
+		Channel *channel = srv.getChannelByTitle(channels[i]);
+		if (!channel)
+		{
+			reply = Response::buildNumeric(msg, irc::NOSUCHCHANNEL, channels[i]);
+			srv.sendMessage(client, reply);
+			continue ;
+		}
+		if (!client->isChannelMember(channel))
+		{
+			reply = Response::buildNumeric(msg, irc::NOTONCHANNEL, channels[i]);
+			srv.sendMessage(client, reply);
+			continue;
+		}
+		if (msg.flags & irc::MSG_HAS_TRAILING)
+			reply = Response::buildRegular(msg, channels[i], msg.trailing);
+		else
+			reply = Response::buildRegular(msg, channels[i]);
+		
+		srv.broadcast(channel, reply);
+		srv.removeClientFromChannel(client, *channel, &Members);
+		client->removeChannel(channel);
+	}
+	return irc::OK;
+}
