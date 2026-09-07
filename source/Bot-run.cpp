@@ -6,12 +6,13 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 09:28:34 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/07 15:38:14 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/07 16:49:39 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Bot.hpp"
 #include "ft_irc.hpp"
+#include "irc.hpp"
 
 #include <sys/socket.h>
 #include <sys/epoll.h>
@@ -51,12 +52,44 @@ void Bot::run()
 			_registerWith("bot");
 			_joinChannel(SPAM_CHANNEL);
 		}
-		// 4) Stay alive with dummy loop
+		
+		// 4) Stay alive in epoll loop
+		struct epoll_event ev;
 		while (_keepRunning && _hasConn)
 		{
+			irc::epollret ret = irc::RET_OK;
+			int ready = _epoll.wait(&ev, 1, TIMEOUT);
+			if (ready > 0)
+			{
+				if (ev.events & (EPOLLHUP | EPOLLERR))
+					ret = irc::RET_CLOSE;
+				else if (ev.events & EPOLLIN)
+					ret = _discardInput(); // TODO proper read
+				else if (ev.events & EPOLLOUT)
+					; // TODO OUT
+			}
+			switch (ret)
+			{
+				case irc::RET_EMPTY:
+					_epoll.mod(_fd, EPOLL_FL_DEFAULT, NULL);
+					break;
+				case irc::RET_CLOSE:
+					_hasConn = false;
+					std::cout << "[Bot] Connection to server lost.\n";
+					// HACK i don't like this... might need to separate cleanup & connect
+					_connect();
+					break;
+				case irc::RET_HASOUTPUT:
+					_epoll.mod(_fd, EPOLL_FL_DEFAULT | EPOLLOUT, NULL);
+				case irc::RET_PARSEINPUT:
+					_processInputBuffer();
+					break;
+				default: ;
+			}
+			// TODO send a ping from time to time?
 			// sleep(2);
-			_spamUser(SPAM_USER);
-			_spamChannel(SPAM_CHANNEL);
+			// _spamUser(SPAM_USER);
+			// _spamChannel(SPAM_CHANNEL);
 		}
 	}
 

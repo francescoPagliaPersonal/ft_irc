@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 07:22:22 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/07 15:01:34 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/07 16:43:42 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define BOT_HPP
 
 # include "Epoll.hpp"
+# include "irc.hpp"
 
 # include <csignal>		// sig_atomic_t
 # include <string>
@@ -22,6 +23,7 @@
 # define SPAM_MSG_CH "Have you tried turning it off and on again?"
 # define SPAM_USER "BugDetector"
 # define SPAM_CHANNEL "#support"
+# define EPOLL_FL_DEFAULT EPOLLIN | EPOLLERR | EPOLLHUP // duplicate of Server.hpp
 
 class Bot
 {
@@ -52,6 +54,8 @@ class Bot
 		void _joinChannel(const std::string&);
 		void _spamUser(const std::string&);
 		void _spamChannel(const std::string&);
+		irc::epollret _discardInput();
+		void _processInputBuffer();
 		// ----
 		Bot();
 		Bot(const Bot&);
