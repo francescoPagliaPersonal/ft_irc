@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 08:20:34 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/07 12:23:34 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/07 12:55:07 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,8 @@ Bot::Bot(const unsigned int server,
 	, _server(server)
 	, _port(port)
 	, _pw(pw)
+	, _isAlive(true)
+	, _hasConn(false)
 {
 	_connect();
 }

@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 07:22:22 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/07 12:55:45 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/07 13:01:04 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,12 @@ class Bot
 		unsigned short _port;
 		std::string _pw;	// server password
 		Epoll _epoll;
+		bool _isAlive;
+		bool _hasConn;
 		// ----
 		void _connect();
 		int _awaitHandshake() const;
-		int _handshakeResult() const;
+		int _handshakeResult();
 		void _sendToServer(const std::string&);
 		void _registerWith(const std::string&);
 		void _joinChannel(const std::string&);

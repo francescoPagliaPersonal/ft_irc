@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 08:12:43 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/07 12:57:10 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/07 14:07:17 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include <cstring>
 #include <cerrno>
+#include <csignal>
 
 #include <sys/socket.h>
 
@@ -32,7 +33,7 @@ int Bot::_awaitHandshake() const
 	return (ready);
 }
 
-int Bot::_handshakeResult() const
+int Bot::_handshakeResult()
 {
 	int err = 0;
 	socklen_t len = sizeof(err);
@@ -44,7 +45,10 @@ int Bot::_handshakeResult() const
 	if (err != 0)
 		std::cout << "[Bot] Connection to server failed: " << std::strerror(err) << std::endl;
 	else
+	{
 		std::cout << "[Bot] Connection to server succeeded." << std::endl;
+		_hasConn = true;
+	}
 	return (err);
 }
 
@@ -55,6 +59,10 @@ void Bot::_sendToServer(const std::string& msg)
 	{
 		std::cerr << "[Error] Sending to server: "
 				  << errno << ", " << strerror(errno) << std::endl;
+		// _isAlive = false;
+		_hasConn = false;
+		if (errno == EPIPE)
+			_connect();
 	}
 	// else
 	// 	std::cout << "Sent:\n" << msg;
