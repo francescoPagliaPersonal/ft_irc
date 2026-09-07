@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 08:12:43 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/07 12:39:43 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/07 12:57:10 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,18 @@ int Bot::_handshakeResult() const
 	return (err);
 }
 
+void Bot::_sendToServer(const std::string& msg)
+{
+	errno = 0;
+	if (::send(_fd, msg.c_str(), msg.size(), MSG_NOSIGNAL) < 0)
+	{
+		std::cerr << "[Error] Sending to server: "
+				  << errno << ", " << strerror(errno) << std::endl;
+	}
+	// else
+	// 	std::cout << "Sent:\n" << msg;
+}
+
 void Bot::_registerWith(const std::string& name)
 {
 	std::string msg;
@@ -56,30 +68,20 @@ void Bot::_registerWith(const std::string& name)
 	msg.append("USER " + name + " 0 * :" + name + CRLF);
 	msg.append("PASS " + _pw + CRLF);
 
-	errno = 0;
-	if (::send(_fd, msg.c_str(), msg.size(), 0) < 0)
-		std::cerr << "Error sending registration: " << std::strerror(errno) << std::endl;
-	else
-		std::cout << "Sent:\n" << msg;
+	_sendToServer(msg);
 }
 
 void Bot::_joinChannel(const std::string& channel)
 {
-	std::string msg;
-	msg.append("JOIN " + channel + CRLF);
-	::send(_fd, msg.c_str(), msg.size(), 0);
+	_sendToServer("JOIN " + channel + CRLF);
 }
 
 void Bot::_spamUser(const std::string& nick)
 {
-	std::string msg;
-	msg.append("PRIVMSG " + nick + " :" + SPAM_MSG_42 + CRLF);
-	::send(_fd, msg.c_str(), msg.size(), MSG_NOSIGNAL);
+	_sendToServer("PRIVMSG " + nick + " :" + SPAM_MSG_42 + CRLF);
 }
 
 void Bot::_spamChannel(const std::string& channel)
 {
-	std::string msg;
-	msg.append("PRIVMSG " + channel + " :" + SPAM_MSG_CH + CRLF);
-	::send(_fd, msg.c_str(), msg.size(), MSG_NOSIGNAL);
+	_sendToServer("PRIVMSG " + channel + " :" + SPAM_MSG_CH + CRLF);
 }

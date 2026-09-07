@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 07:22:22 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/07 12:23:00 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/07 12:55:45 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ class Bot
 		void _connect();
 		int _awaitHandshake() const;
 		int _handshakeResult() const;
+		void _sendToServer(const std::string&);
 		void _registerWith(const std::string&);
 		void _joinChannel(const std::string&);
 		void _spamUser(const std::string&);
