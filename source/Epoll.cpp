@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:58:17 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/08 11:22:21 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/08 11:38:20 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,9 @@ void Epoll::mod(int fd, eventflags eventFlags, Client* client) const
 	errno = 0;
 	if (::epoll_ctl(_fd, EPOLL_CTL_MOD, fd, &ev) < 0)
 	{
+		// note: see notes of ::del
+		// any real failure will be caught by EPOLLHUP, EPOLLERR or housekeeping
+		// and the connection will be closed
 		std::cerr << "[Warning] Modifying epoll events for FD " << fd
 			<< " caused an error: " << std::strerror(errno) << std::endl;
 	}
