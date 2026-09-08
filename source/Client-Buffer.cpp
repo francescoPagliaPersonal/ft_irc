@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 17:02:24 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/05 15:25:38 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/08 11:17:20 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ irc::epollret Client::receiveToBuffer()
 	char buf[BUF_SIZE + 1];
 	ssize_t ret = 0;
 	ret = recv(_fd, buf, BUF_SIZE, 0);
+	// epoll loop is designed as such that EPOLLIN is required to recv()
+	// thus the usual EAGAIN cannot happen. any other error is a problem.
 	if (ret == -1)
 	{
 		if (DEBUG)
@@ -88,12 +90,14 @@ irc::epollret Client::sendFromBuffer()
 {
 	errno = 0;
 	ssize_t ret = send(_fd, _bufOUT.c_str(), _bufOUT.size(), 0);
+	// epoll loop is designed as such that EPOLLOUT is required to send()
+	// thus the usual EAGAIN cannot happen. any other error is a problem.
 	if (ret < 0)
 	{
 		if (DEBUG)
 			std::cerr << "[Error] FD " << _fd << " send(): "
 				<< errno << ", " << strerror(errno) << std::endl;
-		return (irc::RET_CLOSE); // TODO should this become a "QUIT" trigger instead?
+		return (irc::RET_CLOSE);
 	}
 	if (ret == static_cast<ssize_t>(_bufOUT.size()))
 	{
