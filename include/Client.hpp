@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 16:22:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/28 08:12:37 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/08 11:46:31 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,12 @@
 
 # include <vector>
 # include <deque>
+# include <ctime>
 
 // -------------------------------------------------------------------------- //
 
-# define BUF_SIZE 4095
+# define BUF_SIZE 4095			// size for the receive buffer
+# define MAX_BUF_SIZE 512000	// max size for IN/OUT buffer in Byte
 
 // -------------------------------------------------------------------------- //
 
@@ -37,20 +39,25 @@ enum e_clientReg
 	REG_DONE = REG_PASSWD | REG_USER | REG_NICK
 };
 
+enum e_buffer
+{
+	BUF_IN,
+	BUF_OUT
+};
+
 class Client
 {
 	public:
 		// ----
 		Client(int, const sockaddr_in&);
 		~Client();
-		// ----
-		int getFD() const;
 		// ---- Buffer ----
 		irc::epollret receiveToBuffer();
 		irc::epollret sendFromBuffer();
 		std::vector<std::string> getRawStrings();
 		void putReply2Buff(const std::string&);
 		// ---- Get ----
+		int getFD() const;
 		int	getRegistrationFlags() const;
 		std::string	getNick() const;
 		std::string	getUserName() const;
@@ -61,6 +68,10 @@ class Client
 		bool getCap() const;
 		bool hasQuit() const;
 		bool isBufferOutFilled() const;
+		bool isBufferFull(e_buffer) const;
+		bool toBeRemoved() const;
+		std::time_t getSpamTime() const;
+		irc::uint getSpamCount() const;
 		// ---- Set ----
 		bool setRegistrationFlags(int flags);
 		void setNick(const std::string & str);
@@ -68,6 +79,10 @@ class Client
 		void setRealName(const std::string & str);
 		void setCap(bool);
 		void setQuit(bool);
+		void setSpamTime(std::time_t);
+		void resetSpamCount();
+		void incrementSpamCount ();
+		void setRemove(bool);
 		// ---- Channels ----
 		bool isChannelMember(Channel*) const;
 		void addChannel(Channel*);
@@ -82,12 +97,15 @@ class Client
 		unsigned char 		 _registrationFlags; // FIXME needs type from newer ft_irc.hpp on Channels branch
 		bool				 _capRequested;		 // track if client requested CAP
 		bool				 _hasQuit;			 // track if a client sent QUIT
+		bool				 _toBeRemoved;		 // forceful disconnect pending
 		std::string			 _nick;				 // client's nick name
 		std::string			 _userName;			 // client's user name
 		std::string			 _realName;			 // client's real name
 		const sockaddr_in& 	 _address;			 // original client IPv4 data
 		std::string			 _host;				 // clients hostname (IP) as string
 		std::deque<Channel*> _channels;			 // channels the client is registered to
+		time_t				 _lastSpamTime;	 	 // time of last msg processed in msgs queue
+		irc::uint			 _spamCount;		 // counts appends within a time
 		// ----
 		Client();
 		Client(const Client&);

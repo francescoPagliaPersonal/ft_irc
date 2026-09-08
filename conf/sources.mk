@@ -21,7 +21,7 @@ SRC_MAN		:=  arg2password.cpp arg2port.cpp\
 				Server.cpp Server-CDTOR.cpp Server-Run.cpp Server-Handlers.cpp\
 				Server-Clients.cpp Server-Channels.cpp Server-Signals.cpp\
 				Server-Commands.cpp Server-procInputBuffer.cpp\
-				Server-Broadcast.cpp\
+				Server-Broadcast.cpp Server-housekeeping.cpp\
 				Server-tryCompleteRegistration.cpp\
 				Server-addToChannel.cpp\
 				Epoll.cpp ListeningSocket.cpp ListeningSocket-CDTOR.cpp\

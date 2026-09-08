@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/10 01:00:26 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/17 17:43:22 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/08 11:55:40 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,12 @@ int createNewSocket()
 	struct protoent	*pe;
 
 	// 0) fetch protocol by name
-	pe = getprotobyname("tcp");
+	pe = ::getprotobyname("tcp");
 	if (pe == NULL)
 		throw std::runtime_error(
 			std::string("Error on getprotobyname(): ") + std::strerror(errno));
 	// 1) open a new socket
-	fd = socket(AF_INET, SOCK_STREAM, pe->p_proto); // TODO use 0 or pe?
+	fd = ::socket(AF_INET, SOCK_STREAM, pe->p_proto); // TODO use 0 or pe?
 	if (fd < 0)
 		throw std::runtime_error(
 			std::string("Error on socket(): ") + std::strerror(errno));
@@ -61,8 +61,8 @@ void bindAddrToFD(int fd, unsigned short port)
 	std::memset(&ipAddr, 0, sizeof (ipAddr));
 	ipAddr.sin_family = AF_INET;
 	// convert little-endian numbers to big-endian
-	ipAddr.sin_port = htons(port);
-	ipAddr.sin_addr.s_addr = htonl(INADDR_ANY);
+	ipAddr.sin_port = ::htons(port);
+	ipAddr.sin_addr.s_addr = ::htonl(INADDR_ANY);
 	if (::bind(fd, reinterpret_cast<struct sockaddr*>(&ipAddr), sizeof(ipAddr)) < 0)
 		throw std::runtime_error(
 			std::string("Error on bind(): ") + std::strerror(errno));

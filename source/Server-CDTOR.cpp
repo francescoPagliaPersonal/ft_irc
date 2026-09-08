@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/10 00:45:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/04 15:47:11 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/08 11:54:37 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ namespace {
 		errno = 0;
 		struct rlimit	rlm;
 		// retrieve system limits for FDs
-		if (getrlimit(RLIMIT_NOFILE, &rlm) == -1)
+		if (::getrlimit(RLIMIT_NOFILE, &rlm) == -1)
 			throw std::runtime_error(std::strerror(errno));
 		// check soft limit (_cur)
 		if (rlm.rlim_cur - RESERVED_FDS < MIN_CLIENTS)
@@ -71,6 +71,7 @@ Server::Server(int port, std::string pw)
 	// Client class
 	// CommandDispatch class
 	_cmdReg.registerCmds();
+	_startTime = std::time(NULL);
 	std::string ip = retrieveServerAddress();
 	printNetworkUsageInfo(ip, port, pw);
 }
@@ -98,32 +99,32 @@ std::string retrieveServerAddress()
 	//    - workaround to connect() to a fake public address w/o sending packets
 	//    - forces kernel to pick an outbound interface
 	//    - thus getsockname() can retrieve a proper network address
-	int fd = socket(AF_INET, SOCK_DGRAM, 0);
+	int fd = ::socket(AF_INET, SOCK_DGRAM, 0);
 	if (fd >= 0)
 	{
 		// 2) build a dummy destination for the socket
 		struct sockaddr_in remote = {};
 		remote.sin_family = AF_INET;
-		remote.sin_port = htons(42); // dummy target port
-		remote.sin_addr.s_addr = inet_addr("42.42.42.42"); // dummy target ip
+		remote.sin_port = ::htons(42); // dummy target port
+		remote.sin_addr.s_addr = ::inet_addr("42.42.42.42"); // dummy target ip
 		// 3) connect the socket to the dummy destination
-		if (connect(fd, reinterpret_cast<struct sockaddr*>(&remote),
+		if (::connect(fd, reinterpret_cast<struct sockaddr*>(&remote),
 				sizeof(remote)) == 0)
 		{
 			// 4) fetch local network address for this connection
 			struct sockaddr_in local = {};
 			socklen_t len = sizeof(local);
-			if (getsockname(fd,
+			if (::getsockname(fd,
 					reinterpret_cast<struct sockaddr*>(&local),
 					&len) == 0)
 			{
 				// 5) transform into string and store it
 				char buf[INET_ADDRSTRLEN];
-				if (inet_ntop(AF_INET, &local.sin_addr, buf, sizeof(buf)) != NULL)
+				if (::inet_ntop(AF_INET, &local.sin_addr, buf, sizeof(buf)) != NULL)
 					ip = buf;
 			}
 		}
-		close(fd);
+		::close(fd);
 	}
 	return (ip);
 }
