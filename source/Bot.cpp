@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 08:12:43 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/08 12:52:58 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/08 13:07:39 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,4 +93,14 @@ void Bot::_spamUser(const std::string& nick)
 void Bot::_spamChannel(const std::string& channel)
 {
 	_sendToServer("PRIVMSG " + channel + " :" + SPAM_MSG_CH + CRLF);
+}
+
+void Bot::sendMessage(const std::string& msg)
+{
+	(void) msg;
+	if (_bufOUT.empty())
+		_epoll.mod(_fd, EPOLL_FL_DEFAULT | EPOLLOUT, NULL);
+	_bufOUT.append(msg);
+	if (DEBUG)
+		std::cout << "[Bot] Appending to output buffer:\n" << msg;
 }

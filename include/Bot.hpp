@@ -6,13 +6,14 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 07:22:22 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/08 12:35:24 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/08 13:06:44 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BOT_HPP
 # define BOT_HPP
 
+# include "IBot.hpp"
 # include "Epoll.hpp"
 # include "irc.hpp"
 
@@ -26,7 +27,7 @@
 # define EPOLL_FL_DEFAULT EPOLLIN | EPOLLERR | EPOLLHUP // duplicate of Server.hpp
 # define BUF_SIZE 4095 // duplicate of Client.hpp
 
-class Bot
+class Bot : public IBot
 {
 	public:
 		// ----
@@ -34,6 +35,7 @@ class Bot
 		~Bot();
 		// ----
 		void run();
+		void sendMessage(const std::string&);
 	private:
 		// ----
 		int _fd;			// socket with connection to server
