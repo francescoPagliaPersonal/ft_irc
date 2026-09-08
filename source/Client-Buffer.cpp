@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 17:02:24 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/08 11:17:20 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/08 11:42:41 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,9 @@ irc::epollret Client::receiveToBuffer()
 		return (irc::RET_CLOSE);
 	buf[ret] = '\0';
 	_bufIN.append(buf);
+	// _bufIN can never be > BUF_SIZE + 1
+	// because processInputBuffer *always* drains an incomplete stream (no CRLF)
+	//  that is longer than MSG_MAX_LENGTH
 	if (DEBUG == debug::DETAILED)
 	{
 		std::cout << "[FD " << _fd << "] Received "<< ret
@@ -80,8 +83,6 @@ irc::epollret Client::receiveToBuffer()
 		if (_bufIN.size() && _bufIN[_bufIN.size() - 1] != '\n')
 			std::cout << std::endl;
 	}
-	if (_bufIN.size() >= MAX_BUF_SIZE)
-		return (irc::RET_CLOSE);
 	return (irc::RET_PARSEINPUT);
 }
 
