@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 10:05:02 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/09/05 16:26:46 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/08 11:46:31 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ irc::epollret Server::_processInputBuffer(Client *client)
 		}
 		else
 		{
-			client->setSpamCount(0);
+			client->resetSpamCount();
 			client->setSpamTime(now);
 		}
 		// 3. normal event --- build the msg and attach to queue

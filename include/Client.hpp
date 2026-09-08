@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 16:22:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/08 11:43:24 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/08 11:46:31 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ class Client
 		void setCap(bool);
 		void setQuit(bool);
 		void setSpamTime(std::time_t);
-		void setSpamCount(irc::uint);
+		void resetSpamCount();
 		void incrementSpamCount ();
 		void setRemove(bool);
 		// ---- Channels ----
