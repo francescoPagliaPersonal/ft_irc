@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Bot-run.cpp                                        :+:      :+:    :+:   */
+/*   Bot-Operation.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 09:28:34 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/08 13:00:58 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/08 13:55:46 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,4 +96,14 @@ void Bot::run()
 		}
 	}
 
+}
+
+void Bot::sendMessage(const std::string& msg)
+{
+	(void) msg;
+	if (_bufOUT.empty())
+		_epoll.mod(_fd, EPOLL_FL_DEFAULT | EPOLLOUT, NULL);
+	_bufOUT.append(msg);
+	if (DEBUG)
+		std::cout << "[Bot] Appending to output buffer:\n" << msg;
 }

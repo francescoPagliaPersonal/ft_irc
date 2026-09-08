@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/07 17:16:20 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/08 13:40:51 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/08 13:54:22 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,36 +25,30 @@
 
 namespace
 {
-// Render unprintable characters in a string differently.
-void printEscaped(std::ostream& os, const std::string& s)
-{
-	static const char* hex = "0123456789abcdef";
-
-	for (std::size_t i = 0; i < s.size(); i++)
+	// Render unprintable characters in a string differently.
+	void printEscaped(std::ostream& os, const std::string& s)
 	{
-		unsigned char c = static_cast<unsigned char>(s[i]);
-		switch (c)
+		static const char* hex = "0123456789abcdef";
+
+		for (std::size_t i = 0; i < s.size(); i++)
 		{
-			case '\n': os << "\\n\n"; break;
-			case '\r': os << "\\r"; break;
-			case '\t': os << "\\t"; break;
-			case '\0': os << "\\0"; break;
-			default:
-				if (c < 0x20 || c == 0x7f)
-					os << "\\x" << hex[c >> 4] << hex[c & 0x0f];
-				else
-					os << static_cast<char>(c);
+			unsigned char c = static_cast<unsigned char>(s[i]);
+			switch (c)
+			{
+				case '\n': os << "\\n\n"; break;
+				case '\r': os << "\\r"; break;
+				case '\t': os << "\\t"; break;
+				case '\0': os << "\\0"; break;
+				default:
+					if (c < 0x20 || c == 0x7f)
+						os << "\\x" << hex[c >> 4] << hex[c & 0x0f];
+					else
+						os << static_cast<char>(c);
+			}
 		}
 	}
-}
-} // end of namespace
 
-// -------------------------------------------------------------------------- //
-// BUFFER INTERACTIONS
-// -------------------------------------------------------------------------- //
-
-namespace
-{
+	// Print received message on one line.
 	void printMessageOneLine(const Message& msgs, size_t i)
 	{
 		std::cout << "[Debug] Msg #" << i
@@ -70,51 +64,12 @@ namespace
 		std::cout << "} trailing {" << msgs.trailing << "}\n";
 		i++;
 	}
-}
 
-irc::epollret Bot::_discardInput()
-{
-	char buffer[4096];
-	ssize_t bytes = ::recv(_fd, buffer, sizeof(buffer), 0);
+} // end of namespace
 
-	if (bytes <= 0)
-		return (irc::RET_CLOSE);
-	return (irc::RET_OK);
-}
-
-void Bot::_processInputBuffer()
-{
-	std::vector<std::string> rawStrs;
-	std::string::size_type pos = 0;
-	// 1) extract raw string (CRLF) from the input buffer
-	//    see Client::getRawStrings
-	while (pos != std::string::npos)
-	{
-		pos = _bufIN.find(CRLF, 0);
-		if (pos == std::string::npos)
-		{
-			if (_bufIN.size() > MSG_MAX_LENGTH)
-				rawStrs.push_back(_bufIN);
-			break;
-		}
-		rawStrs.push_back(_bufIN.substr(0, pos));
-		_bufIN.erase(0, pos + 2 );
-	}
-	// 2) check all individual messages & append to msg queue
-	for (std::size_t i = 0; i < rawStrs.size(); i++)
-	{
-		Message tmp = irc::string2Message(rawStrs[i], NULL);
-		// TODO what else?
-		if ((tmp.command == "PRIVMSG" &&
-				!tmp.trailing.empty() && tmp.trailing[0] == '!') ||
-			tmp.command == "INVITE")
-		{
-			_msgsQueue.push_back(tmp);
-			// if (DEBUG) // TODO activate
-			printMessageOneLine(tmp, i + 1);
-		}
-	}
-}
+// -------------------------------------------------------------------------- //
+// BUFFER INTERACTIONS
+// -------------------------------------------------------------------------- //
 
 irc::epollret Bot::_receiveToBuffer()
 {
@@ -160,5 +115,39 @@ irc::epollret Bot::_sendFromBuffer()
 	{
 		_bufOUT = _bufOUT.substr(ret);
 		return (irc::RET_HASOUTPUT);
+	}
+}
+
+void Bot::_processInputBuffer()
+{
+	std::vector<std::string> rawStrs;
+	std::string::size_type pos = 0;
+	// 1) extract raw string (CRLF) from the input buffer
+	//    see Client::getRawStrings
+	while (pos != std::string::npos)
+	{
+		pos = _bufIN.find(CRLF, 0);
+		if (pos == std::string::npos)
+		{
+			if (_bufIN.size() > MSG_MAX_LENGTH)
+				rawStrs.push_back(_bufIN);
+			break;
+		}
+		rawStrs.push_back(_bufIN.substr(0, pos));
+		_bufIN.erase(0, pos + 2 );
+	}
+	// 2) check all individual messages & append to msg queue
+	for (std::size_t i = 0; i < rawStrs.size(); i++)
+	{
+		Message tmp = irc::string2Message(rawStrs[i], NULL);
+		// TODO what else?
+		if ((tmp.command == "PRIVMSG" &&
+				!tmp.trailing.empty() && tmp.trailing[0] == '!') ||
+			tmp.command == "INVITE")
+		{
+			_msgsQueue.push_back(tmp);
+			// if (DEBUG) // TODO activate
+			printMessageOneLine(tmp, i + 1);
+		}
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 07:22:22 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/08 13:15:28 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/08 13:57:33 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,10 @@
 class Bot : public IBot
 {
 	public:
-		// ----
+		// ---- Construction
 		Bot(const unsigned int, const unsigned short, const std::string&);
 		~Bot();
-		// ----
+		// ---- Operation
 		void run();
 		void sendMessage(const std::string&);
 	private:
@@ -49,23 +49,27 @@ class Bot : public IBot
 		std::string _bufIN;
 		std::string _bufOUT;
 		std::deque<Message>		_msgsQueue; // holds all incoming messages/loop
-		// ----
+		// ---- Signals
 		static volatile std::sig_atomic_t _keepRunning;
 		static void signalHandler(int);
 		static bool _captureSignals();
-		// ----
+		// ---- Construction
 		void _connect();
+		// ---- Connection
+		void _waitForServer();
 		int _awaitHandshake() const;
 		int _handshakeResult();
-		void _sendToServer(const std::string&);
-		void _registerWith(const std::string&);
-		void _joinChannel(const std::string&);
-		void _spamUser(const std::string&);
-		void _spamChannel(const std::string&);
-		irc::epollret _discardInput();
+		// ---- Buffer
 		irc::epollret _receiveToBuffer();
 		irc::epollret _sendFromBuffer();
 		void _processInputBuffer();
+		// ---- Actions
+		void _registerWith(const std::string&);
+		// ---- Legacy Actions
+		void _sendToServer(const std::string&);
+		void _joinChannel(const std::string&);
+		void _spamUser(const std::string&);
+		void _spamChannel(const std::string&);
 		// ----
 		Bot();
 		Bot(const Bot&);

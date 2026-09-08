@@ -35,7 +35,7 @@ SRC_MAN		:=  arg2password.cpp arg2port.cpp\
 				irc.cpp\
 				main.cpp
 SRC_BON		:=	Bot-main.cpp Bot.cpp Bot-CDTOR.cpp Bot-Signals.cpp\
-				Bot-run.cpp Bot-Buffer.cpp\
+				Bot-Operation.cpp Bot-Connection.cpp Bot-Buffer.cpp\
 				arg2ip.cpp arg2password.cpp arg2port.cpp\
 				Epoll.cpp Message.cpp irc.cpp
 
