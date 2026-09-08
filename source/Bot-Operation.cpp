@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 09:28:34 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/08 13:55:46 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/08 14:10:44 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,86 +14,16 @@
 #include "ft_irc.hpp"
 #include "irc.hpp"
 
-#include <sys/socket.h>
-#include <sys/epoll.h>
-
-#include <cerrno>
-#include <cstring>
-#include <iostream>
-#include <stdexcept>
-
-#include <unistd.h> // sleep()
-
 void Bot::run()
 {
 	while (_keepRunning)
 	{
-		// Retry failed connections with a fresh socket until connection is made.
-		// 1) wait until kernel finishes handshake
-		//    NOTE: epoll returns ready==1 on BOTH success and failure.
-		//    EPOLLOUT on success, EPOLLERR|EPOLLHUP on failure both wake wait().
-		//    ready>0 only means handshake finished, NOT that it succeeded.
-		//    Must check SO_ERROR next to distinguish.
-		// 2) after handshake ask kernel for result
-		// 3) if there was no connection, wait a bit and try again
-		while (_keepRunning && !_hasConn)
-		{
-			int ready = _awaitHandshake();
-			if (ready == 0)
-				continue;
-			if (_handshakeResult() == 0)
-				break;
-			sleep(3);
-			_connect();
-		}
-		if (_keepRunning)
-		{
-			// 3) register with server and join a default channel
-			_registerWith("bot");
-			_joinChannel(SPAM_CHANNEL);
-		}
-		
-		// 4) Stay alive in epoll loop
-		struct epoll_event ev;
-		while (_keepRunning && _hasConn)
-		{
-			irc::epollret ret = irc::RET_OK;
-			int ready = _epoll.wait(&ev, 1, TIMEOUT);
-			if (ready > 0)
-			{
-				if (ev.events & (EPOLLHUP | EPOLLERR))
-					ret = irc::RET_CLOSE;
-				else if (ev.events & EPOLLIN)
-					ret = _receiveToBuffer();
-				else if (ev.events & EPOLLOUT)
-					ret = _receiveToBuffer();
-			}
-			switch (ret)
-			{
-				case irc::RET_EMPTY:
-					_epoll.mod(_fd, EPOLL_FL_DEFAULT, NULL);
-					break;
-				case irc::RET_CLOSE:
-					_hasConn = false;
-					std::cout << "[Bot] Connection to server lost.\n";
-					// HACK i don't like this... might need to separate cleanup & connect
-					_connect();
-					break;
-				case irc::RET_HASOUTPUT:
-					_epoll.mod(_fd, EPOLL_FL_DEFAULT | EPOLLOUT, NULL);
-				case irc::RET_PARSEINPUT:
-					_processInputBuffer();
-					break;
-				default: ;
-			}
-			// TODO remove 
-			std::cout << __FUNCTION__ << "Buffer sizes are IN|OUT: "
-				<< _bufIN.size() << ' ' << _bufOUT.size() << '\n';
-			// TODO have it's own housekeeping & send a ping from time to time?
-			// sleep(2);
-			// _spamUser(SPAM_USER);
-			// _spamChannel(SPAM_CHANNEL);
-		}
+		_waitForServer();
+		// register with server and join a default channel
+		_registerWith("bot");
+		_joinChannel(SPAM_CHANNEL);
+		// stay alive in epoll loop
+		_epollHandler();	
 	}
 
 }
@@ -106,4 +36,49 @@ void Bot::sendMessage(const std::string& msg)
 	_bufOUT.append(msg);
 	if (DEBUG)
 		std::cout << "[Bot] Appending to output buffer:\n" << msg;
+}
+
+void Bot::_epollHandler()
+{
+	struct epoll_event ev;
+	while (_keepRunning && _hasConn)
+	{
+		irc::epollret ret = irc::RET_OK;
+		// retrieve epoll events or wake up on timeout
+		int ready = _epoll.wait(&ev, 1, TIMEOUT);
+		// take action on event
+		if (ready > 0)
+		{
+			if (ev.events & (EPOLLHUP | EPOLLERR))
+				ret = irc::RET_CLOSE;
+			else if (ev.events & EPOLLIN)
+				ret = _receiveToBuffer();
+			else if (ev.events & EPOLLOUT)
+				ret = _sendFromBuffer();
+		}
+		// pick followup task
+		switch (ret)
+		{
+			case irc::RET_OK:
+				break;
+			case irc::RET_EMPTY:
+				_epoll.mod(_fd, EPOLL_FL_DEFAULT, NULL);
+				break;
+			case irc::RET_CLOSE:
+				_hasConn = false;
+				std::cout << "[Bot] Connection to server lost.\n";
+				// HACK i don't like this... might need to separate cleanup & connect
+				_connect();
+				break;
+			case irc::RET_HASOUTPUT: // FIXME this needs to go completely (also server) send must just RET_OK
+				_epoll.mod(_fd, EPOLL_FL_DEFAULT | EPOLLOUT, NULL);
+			case irc::RET_PARSEINPUT:
+				_processInputBuffer();
+				break;
+		}
+		// TODO have it's own housekeeping & send a ping from time to time?
+		// sleep(2);
+		// _spamUser(SPAM_USER);
+		// _spamChannel(SPAM_CHANNEL);
+	}
 }

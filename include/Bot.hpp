@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 07:22:22 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/08 13:57:33 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/08 14:03:59 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ class Bot : public IBot
 		void _waitForServer();
 		int _awaitHandshake() const;
 		int _handshakeResult();
+		// ---- Operation
+		void _epollHandler();
 		// ---- Buffer
 		irc::epollret _receiveToBuffer();
 		irc::epollret _sendFromBuffer();
