@@ -29,6 +29,12 @@ rfc cmd_part(IServerCtrl & srv, const Message & msg)
 
 	for (size_t i = 0; i < channels.size(); ++i)
 	{
+		if (channels[i][0] != '#' && channels[i][0] != '&' )
+		{
+			reply = Response::buildNumeric(msg, irc::NOSUCHCHANNEL, channels[i]);
+			srv.sendMessage(client, reply);
+			continue ;
+		}
 		Channel *channel = srv.getChannelByTitle(channels[i]);
 		if (!channel)
 		{
