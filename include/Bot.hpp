@@ -43,6 +43,7 @@ class Bot
 		Epoll _epoll;
 		bool _hasConn;
 		std::string _bufIN;
+		std::string _bufOUT;
 		// ----
 		static volatile std::sig_atomic_t _keepRunning;
 		static void signalHandler(int);
@@ -58,6 +59,7 @@ class Bot
 		void _spamChannel(const std::string&);
 		irc::epollret _discardInput();
 		irc::epollret _receiveToBuffer();
+		irc::epollret _sendFromBuffer();
 		void _processInputBuffer();
 		// ----
 		Bot();

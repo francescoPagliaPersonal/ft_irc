@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 09:28:34 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/08 12:54:25 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/08 13:00:58 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void Bot::run()
 				else if (ev.events & EPOLLIN)
 					ret = _receiveToBuffer();
 				else if (ev.events & EPOLLOUT)
-					; // TODO OUT
+					ret = _receiveToBuffer();
 			}
 			switch (ret)
 			{
@@ -86,6 +86,9 @@ void Bot::run()
 					break;
 				default: ;
 			}
+			// TODO remove 
+			std::cout << __FUNCTION__ << "Buffer sizes are IN|OUT: "
+				<< _bufIN.size() << ' ' << _bufOUT.size() << '\n';
 			// TODO have it's own housekeeping & send a ping from time to time?
 			// sleep(2);
 			// _spamUser(SPAM_USER);
