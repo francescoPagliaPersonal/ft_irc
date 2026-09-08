@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 09:28:34 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/07 16:49:39 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/08 12:54:25 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void Bot::run()
 				if (ev.events & (EPOLLHUP | EPOLLERR))
 					ret = irc::RET_CLOSE;
 				else if (ev.events & EPOLLIN)
-					ret = _discardInput(); // TODO proper read
+					ret = _receiveToBuffer();
 				else if (ev.events & EPOLLOUT)
 					; // TODO OUT
 			}
@@ -86,7 +86,7 @@ void Bot::run()
 					break;
 				default: ;
 			}
-			// TODO send a ping from time to time?
+			// TODO have it's own housekeeping & send a ping from time to time?
 			// sleep(2);
 			// _spamUser(SPAM_USER);
 			// _spamChannel(SPAM_CHANNEL);

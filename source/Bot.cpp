@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 08:12:43 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/07 16:47:03 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/08 12:52:58 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,16 +94,3 @@ void Bot::_spamChannel(const std::string& channel)
 {
 	_sendToServer("PRIVMSG " + channel + " :" + SPAM_MSG_CH + CRLF);
 }
-
-irc::epollret Bot::_discardInput()
-{
-	char buffer[4096];
-	ssize_t bytes = ::recv(_fd, buffer, sizeof(buffer), 0);
-
-	if (bytes <= 0)
-		return (irc::RET_CLOSE);
-	return (irc::RET_OK);
-}
-
-void Bot::_processInputBuffer()
-{}
