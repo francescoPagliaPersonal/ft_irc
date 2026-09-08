@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------- #
-# Makefile template v 3.1                                           2026-08-25 #
+# Makefile template v 3.1                                           2026-09-08 #
 # ---------------------------------------------------------------------------- #
 #
 #							   PROJECT BUILD TARGETS
@@ -20,7 +20,7 @@ chat:
 
 bonus:		MODE := reg
 bonus:		PART := bon
-bonus:		build
+bonus:		build-both
 
 run:		MODE := reg
 run:		PART := man
@@ -29,8 +29,15 @@ run:		build
 
 runb:		MODE := reg
 runb:		PART := bon
-runb:		build
-	$(EXEC)
+runb:		build-both run-both
+
+bot:		MODE := reg
+bot:		PART := bon
+bot:		build-both
+	@printf "$(C_AUTUMN_ORANGE)  starting: "
+	@printf "$(C_FUJI_WHITE)bot$(C_RESET)\n"
+	@printf "$(C_FUJI_GRAY3)::::::::::::\n$(C_RESET)"
+	@./bin/$(MODE)/bon/ircbot $(HOST) $(PORT) $(PASSWORD)
 
 asan:		MODE := asan
 asan:		PART := man
@@ -39,8 +46,7 @@ asan:		build
 
 asanb:		MODE := asan
 asanb:		PART := bon
-asanb:		build
-	$(EXEC)
+asanb:		build-both run-both
 
 val:		MODE := val
 val:		PART := man
@@ -49,8 +55,20 @@ val:		build
 
 valb:		MODE := val
 valb:		PART := bon
-valb:		build
-	$(EXEC_VALG)
+valb:		build-both run-both-valg
+
+# Build both server (with BONUS=1) and bot
+build-both:
+	@$(MAKE) build MODE=$(MODE) PART=man CXXFLAGS_OTHER+=-DBONUS=1 SRCLANG=$(SRCLANG) --no-print-directory
+	@$(MAKE) build MODE=$(MODE) PART=bon SRCLANG=$(SRCLANG) --no-print-directory
+
+# Run both server and bot in background
+run-both:
+	$(EXEC_BOTH)
+
+# Run both server and bot in background with valgrind
+run-both-valg:
+	$(EXEC_BOTH_VALG)
 
 print:
 	@printf "$(C_SAKURA_BLOSSOM)"
@@ -124,6 +142,6 @@ norm:
 	$(NORM_HEADERS)
 
 .PHONY:	all bonus clean fclean re \
-		run runb asan asanb val valb \
+		run runb asan asanb val valb bot \
 		print build libft norm \
-		nc chat
+		nc chat build-both run-both run-both-valg
