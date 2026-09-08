@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/03 11:38:33 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/06 21:25:02 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/08 11:18:39 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ void Server::_housekeeping()
 		for (it  = _clients.begin(); it != _clients.end(); it++)
 		{
 			Client* client = it->second;
+			if (client->hasQuit())
+				continue ;
 			sendMessage(client, "PING " + client->getNick() + CRLF);
 		}
 		lastPing = now;
