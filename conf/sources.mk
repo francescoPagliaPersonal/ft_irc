@@ -36,7 +36,8 @@ SRC_MAN		:=  arg2password.cpp arg2port.cpp\
 				main.cpp
 SRC_BON		:=	Bot-main.cpp Bot.cpp Bot-CDTOR.cpp Bot-Signals.cpp\
 				Bot-run.cpp Bot-Buffer.cpp\
-				arg2ip.cpp arg2password.cpp arg2port.cpp Epoll.cpp
+				arg2ip.cpp arg2password.cpp arg2port.cpp\
+				Epoll.cpp Message.cpp irc.cpp
 
 # Pattern for source files in subdirectories. WITH DIR SLASH
 #   DIR_PARSER = parser/

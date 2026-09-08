@@ -6,12 +6,13 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/07 17:16:20 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/08 12:59:51 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/08 13:33:26 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Bot.hpp"
 #include "ft_irc.hpp"
+#include "Message.hpp"
 
 #include <cerrno>
 #include <cstring>
@@ -52,6 +53,25 @@ void printEscaped(std::ostream& os, const std::string& s)
 // BUFFER INTERACTIONS
 // -------------------------------------------------------------------------- //
 
+namespace
+{
+	void printMessageOneLine(const Message& msgs, size_t i)
+	{
+		std::cout << "[Debug] Msg #" << i
+			<< " prefix {"<< msgs.prefix 
+			<< "} command {"<< msgs.command
+			<< "} params {" ;
+		for (size_t j = 0; j < msgs.params.size(); j++)
+		{
+			if (j != 0)
+				std::cout << '|';
+			std::cout << msgs.params[j];
+		}
+		std::cout << "} trailing {" << msgs.trailing << "}\n";
+		i++;
+	}
+}
+
 irc::epollret Bot::_discardInput()
 {
 	char buffer[4096];
@@ -64,8 +84,36 @@ irc::epollret Bot::_discardInput()
 
 void Bot::_processInputBuffer()
 {
-	// TODO needs to build the msg for command execd
-	_bufIN.erase();
+	std::vector<std::string> rawStrs;
+	std::string::size_type pos = 0;
+	// 1) extract raw string (CRLF) from the input buffer
+	//    see Client::getRawStrings
+	while (pos != std::string::npos)
+	{
+		pos = _bufIN.find(CRLF, 0);
+		if (pos == std::string::npos)
+		{
+			if (_bufIN.size() > MSG_MAX_LENGTH)
+				rawStrs.push_back(_bufIN);
+			break;
+		}
+		rawStrs.push_back(_bufIN.substr(0, pos));
+		_bufIN.erase(0, pos + 2 );
+	}
+	// 2) check all individual messages & append to msg queue
+	for (std::size_t i = 0; i < rawStrs.size(); i++)
+	{
+		Message tmp = irc::string2Message(rawStrs[i], NULL);
+		if (tmp.flags & irc::MSG_HAS_COMMAND)
+		{
+			// TODO needs to proccess WHAT messages to add
+			//      all PRIVMSG with leading '!'
+			//      all INVITE
+			_msgsQueue.push_back(tmp);
+			// if (DEBUG) // TODO activate
+			printMessageOneLine(tmp, i + 1);
+		}
+	}
 }
 
 irc::epollret Bot::_receiveToBuffer()

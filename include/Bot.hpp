@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 07:22:22 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/08 13:06:44 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/08 13:15:28 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,11 @@
 # include "IBot.hpp"
 # include "Epoll.hpp"
 # include "irc.hpp"
+# include "Message.hpp"
 
 # include <csignal>		// sig_atomic_t
 # include <string>
+# include <deque>
 
 # define SPAM_MSG_42 "42 is the answer to the Ultimate Question of Life, the Universe, and Everything."
 # define SPAM_MSG_CH "Have you tried turning it off and on again?"
@@ -46,6 +48,7 @@ class Bot : public IBot
 		bool _hasConn;
 		std::string _bufIN;
 		std::string _bufOUT;
+		std::deque<Message>		_msgsQueue; // holds all incoming messages/loop
 		// ----
 		static volatile std::sig_atomic_t _keepRunning;
 		static void signalHandler(int);
