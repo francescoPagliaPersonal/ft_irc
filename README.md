@@ -150,5 +150,4 @@ The architecture employs RAII principles with careful attention to ownership sem
 * No SSL/TLS encryption
 * Limited to IPv4
 * Maximum 50,000 clients (configurable)
-* No DCC (Direct Client-to-Client) support
 * Minimal CAP negotiation (only LS/END support)
