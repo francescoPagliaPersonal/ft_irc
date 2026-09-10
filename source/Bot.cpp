@@ -3,20 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   Bot.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 08:12:43 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/08 13:56:53 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/10 15:56:31 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Bot.hpp"
+#include "Epoll.hpp"
 #include "ft_irc.hpp"
 
 #include <cstring>
 #include <cerrno>
 #include <csignal>
 
+#include <sys/epoll.h>
 #include <sys/socket.h>
 
 // -------------------------------------------------------------------------- //
@@ -31,7 +33,8 @@ void Bot::_registerWith(const std::string& name)
 	msg.append("USER " + name + " 0 * :" + name + CRLF);
 	msg.append("PASS " + _pw + CRLF);
 
-	_sendToServer(msg);
+	_bufOUT.append(msg);
+	_epoll.mod(_fd, EPOLL_FL_DEFAULT | EPOLLOUT);
 }
 
 // -------------------------------------------------------------------------- //

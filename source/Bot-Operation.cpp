@@ -3,27 +3,45 @@
 /*                                                        :::      ::::::::   */
 /*   Bot-Operation.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 09:28:34 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/08 14:10:44 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/10 15:57:44 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Bot.hpp"
 #include "ft_irc.hpp"
 #include "irc.hpp"
+#include <unistd.h>
+
+
 
 void Bot::run()
 {
+	int delay = 3;
 	while (_keepRunning)
 	{
-		_waitForServer();
-		// register with server and join a default channel
+		_fd = connectWithRetry(3, delay);
+		if (_fd == -1)
+		{
+			delay = delay <= 640 ? delay *2 : delay;
+			continue ;	
+		}
+		std::cout << "[bot] registered with fd: " << _fd << std::endl;
+		_epoll.add(_fd, EPOLL_FL_DEFAULT);
+
 		_registerWith("bot");
-		_joinChannel(SPAM_CHANNEL);
+		_joinChannel(DEFAULT_CHANNEL);
 		// stay alive in epoll loop
 		_epollHandler();	
+		_bufIN.clear();
+		_bufOUT.clear();
+		if (_fd != -1) {
+            _epoll.del(_fd);
+            ::close(_fd);
+            _fd = -1;
+        }
 	}
 
 }
@@ -41,9 +59,10 @@ void Bot::sendMessage(const std::string& msg)
 void Bot::_epollHandler()
 {
 	struct epoll_event ev;
+	irc::epollret ret = irc::RET_OK;
+
 	while (_keepRunning && _hasConn)
 	{
-		irc::epollret ret = irc::RET_OK;
 		// retrieve epoll events or wake up on timeout
 		int ready = _epoll.wait(&ev, 1, TIMEOUT);
 		// take action on event
@@ -68,7 +87,6 @@ void Bot::_epollHandler()
 				_hasConn = false;
 				std::cout << "[Bot] Connection to server lost.\n";
 				// HACK i don't like this... might need to separate cleanup & connect
-				_connect();
 				break;
 			case irc::RET_HASOUTPUT: // FIXME this needs to go completely (also server) send must just RET_OK
 				_epoll.mod(_fd, EPOLL_FL_DEFAULT | EPOLLOUT, NULL);
