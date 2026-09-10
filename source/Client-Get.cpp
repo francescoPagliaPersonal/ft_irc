@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 17:07:36 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/05 15:31:16 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/10 14:46:36 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,9 +95,9 @@ bool Client::toBeRemoved() const
 	return (_toBeRemoved);
 }
 
-std::time_t Client::getSpamTime() const
+std::time_t Client::getLastMsgTime() const
 {
-	return (_lastSpamTime);
+	return (_lastMsgTime);
 }
 
 irc::uint Client::getSpamCount() const

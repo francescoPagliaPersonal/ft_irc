@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/24 17:48:24 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/01 17:48:17 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/10 14:22:43 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,8 @@ namespace irc
 		YOUREOPER = 381,			// 381 RPL_YOUREOPER
 		// ERROR CODES				--------------------------------------------
 		NOSUCHNICK = 401,			// 401 ERR_NOSUCHNICK
-		NOSUCHCHANNEL = 403,		// 403 ERR_NOSUCHCHANNEL
+		NOSUCHSERVER,				// 402 ERR_NOSUCHSERVER
+		NOSUCHCHANNEL,				// 403 ERR_NOSUCHCHANNEL
 		CANNOTSENDTOCHAN,			// 404 ERR_CANNOTSENDTOCHAN
 		TOOMANYCHANNELS,			// 405 ERR_TOOMANYCHANNELS
 		NOORIGIN = 409,				// 409 ERR_NOORIGIN

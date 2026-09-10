@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/03 11:38:33 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/08 11:18:39 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/10 14:52:29 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,34 @@ void Server::_housekeeping()
 	if (std::difftime(now, lastPing) >= INTERVAL_PING)
 	{
 		std::map<int, Client*>::iterator it;
+		std::time_t minLast = now - INTERVAL_PING;
+
+		// --- TESTING ---
+		char buffer[9];
+		std::strftime(buffer, sizeof(buffer), "%H:%M:%S", std::localtime(&now));
+		std::string strNow(buffer);
+		std::strftime(buffer, sizeof(buffer), "%H:%M:%S", std::localtime(&minLast));
+		std::string strLast(buffer);
+		std::cout << " -- ping must be checked -- "
+			<< " (now: " << strNow <<" | ping threshold: " << strLast << ")\n";
+		
 		for (it  = _clients.begin(); it != _clients.end(); it++)
 		{
 			Client* client = it->second;
-			if (client->hasQuit())
+
+			// --- TESTING ---
+			std::time_t clT = client->getLastMsgTime();
+			std::strftime(buffer, sizeof(buffer), "%H:%M:%S", std::localtime(&clT));
+			std::string strC(buffer);
+			
+			if (client->hasQuit() || client->getLastMsgTime() > minLast)
+			{
+				std::cout << "\t client last msg @ " << strC << '\n';
 				continue ;
+			}
+
+			std::cout << "\t client last msg @ " << strC << " ...sending\n";
+
 			sendMessage(client, "PING " + client->getNick() + CRLF);
 		}
 		lastPing = now;

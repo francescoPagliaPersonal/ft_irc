@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 16:22:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/08 11:46:31 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/10 14:46:36 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ class Client
 		bool isBufferOutFilled() const;
 		bool isBufferFull(e_buffer) const;
 		bool toBeRemoved() const;
-		std::time_t getSpamTime() const;
+		std::time_t getLastMsgTime() const;
 		irc::uint getSpamCount() const;
 		// ---- Set ----
 		bool setRegistrationFlags(int flags);
@@ -79,7 +79,7 @@ class Client
 		void setRealName(const std::string & str);
 		void setCap(bool);
 		void setQuit(bool);
-		void setSpamTime(std::time_t);
+		void setLastMsgTime(std::time_t);
 		void resetSpamCount();
 		void incrementSpamCount ();
 		void setRemove(bool);
@@ -104,7 +104,7 @@ class Client
 		const sockaddr_in& 	 _address;			 // original client IPv4 data
 		std::string			 _host;				 // clients hostname (IP) as string
 		std::deque<Channel*> _channels;			 // channels the client is registered to
-		time_t				 _lastSpamTime;	 	 // time of last msg processed in msgs queue
+		time_t				 _lastMsgTime;	 	 // time of last msg processed in msgs queue
 		irc::uint			 _spamCount;		 // counts appends within a time
 		// ----
 		Client();
