@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/10 14:07:51 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/10 14:32:06 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/10 17:24:28 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,19 @@ Server::_housekeeping() compares now with _lastMsgTime before sending a PING
 rfc cmd_pong(IServerCtrl& srv, const Message& msg)
 {
 	(void) srv;
+	Client* client = msg.sender;
 	if (!(msg.flags & irc::MSG_HAS_PARAMS) && !(msg.flags & irc::MSG_HAS_TRAILING))
 		return (irc::NOORIGIN);
-	// TODO shall we just ignore multiple provided sesrvers?
-	if ((msg.flags & irc::MSG_HAS_PARAMS) && msg.params[0] != "CoolServ") // FIXME server name macro
-		return (irc::NOSUCHSERVER);
-	if ((msg.flags & irc::MSG_HAS_TRAILING) && msg.trailing != "CoolServ") // FIXME server name macro
-		return (irc::NOSUCHSERVER);
+	if (msg.flags & irc::MSG_HAS_PARAMS)
+	{
+		if (msg.params[0] != client->getNick())
+			return (irc::NOSUCHNICK);
+	} 
+	else if (msg.flags & irc::MSG_HAS_TRAILING)
+	{
+		if (msg.trailing != client->getNick())
+			return (irc::NOSUCHNICK);
+	}
 	// internal timer is updated by Server::_executeCommands
 	return (irc::OK);
 }
