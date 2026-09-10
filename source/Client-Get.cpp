@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 17:07:36 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/10 14:46:36 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/10 17:08:50 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,4 +103,9 @@ std::time_t Client::getLastMsgTime() const
 irc::uint Client::getSpamCount() const
 {
 	return (_spamCount);
+}
+
+irc::uint Client::getPingCount() const
+{
+	return (_pingCount);
 }

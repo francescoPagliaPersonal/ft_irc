@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/03 11:38:33 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/10 14:52:29 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/10 17:41:55 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,13 +56,26 @@ void Server::_housekeeping()
 			
 			if (client->hasQuit() || client->getLastMsgTime() > minLast)
 			{
-				std::cout << "\t client last msg @ " << strC << '\n';
+				std::cout << "\tFD " << client->getFD() << " last msg @ " << strC << '\n';
 				continue ;
 			}
 
-			std::cout << "\t client last msg @ " << strC << " ...sending\n";
+			std::cout << "\tFD " << client->getFD() << " last msg @ " << strC << " ...sending\n";
 
+			if (client->getPingCount() >= MAX_UNANSWERED_PING)
+			{
+				_toRemove.insert(client);
+				continue ;
+			}
 			sendMessage(client, "PING " + client->getNick() + CRLF);
+			client->incrementPingCount();
+		}
+		// -- remove conspicuous clients
+		while (_toRemove.size())
+		{
+			Client* client = *(_toRemove.begin());
+			_toRemove.erase(client);
+			_deleteClient(client);
 		}
 		lastPing = now;
 	}

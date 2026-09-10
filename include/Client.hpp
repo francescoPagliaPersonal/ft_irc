@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 16:22:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/10 14:46:36 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/10 17:08:29 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ class Client
 		bool toBeRemoved() const;
 		std::time_t getLastMsgTime() const;
 		irc::uint getSpamCount() const;
+		irc::uint getPingCount() const;
 		// ---- Set ----
 		bool setRegistrationFlags(int flags);
 		void setNick(const std::string & str);
@@ -83,6 +84,8 @@ class Client
 		void resetSpamCount();
 		void incrementSpamCount ();
 		void setRemove(bool);
+		void incrementPingCount();
+		void resetPingCount();
 		// ---- Channels ----
 		bool isChannelMember(Channel*) const;
 		void addChannel(Channel*);
@@ -106,6 +109,7 @@ class Client
 		std::deque<Channel*> _channels;			 // channels the client is registered to
 		time_t				 _lastMsgTime;	 	 // time of last msg processed in msgs queue
 		irc::uint			 _spamCount;		 // counts appends within a time
+		irc::uint			 _pingCount;		 // counts unanswered ping req.
 		// ----
 		Client();
 		Client(const Client&);
