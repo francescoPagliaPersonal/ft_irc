@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   args.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 12:19:28 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/09/10 12:02:18 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/02 09:02:48 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ARGS_HPP
 # define ARGS_HPP
 
-# include "ft_irc.hpp"
 # include <string>
 # include <sstream>
 
