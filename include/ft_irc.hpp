@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:25:38 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/10 17:41:15 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/11 12:11:16 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@
 # define MAX_CHANNELUSERS 500
 # define MAX_CLIENT_ON_IP 5
 # define SPAM_THRESHOLD_MSGS 42
-# define SPAM_TRHESHOLD_TIME 4.0
+# define SPAM_TRHESHOLD_TIME 2.0
 # define INTERVAL_PING 3
 # define MAX_UNANSWERED_PING 1
 
