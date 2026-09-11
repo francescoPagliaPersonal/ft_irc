@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 11:41:20 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/09/11 22:05:12 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/11 23:10:12 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,9 +96,6 @@ void CommandRegistry::registerCmds()
 
 void CommandRegistry::registerBotCmds()
 {
-	Command *invite = new Command("!invite", bot_invite);
-	_commands[invite->getName()] = invite;
-
 	Command *help = new Command("!help", bot_help);
 	_commands[help->getName()] = help;
 
@@ -107,6 +104,9 @@ void CommandRegistry::registerBotCmds()
 
 	Command *mirror = new Command("!mirror", bot_mirror);
 	_commands[mirror->getName()] = mirror;
+
+	Command *quote = new Command("!quote", bot_quote);
+	_commands[quote->getName()] = quote;
 }
 
 #endif

@@ -62,5 +62,5 @@ SRC_MAN   += $(addprefix $(DIR_PLCY),$(SRC_PLCY))
 
 # Bot Commands
 DIR_BOTCMD = commands/
-SRC_BOTCMD = bot_invite.cpp bot_help.cpp bot_spam.cpp bot_mirror.cpp bot_quote.cpp
+SRC_BOTCMD = bot_help.cpp bot_spam.cpp bot_mirror.cpp bot_quote.cpp
 SRC_BON   += $(addprefix $(DIR_BOTCMD),$(SRC_BOTCMD))
