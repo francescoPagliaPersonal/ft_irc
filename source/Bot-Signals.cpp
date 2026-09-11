@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Bot-Signals.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/07 14:45:57 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/07 14:57:44 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/10 12:10:46 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void Bot::signalHandler(int)
 }
 
 // Configures and registers signal and signal handlers.
-bool Bot::_captureSignals()
+bool Bot::_installSignals()
 {
 	struct sigaction sa;
 	std::memset(&sa, 0, sizeof(sa));

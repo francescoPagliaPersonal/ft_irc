@@ -34,8 +34,9 @@ SRC_MAN		:=  arg2password.cpp arg2port.cpp\
 				Channel-Operation.cpp Channel-Compliancy.cpp\
 				irc.cpp\
 				main.cpp
-SRC_BON		:=	Bot-main.cpp Bot.cpp Bot-CDTOR.cpp Bot-Signals.cpp\
-				Bot-Operation.cpp Bot-Connection.cpp Bot-Buffer.cpp\
+SRC_BON		:=	Bot-main.cpp Bot-Run.cpp Bot-CDTOR.cpp Bot-Signals.cpp\
+				Bot-Connection.cpp Bot-Buffer.cpp\
+				Bot-EpollHandler.cpp Bot-Actions.cpp\
 				arg2ip.cpp arg2password.cpp arg2port.cpp\
 				Epoll.cpp Message.cpp irc.cpp
 
