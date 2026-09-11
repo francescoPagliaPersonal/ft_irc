@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/10 01:00:26 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/11 18:05:15 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/11 18:06:01 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,11 +85,11 @@ void ListeningSocket::_bindAddrToFD()
 
 void ListeningSocket::_setHostName()
 {
-	struct hostent* hostByName = gethostbyaddr((char*)&_ipAddr.sin_addr.s_addr, sizeof(_ipAddr.sin_addr.s_addr), AF_INET);
-	if (hostByName == NULL)
+	char buffer[30];
+	if (::gethostname(buffer, 30) == -1)
 		_hostName = SERVER_NAME;
 	else
-		_hostName = hostByName->h_name;
+		_hostName = std::string(buffer);
 }
 // -------------------------------------------------------------------------- //
 // CUSTOM CTOR
