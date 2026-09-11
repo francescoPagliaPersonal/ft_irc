@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 09:28:34 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/11 21:33:54 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/11 21:42:49 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,12 +64,12 @@ void Bot::_runUntilDisconnect()
 				_processInputBuffer();
 				break;
 		}
-		_executeMessage();
+		_executeMessages();
 	}
 }
 
 // simple startup of the command execution.
-void Bot::_executeMessage()
+void Bot::_executeMessages()
 {
 	if (DEBUG && !_msgsQueue.empty())
 		std::cout << "[Info] Processing message queue with "
@@ -82,12 +82,12 @@ void Bot::_executeMessage()
 			_joinedServer = true;
 		else if (msg.command == "433")
 			_keepRunning = false;	
-		else if (msg.prefix.find(std::string(":") + BOT_NAME) != msg.prefix.npos 
-			&& msg.command == "JOIN"
+		else if (msg.command == "JOIN"
+			&& msg.prefix.find(std::string(":") + BOT_NAME) != msg.prefix.npos
 			&& msg.params[0] == DEFAULT_CHANNEL)
 			_joinDefChan =  true;
-		else if (msg.prefix.find(std::string(":") + BOT_NAME) == msg.prefix.npos
-			&& msg.command == "PRIVMSG"
+		else if (msg.command == "PRIVMSG"
+			&& msg.prefix.find(std::string(":") + BOT_NAME) == msg.prefix.npos
 			&& msg.params[0] == DEFAULT_CHANNEL)
 			sendMessage(std::string("PRIVMSG ") + DEFAULT_CHANNEL + " :" + msg.trailing + CRLF ); 
 		_msgsQueue.pop_front();

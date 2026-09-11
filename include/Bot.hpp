@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 07:22:22 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/11 21:19:34 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/11 21:42:49 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ class Bot : public IBot
 
 		// ---- Operation
 		void _runUntilDisconnect();
-		void _executeMessage();
+		void _executeMessages();
 		// ---- Buffer
 		irc::epollret	_receiveToBuffer();
 		irc::epollret	_sendFromBuffer();
