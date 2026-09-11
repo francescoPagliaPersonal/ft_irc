@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 07:22:22 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/11 20:22:19 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/11 21:13:28 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@
 # define SPAM_MSG_42 "42 is the answer to the Ultimate Question of Life, the Universe, and Everything."
 # define SPAM_MSG_CH "Have you tried turning it off and on again?"
 # define SPAM_USER "BugDetector"
-# define DEFAULT_CHANNEL "#support"
+# define DEFAULT_CHANNEL "#ssot"
+
 # define EPOLL_FL_DEFAULT EPOLLIN | EPOLLERR | EPOLLHUP // duplicate of Server.hpp
 # define BUF_SIZE 4095 // duplicate of Client.hpp
 
