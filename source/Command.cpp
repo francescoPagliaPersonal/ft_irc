@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 18:07:43 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/11 16:53:19 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/11 17:19:29 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,22 @@
 // CUSTOM CTOR & DTOR
 // -------------------------------------------------------------------------- //
 
+#ifndef BONUS
 // Custom constructor to create a command with NAME and its handler FUNC.
 Command::Command(const std::string& name, command func)
 	: _name(name)
-	, _func(func)
 	, _policies()
+	, _func(func)
 {}
+# else
+// Custom construtor to create a command for the bot.
+Command::Command(const std::string& name, botcmd func)
+	: _name(name)
+	, _policies()
+	, _func(func)
+{}
+
+#endif
 
 // Free all attached policies.
 Command::~Command()
@@ -60,6 +70,16 @@ void Command::addPolicy(IPolicy* policy)
 	_policies.push_back(policy);
 }
 
+#ifdef BONUS
+
+// Execute the called bot command.
+void Command::execute(IBot& bot, const Message &msg) const
+{
+	_func(bot, msg);
+}
+
+# else
+
 // Check all policies against MSG, then run the command on SRV.
 rfc Command::execute(IServerCtrl& srv, const Message& msg) const
 {
@@ -72,6 +92,8 @@ rfc Command::execute(IServerCtrl& srv, const Message& msg) const
 	}
 	return (_func(srv, msg));
 }
+
+#endif
 
 // -------------------------------------------------------------------------- //
 // OCF

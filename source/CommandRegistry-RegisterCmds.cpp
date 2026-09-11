@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandRegistry-RegisterCmds.cpp                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 11:41:20 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/09/04 10:24:42 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/11 17:18:54 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 	example:
 		join->addPolicy(new AlreadyRegisteredPlcy(true));
 */
+
+#ifndef BONUS
 
 // Register all known commands with their policies.
 void CommandRegistry::registerCmds()
@@ -84,3 +86,22 @@ void CommandRegistry::registerCmds()
 	kick->addPolicy(new ArgsLimitPlcy(2, 3));
 	_commands[kick->getName()] = kick;
 }
+
+# else
+
+void CommandRegistry::registerBotCmds()
+{
+	Command *invite = new Command("!invite", bot_invite);
+	_commands[invite->getName()] = invite;
+
+	Command *help = new Command("!help", bot_help);
+	_commands[help->getName()] = help;
+
+	Command *spam = new Command("!spam", bot_spam);
+	_commands[spam->getName()] = spam;
+
+	Command *mirror = new Command("!mirror", bot_mirror);
+	_commands[mirror->getName()] = mirror;
+}
+
+#endif

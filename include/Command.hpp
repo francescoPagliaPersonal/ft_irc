@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:15:32 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/08 15:42:28 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/11 17:11:37 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,14 @@ class IPolicy;
 
 typedef rfc (*command)(IServerCtrl&, const Message&);
 
+# ifdef BONUS
+typedef void (*botcmd)(IBot&, const Message&);
+#endif
+
 class Command
 {
 	public:
 		// ----
-		Command(const std::string&, command);
 		~Command();
 		// ----
 		struct Data
@@ -63,7 +66,6 @@ class Command
 	private:
 		// ----
 		std::string	_name;				 // name of the command
-		command 	_func;				 // function handler for the command
 		std::vector<IPolicy*> _policies; // active policies per command
 		// ----
 		// ----
@@ -71,9 +73,17 @@ class Command
 		Command(const Command&);
 		Command operator=(const Command&);
 
-# ifdef BONUS
+# ifndef BONUS
 	public:
-		rfc execute(IBot&, const Message&) const;
+		Command(const std::string&, command);
+	private:
+		command 	_func;				 // function handler for the command
+#  else
+	public:
+		Command(const std::string&, botcmd);
+		void execute(IBot&, const Message&) const;
+	private:
+		botcmd		_func;				// function handler for the bot command
 # endif
 };
 
@@ -91,6 +101,15 @@ rfc cmd_mode(IServerCtrl&, const Message&);
 rfc cmd_quit(IServerCtrl&, const Message&);
 rfc cmd_topic(IServerCtrl&, const Message&);
 rfc cmd_kick(IServerCtrl&, const Message&);
+
+# ifdef BONUS
+
+void bot_invite(IBot&, const Message&);
+void bot_help(IBot&, const Message&);
+void bot_spam(IBot&, const Message&);
+void bot_mirror(IBot&, const Message&);
+
+# endif
 
 #endif
 
