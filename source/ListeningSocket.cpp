@@ -13,7 +13,6 @@
 #include "ListeningSocket.hpp"
 
 #include <sys/socket.h>		// socket, setsockopt, bind, listen, accept
-#include <netinet/in.h>		// struct sockaddr_in
 #include <fcntl.h>			// fcntl
 
 #include <cerrno>
@@ -35,6 +34,11 @@ int ListeningSocket::getFD() const
 int ListeningSocket::getPort() const
 {
 	return (_port);
+}
+
+std::string ListeningSocket::getHostName() const
+{
+	return (_hostName);
 }
 
 // Orchestrates the process of accepting a new connection from IPADDR.

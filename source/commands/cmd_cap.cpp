@@ -15,6 +15,7 @@
 #include "IServerCtrl.hpp"
 #include "Client.hpp"
 #include "irc.hpp"
+#include "Response.hpp"
 
 /*
 	CAPABILITY NEGOTIATION of IRCv3
@@ -28,6 +29,7 @@
 rfc cmd_cap(IServerCtrl & srv, const Message & msg)
 {
 	// TODO need more content? currently is empty stub to advance handshake
+	std::string srvName = Response::getServerName();
 	
 	Client *client = msg.sender;
 	if (msg.flags & irc::MSG_HAS_PARAMS)
@@ -37,7 +39,7 @@ rfc cmd_cap(IServerCtrl & srv, const Message & msg)
 			if (client->getRegistrationFlags() != REG_DONE)
 				client->setCap(true);
 			std::string reply;
-			reply = ":CoolServ CAP " + client->getNick() + " LS :" + CRLF;
+			reply = ":" + srvName + " CAP " + client->getNick() + " LS :" + CRLF;
 			srv.sendMessage(client, reply);
 		}
 		else if (msg.params[0] == "END" && client->getCap())

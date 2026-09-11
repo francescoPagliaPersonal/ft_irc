@@ -6,10 +6,11 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/16 20:13:56 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/10 17:28:57 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/11 18:34:46 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "Response.hpp"
 #include "ft_irc.hpp"
 #include "Command.hpp"
 #include "IServerCtrl.hpp"
@@ -26,9 +27,10 @@ rfc cmd_ping(IServerCtrl& srv, const Message& msg)
 		token = msg.params[0];
 	else
 		token = msg.trailing;
-	if (token != "CoolServ") // FIXME name macro
+	std::string srvName = Response::getServerName();
+	if (token != srvName)
 		return (irc::NOSUCHSERVER);
 	srv.sendMessage(client,
-		std::string(":CoolServ PONG CoolServ :") + token + CRLF);
+		std::string(":" + srvName + " PONG " + srvName + " :") + token + CRLF);
 	return (irc::OK);
 }
