@@ -6,13 +6,14 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 07:22:22 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/10 14:23:57 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/11 17:39:57 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BOT_HPP
 # define BOT_HPP
 
+#include "Channel.hpp"
 # include "IBot.hpp"
 # include "Epoll.hpp"
 # include "irc.hpp"
@@ -22,6 +23,7 @@
 # include <string>
 # include <deque>
 
+# define BOT_NAME "Bot"
 # define SPAM_MSG_42 "42 is the answer to the Ultimate Question of Life, the Universe, and Everything."
 # define SPAM_MSG_CH "Have you tried turning it off and on again?"
 # define SPAM_USER "BugDetector"
@@ -35,7 +37,6 @@ class Bot : public IBot
 		// ---- Construction
 		Bot(const irc::uint, const irc::uint16, const std::string&);
 		~Bot();
-		// ---- Operation
 		void run();
 		void sendMessage(const std::string&);
 	private:
@@ -46,6 +47,8 @@ class Bot : public IBot
 		std::string 	_pw;	// server password
 		Epoll 			_epoll;
 		bool 			_hasConn;
+		bool			_joinSrv;
+		bool			_joinDefChan;
 		std::string 	_bufIN;
 		std::string 	_bufOUT;
 		std::deque<Message>		_msgsQueue; // holds all incoming messages/loop
@@ -53,25 +56,21 @@ class Bot : public IBot
 		static volatile std::sig_atomic_t _keepRunning;
 		static void signalHandler(int);
 		static bool _installSignals();
-		// ---- Construction
-		void _connect();
-		// ---- Connection
 
+		// ---- Connection
 		int		connectWithRetry(int, int);
-		irc::epollret _waitForServer();
-		int _awaitHandshake() const;
-		int _handshakeResult();
+
 		// ---- Operation
 		void _epollHandler();
+		void _executeMessage();
 		// ---- Buffer
-		irc::epollret _receiveToBuffer();
-		irc::epollret _sendFromBuffer();
-		void _processInputBuffer();
+		irc::epollret	_receiveToBuffer();
+		irc::epollret	_sendFromBuffer();
+		void 			_processInputBuffer();
 		// ---- Actions
 		void _registerWith(const std::string&);
-		// ---- Legacy Actions
-		void _sendToServer(const std::string&);
 		void _joinChannel(const std::string&);
+		// ---- Legacy Actions
 		void _spamUser(const std::string&);
 		void _spamChannel(const std::string&);
 		// ----

@@ -1,70 +1,46 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Bot-Operation.cpp                                  :+:      :+:    :+:   */
+/*   Bot-EpollHandler.cpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 09:28:34 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/10 15:57:44 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/11 17:29:53 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Bot.hpp"
 #include "ft_irc.hpp"
 #include "irc.hpp"
+#include <cstring>
 #include <unistd.h>
-
-
-
-void Bot::run()
-{
-	int delay = 3;
-	while (_keepRunning)
-	{
-		_fd = connectWithRetry(3, delay);
-		if (_fd == -1)
-		{
-			delay = delay <= 640 ? delay *2 : delay;
-			continue ;	
-		}
-		std::cout << "[bot] registered with fd: " << _fd << std::endl;
-		_epoll.add(_fd, EPOLL_FL_DEFAULT);
-
-		_registerWith("bot");
-		_joinChannel(DEFAULT_CHANNEL);
-		// stay alive in epoll loop
-		_epollHandler();	
-		_bufIN.clear();
-		_bufOUT.clear();
-		if (_fd != -1) {
-            _epoll.del(_fd);
-            ::close(_fd);
-            _fd = -1;
-        }
-	}
-
-}
-
-void Bot::sendMessage(const std::string& msg)
-{
-	(void) msg;
-	if (_bufOUT.empty())
-		_epoll.mod(_fd, EPOLL_FL_DEFAULT | EPOLLOUT, NULL);
-	_bufOUT.append(msg);
-	if (DEBUG)
-		std::cout << "[Bot] Appending to output buffer:\n" << msg;
-}
 
 void Bot::_epollHandler()
 {
 	struct epoll_event ev;
 	irc::epollret ret = irc::RET_OK;
 
+	std::memset(&ev, 0, sizeof(ev));
+	bool loginRequested = false;
+	bool defChanJoined = false;
+	
 	while (_keepRunning && _hasConn)
 	{
+		if (!loginRequested)
+		{
+			_registerWith(BOT_NAME);
+			loginRequested = true;
+		}
+		if (_joinSrv && !defChanJoined)
+		{
+			_joinChannel(DEFAULT_CHANNEL);
+			defChanJoined = true;
+		}
+		
 		// retrieve epoll events or wake up on timeout
 		int ready = _epoll.wait(&ev, 1, TIMEOUT);
+
 		// take action on event
 		if (ready > 0)
 		{
@@ -94,9 +70,32 @@ void Bot::_epollHandler()
 				_processInputBuffer();
 				break;
 		}
-		// TODO have it's own housekeeping & send a ping from time to time?
-		// sleep(2);
-		// _spamUser(SPAM_USER);
-		// _spamChannel(SPAM_CHANNEL);
+		_executeMessage();
+	}
+}
+
+// simple startup of the command execution.
+void Bot::_executeMessage()
+{
+	if (DEBUG && !_msgsQueue.empty())
+		std::cout << "[Info] Processing message queue with "
+			<< _msgsQueue.size() << " messages...\n";
+	while (!_msgsQueue.empty())
+	{
+		Message& msg = _msgsQueue.front();
+		
+		if (msg.command == "001")
+			_joinSrv = true;
+		else if (msg.command == "433")
+			_keepRunning = false;	
+		else if (msg.prefix.find(std::string(":") + BOT_NAME) != msg.prefix.npos 
+			&& msg.command == "JOIN"
+			&& msg.params[0] == DEFAULT_CHANNEL)
+			_joinDefChan =  true;
+		else if (msg.prefix.find(std::string(":") + BOT_NAME) == msg.prefix.npos
+			&& msg.command == "PRIVMSG"
+			&& msg.params[0] == DEFAULT_CHANNEL)
+			sendMessage(std::string("PRIVMSG ") + DEFAULT_CHANNEL + " :" + msg.trailing + CRLF ); 
+		_msgsQueue.pop_front();
 	}
 }
