@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/11 17:04:38 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/09/11 21:19:47 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/11 21:54:28 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,5 +42,5 @@ void Bot::run()
             _fd = -1;
         }
 	}
-
+	std::cout << "[Bot] Shutting down.\n";
 }
