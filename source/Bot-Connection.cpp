@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/08 13:46:16 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/11 21:06:00 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/11 21:18:10 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,9 @@ namespace  {
 	}
 }
 
-int Bot::connectWithRetry(int maxAttempts, int delaySeconds)
+int Bot::_connectWithRetry(int delaySeconds)
 {
-    for (int attempt = 0; _keepRunning && attempt < maxAttempts; ++attempt)
+    for (int attempt = 0; _keepRunning && attempt < CONN_MAX_RETRY; ++attempt)
     {
 		std::cout << "[Bot] Attempting connection to server...\n";
         int fd = ::socket(AF_INET, SOCK_STREAM, 0);

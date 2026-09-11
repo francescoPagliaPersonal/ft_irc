@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 07:22:22 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/11 21:13:28 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/11 21:19:34 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,9 @@
 # define SPAM_MSG_CH "Have you tried turning it off and on again?"
 # define SPAM_USER "BugDetector"
 # define DEFAULT_CHANNEL "#ssot"
+# define CONN_DELAY 5		// default delay between retries
+# define CONN_MAX_RETRY 4	// max retries before delay is increased
+# define CONN_MAX_DELAY	300 // max delay between retries
 
 # define EPOLL_FL_DEFAULT EPOLLIN | EPOLLERR | EPOLLHUP // duplicate of Server.hpp
 # define BUF_SIZE 4095 // duplicate of Client.hpp
@@ -59,7 +62,7 @@ class Bot : public IBot
 		static bool _installSignals();
 
 		// ---- Connection
-		int		connectWithRetry(int, int);
+		int		_connectWithRetry(int);
 
 		// ---- Operation
 		void _runUntilDisconnect();
