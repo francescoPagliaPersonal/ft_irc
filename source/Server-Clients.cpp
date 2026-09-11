@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 16:27:31 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/08 11:51:33 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/11 13:12:19 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,13 +148,14 @@ void Server::_registerNewClient(int fd, const struct sockaddr_in& addr)
 		return ;	
 	}
 	std::cout << "[Info] New connection from " << tmp->getHost()
-			<< " accepted at FD " << fd << '\n';
+			<< " accepted at FD " << fd << " (" << irc::timeNowStr() << ").\n";
 }
 // Remove a client and deregister FD.
 void Server::_deleteClient(Client* client)
 {
 	std::cout << "[Info] Connection to " << client->getHost()
-			  << " is being closed on FD " << client->getFD() << ".\n";
+			  << " is being closed on FD " << client->getFD()
+			  << " (" << irc::timeNowStr() << ").\n";
 	std::set<Client*> contacts;
 	if (!client->hasQuit())
 	{
