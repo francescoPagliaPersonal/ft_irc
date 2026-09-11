@@ -67,7 +67,7 @@ Server::Server(int port, std::string pw)
 	_epoll.add(_listener.getFD(), EPOLLIN);
 	_captureSignals();
 	//TODO: replace server hard coded label with official name.
-	Response::init("CoolServ");
+	Response::init(_listener.getHostName());
 	// Client class
 	// CommandDispatch class
 	_cmdReg.registerCmds();
