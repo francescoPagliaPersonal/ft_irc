@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/03 11:38:33 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/11 12:16:23 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/11 14:48:15 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ void Server::_housekeeping()
 	// -- remove conspicuous clients
 	while (_toRemove.size())
 	{
+		if (DEBUG == debug::DETAILED)
+			std::cout << "[Server] Removing clients...\n";
 		Client* client = *(_toRemove.begin());
 		_toRemove.erase(client);
 		_deleteClient(client);
@@ -36,31 +38,29 @@ void Server::_housekeeping()
 		std::map<int, Client*>::iterator it;
 		std::time_t minLast = now - INTERVAL_PING;
 
-		// --- TESTING ---
-		char buffer[9];
-		std::strftime(buffer, sizeof(buffer), "%H:%M:%S", std::localtime(&now));
-		std::string strNow(buffer);
-		std::strftime(buffer, sizeof(buffer), "%H:%M:%S", std::localtime(&minLast));
-		std::string strLast(buffer);
-		std::cout << " -- ping must be checked -- "
-			<< " (now: " << strNow <<" | ping threshold: " << strLast << ")\n";
+		if (DEBUG == debug::DETAILED)
+			std::cout << "[Server] Time to PING inactive clients,"
+				<< " last active before "
+				<< irc::timeAsStr(minLast) << " (now " 
+				<< irc::timeAsStr(now) << ")\n";
+				// << " (now: " << irc::timeAsStr(now)
+				// << " | ping threshold: " << irc::timeAsStr(minLast) << ")\n";
 		
 		for (it  = _clients.begin(); it != _clients.end(); it++)
 		{
 			Client* client = it->second;
-
-			// --- TESTING ---
-			std::time_t clT = client->getLastMsgTime();
-			std::strftime(buffer, sizeof(buffer), "%H:%M:%S", std::localtime(&clT));
-			std::string strC(buffer);
 			
 			if (client->hasQuit() || client->getLastMsgTime() >= minLast)
 			{
-				std::cout << "\tFD " << client->getFD() << " last msg @ " << strC << '\n';
+				if (DEBUG == debug::DETAILED)
+					std::cout << "\t FD " << client->getFD() << " last msg @ "
+						<< irc::timeAsStr(client->getLastMsgTime()) << '\n';
 				continue ;
 			}
 
-			std::cout << "\tFD " << client->getFD() << " last msg @ " << strC << " ...sending\n";
+			if (DEBUG == debug::DETAILED)
+				std::cout << "\t FD " << client->getFD() << " last msg @ "
+					<< irc::timeAsStr(client->getLastMsgTime()) << " ...sending\n";
 
 			if (client->getPingCount() >= MAX_UNANSWERED_PING)
 			{
