@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 16:50:07 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/11 16:39:33 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/11 17:43:36 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ class CommandRegistry
 
 # ifdef BONUS
 	public:
-		void execute(IBot&, const Message&) const;
+		void execute(IBot&, const Message&, std::vector<std::string>&) const;
 		void registerBotCmds();
 # endif
 };

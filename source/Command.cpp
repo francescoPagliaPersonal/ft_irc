@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 18:07:43 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/11 17:19:29 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/11 17:44:09 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,9 +73,9 @@ void Command::addPolicy(IPolicy* policy)
 #ifdef BONUS
 
 // Execute the called bot command.
-void Command::execute(IBot& bot, const Message &msg) const
+void Command::execute(IBot& bot, const Message &msg, std::vector<std::string> botcmds) const
 {
-	_func(bot, msg);
+	_func(bot, msg, botcmds);
 }
 
 # else

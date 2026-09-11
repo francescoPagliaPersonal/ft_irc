@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:15:32 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/11 17:11:37 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/11 17:44:31 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ class IPolicy;
 typedef rfc (*command)(IServerCtrl&, const Message&);
 
 # ifdef BONUS
-typedef void (*botcmd)(IBot&, const Message&);
+typedef void (*botcmd)(IBot&, const Message&, std::vector<std::string>&);
 #endif
 
 class Command
@@ -81,7 +81,7 @@ class Command
 #  else
 	public:
 		Command(const std::string&, botcmd);
-		void execute(IBot&, const Message&) const;
+		void execute(IBot&, const Message&, std::vector<std::string>&) const;
 	private:
 		botcmd		_func;				// function handler for the bot command
 # endif
@@ -104,10 +104,10 @@ rfc cmd_kick(IServerCtrl&, const Message&);
 
 # ifdef BONUS
 
-void bot_invite(IBot&, const Message&);
-void bot_help(IBot&, const Message&);
-void bot_spam(IBot&, const Message&);
-void bot_mirror(IBot&, const Message&);
+void bot_invite(IBot&, const Message&, std::vector<std::string>&);
+void bot_help(IBot&, const Message&, std::vector<std::string>&);
+void bot_spam(IBot&, const Message&, std::vector<std::string>&);
+void bot_mirror(IBot&, const Message&, std::vector<std::string>&);
 
 # endif
 
