@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Bot-Buffer.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/07 17:16:20 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/08 13:54:22 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/11 17:36:57 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,14 +140,8 @@ void Bot::_processInputBuffer()
 	for (std::size_t i = 0; i < rawStrs.size(); i++)
 	{
 		Message tmp = irc::string2Message(rawStrs[i], NULL);
-		// TODO what else?
-		if ((tmp.command == "PRIVMSG" &&
-				!tmp.trailing.empty() && tmp.trailing[0] == '!') ||
-			tmp.command == "INVITE")
-		{
-			_msgsQueue.push_back(tmp);
-			// if (DEBUG) // TODO activate
+		_msgsQueue.push_back(tmp);
+		if (DEBUG) 
 			printMessageOneLine(tmp, i + 1);
-		}
 	}
 }

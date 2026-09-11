@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 17:02:24 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/28 08:26:25 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/08 11:43:20 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ irc::epollret Client::receiveToBuffer()
 	char buf[BUF_SIZE + 1];
 	ssize_t ret = 0;
 	ret = recv(_fd, buf, BUF_SIZE, 0);
+	// epoll loop is designed as such that EPOLLIN is required to recv()
+	// thus the usual EAGAIN cannot happen. any other error is a problem.
 	if (ret == -1)
 	{
 		if (DEBUG)
@@ -70,6 +72,9 @@ irc::epollret Client::receiveToBuffer()
 		return (irc::RET_CLOSE);
 	buf[ret] = '\0';
 	_bufIN.append(buf);
+	// _bufIN can never be > BUF_SIZE + 1
+	// because processInputBuffer *always* drains an incomplete stream (no CRLF)
+	//  that is longer than MSG_MAX_LENGTH
 	if (DEBUG == debug::DETAILED)
 	{
 		std::cout << "[FD " << _fd << "] Received "<< ret
@@ -86,12 +91,14 @@ irc::epollret Client::sendFromBuffer()
 {
 	errno = 0;
 	ssize_t ret = send(_fd, _bufOUT.c_str(), _bufOUT.size(), 0);
+	// epoll loop is designed as such that EPOLLOUT is required to send()
+	// thus the usual EAGAIN cannot happen. any other error is a problem.
 	if (ret < 0)
 	{
 		if (DEBUG)
 			std::cerr << "[Error] FD " << _fd << " send(): "
 				<< errno << ", " << strerror(errno) << std::endl;
-		return (irc::RET_CLOSE);	
+		return (irc::RET_CLOSE);
 	}
 	if (ret == static_cast<ssize_t>(_bufOUT.size()))
 	{
@@ -104,6 +111,7 @@ irc::epollret Client::sendFromBuffer()
 	else
 	{
 		_bufOUT = _bufOUT.substr(ret);
+		std::cout << '[' << __FUNCTION__ << "] kernel buffer doesn't have enough space.\n";
 		return (irc::RET_HASOUTPUT);
 	}
 }

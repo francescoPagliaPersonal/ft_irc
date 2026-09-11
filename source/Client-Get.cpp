@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 17:07:36 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/28 08:13:13 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/05 15:31:16 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,34 @@ bool Client::isBufferOutFilled() const
 	return (!_bufOUT.empty());
 }
 
+bool Client::isBufferFull(e_buffer which) const
+{
+	if (which == BUF_IN)
+	{
+		if (_bufIN.size() > MAX_BUF_SIZE)
+			return (true);
+	}
+	else if (_bufOUT.size() > MAX_BUF_SIZE)
+		return (true);
+	return (false);
+}
+
 std::deque<Channel*> Client::getChannelsList() const
 {
 	return _channels;
+}
+
+bool Client::toBeRemoved() const
+{
+	return (_toBeRemoved);
+}
+
+std::time_t Client::getSpamTime() const
+{
+	return (_lastSpamTime);
+}
+
+irc::uint Client::getSpamCount() const
+{
+	return (_spamCount);
 }

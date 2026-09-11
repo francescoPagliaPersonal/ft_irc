@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_irc.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:25:38 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/04 14:28:51 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/06 21:24:29 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
  * 3 server listener
  * 4 reserved client to return closing event without impacting the server.
  */
+# define SERVER_NAME "irc.CoolServ.42"
 # define RESERVED_FDS 5
 # define MIN_CLIENTS 5
 # define MAX_CLIENTS 50000
@@ -42,6 +43,9 @@
 # define MAX_TOPICLEN 300
 # define MAX_CHANNELUSERS 500
 # define MAX_CLIENT_ON_IP 5
+# define SPAM_THRESHOLD_MSGS 42
+# define SPAM_TRHESHOLD_TIME 4.0
+# define INTERVAL_PING 90
 
 # ifndef DEBUG
 #  define DEBUG 0 // TODO set this to zero later and ctl via makefile

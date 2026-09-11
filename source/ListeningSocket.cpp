@@ -6,14 +6,13 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:55:20 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/27 13:36:36 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/08 11:56:12 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ListeningSocket.hpp"
 
 #include <sys/socket.h>		// socket, setsockopt, bind, listen, accept
-#include <netinet/in.h>		// struct sockaddr_in
 #include <fcntl.h>			// fcntl
 
 #include <cerrno>
@@ -37,6 +36,11 @@ int ListeningSocket::getPort() const
 	return (_port);
 }
 
+std::string ListeningSocket::getHostName() const
+{
+	return (_hostName);
+}
+
 // Orchestrates the process of accepting a new connection from IPADDR.
 int ListeningSocket::acceptConnection(struct sockaddr_in& ipAddr) const
 {
@@ -46,7 +50,7 @@ int ListeningSocket::acceptConnection(struct sockaddr_in& ipAddr) const
 	len = sizeof(ipAddr);
 	std::memset(&ipAddr, 0, len);
 	// 1) accept the incoming connection
-	newFD = accept(_fd, reinterpret_cast<struct sockaddr*>(&ipAddr), &len);
+	newFD = ::accept(_fd, reinterpret_cast<struct sockaddr*>(&ipAddr), &len);
 	if (newFD < 0)
 	{
 		// EAGAIN and EWOULDBLOCK signal the queue is drained, this is OKAY
