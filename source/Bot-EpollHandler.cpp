@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 09:28:34 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/11 20:22:19 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/11 21:33:54 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,12 @@ void Bot::_runUntilDisconnect()
 	irc::epollret ret = irc::RET_OK;
 
 	std::memset(&ev, 0, sizeof(ev));
-	bool loginRequested = false;
 	bool joinedDefChan = false;
-	
+	_registerWith(BOT_NAME);
+
 	while (_keepRunning && _hasConn)
 	{
-		if (!loginRequested)
-		{
-			_registerWith(BOT_NAME);
-			loginRequested = true;
-		}
-		if (_joinedServer && !joinedDefChan)
+		if (!joinedDefChan && _joinedServer)
 		{
 			_joinChannel(DEFAULT_CHANNEL);
 			joinedDefChan = true;
@@ -62,7 +57,6 @@ void Bot::_runUntilDisconnect()
 			case irc::RET_CLOSE:
 				_hasConn = false;
 				std::cout << "[Bot] Connection to server lost.\n";
-				// HACK i don't like this... might need to separate cleanup & connect
 				break;
 			case irc::RET_HASOUTPUT: // FIXME this needs to go completely (also server) send must just RET_OK
 				_epoll.mod(_fd, EPOLL_FL_DEFAULT | EPOLLOUT, NULL);
