@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:58:17 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/11 19:50:57 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/11 22:00:35 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ void Epoll::add(int fd, eventflags eventFlags) const
 	std::memset(&ev, 0, sizeof(ev));
 	ev.events = eventFlags;
 	ev.data.fd = fd;
+	errno = 0;
 	// 2) add new FD to epoll watchlist
 	if (::epoll_ctl(_fd, EPOLL_CTL_ADD, fd, &ev) < 0)
 		throw std::runtime_error(std::string("Error on epoll_ctl(ADD): ")
@@ -79,6 +80,7 @@ void Epoll::add(int fd, eventflags eventFlags, Client* client) const
 	ev.events = eventFlags;
 	ev.data.ptr = client;
 	// 2) add new FD to epoll watchlist
+	errno = 0;
 	if (::epoll_ctl(_fd, EPOLL_CTL_ADD, fd, &ev) < 0)
 		throw std::runtime_error(std::string("Error on epoll_ctl(ADD): ")
 			+ std::strerror(errno));
@@ -94,9 +96,15 @@ void Epoll::mod(int fd, eventflags eventFlags, Client* client) const
 	ev.events = eventFlags;
 	ev.data.ptr = client;
 	// 2) modify fd watchlist
+	errno = 0;
 	if (::epoll_ctl(_fd, EPOLL_CTL_MOD, fd, &ev) < 0)
-		throw std::runtime_error(std::string("Error on epoll_ctl(MODIFY): ")
-			+ std::strerror(errno));
+	{
+		// note: see notes of ::del
+		// any real failure will be caught by EPOLLHUP, EPOLLERR or housekeeping
+		// and the connection will be closed
+		std::cerr << "[Warning] Modifying epoll events for FD " << fd
+			<< " caused an error: " << std::strerror(errno) << std::endl;
+	}
 }
 
 #ifdef BONUS
@@ -110,9 +118,15 @@ void Epoll::mod(int fd, eventflags eventFlags) const
 	ev.events = eventFlags;
 	ev.data.fd = fd;
 	// 2) modify fd watchlist
+	errno = 0;
 	if (::epoll_ctl(_fd, EPOLL_CTL_MOD, fd, &ev) < 0)
-		throw std::runtime_error(std::string("Error on epoll_ctl(MODIFY): ")
-			+ std::strerror(errno));
+	{
+		// note: see notes of ::del
+		// any real failure will be caught by EPOLLHUP, EPOLLERR or housekeeping
+		// and the connection will be closed
+		std::cerr << "[Warning] Modifying epoll events for FD " << fd
+			<< " caused an error: " << std::strerror(errno) << std::endl;
+	}
 }
 #endif
 
@@ -126,10 +140,12 @@ void Epoll::del(int fd) const
 	// EPERM - target fd doesn't support epoll
 	// note: throwing on error breaks cleanup if triggered in class dtor
 	//	     kernel also cleans up epoll watchlist on close(fd)
+	errno = 0;
 	if (::epoll_ctl(_fd, EPOLL_CTL_DEL, fd, NULL) < 0)
 	{
 		std::cerr << "[Warning] Removing FD " << fd
-			<< " from epoll watchlist caused an error" << std::endl;
+			<< " from epoll watchlist caused an error: "
+			<< std::strerror(errno) << std::endl;
 	};
 }
 

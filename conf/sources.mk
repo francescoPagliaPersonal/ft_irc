@@ -21,7 +21,7 @@ SRC_MAN		:=  arg2password.cpp arg2port.cpp\
 				Server.cpp Server-CDTOR.cpp Server-Run.cpp Server-Handlers.cpp\
 				Server-Clients.cpp Server-Channels.cpp Server-Signals.cpp\
 				Server-Commands.cpp Server-procInputBuffer.cpp\
-				Server-Broadcast.cpp\
+				Server-Broadcast.cpp Server-housekeeping.cpp\
 				Server-tryCompleteRegistration.cpp\
 				Server-addToChannel.cpp\
 				Epoll.cpp ListeningSocket.cpp ListeningSocket-CDTOR.cpp\
@@ -50,7 +50,7 @@ SRC_BON		:=	Bot-main.cpp Bot-Run.cpp Bot-CDTOR.cpp Bot-Signals.cpp\
 DIR_CMDS = commands/
 SRC_CMDS = cmd_cap.cpp cmd_nick.cpp cmd_pass.cpp cmd_user.cpp cmd_ping.cpp\
 		   cmd_join.cpp cmd_privmsg.cpp cmd_invite.cpp cmd_quit.cpp\
-		   cmd_kick.cpp cmd_topic.cpp\
+		   cmd_kick.cpp cmd_topic.cpp cmd_part.cpp\
 		   cmd_mode.cpp cmd_mode-response.cpp cmd_mode-handleChange.cpp
 SRC_MAN   += $(addprefix $(DIR_CMDS),$(SRC_CMDS))
 

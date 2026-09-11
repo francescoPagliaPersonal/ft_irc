@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server-Handlers.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 22:58:08 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/04 14:55:00 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/06 21:47:37 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,20 +55,21 @@ void Server::_handleClientEvent(epoll_event& ev)
 	switch (ret)
 	{
 		case irc::RET_EMPTY:
-			_epoll.mod(client->getFD(), EPOLL_FL_DEFAULT, client);
+			if (!client->hasQuit())
+				_epoll.mod(client->getFD(), EPOLL_FL_DEFAULT, client);
+			else
+				_epoll.mod(client->getFD(), EPOLLERR | EPOLLHUP, client);
 			break;
-		case irc::RET_CLOSE:
-			_deleteClient(client);
-			// TODO closing events needs validation, thus also the printout
-			std::cout << "[Warning] " << __FUNCTION__ << " removed a Client." << std::endl;
-			// TODO but also, are they the same for IN/OUT?
+		case irc::RET_CLOSE: // this is a forceful disconnect, never a QUIT
+			_addToRemove(client);
 			break;
 		case irc::RET_HASOUTPUT:
+			// FIXME this is redundant, is it not?
 			_epoll.mod(client->getFD(), EPOLL_FL_DEFAULT | EPOLLOUT, client);
 			break;
-		case irc::RET_PARSEINPUT:
-			if (_processInputBuffer(client) == false)
-				_deleteClient(client); // builds the interneal message array
+		case irc::RET_PARSEINPUT: // builds the interneal message array
+			if (_processInputBuffer(client) == irc::RET_CLOSE)
+				_addToRemove(client);
 			break;
 		default: ;
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server-Clients.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 16:27:31 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/04 10:02:19 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/08 11:51:33 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,22 @@ Client* Server::findClientByNick(const std::string & nick) const
 }
 
 // Queue STR for sending to CLIENT and enable the EPOLLOUT interest.
-void Server::sendMessage(Client* client, const std::string& str) const 
+void Server::sendMessage(Client* client, const std::string& str) const
 {
+	if (client->toBeRemoved())
+		return ;
 	if (!client->isBufferOutFilled() && !client->hasQuit())
 		_epoll.mod(client->getFD(), EPOLL_FL_DEFAULT | EPOLLOUT, client);
-	// TODO drop connection if bufOUT grows too much? or do we drop if kernel buffer stays full?
 	client->putReply2Buff(str);
-	// TODO consider CATCH & disconnect
+	// check for clients that don't empty their buffer fast enough
+	if (client->isBufferFull(BUF_OUT))
+	{
+		_addToRemove(client);
+		if (DEBUG >= debug::DETAILED)
+			std::cout << "[Info] Client '" << client->getNick()
+					  << "' (FD " << client->getFD() << ") will be disconnected"
+					  << " due to a full outgoing buffer.\n";
+	}
 }
 
 // -------------------------------------------------------------------------- //
@@ -134,7 +143,7 @@ void Server::_registerNewClient(int fd, const struct sockaddr_in& addr)
 	{
 		sendMessage(tmp, 
 				"ERROR: too many connection from IP " + tmp->getHost() + CRLF);
-		tmp->setQuit(true);
+		_addToRemove(tmp);
 		_epoll.mod(fd, EPOLL_FL_QUIT, tmp);
 		return ;	
 	}
@@ -144,6 +153,8 @@ void Server::_registerNewClient(int fd, const struct sockaddr_in& addr)
 // Remove a client and deregister FD.
 void Server::_deleteClient(Client* client)
 {
+	std::cout << "[Info] Connection to " << client->getHost()
+			  << " is being closed on FD " << client->getFD() << ".\n";
 	std::set<Client*> contacts;
 	if (!client->hasQuit())
 	{
@@ -176,4 +187,11 @@ void Server::_prepareClientDisconnect(Client* client)
 
 	// HACK only for testing!!
 	// _deleteClient(client);
+}
+
+// Inserts a CLIENT that is to be removed into the set of clients to be removed.
+void Server::_addToRemove(Client* client) const // with the mutable attribute it has to be const
+{
+	_toRemove.insert(client);
+	client->setRemove(true);
 }
