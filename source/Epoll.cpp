@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Epoll.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:58:17 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/10 15:55:17 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/11 19:50:57 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,8 @@ void Epoll::mod(int fd, eventflags eventFlags, Client* client) const
 			+ std::strerror(errno));
 }
 
-// Change the set of events to watch for a given FD and store client pointer.
+#ifdef BONUS
+// Change the set of events for the Bot on the server connection.
 void Epoll::mod(int fd, eventflags eventFlags) const
 {
 	struct epoll_event ev;
@@ -113,6 +114,7 @@ void Epoll::mod(int fd, eventflags eventFlags) const
 		throw std::runtime_error(std::string("Error on epoll_ctl(MODIFY): ")
 			+ std::strerror(errno));
 }
+#endif
 
 // Remove a FD from the epoll() watchlist.
 void Epoll::del(int fd) const
