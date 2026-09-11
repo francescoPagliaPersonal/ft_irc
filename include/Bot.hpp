@@ -6,18 +6,19 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 07:22:22 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/11 21:42:49 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/11 22:42:24 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BOT_HPP
 # define BOT_HPP
 
-#include "Channel.hpp"
+# include "Channel.hpp"
 # include "IBot.hpp"
 # include "Epoll.hpp"
 # include "irc.hpp"
 # include "Message.hpp"
+# include "CommandRegistry.hpp"
 
 # include <csignal>		// sig_atomic_t
 # include <string>
@@ -32,6 +33,7 @@
 # define CONN_MAX_RETRY 4	// max retries before delay is increased
 # define CONN_MAX_DELAY	300 // max delay between retries
 
+# define CRLF "\r\n" // duplicate of ft_irc.hpp
 # define EPOLL_FL_DEFAULT EPOLLIN | EPOLLERR | EPOLLHUP // duplicate of Server.hpp
 # define BUF_SIZE 4095 // duplicate of Client.hpp
 
@@ -56,6 +58,7 @@ class Bot : public IBot
 		std::string 	_bufIN;
 		std::string 	_bufOUT;
 		std::deque<Message>		_msgsQueue; // holds all incoming messages/loop
+		CommandRegistry			_cmdReg;	// command orchestrator
 		// ---- Signals
 		static volatile std::sig_atomic_t _keepRunning;
 		static void signalHandler(int);

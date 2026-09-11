@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Bot.cpp                                            :+:      :+:    :+:   */
+/*   Bot-Actions.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 08:12:43 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/11 16:58:17 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/11 22:31:52 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,20 +50,3 @@ void Bot::_joinChannel(const std::string& channel)
 {
 	sendMessage("JOIN " + channel + CRLF);
 }
-
-
-// -------------------------------------------------------------------------- //
-// LEGACY TESTING FUNCTIONS
-// -------------------------------------------------------------------------- //
-
-
-
-// void Bot::_spamUser(const std::string& nick)
-// {
-// 	_sendToServer("PRIVMSG " + nick + " :" + SPAM_MSG_42 + CRLF);
-// }
-
-// void Bot::_spamChannel(const std::string& channel)
-// {
-// 	_sendToServer("PRIVMSG " + channel + " :" + SPAM_MSG_CH + CRLF);
-// }

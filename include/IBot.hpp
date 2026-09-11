@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/07 17:14:08 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/08 13:06:49 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/11 22:26:18 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@
 
 class IBot
 {
-	void sendMessage(const std::string&);
+	public:
+		virtual void sendMessage(const std::string&) = 0;
 };
 
 #endif

@@ -59,7 +59,7 @@ valb:		build-both run-both-valg
 
 # Build both server (with BONUS=1) and bot
 build-both:
-	@$(MAKE) build MODE=$(MODE) PART=man CXXFLAGS_OTHER+=-DBONUS=1 SRCLANG=$(SRCLANG) --no-print-directory
+	@$(MAKE) build MODE=$(MODE) PART=man SRCLANG=$(SRCLANG) --no-print-directory
 	@$(MAKE) build MODE=$(MODE) PART=bon SRCLANG=$(SRCLANG) --no-print-directory
 
 # Run both server and bot in background
