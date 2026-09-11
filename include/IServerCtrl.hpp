@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   IServerCtrl.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/14 19:25:52 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/02 17:21:34 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/04 13:54:41 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ public:
 	virtual ~IServerCtrl() {}
 	// ---- Get Server Info
 	virtual std::string getPassword() const = 0;
+	virtual std::time_t getStartTime() const = 0;
 	// virtual std::string getServerName() const = 0; // or a DEFINE
 	// ---- Registration
 	virtual void tryCompleteRegistration(Client*) const = 0;

@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/10 01:00:26 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/17 17:43:22 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/11 18:05:15 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,12 @@ int ListeningSocket::_createNewSocket()
 	struct protoent	*pe;
 
 	// 0) fetch protocol by name
-	pe = getprotobyname("tcp");
+	pe = ::getprotobyname("tcp");
 	if (pe == NULL)
 		throw std::runtime_error(
 			std::string("Error on getprotobyname(): ") + std::strerror(errno));
 	// 1) open a new socket
-	fd = socket(AF_INET, SOCK_STREAM, pe->p_proto); // TODO use 0 or pe?
+	fd = ::socket(AF_INET, SOCK_STREAM, pe->p_proto); // TODO use 0 or pe?
 	if (fd < 0)
 		throw std::runtime_error(
 			std::string("Error on socket(): ") + std::strerror(errno));
@@ -53,8 +53,6 @@ int ListeningSocket::_createNewSocket()
 	// TODO do we need SO_KEEPALIVE?
 	return (fd);
 }
-
-
 
 // Helper to configure the FD of the listening socket.
 void ListeningSocket::_configureFD()
@@ -75,12 +73,11 @@ void ListeningSocket::_configureFD()
 void ListeningSocket::_bindAddrToFD()
 {
 	// 3) bind the new socket to any network adress
-	
 	std::memset(&_ipAddr, 0, sizeof (_ipAddr));
 	_ipAddr.sin_family = AF_INET;
 	// convert little-endian numbers to big-endian
-	_ipAddr.sin_port = htons(_port);
-	_ipAddr.sin_addr.s_addr = htonl(INADDR_ANY);
+	_ipAddr.sin_port = ::htons(_port);
+	_ipAddr.sin_addr.s_addr = ::htonl(INADDR_ANY);
 	if (::bind(_fd, reinterpret_cast<struct sockaddr*>(&_ipAddr), sizeof(_ipAddr)) < 0)
 		throw std::runtime_error(
 			std::string("Error on bind(): ") + std::strerror(errno));
@@ -88,7 +85,6 @@ void ListeningSocket::_bindAddrToFD()
 
 void ListeningSocket::_setHostName()
 {
-
 	struct hostent* hostByName = gethostbyaddr((char*)&_ipAddr.sin_addr.s_addr, sizeof(_ipAddr.sin_addr.s_addr), AF_INET);
 	if (hostByName == NULL)
 		_hostName = SERVER_NAME;

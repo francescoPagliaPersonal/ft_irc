@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:32:56 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/04 14:14:31 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/05 16:26:16 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,11 @@
 // -------------------------------------------------------------------------- //
 
 # include <csignal>
+# include <ctime>
 # include <deque>
 # include <string>
 # include <map>
+# include <set>
 
 # include "IServerCtrl.hpp"
 # include "ListeningSocket.hpp"
@@ -46,6 +48,7 @@ class Server : public IServerCtrl
 		void run();
 		// ---- Interface ----
 		std::string getPassword() const;
+		std::time_t getStartTime() const;
 		//		Clients
 		void tryCompleteRegistration(Client*) const;
 		void sendMessage(Client*, const std::string&) const;
@@ -67,9 +70,11 @@ class Server : public IServerCtrl
 		std::map<std::string, Channel*> _channels; // Channels sorted by key
 		Epoll					_epoll;		// isolated kernel epoll wrapper
 		CommandRegistry			_cmdReg;	// command orchestrator
+		std::time_t				_startTime; // start time of the server
 		std::map<std::string, std::deque<Client*> >
 								_IPrecords; // map of clients that share same IP 
 		irc::uint				_maxClients; // max number of clients that can register
+		mutable std::set<Client*> _toRemove; // lists clients to remove forcefully
 		
 		// ---- Signals ---
 		static volatile std::sig_atomic_t _isAlive;	// server state
@@ -84,9 +89,11 @@ class Server : public IServerCtrl
 		void _registerNewClient(int, const sockaddr_in&);
 		void _deleteClient(Client*);
 		void _prepareClientDisconnect(Client*);
+		void _housekeeping();
+		void _addToRemove(Client*) const;
 		// ---- Command Execution ----
 		void _executeCommands();
-		bool _processInputBuffer(Client*);
+		irc::epollret _processInputBuffer(Client*);
 		void _removeMsgsFrom(Client*);
 		// ---- Channels ----
 
@@ -96,7 +103,8 @@ class Server : public IServerCtrl
 		Channel* _getChannel(const std::string&) const;
 		Channel* _addChannel(const std::string& key, const std::string& title, const std::string& pw);
 		Channel* _addChannel(const std::string& title, const std::string& pw);
-
+		// ---- other
+		std::string _getStartTimeString() const;
 		// ----
 		Server();
 		Server(const Server&);

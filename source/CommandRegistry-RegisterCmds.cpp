@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandRegistry-RegisterCmds.cpp                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 11:41:20 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/09/04 10:24:42 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/04 19:15:48 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void CommandRegistry::registerCmds()
 	_commands[user->getName()] = user;
 
 	Command *ping = new Command("PING", cmd_ping);
-	ping->addPolicy(new ArgsLimitPlcy(1, 2));
+	ping->addPolicy(new ArgsLimitPlcy(1, 2)); // FIXME 409 ERR_NOORIGIN of no ARG given, not param error
 	_commands[ping->getName()] = ping;
 
 	Command *join = new Command("JOIN", cmd_join);
@@ -83,4 +83,9 @@ void CommandRegistry::registerCmds()
 	kick->addPolicy(new AlreadyRegisteredPlcy(true));
 	kick->addPolicy(new ArgsLimitPlcy(2, 3));
 	_commands[kick->getName()] = kick;
+
+	Command *part = new Command("PART", cmd_part);
+	part->addPolicy(new AlreadyRegisteredPlcy(true));
+	part->addPolicy(new ArgsLimitPlcy(1, 2));
+	_commands[part->getName()] = part;
 }

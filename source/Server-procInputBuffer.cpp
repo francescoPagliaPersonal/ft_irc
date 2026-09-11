@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 10:05:02 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/28 08:48:11 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/08 11:46:31 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,12 @@ namespace {
 
 // Convert the client's raw strings into messages and queue them;
 // returns false if a message exceeds the protocol limit.
-bool Server::_processInputBuffer(Client *client)
+irc::epollret Server::_processInputBuffer(Client *client)
 {
 	std::vector<std::string> rawStrs = client->getRawStrings();
 	for (size_t i = 0; i < rawStrs.size(); ++i)
 	{
+		// 1. violation event --- message too long
 		if (rawStrs[i].size() > MSG_MAX_LENGTH)
 		{
 			if (DEBUG)
@@ -71,9 +72,22 @@ bool Server::_processInputBuffer(Client *client)
 					<< "Closing connection now." 
 					<< std::endl;
 			}
-			_removeMsgsFrom(client);
-			return false;
+			return (irc::RET_CLOSE);
 		}
+		// 2. violation event --- spammer
+		std::time_t now = time(NULL);
+		if (std::difftime(now, client->getSpamTime()) <= SPAM_TRHESHOLD_TIME)
+		{
+			if (client->getSpamCount() > SPAM_THRESHOLD_MSGS)
+				return (irc::RET_CLOSE);
+			client->incrementSpamCount();
+		}
+		else
+		{
+			client->resetSpamCount();
+			client->setSpamTime(now);
+		}
+		// 3. normal event --- build the msg and attach to queue
 		Message tmp = irc::string2Message(rawStrs[i], client);
 		if (tmp.flags & irc::MSG_HAS_COMMAND)
 		{
@@ -91,5 +105,5 @@ bool Server::_processInputBuffer(Client *client)
 			<< "added " << rawStrs.size() << " strings for a total of "
 			<< _msgsQueue.size() << " messages\n";
 	}
-	return true;
+	return (irc::RET_OK);
 }
