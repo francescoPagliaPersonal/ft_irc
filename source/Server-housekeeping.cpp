@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/03 11:38:33 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/10 17:41:55 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/11 12:16:23 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void Server::_housekeeping()
 			std::strftime(buffer, sizeof(buffer), "%H:%M:%S", std::localtime(&clT));
 			std::string strC(buffer);
 			
-			if (client->hasQuit() || client->getLastMsgTime() > minLast)
+			if (client->hasQuit() || client->getLastMsgTime() >= minLast)
 			{
 				std::cout << "\tFD " << client->getFD() << " last msg @ " << strC << '\n';
 				continue ;
