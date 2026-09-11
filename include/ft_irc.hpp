@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:25:38 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/10 12:01:41 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/11 17:32:00 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,6 @@
 #  define DEBUG 0 // TODO set this to zero later and ctl via makefile
 # endif
 
-# ifndef BONUS
-#  define BONUS 1 // TODO set this to zero later and ctl via makefile
-# endif
 
 // -------------------------------------------------------------------------- //
 
