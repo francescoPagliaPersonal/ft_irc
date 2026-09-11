@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Bot-EpollHandler.cpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 09:28:34 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/11 17:29:53 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/11 20:22:19 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,14 @@
 #include <cstring>
 #include <unistd.h>
 
-void Bot::_epollHandler()
+void Bot::_runUntilDisconnect()
 {
 	struct epoll_event ev;
 	irc::epollret ret = irc::RET_OK;
 
 	std::memset(&ev, 0, sizeof(ev));
 	bool loginRequested = false;
-	bool defChanJoined = false;
+	bool joinedDefChan = false;
 	
 	while (_keepRunning && _hasConn)
 	{
@@ -32,10 +32,10 @@ void Bot::_epollHandler()
 			_registerWith(BOT_NAME);
 			loginRequested = true;
 		}
-		if (_joinSrv && !defChanJoined)
+		if (_joinedServer && !joinedDefChan)
 		{
 			_joinChannel(DEFAULT_CHANNEL);
-			defChanJoined = true;
+			joinedDefChan = true;
 		}
 		
 		// retrieve epoll events or wake up on timeout
@@ -85,7 +85,7 @@ void Bot::_executeMessage()
 		Message& msg = _msgsQueue.front();
 		
 		if (msg.command == "001")
-			_joinSrv = true;
+			_joinedServer = true;
 		else if (msg.command == "433")
 			_keepRunning = false;	
 		else if (msg.prefix.find(std::string(":") + BOT_NAME) != msg.prefix.npos 

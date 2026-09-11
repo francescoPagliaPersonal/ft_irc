@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Bot.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 07:22:22 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/11 17:39:57 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/11 20:22:19 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ class Bot : public IBot
 		std::string 	_pw;	// server password
 		Epoll 			_epoll;
 		bool 			_hasConn;
-		bool			_joinSrv;
+		bool			_joinedServer;
 		bool			_joinDefChan;
 		std::string 	_bufIN;
 		std::string 	_bufOUT;
@@ -61,7 +61,7 @@ class Bot : public IBot
 		int		connectWithRetry(int, int);
 
 		// ---- Operation
-		void _epollHandler();
+		void _runUntilDisconnect();
 		void _executeMessage();
 		// ---- Buffer
 		irc::epollret	_receiveToBuffer();

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Bot-Connection.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/08 13:46:16 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/11 17:01:12 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/11 20:45:52 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,17 @@
 
 #include <cstring>
 #include <cerrno>
-#include <sys/socket.h>
-#include <netdb.h>
+#include <sys/socket.h>		// socket, connect
+#include <netinet/in.h>		// sockaddr_in, htons
 #include <fcntl.h>			// fcntl
 
 namespace  {
 	
-	// Helper to configure the FD of the listening socket.
+	// Helper to configure the server FD.
 	void configureFD(int fd)
-	{	
-		if (DEBUG)
-			std::cout << "[CONNECTION] marking fd non blocking." << std::endl;
+	{
 		errno = 0;
-		// 3) configure socketfd as non-blocking
+		// configure socketfd as non-blocking
 		int flags = ::fcntl(fd, F_GETFL, 0);
 		if (flags < 0 || ::fcntl(fd, F_SETFL, flags | O_NONBLOCK) < 0)
 			throw std::runtime_error(
@@ -40,9 +38,7 @@ int Bot::connectWithRetry(int maxAttempts, int delaySeconds)
 {
     for (int attempt = 0; attempt < maxAttempts; ++attempt)
     {
-		std::cout 
-				<< "[CONNECTION] connecting to server. attempt n: " 
-				<< attempt << std::endl;
+		std::cout << "[Bot] Attempting connection to server...\n";
         int fd = ::socket(AF_INET, SOCK_STREAM, 0);
         if (fd < 0)
             throw std::runtime_error(std::string("socket: ") + std::strerror(errno));

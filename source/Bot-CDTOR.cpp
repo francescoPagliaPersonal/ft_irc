@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Bot-CDTOR.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 08:20:34 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/11 16:50:28 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/11 20:07:46 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ Bot::Bot(const irc::uint server,
 	, _port(port)
 	, _pw(pw)
 	, _hasConn(false)
-	, _joinSrv(false)
+	, _joinedServer(false)
 	, _joinDefChan(false)
 {
 	if (!_installSignals())
