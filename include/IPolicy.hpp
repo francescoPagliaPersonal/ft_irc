@@ -24,7 +24,7 @@ class IPolicy
 	IPolicy() {};
 	virtual ~IPolicy() {};
 
-	virtual rfc		check(const Message &, IServerCtrl&) const = 0;
+	virtual rfc		check(const Message &) const = 0;
 
 	private:
 	IPolicy(const IPolicy & other);

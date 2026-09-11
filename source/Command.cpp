@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 18:07:43 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/30 10:04:59 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/11 16:53:19 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ rfc Command::execute(IServerCtrl& srv, const Message& msg) const
 	// TODO ensure POLICY and COMMAND errors are in line with PROTOCOL CODES
 	for (size_t i = 0; i < _policies.size(); ++i)
 	{
-		rfc ret = _policies[i]->check(msg, srv);
+		rfc ret = _policies[i]->check(msg);
 		if (ret)
 			return (ret);
 	}
