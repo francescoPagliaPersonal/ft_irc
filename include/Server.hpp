@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:32:56 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/05 16:26:16 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/11 15:14:16 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,14 +89,16 @@ class Server : public IServerCtrl
 		void _registerNewClient(int, const sockaddr_in&);
 		void _deleteClient(Client*);
 		void _prepareClientDisconnect(Client*);
+		// ---- Housekeeping ----
 		void _housekeeping();
 		void _addToRemove(Client*) const;
+		void _removeMarkedClients();
+		void _clientPingSkipRemove(Client*, std::time_t);
 		// ---- Command Execution ----
 		void _executeCommands();
 		irc::epollret _processInputBuffer(Client*);
 		void _removeMsgsFrom(Client*);
 		// ---- Channels ----
-
 		void	_deleteChannel(Channel*);
 		void _removeClientFromChannels(Client*);
 		Channel* _getOrCreateChannel(const std::string&, const std::string&);

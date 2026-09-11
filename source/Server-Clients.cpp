@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 16:27:31 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/11 13:12:19 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/11 15:08:07 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,11 +188,4 @@ void Server::_prepareClientDisconnect(Client* client)
 
 	// HACK only for testing!!
 	// _deleteClient(client);
-}
-
-// Inserts a CLIENT that is to be removed into the set of clients to be removed.
-void Server::_addToRemove(Client* client) const // with the mutable attribute it has to be const
-{
-	_toRemove.insert(client);
-	client->setRemove(true);
 }
