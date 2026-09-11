@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/24 17:48:24 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/10 14:22:43 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/11 13:14:22 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 # include <string>
 # include <vector>
+# include <ctime>
 
 // -------------------------------------------------------------------------- //
 
@@ -26,6 +27,8 @@ namespace irc
 	bool isNameCompliant(const std::string& );
 	std::vector<std::string> strSplit(std::string str, char ch, bool keepEmptyStr);
 	std::string chunkifyTrailing(const std::string & msgArgs, std::string msgTrailing);
+	std::string timeNowStr();
+	std::string timeAsStr(std::time_t);
 
 	typedef unsigned int		uint;
 	typedef unsigned char		uint8;
