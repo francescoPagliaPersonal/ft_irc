@@ -39,7 +39,7 @@ SRC_BON		:=	Bot-main.cpp Bot-Run.cpp Bot-CDTOR.cpp Bot-Signals.cpp\
 				Bot-EpollHandler.cpp Bot-Actions.cpp\
 				arg2ip.cpp arg2password.cpp arg2port.cpp\
 				Epoll.cpp Message.cpp irc.cpp\
-				CommandRegistry.cpp Command.cpp
+				CommandRegistry.cpp CommandRegistry-RegisterCmds.cpp Command.cpp
 
 # Pattern for source files in subdirectories. WITH DIR SLASH
 #   DIR_PARSER = parser/
