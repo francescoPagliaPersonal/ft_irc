@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/10 14:07:51 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/10 18:09:19 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/11 14:37:06 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,23 +17,13 @@
 #include "IServerCtrl.hpp"
 #include "Response.hpp"
 
-/*
-		409    ERR_NOORIGIN
-              ":No origin specified"
-
-         - PING or PONG message missing the originator parameter.
-
-
-repurpose Client::_lastSpamTime to Client::_lastMsgTime
-use it for both spam detection and ping/pong timing
-Command::execute(IServerCtrl& srv, const Message& msg) can do the regular update
-Server::_housekeeping() compares now with _lastMsgTime before sending a PING
-
-*/
-
+/// Prevents client disconnect by resetting ping counter when valid PONG is received.
 rfc cmd_pong(IServerCtrl& srv, const Message& msg)
 {
 	(void) srv;
+	// IMPORTANT: an INVALID PING does not reset the counter!
+	//			  we could change this, by resetting here on top, no matter what
+	//			  but this design is strict and requires a correct attribute
 	Client* client = msg.sender;
 	if (!(msg.flags & irc::MSG_HAS_PARAMS) && !(msg.flags & irc::MSG_HAS_TRAILING))
 		return (irc::NOORIGIN);
@@ -51,7 +41,6 @@ rfc cmd_pong(IServerCtrl& srv, const Message& msg)
 		}
 	}
 	// internal timer is updated by Server::_executeCommands
-	std::cout << "[FD " << client->getFD() << "] Resetting ping counter...\n";
 	client->resetPingCount();
 	return (irc::OK);
 }
