@@ -1,21 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Bot-EpollHandler.cpp                               :+:      :+:    :+:   */
+/*   Bot-RunUntilDisconnect.cpp                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 09:28:34 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/12 09:49:30 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/12 15:00:08 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Bot.hpp"
 #include "ft_irc.hpp"
 #include "irc.hpp"
-#include "CommandRegistry.hpp"
+
 #include <cstring>
-#include <unistd.h>
 
 void Bot::_runUntilDisconnect()
 {
@@ -24,20 +23,22 @@ void Bot::_runUntilDisconnect()
 
 	std::memset(&ev, 0, sizeof(ev));
 	bool joinedDefChan = false;
+	// 1) new connection: register on server
 	_registerWith(BOT_NAME);
 
 	while (_keepRunning && _hasConn)
 	{
+		// 2) finish server setup
 		if (!joinedDefChan && _joinedServer)
 		{
 			_joinChannel(DEFAULT_CHANNEL);
 			joinedDefChan = true;
 		}
 		
-		// retrieve epoll events or wake up on timeout
+		// 3) retrieve epoll events or wake up on timeout
 		int ready = _epoll.wait(&ev, 1, TIMEOUT);
 
-		// take action on event
+		// 4) take action on event
 		if (ready > 0)
 		{
 			if (ev.events & (EPOLLHUP | EPOLLERR))
@@ -47,7 +48,7 @@ void Bot::_runUntilDisconnect()
 			else if (ev.events & EPOLLOUT)
 				ret = _sendFromBuffer();
 		}
-		// pick followup task
+		// 5) pick followup task
 		switch (ret)
 		{
 			case irc::RET_OK:
@@ -64,37 +65,7 @@ void Bot::_runUntilDisconnect()
 				break;
 			default: ; // HACK because there is still HASOUTPUT present in header
 		}
+		// 6) custom commands and internal actions
 		_executeMessages();
-	}
-}
-
-// simple startup of the command execution.
-void Bot::_executeMessages()
-{
-	if (DEBUG && !_msgsQueue.empty())
-		std::cout << "[Info] Processing message queue with "
-			<< _msgsQueue.size() << " messages...\n";
-	while (!_msgsQueue.empty())
-	{
-		Message& msg = _msgsQueue.front();
-		std::vector<std::string> botcmds = irc::strSplit(msg.trailing, ' ', false);
-		if (!_cmdReg.execute(*this, msg, botcmds))
-		{
-			if (!_joinedServer)
-			{
-				if (msg.command == "433")
-				{
-					_keepRunning = false;
-					std::cout << "[Bot] Another bot is already connected.\n";
-				}
-				else if (msg.command == "001")
-					_joinedServer = true;
-			}
-			else if (_mirrorMsg && msg.command == "PRIVMSG")
-				_mirrorMessage(msg);
-			else if (msg.command == "INVITE")
-				_processInvite(msg);
-		}
-		_msgsQueue.pop_front();
 	}
 }
