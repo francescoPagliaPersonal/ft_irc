@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 07:22:22 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/12 10:26:05 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/12 13:53:23 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@
 # define CONN_MAX_RETRY 4	// max retries before delay is increased
 # define CONN_MAX_DELAY	300 // max delay between retries
 
-# define CRLF "\r\n" // duplicate of ft_irc.hpp
 # define EPOLL_FL_DEFAULT EPOLLIN | EPOLLERR | EPOLLHUP // duplicate of Server.hpp
 # define BUF_SIZE 4095 // duplicate of Client.hpp
 
