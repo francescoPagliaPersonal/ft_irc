@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 08:12:43 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/12 10:17:24 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/12 15:07:02 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,4 +85,13 @@ void Bot::_processInvite(const Message& msg)
 	if (msg.params[0] != BOT_NAME)
 		return ;
 	_joinChannel(msg.params[1]);
+}
+
+void Bot::_pong(const Message& msg)
+{
+	if (msg.params.empty())
+		return ;
+	if (msg.params[0] != BOT_NAME)
+		return ;
+	sendMessage("PONG " + std::string(BOT_NAME) + CRLF);
 }
