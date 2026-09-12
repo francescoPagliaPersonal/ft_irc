@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 08:12:43 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/11 22:31:52 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/12 10:09:26 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,31 @@ void Bot::_registerWith(const std::string& name)
 void Bot::_joinChannel(const std::string& channel)
 {
 	sendMessage("JOIN " + channel + CRLF);
+}
+
+// Mirrors any message that the bot receives via PRIVMSG
+void Bot::_mirrorMessage(const Message& msg)
+{
+	if (msg.params.empty())
+		return ;
+	// 1) Channel Replies
+	if (msg.params[0][0] == '#' || msg.params[0][0] == '&')
+		sendMessage(std::string("PRIVMSG ") + msg.params[0] + " :" + msg.trailing + CRLF );
+	// 2) Private Message Reply
+	else if (msg.params[0] == BOT_NAME)
+	{
+		if (msg.prefix.empty())
+			return ;
+		std::string sender = msg.prefix.substr(0, msg.prefix.find('!'));
+		sendMessage(std::string("PRIVMSG ") + sender + " :" + msg.trailing + CRLF );
+	}
+}
+
+void Bot::_processInvite(const Message& msg)
+{
+	if (msg.params.size() < 2)
+		return ;
+	if (msg.params[0] != BOT_NAME)
+		return ;
+	_joinChannel(msg.params[1]);
 }
