@@ -6,13 +6,12 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/11 17:47:14 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/12 15:43:58 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/12 15:59:46 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Command.hpp"
 #include "IBot.hpp"
-#include "Bot.hpp"
 #include "irc.hpp"
 
 namespace
