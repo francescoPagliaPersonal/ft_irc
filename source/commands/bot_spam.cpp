@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/11 17:47:14 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/12 10:45:30 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/12 15:43:58 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,17 @@ void bot_spam(IBot& bot, const Message& msg, std::vector<std::string>& botcmds)
 		if (botcmds[1][0] == '#' || botcmds[1][0] == '&')
 			spamTarget(bot, botcmds[1], SPAM_MSG_CH);
 		// 3) spam the target user
-		else
+		//    but don't send to yourself
+		else if (botcmds[1] == BOT_NAME)
+		{
+			std::string sender;
+			if (msg.params[0][0] == '#' || msg.params[0][0] == '&')
+				sender = msg.params[0];
+			else
+				sender = msg.prefix.substr(0, msg.prefix.find('!'));
+			bot.sendMessage("PRIVMSG " + sender + " :Don't you dare trick me!" + CRLF);
+		}
+		else // only to other users of course
 			spamTarget(bot, botcmds[1], SPAM_MSG_42);
 	}
 }
