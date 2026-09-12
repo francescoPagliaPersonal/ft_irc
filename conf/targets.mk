@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------- #
-# Makefile template v 3.1                                           2026-09-08 #
+# Makefile template v 3.1                                           2026-09-12 #
 # ---------------------------------------------------------------------------- #
 #
 #							   PROJECT BUILD TARGETS
@@ -20,7 +20,7 @@ chat:
 
 bonus:		MODE := reg
 bonus:		PART := bon
-bonus:		build-both
+bonus:		build
 
 run:		MODE := reg
 run:		PART := man
@@ -29,15 +29,10 @@ run:		build
 
 runb:		MODE := reg
 runb:		PART := bon
-runb:		build-both run-both
+runb:		build
+	$(EXEC)
 
-bot:		MODE := reg
-bot:		PART := bon
-bot:		build-both
-	@printf "$(C_AUTUMN_ORANGE)  starting: "
-	@printf "$(C_FUJI_WHITE)bot$(C_RESET)\n"
-	@printf "$(C_FUJI_GRAY3)::::::::::::\n$(C_RESET)"
-	@./bin/$(MODE)/bon/ircbot $(HOST) $(PORT) $(PASSWORD)
+bot:		runb
 
 asan:		MODE := asan
 asan:		PART := man
@@ -46,7 +41,8 @@ asan:		build
 
 asanb:		MODE := asan
 asanb:		PART := bon
-asanb:		build-both run-both
+asanb:		build
+	$(EXEC)
 
 val:		MODE := val
 val:		PART := man
@@ -55,19 +51,23 @@ val:		build
 
 valb:		MODE := val
 valb:		PART := bon
-valb:		build-both run-both-valg
+valb:		build
+	$(EXEC_VALG)
 
-# Build both server (with BONUS=1) and bot
-build-both:
+both:
 	@$(MAKE) build MODE=$(MODE) PART=man SRCLANG=$(SRCLANG) --no-print-directory
 	@$(MAKE) build MODE=$(MODE) PART=bon SRCLANG=$(SRCLANG) --no-print-directory
 
-# Run both server and bot in background
-run-both:
+both-run:	MODE := reg
+both-run:	both
 	$(EXEC_BOTH)
 
-# Run both server and bot in background with valgrind
-run-both-valg:
+both-asan:	MODE := asan
+both-asan:	both
+	$(EXEC_BOTH)
+
+both-val:	MODE := val
+both-val:	both
 	$(EXEC_BOTH_VALG)
 
 print:
@@ -101,7 +101,7 @@ clean:
 	$(LFT_CLEAN)
 
 fclean:		clean
-	@rm -rf bin $(PROG_NAME)
+	@rm -rf bin $(PROG_NAME) $(PROG_NAME_BONUS)
 	@printf "$(C_BAMBOO_GREEN)$(PROG_NAME) fclean complete$(C_RESET)\n"
 	$(LFT_FCLEAN)
 
@@ -143,5 +143,6 @@ norm:
 
 .PHONY:	all bonus clean fclean re \
 		run runb asan asanb val valb bot \
+		both both-run both-asan both-val \
 		print build libft norm \
-		nc chat build-both run-both run-both-valg
+		nc chat

@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------- #
-# Makefile template v 3.1                                           2026-09-08 #
+# Makefile template v 3.1                                           2026-09-12 #
 # ---------------------------------------------------------------------------- #
 #
 #								PROJECT CONTROL
@@ -34,10 +34,11 @@ endif
 endif
 
 # for executable targets
-EXEC_STR	= ./$(BIN) $(if $(filter bon,$(PART)),localhost )$(RUN_ARGS_$(MODE))
-EXEC_V_STR	= valgrind $(VALGRIND_FLAGS) ./$(BIN) $(if $(filter bon,$(PART)),localhost )$(RUN_ARGS_$(MODE))
-EXEC_BOTH_STR = ./bin/$(MODE)/man/ircserv $(PORT) $(PASSWORD) & ./bin/$(MODE)/bon/ircbot $(HOST) $(PORT) $(PASSWORD) &
-EXEC_BOTH_V_STR = valgrind $(VALGRIND_FLAGS) ./bin/$(MODE)/man/ircserv $(PORT) $(PASSWORD) & valgrind $(VALGRIND_FLAGS) ./bin/$(MODE)/bon/ircbot $(HOST) $(PORT) $(PASSWORD) &
+# server args: $(PORT) $(PASSWORD)  |  bot args: $(HOST) $(PORT) $(PASSWORD)
+EXEC_STR	= ./$(BIN) $(if $(filter bon,$(PART)),$(HOST) )$(RUN_ARGS_$(MODE))
+EXEC_V_STR	= valgrind $(VALGRIND_FLAGS) ./$(BIN) $(if $(filter bon,$(PART)),$(HOST) )$(RUN_ARGS_$(MODE))
+SERVER_BIN	= ./bin/$(MODE)/man/$(PROG_NAME)
+BOT_BIN		= ./bin/$(MODE)/bon/$(PROG_NAME_BONUS)
 END_STR		:= printf '$(C_FUJI_GRAY3)::::::::::::\n$(C_RESET)'
 
 define EXEC
@@ -51,14 +52,22 @@ define EXEC_VALG
 	@$(END_STR)
 endef
 define EXEC_BOTH
-	@printf '$(C_AUTUMN_ORANGE)  executing: '
-	@printf '$(C_FUJI_WHITE)$(EXEC_BOTH_STR)$(C_RESET)\n'
-	@printf '$(C_FUJI_GRAY3)°°°°°°°°°°°°\n$(C_RESET)'
-	@$(EXEC_BOTH_STR)
+	$(PRT_BOTH)
+	@SERVER_PID=; \
+	trap 'if [ -n "$$SERVER_PID" ]; then kill $$SERVER_PID 2>/dev/null; wait $$SERVER_PID 2>/dev/null; fi' EXIT INT TERM; \
+	$(SERVER_BIN) $(PORT) $(PASSWORD) & \
+	SERVER_PID=$$!; \
+	sleep 0.3; \
+	$(BOT_BIN) $(HOST) $(PORT) $(PASSWORD)
+	@$(END_STR)
 endef
 define EXEC_BOTH_VALG
-	@printf '$(C_AUTUMN_ORANGE)  executing: '
-	@printf '$(C_FUJI_WHITE)$(EXEC_BOTH_V_STR)$(C_RESET)\n'
-	@printf '$(C_FUJI_GRAY3)°°°°°°°°°°°°\n$(C_RESET)'
-	@$(EXEC_BOTH_V_STR)
+	$(PRT_BOTH_VALG)
+	@SERVER_PID=; \
+	trap 'if [ -n "$$SERVER_PID" ]; then kill $$SERVER_PID 2>/dev/null; wait $$SERVER_PID 2>/dev/null; fi' EXIT INT TERM; \
+	valgrind $(VALGRIND_FLAGS) $(SERVER_BIN) $(PORT) $(PASSWORD) & \
+	SERVER_PID=$$!; \
+	sleep 0.3; \
+	valgrind $(VALGRIND_FLAGS) $(BOT_BIN) $(HOST) $(PORT) $(PASSWORD)
+	@$(END_STR)
 endef
