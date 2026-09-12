@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 09:28:34 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/12 09:43:31 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/12 09:49:30 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,8 @@ void Bot::_executeMessages()
 			}
 			else if (_mirrorMsg && msg.command == "PRIVMSG")
 				_mirrorMessage(msg);
+			else if (msg.command == "INVITE")
+				_processInvite(msg);
 		}
 		_msgsQueue.pop_front();
 	}

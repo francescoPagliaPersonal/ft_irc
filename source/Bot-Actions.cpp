@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 08:12:43 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/12 09:44:20 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/12 09:52:13 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,4 +58,13 @@ void Bot::_mirrorMessage(const Message& msg)
 	{
 		sendMessage(std::string("PRIVMSG ") + DEFAULT_CHANNEL + " :" + msg.trailing + CRLF );
 	}
+}
+
+void Bot::_processInvite(const Message& msg)
+{
+	if (msg.params.size() < 2)
+		return ;
+	if (msg.params[0] != BOT_NAME)
+		return ;
+	_joinChannel(msg.params[1]);
 }
