@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 07:22:22 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/12 09:40:59 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/12 10:15:58 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ class Bot : public IBot
 		~Bot();
 		void run();
 		void sendMessage(const std::string&);
+		void toggleMirror();
 	private:
 		// ----
 		int 			_fd;			// socket with connection to server

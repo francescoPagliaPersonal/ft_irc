@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 08:12:43 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/12 10:09:26 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/12 10:17:24 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,15 @@
 #include <sys/epoll.h>
 #include <sys/socket.h>
 
+// -------------------------------------------------------------------------- //
+// PUBLIC ACTIONS
+// -------------------------------------------------------------------------- //
+
+void Bot::toggleMirror()
+{
+	_mirrorMsg = !_mirrorMsg;
+}
+
 void Bot::sendMessage(const std::string& msg)
 {
 	// (void) msg;
@@ -32,7 +41,7 @@ void Bot::sendMessage(const std::string& msg)
 }
 
 // -------------------------------------------------------------------------- //
-// ACTIONS
+// PRIVATE ACTIONS
 // -------------------------------------------------------------------------- //
 
 void Bot::_registerWith(const std::string& name)

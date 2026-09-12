@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/07 17:14:08 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/11 22:26:18 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/12 10:15:44 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ class IBot
 {
 	public:
 		virtual void sendMessage(const std::string&) = 0;
+		virtual void toggleMirror() = 0;
 };
 
 #endif
