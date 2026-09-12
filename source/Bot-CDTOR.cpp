@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 08:20:34 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/12 09:41:22 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/12 09:45:08 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ Bot::Bot(const irc::uint server,
 	, _pw(pw)
 	, _hasConn(false)
 	, _joinedServer(false)
-	, _mirrorMsg(false)
+	, _mirrorMsg(true)
 {
 	if (!_installSignals())
 		throw std::runtime_error("Setting up signal handler failed.");
