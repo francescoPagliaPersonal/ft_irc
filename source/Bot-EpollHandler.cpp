@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 09:28:34 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/11 22:46:53 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/12 09:10:22 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,10 @@ void Bot::_runUntilDisconnect()
 				_hasConn = false;
 				std::cout << "[Bot] Connection to server lost.\n";
 				break;
-			case irc::RET_HASOUTPUT: // FIXME this needs to go completely (also server) send must just RET_OK
-				_epoll.mod(_fd, EPOLL_FL_DEFAULT | EPOLLOUT, NULL);
 			case irc::RET_PARSEINPUT:
 				_processInputBuffer();
 				break;
+			default: ; // HACK because there is still HASOUTPUT present in header
 		}
 		_executeMessages();
 	}

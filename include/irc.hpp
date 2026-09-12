@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   irc.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/24 17:48:24 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/10 12:07:38 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/12 09:08:56 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ namespace irc
 		RET_OK,
 		RET_EMPTY,
 		RET_CLOSE,
-		RET_HASOUTPUT,
+		RET_HASOUTPUT,	// FIXME this needs to go completely, redundant arming of EPOLLOUT, send must just RET_OK
 		RET_PARSEINPUT
 	};
 
