@@ -90,5 +90,10 @@ void bot_quote(IBot& bot, const Message& msg, std::vector<std::string>& botcmds)
 	if (!init)
 		init = initQuotes(quotes);
 	int i = std::rand() % 30;
-	bot.sendMessage("PRIVMSG " + msg.params[0] + " :" + quotes[i] + CRLF);
+	std::string target;
+	if (msg.params[0] == BOT_NAME)
+		target = msg.prefix.substr(0, msg.prefix.find('!'));
+	else
+		target = msg.params[0];
+	bot.sendMessage("PRIVMSG " + target + " :" + quotes[i] + CRLF);
 }

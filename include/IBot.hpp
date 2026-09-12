@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/07 17:14:08 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/12 14:05:50 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/12 15:53:20 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <string>
 
+# define BOT_NAME "Bot"
 # define CRLF "\r\n" // duplicate of ft_irc.hpp
 # define HELP_L1 "Available commands are: !help, !quote, !mirror, !spam <target>"
 # define HELP_L2 "  !help:   prints this message"
