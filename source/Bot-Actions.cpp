@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 08:12:43 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/12 15:07:02 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/12 15:22:23 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,4 +94,18 @@ void Bot::_pong(const Message& msg)
 	if (msg.params[0] != BOT_NAME)
 		return ;
 	sendMessage("PONG " + std::string(BOT_NAME) + CRLF);
+}
+
+void Bot::_welcomeUser(const Message& msg)
+{
+	if (msg.params.empty() || (msg.params[0][0] != '#' && msg.params[0][0] != '&'))
+		return ;
+	std::string user = msg.prefix.substr(0, msg.prefix.find('!'));
+	std::string rpl = "PRIVMSG " + msg.params[0] + " :Hello " + user;
+	if (msg.params[0] == DEFAULT_CHANNEL)
+		rpl += ", you found the single source of truth!";
+	else
+		rpl += ", welcome to \'" + msg.params[0].substr(1) + "\'.";
+	rpl += CRLF;
+	sendMessage(rpl);
 }

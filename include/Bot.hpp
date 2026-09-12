@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 07:22:22 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/12 15:05:47 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/12 15:13:27 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ class Bot : public IBot
 		void _mirrorMessage(const Message&);
 		void _processInvite(const Message&);
 		void _pong(const Message&);
+		void _welcomeUser(const Message&);
 		// ----
 		Bot();
 		Bot(const Bot&);
