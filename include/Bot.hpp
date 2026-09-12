@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 07:22:22 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/11 22:42:24 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/12 09:35:03 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ class Bot : public IBot
 		Epoll 			_epoll;
 		bool 			_hasConn;
 		bool			_joinedServer;
-		bool			_joinDefChan;
 		std::string 	_bufIN;
 		std::string 	_bufOUT;
 		std::deque<Message>		_msgsQueue; // holds all incoming messages/loop

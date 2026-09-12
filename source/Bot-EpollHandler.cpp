@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 09:28:34 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/12 09:19:26 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/12 09:35:09 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,10 +90,6 @@ void Bot::_executeMessages()
 				else if (msg.command == "001")
 					_joinedServer = true;
 			}
-			else if (msg.command == "JOIN"
-				&& msg.prefix.find(std::string(":") + BOT_NAME) != msg.prefix.npos
-				&& msg.params[0] == DEFAULT_CHANNEL)
-				_joinDefChan =  true;
 			else if (msg.command == "PRIVMSG"
 				&& msg.prefix.find(std::string(":") + BOT_NAME) == msg.prefix.npos
 				&& msg.params[0] == DEFAULT_CHANNEL)
