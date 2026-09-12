@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 09:28:34 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/12 09:10:22 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/12 09:19:26 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,12 +80,15 @@ void Bot::_executeMessages()
 		std::vector<std::string> botcmds = irc::strSplit(msg.trailing, ' ', false);
 		if (!_cmdReg.execute(*this, msg, botcmds))
 		{
-			if (msg.command == "001")
-				_joinedServer = true;
-			else if (msg.command == "433")
+			if (!_joinedServer)
 			{
-				_keepRunning = false;
-				std::cout << "[Bot] Another bot is already connected.\n";
+				if (msg.command == "433")
+				{
+					_keepRunning = false;
+					std::cout << "[Bot] Another bot is already connected.\n";
+				}
+				else if (msg.command == "001")
+					_joinedServer = true;
 			}
 			else if (msg.command == "JOIN"
 				&& msg.prefix.find(std::string(":") + BOT_NAME) != msg.prefix.npos
