@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 07:22:22 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/12 15:13:27 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/12 15:25:50 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # define SPAM_MSG_CH "Have you tried turning it off and on again?"
 # define SPAM_COUNT 12
 # define DEFAULT_CHANNEL "#ssot"
+# define DEFAULT_TOPIC "Single Source Of Truth :: request !help from the bot"
 # define CONN_DELAY 5		// default delay between retries
 # define CONN_MAX_RETRY 4	// max retries before delay is increased
 # define CONN_MAX_DELAY	300 // max delay between retries
@@ -77,6 +78,7 @@ class Bot : public IBot
 		// ---- Actions
 		void _registerWith(const std::string&);
 		void _joinChannel(const std::string&);
+		void _lockAndSetTopic(const std::string&);
 		void _mirrorMessage(const Message&);
 		void _processInvite(const Message&);
 		void _pong(const Message&);

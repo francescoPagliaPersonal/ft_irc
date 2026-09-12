@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 09:28:34 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/12 15:00:08 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/12 15:25:55 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ void Bot::_runUntilDisconnect()
 		if (!joinedDefChan && _joinedServer)
 		{
 			_joinChannel(DEFAULT_CHANNEL);
+			_lockAndSetTopic(DEFAULT_TOPIC);
 			joinedDefChan = true;
 		}
 		

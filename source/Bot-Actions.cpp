@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 08:12:43 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/12 15:22:23 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/12 15:32:17 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,12 @@ void Bot::_registerWith(const std::string& name)
 void Bot::_joinChannel(const std::string& channel)
 {
 	sendMessage("JOIN " + channel + CRLF);
+}
+
+void Bot::_lockAndSetTopic(const std::string& topic)
+{
+	sendMessage("MODE " + std::string(DEFAULT_CHANNEL) + " +t" + CRLF);
+	sendMessage("TOPIC " + std::string(DEFAULT_CHANNEL) + " :" + topic + CRLF);
 }
 
 // Mirrors any message that the bot receives via PRIVMSG
