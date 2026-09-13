@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 16:19:04 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/13 10:05:03 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/13 10:37:01 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,11 @@ class ListeningSocket
 		ListeningSocket(unsigned short);
 		~ListeningSocket();
 		// ----
+		enum acceptret
+		{
+			ACCEPT_SETUP_FAIL = -2,
+			ACCEPT_NONE = -1
+		};
 		// ----
 		int				getFD() const;
 		int				getPort() const;

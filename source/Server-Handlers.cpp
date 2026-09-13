@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 22:58:08 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/06 21:47:37 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/13 10:37:42 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,10 @@ void Server::_handleListenEvent()
 		struct sockaddr_in ipAddr; // in case client needs it later
 		// 1) create new FD for new connection
 		int newFD = _listener.acceptConnection(ipAddr);
-		if (newFD < 0)
+		if (newFD == ListeningSocket::ACCEPT_NONE)
 			return ;
+		else if (newFD == ListeningSocket::ACCEPT_SETUP_FAIL)
+			continue ;
 		// 2) check for max clients
 		if (_clients.size() >= _maxClients)
 		{
