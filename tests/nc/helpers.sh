@@ -2,7 +2,7 @@
 
 NC_DIR="${NC_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)}"
 RUNDIR="${NC_DIR}/.run"
-NC_TIMEOUT="${NC_TIMEOUT:-1}"
+NC_TIMEOUT="${NC_TIMEOUT:-3}"
 NC_POLL="${NC_POLL:-0.01}"
 
 : "${C_RESET:=\033[0m}"

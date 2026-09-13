@@ -73,10 +73,12 @@ public:
 	{
 		std::map<std::string, Client*>::const_iterator	it;
 
-		it = nicks.find(n);
-		if (it == nicks.end())
-			return (0);
-		return (it->second);
+		for (it = nicks.begin(); it != nicks.end(); ++it)
+		{
+			if (it->second && it->second->getNick() == n)
+				return (it->second);
+		}
+		return (0);
 	}
 
 	void	sendMessage(Client *c, const std::string &s) const
