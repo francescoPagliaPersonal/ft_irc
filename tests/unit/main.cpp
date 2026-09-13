@@ -32,6 +32,7 @@ namespace
 		"quit",
 		"topic",
 		"kick",
+		"part",
 		"framing",
 		0
 	};
