@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:55:20 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/08 11:56:12 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/13 09:32:39 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 #include <sys/socket.h>		// socket, setsockopt, bind, listen, accept
 #include <fcntl.h>			// fcntl
+#include <netinet/tcp.h>	// TCP_KEEPIDLE, TCP_KEEPINTVL, TCP_KEEPCNT
 
 #include <cerrno>
 #include <cstring>
@@ -65,7 +66,31 @@ int ListeningSocket::acceptConnection(struct sockaddr_in& ipAddr) const
 	if (flags < 0 || ::fcntl(newFD, F_SETFL, flags | O_NONBLOCK) < 0)
 		throw std::runtime_error(
 			std::string("Error on fcntl(): ") + std::strerror(errno));
+	// 3) enable keep-alive on the FD
+	_enableKeepAlive(newFD);
 	return (newFD);
+}
+
+void ListeningSocket::_enableKeepAlive(int fd) const
+{
+	int optval = 1;
+	// 1) enable keep-alive probe on the FD
+	if (::setsockopt(fd, SOL_SOCKET, SO_KEEPALIVE, &optval, sizeof(optval)) < 0)
+		throw std::runtime_error(
+			std::string("Error on setsockopt(): ") + std::strerror(errno));
+	// 2) Tune the kernel timers
+	int idle = 30;		// idle time after last data packet
+	int interval = 5;	// interval between keep-alive probes
+	int probes = 8;		// number of keep-alive probes to send
+	if (::setsockopt(fd, SOL_TCP, TCP_KEEPIDLE, &idle, sizeof(idle)) < 0)
+		throw std::runtime_error(
+			std::string("Error on setsockopt(): ") + std::strerror(errno));
+	if (::setsockopt(fd, SOL_TCP, TCP_KEEPINTVL, &interval, sizeof(interval)) < 0)
+		throw std::runtime_error(
+			std::string("Error on setsockopt(): ") + std::strerror(errno));
+	if (::setsockopt(fd, SOL_TCP, TCP_KEEPCNT, &probes, sizeof(probes)) < 0)
+		throw std::runtime_error(
+			std::string("Error on setsockopt(): ") + std::strerror(errno));
 }
 
 // -------------------------------------------------------------------------- //
