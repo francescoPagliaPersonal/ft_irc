@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:55:20 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/13 10:05:31 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/13 10:06:13 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,7 @@ int ListeningSocket::acceptConnection(struct sockaddr_in& ipAddr) const
 	// 1) accept the incoming connection
 	newFD = ::accept(_fd, reinterpret_cast<struct sockaddr*>(&ipAddr), &len);
 	if (newFD < 0)
-	{
-		_errorOnAcceptConnection(ipAddr);
 		return (-1);
-	}
 	// 2) make the FD non-blocking
 	int flags = ::fcntl(newFD, F_GETFL, 0);
 	if (flags < 0 || ::fcntl(newFD, F_SETFL, flags | O_NONBLOCK) < 0)
