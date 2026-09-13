@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 22:58:08 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/13 10:37:42 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/13 10:39:11 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void Server::_handleListenEvent()
 			std::string reply = "ERROR: too many connection. ";
 			send(newFD, reply.c_str(), reply.size(), 0);
 			::close(newFD); // TODO info msg
-			break ; // needs to break, to allow loop to empty queue
+			continue ;
 		}
 		// 3) register new client
 		_registerNewClient(newFD, ipAddr);
