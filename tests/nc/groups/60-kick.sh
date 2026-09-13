@@ -66,8 +66,59 @@ test_kick_not_on_channel() {
 		"USER alicek3 0 * :x" "KICK #kck3 nobody :x"
 }
 
+test_kick_multi_and_rejoin_op() {
+	if ! register_client kk alicek4; then
+		return 1
+	fi
+	if ! register_client kl bobk4; then
+		irc_close kk
+		return 1
+	fi
+	if ! register_client km carolk4; then
+		irc_close kk
+		irc_close kl
+		return 1
+	fi
+	irc_send kk "JOIN #kck4"
+	if ! irc_expect kk " 353 " "@alicek4" " 366 "; then
+		irc_close kk
+		irc_close kl
+		irc_close km
+		return 1
+	fi
+	irc_send kl "JOIN #kck4"
+	if ! irc_expect kl "JOIN #kck4"; then
+		irc_close kk
+		irc_close kl
+		irc_close km
+		return 1
+	fi
+	irc_send km "JOIN #kck4"
+	if ! irc_expect km "JOIN #kck4"; then
+		irc_close kk
+		irc_close kl
+		irc_close km
+		return 1
+	fi
+	irc_send kk "KICK #kck4 bobk4,carolk4,alicek4"
+	irc_send kl "JOIN #kck4"
+	if ! irc_expect kl " 353 " "@bobk4" " 366 "; then
+		irc_close kk
+		irc_close kl
+		irc_close km
+		return 1
+	fi
+	probe_alive kl kickrejoin
+	local rc=$?
+	irc_close kk
+	irc_close kl
+	irc_close km
+	return "$rc"
+}
+
 test "kick_by_op" test_kick_by_op
 test "kick_non_op" test_kick_non_op
 test "kick_not_on_channel" test_kick_not_on_channel
+test "kick_multi_and_rejoin_op" test_kick_multi_and_rejoin_op
 
 group_end

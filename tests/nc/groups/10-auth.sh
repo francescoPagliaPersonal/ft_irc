@@ -1,7 +1,14 @@
 group_begin "AUTH"
 
 test_pass_ok() {
-	oneshot_expect " 001 " "PASS $PASSWORD" "NICK aliceok" "USER aliceok 0 * :Alice"
+	irc_open po
+	irc_send po "PASS $PASSWORD"
+	irc_send po "NICK aliceok"
+	irc_send po "USER aliceok 0 * :Alice"
+	irc_expect po " 001 " " 375 " " 376 "
+	local rc=$?
+	irc_close po
+	return "$rc"
 }
 
 test_pass_mismatch() {

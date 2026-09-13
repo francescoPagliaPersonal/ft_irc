@@ -127,9 +127,78 @@ test_mode_o_give_take() {
 	return "$rc"
 }
 
+test_mode_i_removed_allows_join() {
+	if ! register_client mj alicem5; then
+		return 1
+	fi
+	if ! register_client mk bobm5; then
+		irc_close mj
+		return 1
+	fi
+	irc_send mj "JOIN #mod5"
+	if ! irc_expect mj "JOIN #mod5"; then
+		irc_close mj
+		irc_close mk
+		return 1
+	fi
+	irc_send mj "MODE #mod5 +i"
+	if ! irc_expect mj "MODE #mod5 +i"; then
+		irc_close mj
+		irc_close mk
+		return 1
+	fi
+	irc_send mj "MODE #mod5 -i"
+	if ! irc_expect mj "MODE #mod5 -i"; then
+		irc_close mj
+		irc_close mk
+		return 1
+	fi
+	irc_send mk "JOIN #mod5"
+	if ! irc_expect mk "JOIN #mod5"; then
+		irc_close mj
+		irc_close mk
+		return 1
+	fi
+	probe_alive mk mod5ok
+	local rc=$?
+	irc_close mj
+	irc_close mk
+	return "$rc"
+}
+
+test_mode_user_stub() {
+	if ! register_client ml alicem6; then
+		return 1
+	fi
+	irc_send ml "MODE alicem6 +i"
+	irc_expect ml " 221 "
+	local rc=$?
+	irc_close ml
+	return "$rc"
+}
+
+test_mode_users_dont_match() {
+	if ! register_client mm alicem7; then
+		return 1
+	fi
+	if ! register_client mn bobm7; then
+		irc_close mm
+		return 1
+	fi
+	irc_send mm "MODE bobm7 +i"
+	irc_expect mm " 502 "
+	local rc=$?
+	irc_close mm
+	irc_close mn
+	return "$rc"
+}
+
 test "mode_i_join_denied" test_mode_i_join_denied
 test "mode_k_bad_key" test_mode_k_bad_key
 test "mode_l_full" test_mode_l_full
 test "mode_o_give_take" test_mode_o_give_take
+test "mode_i_removed_allows_join" test_mode_i_removed_allows_join
+test "mode_user_stub" test_mode_user_stub
+test "mode_users_dont_match" test_mode_users_dont_match
 
 group_end

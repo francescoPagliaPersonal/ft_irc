@@ -66,8 +66,68 @@ test_topic_non_op_plus_t() {
 	return "$rc"
 }
 
+test_topic_clear() {
+	if ! register_client te alicet4; then
+		return 1
+	fi
+	irc_send te "JOIN #top4"
+	if ! irc_expect te "JOIN #top4"; then
+		irc_close te
+		return 1
+	fi
+	irc_send te "TOPIC #top4 :hello"
+	if ! irc_expect te " 332 " "hello"; then
+		irc_close te
+		return 1
+	fi
+	irc_send te "TOPIC #top4 :"
+	if ! irc_expect te " 331 "; then
+		irc_close te
+		return 1
+	fi
+	probe_alive te topclr
+	local rc=$?
+	irc_close te
+	return "$rc"
+}
+
+test_topic_non_op_without_plus_t() {
+	if ! register_client tf alicet5; then
+		return 1
+	fi
+	if ! register_client tg bobt5; then
+		irc_close tf
+		return 1
+	fi
+	irc_send tf "JOIN #top5"
+	if ! irc_expect tf "JOIN #top5"; then
+		irc_close tf
+		irc_close tg
+		return 1
+	fi
+	irc_send tg "JOIN #top5"
+	if ! irc_expect tg "JOIN #top5"; then
+		irc_close tf
+		irc_close tg
+		return 1
+	fi
+	irc_send tg "TOPIC #top5 :member sets"
+	if ! irc_expect tf "member sets"; then
+		irc_close tf
+		irc_close tg
+		return 1
+	fi
+	probe_alive tg topmem
+	local rc=$?
+	irc_close tf
+	irc_close tg
+	return "$rc"
+}
+
 test "topic_set_view" test_topic_set_view
 test "topic_empty" test_topic_empty
 test "topic_non_op_plus_t" test_topic_non_op_plus_t
+test "topic_clear" test_topic_clear
+test "topic_non_op_without_plus_t" test_topic_non_op_without_plus_t
 
 group_end
