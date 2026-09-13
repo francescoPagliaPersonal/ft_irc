@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:55:20 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/13 09:46:44 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/13 10:05:31 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@
 #include <cerrno>			// errno
 #include <cstring>			// memset, strerror
 #include <string>			// string
-#include <stdexcept>		// runtime_error
 #include <iostream>			// cerr
 
 // -------------------------------------------------------------------------- //
@@ -57,19 +56,24 @@ int ListeningSocket::acceptConnection(struct sockaddr_in& ipAddr) const
 	// 1) accept the incoming connection
 	newFD = ::accept(_fd, reinterpret_cast<struct sockaddr*>(&ipAddr), &len);
 	if (newFD < 0)
-		return (_errorOnAcceptConnection(ipAddr));
+	{
+		_errorOnAcceptConnection(ipAddr);
+		return (-1);
+	}
 	// 2) make the FD non-blocking
 	int flags = ::fcntl(newFD, F_GETFL, 0);
 	if (flags < 0 || ::fcntl(newFD, F_SETFL, flags | O_NONBLOCK) < 0)
 	{
+		_errorOnAcceptConnection(ipAddr);
 		::close(newFD);
-		return (_errorOnAcceptConnection(ipAddr));
+		return (-1);
 	}
 	// 3) enable keep-alive on the FD
 	if (!_enableKeepAlive(newFD))
 	{
+		_errorOnAcceptConnection(ipAddr);
 		::close(newFD);
-		return (_errorOnAcceptConnection(ipAddr));
+		return (-1);
 	}
 	return (newFD);
 }
@@ -94,12 +98,11 @@ bool ListeningSocket::_enableKeepAlive(int fd) const
 	return (true);
 }
 
-int ListeningSocket::_errorOnAcceptConnection(struct sockaddr_in& ipAddr) const
+void ListeningSocket::_errorOnAcceptConnection(struct sockaddr_in& ipAddr) const
 {
 	std::cerr << "[Server] Error while accepting connection from "
 		<< inet_ntoa(ipAddr.sin_addr) << ":" << ntohs(ipAddr.sin_port)
 		<< ": " << std::strerror(errno) << std::endl;
-	return (-1);
 }
 
 // -------------------------------------------------------------------------- //
