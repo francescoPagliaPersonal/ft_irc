@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:55:20 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/13 09:32:39 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/13 09:46:44 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,15 @@
 
 #include <sys/socket.h>		// socket, setsockopt, bind, listen, accept
 #include <fcntl.h>			// fcntl
+#include <arpa/inet.h>		// inet_ntoa
 #include <netinet/tcp.h>	// TCP_KEEPIDLE, TCP_KEEPINTVL, TCP_KEEPCNT
+#include <unistd.h>			// close
 
-#include <cerrno>
-#include <cstring>
-#include <string>
-#include <stdexcept>
+#include <cerrno>			// errno
+#include <cstring>			// memset, strerror
+#include <string>			// string
+#include <stdexcept>		// runtime_error
+#include <iostream>			// cerr
 
 // -------------------------------------------------------------------------- //
 // OPERATION
@@ -50,47 +53,53 @@ int ListeningSocket::acceptConnection(struct sockaddr_in& ipAddr) const
 	
 	len = sizeof(ipAddr);
 	std::memset(&ipAddr, 0, len);
+	errno = 0;
 	// 1) accept the incoming connection
 	newFD = ::accept(_fd, reinterpret_cast<struct sockaddr*>(&ipAddr), &len);
 	if (newFD < 0)
-	{
-		// EAGAIN and EWOULDBLOCK signal the queue is drained, this is OKAY
-		if (errno == EAGAIN || errno == EWOULDBLOCK)
-			return (-1);
-		// anything else is not
-		throw std::runtime_error(
-			std::string("Error on accept(): ") + std::strerror(errno));
-	}
+		return (_errorOnAcceptConnection(ipAddr));
 	// 2) make the FD non-blocking
 	int flags = ::fcntl(newFD, F_GETFL, 0);
 	if (flags < 0 || ::fcntl(newFD, F_SETFL, flags | O_NONBLOCK) < 0)
-		throw std::runtime_error(
-			std::string("Error on fcntl(): ") + std::strerror(errno));
+	{
+		::close(newFD);
+		return (_errorOnAcceptConnection(ipAddr));
+	}
 	// 3) enable keep-alive on the FD
-	_enableKeepAlive(newFD);
+	if (!_enableKeepAlive(newFD))
+	{
+		::close(newFD);
+		return (_errorOnAcceptConnection(ipAddr));
+	}
 	return (newFD);
 }
 
-void ListeningSocket::_enableKeepAlive(int fd) const
+bool ListeningSocket::_enableKeepAlive(int fd) const
 {
 	int optval = 1;
 	// 1) enable keep-alive probe on the FD
 	if (::setsockopt(fd, SOL_SOCKET, SO_KEEPALIVE, &optval, sizeof(optval)) < 0)
-		throw std::runtime_error(
-			std::string("Error on setsockopt(): ") + std::strerror(errno));
+		return (false);
 	// 2) Tune the kernel timers
 	int idle = 30;		// idle time after last data packet
 	int interval = 5;	// interval between keep-alive probes
 	int probes = 8;		// number of keep-alive probes to send
+	// 3) set the kernel timers
 	if (::setsockopt(fd, SOL_TCP, TCP_KEEPIDLE, &idle, sizeof(idle)) < 0)
-		throw std::runtime_error(
-			std::string("Error on setsockopt(): ") + std::strerror(errno));
+		return (false);
 	if (::setsockopt(fd, SOL_TCP, TCP_KEEPINTVL, &interval, sizeof(interval)) < 0)
-		throw std::runtime_error(
-			std::string("Error on setsockopt(): ") + std::strerror(errno));
+		return (false);
 	if (::setsockopt(fd, SOL_TCP, TCP_KEEPCNT, &probes, sizeof(probes)) < 0)
-		throw std::runtime_error(
-			std::string("Error on setsockopt(): ") + std::strerror(errno));
+		return (false);
+	return (true);
+}
+
+int ListeningSocket::_errorOnAcceptConnection(struct sockaddr_in& ipAddr) const
+{
+	std::cerr << "[Server] Error while accepting connection from "
+		<< inet_ntoa(ipAddr.sin_addr) << ":" << ntohs(ipAddr.sin_port)
+		<< ": " << std::strerror(errno) << std::endl;
+	return (-1);
 }
 
 // -------------------------------------------------------------------------- //
