@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 17:08:53 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/28 08:10:47 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/08 11:46:31 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,4 +56,24 @@ void Client::setCap(bool requested)
 void Client::setQuit(bool connected)
 {
 	_hasQuit = connected;
+}
+
+void Client::setSpamTime(std::time_t now)
+{
+	_lastSpamTime = now;
+}
+
+void Client::resetSpamCount()
+{
+	_spamCount = 0;
+}
+
+void Client::incrementSpamCount()
+{
+	_spamCount++;
+}
+
+void Client::setRemove(bool val)
+{
+	_toBeRemoved = val;
 }
