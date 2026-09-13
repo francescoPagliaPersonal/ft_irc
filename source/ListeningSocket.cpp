@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:55:20 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/13 10:37:25 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/13 12:59:39 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,9 +82,9 @@ bool ListeningSocket::_enableKeepAlive(int fd) const
 	if (::setsockopt(fd, SOL_SOCKET, SO_KEEPALIVE, &optval, sizeof(optval)) < 0)
 		return (false);
 	// 2) Tune the kernel timers
-	int idle = 30;		// idle time after last data packet
-	int interval = 5;	// interval between keep-alive probes
-	int probes = 8;		// number of keep-alive probes to send
+	int idle = ALIVE_TIME_IDLE;
+	int interval = ALIVE_TIME_INTERVAL;
+	int probes = ALIVE_PROBES;
 	// 3) set the kernel timers
 	if (::setsockopt(fd, SOL_TCP, TCP_KEEPIDLE, &idle, sizeof(idle)) < 0)
 		return (false);

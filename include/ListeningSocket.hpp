@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 16:19:04 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/13 10:37:01 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/13 12:59:09 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,15 @@
 // -------------------------------------------------------------------------- //
 
 #include <string>
-# define BACKLOG 64		// how many unaccepted connections the kernel queues
 
 #include <netinet/in.h>		// struct sockaddr_in
+
+// -------------------------------------------------------------------------- //
+
+# define BACKLOG 64	// how many unaccepted connections the kernel queues
+# define ALIVE_TIME_IDLE 50 // idle time after last data packet
+# define ALIVE_TIME_INTERVAL 4 // time between keepalive probes
+# define ALIVE_PROBES 3 // number of probes to send
 
 // -------------------------------------------------------------------------- //
 
