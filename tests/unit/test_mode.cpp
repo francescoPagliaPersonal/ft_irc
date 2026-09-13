@@ -188,3 +188,186 @@ TEST(mode_unknown_letter)
 	reg.execute(srv, irc::string2Message("MODE #chan +z", &alice.client));
 	CHECK(sentContains(srv, &alice.client, " 472 "));
 }
+
+TEST(mode_remove_invite)
+{
+	CommandRegistry	reg;
+	FakeServer		srv;
+	TestClient		alice;
+
+	reg.registerCmds();
+	registerClient(srv, alice, "alice");
+	joinChannel(reg, srv, alice, "#chan");
+	reg.execute(srv, irc::string2Message("MODE #chan +i", &alice.client));
+	srv.sent.clear();
+	reg.execute(srv, irc::string2Message("MODE #chan -i", &alice.client));
+	CHECK(!(srv.getChannelByTitle("#chan")->getModes() & CH_INVITE));
+	CHECK(sentContains(srv, &alice.client, " MODE #chan -i"));
+}
+
+TEST(mode_remove_topic_flag)
+{
+	CommandRegistry	reg;
+	FakeServer		srv;
+	TestClient		alice;
+
+	reg.registerCmds();
+	registerClient(srv, alice, "alice");
+	joinChannel(reg, srv, alice, "#chan");
+	reg.execute(srv, irc::string2Message("MODE #chan +t", &alice.client));
+	srv.sent.clear();
+	reg.execute(srv, irc::string2Message("MODE #chan -t", &alice.client));
+	CHECK(!(srv.getChannelByTitle("#chan")->getModes() & CH_TOPIC));
+}
+
+TEST(mode_remove_limit)
+{
+	CommandRegistry	reg;
+	FakeServer		srv;
+	TestClient		alice;
+	TestClient		bob;
+
+	reg.registerCmds();
+	registerClient(srv, alice, "alice");
+	registerClient(srv, bob, "bob");
+	joinChannel(reg, srv, alice, "#chan");
+	reg.execute(srv, irc::string2Message("MODE #chan +l 2", &alice.client));
+	joinChannel(reg, srv, bob, "#chan");
+	srv.sent.clear();
+	reg.execute(srv, irc::string2Message("MODE #chan -l", &alice.client));
+	CHECK(!(srv.getChannelByTitle("#chan")->getModes() & CH_LIMIT));
+	reg.execute(srv, irc::string2Message("JOIN #chan", &bob.client));
+	CHECK(!sentContains(srv, &bob.client, " 471 "));
+}
+
+TEST(mode_remove_key_with_matching_arg)
+{
+	CommandRegistry	reg;
+	FakeServer		srv;
+	TestClient		alice;
+	TestClient		bob;
+
+	reg.registerCmds();
+	registerClient(srv, alice, "alice");
+	registerClient(srv, bob, "bob");
+	joinChannel(reg, srv, alice, "#chan");
+	reg.execute(srv, irc::string2Message("MODE #chan +k secret", &alice.client));
+	srv.sent.clear();
+	reg.execute(srv, irc::string2Message("MODE #chan -k secret", &alice.client));
+	CHECK(!(srv.getChannelByTitle("#chan")->getModes() & CH_PASSWORD));
+	srv.sent.clear();
+	reg.execute(srv, irc::string2Message("JOIN #chan", &bob.client));
+	CHECK(!sentContains(srv, &bob.client, " 475 "));
+}
+
+TEST(mode_remove_key_without_arg)
+{
+	CommandRegistry	reg;
+	FakeServer		srv;
+	TestClient		alice;
+
+	reg.registerCmds();
+	registerClient(srv, alice, "alice");
+	joinChannel(reg, srv, alice, "#chan");
+	reg.execute(srv, irc::string2Message("MODE #chan +k secret", &alice.client));
+	srv.sent.clear();
+	reg.execute(srv, irc::string2Message("MODE #chan -k", &alice.client));
+	CHECK_EQ(lastTo(srv, &alice.client),
+		std::string(":CoolServ 461 alice MODE #chan :Not enough parameters.\r\n"));
+}
+
+TEST(mode_combined_iktl_query)
+{
+	CommandRegistry	reg;
+	FakeServer		srv;
+	TestClient		alice;
+
+	reg.registerCmds();
+	registerClient(srv, alice, "alice");
+	joinChannel(reg, srv, alice, "#chan");
+	reg.execute(srv, irc::string2Message("MODE #chan +iktl secret 10",
+			&alice.client));
+	srv.sent.clear();
+	reg.execute(srv, irc::string2Message("MODE #chan", &alice.client));
+	CHECK_EQ(lastTo(srv, &alice.client),
+		std::string(":CoolServ 324 alice #chan +itkl secret :10\r\n"));
+}
+
+TEST(mode_iktol_value_stealing)
+{
+	CommandRegistry	reg;
+	FakeServer		srv;
+	TestClient		alice;
+	TestClient		bob;
+
+	reg.registerCmds();
+	registerClient(srv, alice, "alice");
+	registerClient(srv, bob, "bob");
+	joinChannel(reg, srv, alice, "#chan");
+	srv.sent.clear();
+	reg.execute(srv, irc::string2Message("MODE #chan +iktol secret 10",
+			&alice.client));
+	srv.sent.clear();
+	reg.execute(srv, irc::string2Message("JOIN #chan wrong", &bob.client));
+	CHECK_EQ(lastTo(srv, &bob.client),
+		std::string(":CoolServ 475 bob #chan :Cannot join channel (+k).\r\n"));
+}
+
+TEST(mode_second_key_returns_keyset)
+{
+	CommandRegistry	reg;
+	FakeServer		srv;
+	TestClient		alice;
+
+	reg.registerCmds();
+	registerClient(srv, alice, "alice");
+	joinChannel(reg, srv, alice, "#chan");
+	reg.execute(srv, irc::string2Message("MODE #chan +k first", &alice.client));
+	srv.sent.clear();
+	reg.execute(srv, irc::string2Message("MODE #chan +k second", &alice.client));
+	CHECK_EQ(lastTo(srv, &alice.client),
+		std::string(":CoolServ 467 alice :Channel key already set\r\n"));
+}
+
+TEST(mode_user_mode_stub)
+{
+	CommandRegistry	reg;
+	FakeServer		srv;
+	TestClient		alice;
+
+	reg.registerCmds();
+	registerClient(srv, alice, "alice");
+	reg.execute(srv, irc::string2Message("MODE alice +i", &alice.client));
+	CHECK_EQ(lastTo(srv, &alice.client),
+		std::string(":CoolServ 221 alice :not supported\r\n"));
+}
+
+TEST(mode_users_dont_match)
+{
+	CommandRegistry	reg;
+	FakeServer		srv;
+	TestClient		alice;
+	TestClient		bob;
+
+	reg.registerCmds();
+	registerClient(srv, alice, "alice");
+	registerClient(srv, bob, "bob");
+	reg.execute(srv, irc::string2Message("MODE bob +i", &alice.client));
+	CHECK_EQ(lastTo(srv, &alice.client),
+		std::string(":CoolServ 502 alice :Cant change mode for other users.\r\n"));
+}
+
+TEST(mode_bad_first_char)
+{
+	CommandRegistry	reg;
+	FakeServer		srv;
+	TestClient		alice;
+
+	reg.registerCmds();
+	registerClient(srv, alice, "alice");
+	joinChannel(reg, srv, alice, "#chan");
+	srv.sent.clear();
+	reg.execute(srv, irc::string2Message("MODE #chan z", &alice.client));
+	CHECK(sentContains(srv, &alice.client, " 472 "));
+	CHECK(!sentContains(srv, &alice.client, " MODE #chan"));
+}
