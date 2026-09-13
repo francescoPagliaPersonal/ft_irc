@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/24 10:48:00 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/31 10:33:00 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/13 14:30:00 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include "ft_irc.hpp"
 # include "irc.hpp"
 
+# include <ctime>
 # include <deque>
 # include <map>
 # include <set>
@@ -54,6 +55,11 @@ public:
 	std::string	getPassword() const
 	{
 		return (password);
+	}
+
+	std::time_t	getStartTime() const
+	{
+		return (0);
 	}
 
 	void	tryCompleteRegistration(Client *c) const
