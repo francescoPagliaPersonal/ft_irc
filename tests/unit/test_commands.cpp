@@ -443,7 +443,7 @@ TEST(pass_too_many_params)
 	reg.registerCmds();
 	reg.execute(srv, irc::string2Message("PASS a b", &tc.client));
 	CHECK_EQ(lastTo(srv, &tc.client),
-		std::string(":CoolServ 42001 * :Too many parameter given\r\n"));
+		std::string(":CoolServ 400 * :Too many parameters given.\r\n"));
 }
 
 TEST(nick_max_length_ok)

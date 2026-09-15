@@ -82,7 +82,7 @@ test_user_too_many() {
 	irc_send um "PASS $PASSWORD"
 	irc_send um "NICK umany"
 	irc_send um "USER a b c d e"
-	irc_expect_any um "42001" " 461 "
+	irc_expect_any um " 400 " " 461 "
 	local rc=$?
 	irc_close um
 	return "$rc"

@@ -54,7 +54,7 @@ TEST(args_limit_too_many)
 	ArgsLimitPlcy	plcy(1, 1);
 	Message			msg = irc::string2Message("PASS a b", &tc.client);
 
-	CHECK_EQ(plcy.check(msg), irc::MANYPARAMS);
+	CHECK_EQ(plcy.check(msg), static_cast<irc::rfc>(400));
 }
 
 TEST(already_registered_requires_done)

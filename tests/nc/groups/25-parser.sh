@@ -38,7 +38,7 @@ test_ping_too_many_params() {
 		return 1
 	fi
 	irc_send pm "PING a b c"
-	irc_expect_any pm "42001" " 461 "
+	irc_expect_any pm " 400 " " 461 "
 	local rc=$?
 	irc_close pm
 	return "$rc"
