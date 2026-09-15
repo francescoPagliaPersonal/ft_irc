@@ -94,6 +94,7 @@ void Response::init(const std::string &srv)
 	_numType[irc::NICKNAMEINUSE] = PARAM0;
 	_numType[irc::USERONCHANNEL] = PARAM0;
 	_numType[irc::NOTONCHANNEL] = PARAM0;
+	_numType[irc::NOTOPIC] = PARAM0;
 	_numType[irc::CHANOPRIVSNEEDED] = PARAM0;
 	_numType[irc::UNKNOWNCOMMAND] = COMMAND;
 	_numType[irc::NEEDMOREPARAMS] = COMMAND;
