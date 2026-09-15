@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/24 17:48:24 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/15 16:01:25 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/15 16:48:08 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,8 @@ namespace irc
 		ENDOFMOTD,					// 376 RPL_ENDOFMOTD
 		YOUREOPER = 381,			// 381 RPL_YOUREOPER
 		// ERROR CODES				--------------------------------------------
-		NOSUCHNICK = 401,			// 401 ERR_NOSUCHNICK
+		UNKNOWNERROR = 400,			// 400 ERR_UNKNOWNERROR
+		NOSUCHNICK,					// 401 ERR_NOSUCHNICK
 		NOSUCHSERVER,				// 402 ERR_NOSUCHSERVER
 		NOSUCHCHANNEL,				// 403 ERR_NOSUCHCHANNEL
 		CANNOTSENDTOCHAN,			// 404 ERR_CANNOTSENDTOCHAN
@@ -98,8 +99,7 @@ namespace irc
 		NOOPERHOST = 491,			// 491 ERR_NOOPERHOST
 		UMODEUNKNOWNFLAG = 501,		// 501 ERR_UMODEUNKNOWNFLAG
 		USERSDONTMATCH,				// 502 ERR_USERSDONTMATCH
-		MANYPARAMS = 42001,			// internal: too many parameters // TODO probably wrong place => parsing topic?
-		HASQUIT						// internal: client send QUIT
+		HASQUIT = 42001				// internal: client send QUIT
 	};
 
 } // end of namespace IRC
