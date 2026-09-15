@@ -1,26 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   args.hpp                                           :+:      :+:    :+:   */
+/*   Bot-main.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/08/04 12:19:28 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/09/02 09:02:48 by mweghofe         ###   ########.fr       */
+/*   Created: 2026/09/02 08:11:16 by mweghofe          #+#    #+#             */
+/*   Updated: 2026/09/02 09:01:58 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ARGS_HPP
-# define ARGS_HPP
+#include "Bot.hpp"
+#include "args.hpp"
 
-# include <string>
-# include <sstream>
+#include <iostream>
 
-unsigned short	arg2port(const char *port_str);
-std::string		arg2password(const char *pw_str);
-
-# ifdef BONUS
-unsigned int	arg2ip(const char *ip_str);
-# endif
-
-#endif
+int main (int argc, char** argv)
+{
+	if (argc != 4)
+	{
+		std::cout << "Usage: ./bot <serverip> <port> <password>" << std::endl;
+		return (1);
+	}
+	try
+	{
+		Bot bot(arg2ip(argv[1]), arg2port(argv[2]), arg2password(argv[3]));
+		bot.run();
+	}
+	catch (const std::exception& e)
+	{
+		std::cerr << e.what() << std::endl;
+		return (2);
+	}
+	return (0);
+}

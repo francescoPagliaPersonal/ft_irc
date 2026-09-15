@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/24 17:48:24 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/11 13:14:22 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/15 16:01:25 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ namespace irc
 
 	typedef unsigned int		uint;
 	typedef unsigned char		uint8;
+	typedef unsigned short		uint16;
 	typedef unsigned long int	uint32;
 	
 	enum epollret 
@@ -39,7 +40,7 @@ namespace irc
 		RET_OK,
 		RET_EMPTY,
 		RET_CLOSE,
-		RET_HASOUTPUT,
+		RET_HASOUTPUT,	// FIXME this needs to go completely, redundant arming of EPOLLOUT, send must just RET_OK
 		RET_PARSEINPUT
 	};
 

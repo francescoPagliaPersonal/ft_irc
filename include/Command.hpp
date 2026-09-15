@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:15:32 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/10 14:08:52 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/15 16:01:17 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,10 @@
 # include "Message.hpp"
 # include "irc.hpp"
 
+# ifdef BONUS
+#  include "IBot.hpp"
+# endif
+
 // -------------------------------------------------------------------------- //
 
 # define MODES "itkol"
@@ -33,11 +37,14 @@ class IPolicy;
 
 typedef rfc (*command)(IServerCtrl&, const Message&);
 
+# ifdef BONUS
+typedef void (*botcmd)(IBot&, const Message&, std::vector<std::string>&);
+#endif
+
 class Command
 {
 	public:
 		// ----
-		Command(const std::string&, command);
 		~Command();
 		// ----
 		struct Data
@@ -59,13 +66,25 @@ class Command
 	private:
 		// ----
 		std::string	_name;				 // name of the command
-		command 	_func;				 // function handler for the command
 		std::vector<IPolicy*> _policies; // active policies per command
 		// ----
 		// ----
 		Command();
 		Command(const Command&);
 		Command operator=(const Command&);
+
+# ifndef BONUS
+	public:
+		Command(const std::string&, command);
+	private:
+		command 	_func;				 // function handler for the command
+#  else
+	public:
+		Command(const std::string&, botcmd);
+		void execute(IBot&, const Message&, std::vector<std::string>&) const;
+	private:
+		botcmd		_func;				// function handler for the bot command
+# endif
 };
 
 // -------------------------------------------------------------------------- //
@@ -84,6 +103,15 @@ rfc cmd_topic(IServerCtrl&, const Message&);
 rfc cmd_kick(IServerCtrl&, const Message&);
 rfc cmd_part(IServerCtrl&, const Message&);
 rfc cmd_pong(IServerCtrl&, const Message&);
+
+# ifdef BONUS
+
+void bot_help(IBot&, const Message&, std::vector<std::string>&);
+void bot_spam(IBot&, const Message&, std::vector<std::string>&);
+void bot_mirror(IBot&, const Message&, std::vector<std::string>&);
+void bot_quote(IBot&, const Message&, std::vector<std::string>&);
+
+# endif
 
 #endif
 

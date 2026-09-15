@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------- #
-# Makefile template v 3.1                                           2026-08-25 #
+# Makefile template v 3.1                                           2026-09-12 #
 # ---------------------------------------------------------------------------- #
 #
 #							   PROJECT BUILD TARGETS
@@ -32,6 +32,8 @@ runb:		PART := bon
 runb:		build
 	$(EXEC)
 
+bot:		runb
+
 asan:		MODE := asan
 asan:		PART := man
 asan:		build
@@ -51,6 +53,22 @@ valb:		MODE := val
 valb:		PART := bon
 valb:		build
 	$(EXEC_VALG)
+
+both:
+	@$(MAKE) build MODE=$(MODE) PART=man SRCLANG=$(SRCLANG) --no-print-directory
+	@$(MAKE) build MODE=$(MODE) PART=bon SRCLANG=$(SRCLANG) --no-print-directory
+
+both-run:	MODE := reg
+both-run:	both
+	$(EXEC_BOTH)
+
+both-asan:	MODE := asan
+both-asan:	both
+	$(EXEC_BOTH)
+
+both-val:	MODE := val
+both-val:	both
+	$(EXEC_BOTH_VALG)
 
 print:
 	@printf "$(C_SAKURA_BLOSSOM)"
@@ -83,7 +101,7 @@ clean:
 	$(LFT_CLEAN)
 
 fclean:		clean
-	@rm -rf bin $(PROG_NAME)
+	@rm -rf bin $(PROG_NAME) $(PROG_NAME_BONUS)
 	@printf "$(C_BAMBOO_GREEN)$(PROG_NAME) fclean complete$(C_RESET)\n"
 	$(LFT_FCLEAN)
 
@@ -124,6 +142,7 @@ norm:
 	$(NORM_HEADERS)
 
 .PHONY:	all bonus clean fclean re \
-		run runb asan asanb val valb \
+		run runb asan asanb val valb bot \
+		both both-run both-asan both-val \
 		print build libft norm \
 		nc chat

@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------- #
-# Makefile template v 3.0                                           2026-08-05 #
+# Makefile template v 3.1                                           2026-09-12 #
 # ---------------------------------------------------------------------------- #
 #
 #								PROJECT CONTROL
@@ -34,8 +34,11 @@ endif
 endif
 
 # for executable targets
-EXEC_STR	= ./$(BIN) $(RUN_ARGS_$(MODE))
-EXEC_V_STR	= valgrind $(VALGRIND_FLAGS) ./$(BIN) $(RUN_ARGS_$(MODE))
+# server args: $(PORT) $(PASSWORD)  |  bot args: $(HOST) $(PORT) $(PASSWORD)
+EXEC_STR	= ./$(BIN) $(if $(filter bon,$(PART)),$(HOST) )$(RUN_ARGS_$(MODE))
+EXEC_V_STR	= valgrind $(VALGRIND_FLAGS) ./$(BIN) $(if $(filter bon,$(PART)),$(HOST) )$(RUN_ARGS_$(MODE))
+SERVER_BIN	= ./bin/$(MODE)/man/$(PROG_NAME)
+BOT_BIN		= ./bin/$(MODE)/bon/$(PROG_NAME_BONUS)
 END_STR		:= printf '$(C_FUJI_GRAY3)::::::::::::\n$(C_RESET)'
 
 define EXEC
@@ -46,5 +49,25 @@ endef
 define EXEC_VALG
 	$(PRT_VALG)
 	@$(EXEC_V_STR)
+	@$(END_STR)
+endef
+define EXEC_BOTH
+	$(PRT_BOTH)
+	@SERVER_PID=; \
+	trap 'if [ -n "$$SERVER_PID" ]; then kill $$SERVER_PID 2>/dev/null; wait $$SERVER_PID 2>/dev/null; fi' EXIT INT TERM; \
+	$(SERVER_BIN) $(PORT) $(PASSWORD) & \
+	SERVER_PID=$$!; \
+	sleep 0.3; \
+	$(BOT_BIN) $(HOST) $(PORT) $(PASSWORD)
+	@$(END_STR)
+endef
+define EXEC_BOTH_VALG
+	$(PRT_BOTH_VALG)
+	@SERVER_PID=; \
+	trap 'if [ -n "$$SERVER_PID" ]; then kill $$SERVER_PID 2>/dev/null; wait $$SERVER_PID 2>/dev/null; fi' EXIT INT TERM; \
+	valgrind $(VALGRIND_FLAGS) $(SERVER_BIN) $(PORT) $(PASSWORD) & \
+	SERVER_PID=$$!; \
+	sleep 0.3; \
+	valgrind $(VALGRIND_FLAGS) $(BOT_BIN) $(HOST) $(PORT) $(PASSWORD)
 	@$(END_STR)
 endef

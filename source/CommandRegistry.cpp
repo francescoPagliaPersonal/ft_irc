@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 18:00:05 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/28 07:55:27 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/11 22:47:14 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 // OPERATION
 // -------------------------------------------------------------------------- //
 
+#ifndef BONUS
 // Lookup MSG's command and execute it on SRV; handles numeric code replies.
 rfc CommandRegistry::execute(IServerCtrl& srv, const Message& msg) const
 {
@@ -43,6 +44,24 @@ rfc CommandRegistry::execute(IServerCtrl& srv, const Message& msg) const
 		srv.sendMessage(client, Response::handleNumeric(msg, code));
 	return (code);
 }
+
+# else
+
+bool CommandRegistry::execute(IBot& bot, const Message& msg, std::vector<std::string>& botcmds) const
+{
+	// look up if requested command exists on the server
+	if (botcmds.empty())
+		return (false);
+	std::map<const std::string, const Command*>::const_iterator it;
+	it = _commands.find(botcmds[0]);
+	if ( it != _commands.end())
+		it->second->execute(bot, msg, botcmds);
+	else
+		return (false);
+	return (true);
+}
+
+#endif
 
 // -------------------------------------------------------------------------- //
 // OCF

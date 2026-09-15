@@ -1,26 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   args.hpp                                           :+:      :+:    :+:   */
+/*   bot_mirror.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/08/04 12:19:28 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/09/02 09:02:48 by mweghofe         ###   ########.fr       */
+/*   Created: 2026/09/11 17:47:22 by mweghofe          #+#    #+#             */
+/*   Updated: 2026/09/12 10:16:31 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ARGS_HPP
-# define ARGS_HPP
+#include "Command.hpp"
+#include "IBot.hpp"
+#include "irc.hpp"
 
-# include <string>
-# include <sstream>
-
-unsigned short	arg2port(const char *port_str);
-std::string		arg2password(const char *pw_str);
-
-# ifdef BONUS
-unsigned int	arg2ip(const char *ip_str);
-# endif
-
-#endif
+void bot_mirror(IBot& bot, const Message& msg, std::vector<std::string>& botcmds)
+{
+	(void) msg; (void) botcmds;
+	bot.toggleMirror();
+}

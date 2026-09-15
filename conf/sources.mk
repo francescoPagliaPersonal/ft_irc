@@ -34,7 +34,13 @@ SRC_MAN		:=  arg2password.cpp arg2port.cpp\
 				Channel-Operation.cpp Channel-Compliancy.cpp\
 				irc.cpp\
 				main.cpp
-SRC_BON		:= 
+SRC_BON		:=	Bot-main.cpp Bot-CDTOR.cpp Bot-Signals.cpp\
+				Bot-Connection.cpp Bot-Buffer.cpp\
+				Bot-Run.cpp Bot-RunUntilDisconnect.cpp\
+				Bot-ExecuteMessages.cpp Bot-Actions.cpp\
+				arg2ip.cpp arg2password.cpp arg2port.cpp\
+				Epoll.cpp Message.cpp irc.cpp\
+				CommandRegistry.cpp CommandRegistry-RegisterCmds.cpp Command.cpp
 
 # Pattern for source files in subdirectories. WITH DIR SLASH
 #   DIR_PARSER = parser/
@@ -54,3 +60,8 @@ SRC_MAN   += $(addprefix $(DIR_CMDS),$(SRC_CMDS))
 DIR_PLCY = policies/
 SRC_PLCY = AlreadyRegisteredPlcy.cpp ArgsLimitPlcy.cpp 
 SRC_MAN   += $(addprefix $(DIR_PLCY),$(SRC_PLCY))
+
+# Bot Commands
+DIR_BOTCMD = commands/
+SRC_BOTCMD = bot_help.cpp bot_spam.cpp bot_mirror.cpp bot_quote.cpp
+SRC_BON   += $(addprefix $(DIR_BOTCMD),$(SRC_BOTCMD))
