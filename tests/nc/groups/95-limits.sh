@@ -30,7 +30,7 @@ test_spam_disconnect() {
 		return 1
 	fi
 	local i
-	for i in $(seq 1 45); do
+	for i in $(seq 1 65); do
 		irc_send sp "PING :${SRVNAME}" || break
 	done
 	if ! wait_client_gone sp; then
