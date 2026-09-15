@@ -57,7 +57,13 @@ rfc cmd_kick(IServerCtrl & srv, const Message & msg)
 		else
 			srv.broadcast(channel, Response::buildRegular(msg, msg.params[0] + " " + users[i]));
 		client2Kick->removeChannel(channel);
-		channel->removeClient(client2Kick);
+		Client* promoted = channel->removeClient(client2Kick);
+		if (promoted != NULL)
+		{
+			srv.broadcast(channel, ":" + Response::getServerName()
+				+ " MODE " + channel->getTitle()
+				+ " +o " + promoted->getNick() + CRLF);
+		}
 	}
 
 	return irc::OK;

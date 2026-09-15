@@ -84,12 +84,18 @@ bool Channel::setOperator(bool switcher, Client* client)
 	if (switcher)
 	{
 		if (!(it->second & US_OPERATOR))
+		{
 			it->second |= US_OPERATOR;
+			++_chanOps;
+		}
 		else
 			return (false);
 	}
 	else if (it->second & US_OPERATOR)
+	{
 		it->second &= ~US_OPERATOR;
+		--_chanOps;
+	}
 	else
 		return (false);
 	return (true);

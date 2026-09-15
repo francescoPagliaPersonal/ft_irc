@@ -65,7 +65,7 @@ class Channel
 		// ----
 		// ---- operation
 		void addClient(Client*, bitMask);
-		void removeClient(Client*);
+		Client* removeClient(Client*);
 		bool isEmpty() const;
 		// ---- get
 		std::string getTitle() const;		// used in debug & test functions

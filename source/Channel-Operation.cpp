@@ -27,13 +27,15 @@ void Channel::addClient(Client* client, bitMask privileges = 0)
 }
 
 // Remove CLIENT from the channel's member list.
-void Channel::removeClient(Client* client)
+// Promote the first remaining member to operator when the last
+// operator is gone; return the promoted client (NULL if none).
+Client* Channel::removeClient(Client* client)
 {
 	std::map<Client *, bitMask>::iterator member;
-	
+
 	member = _members.find(client);
 	if (member == _members.end())
-		return ;
+		return (NULL);
 	if (member->second & US_OPERATOR)
 		--_chanOps;
 	_members.erase(client);
@@ -42,8 +44,9 @@ void Channel::removeClient(Client* client)
 	{
 		_members.begin()->second |= US_OPERATOR;
 		++_chanOps;
+		return (_members.begin()->first);
 	}
-	
+	return (NULL);
 }
 
 // Check if the channel has no members left.
