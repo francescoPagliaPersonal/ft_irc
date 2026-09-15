@@ -28,8 +28,6 @@ rfc cmd_pong(IServerCtrl& srv, const Message& msg)
 
 
 	if (msg.params[0] != client->getNick())
-		return (irc::NOSUCHNICK);
-	else
 		return (irc::NOORIGIN);
 	// internal timer is updated by Server::_executeCommands
 	client->resetPingCount();
