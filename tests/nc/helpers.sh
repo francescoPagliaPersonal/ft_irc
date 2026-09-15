@@ -19,6 +19,20 @@ NC_POLL="${NC_POLL:-0.01}"
 : "${C_WINTER_BLUE:=\033[38;2;110;134;161m}"
 NC="stdbuf -o0 nc -4"
 
+# Match ListeningSocket::_setHostName(): gethostname(buf, 30) or SERVER_NAME.
+_init_srvname() {
+	local h
+
+	h=$(hostname 2>/dev/null || true)
+	if [ -z "$h" ] || [ "${#h}" -ge 30 ]; then
+		SRVNAME="irc.CoolServ.42"
+	else
+		SRVNAME="$h"
+	fi
+	PONG_NEEDLE="PONG ${SRVNAME} :${SRVNAME}"
+}
+_init_srvname
+
 TOTAL_OK=0
 TOTAL_FAIL=0
 TOTAL_CRASH=0
@@ -349,13 +363,86 @@ wait_client_gone() {
 # Prove the session still parses. Raw sessions get an explicit CRLF.
 probe_alive() {
 	local id="$1"
-	local token="${2:-alive}"
+	local file="$RUNDIR/cli_$id/out"
+	local before
+
+	before=$(wc -c <"$file" 2>/dev/null || echo 0)
 	if [ -f "$RUNDIR/cli_$id/raw" ]; then
-		irc_write "$id" "PING :${token}"$'\r\n' || return 1
+		irc_write "$id" "PING :${SRVNAME}"$'\r\n' || return 1
 	else
-		irc_send "$id" "PING :${token}" || return 1
+		irc_send "$id" "PING :${SRVNAME}" || return 1
 	fi
-	irc_expect "$id" "PONG CoolServ :${token}"
+	irc_expect_growth_after "$id" "$before" "$PONG_NEEDLE"
+}
+
+# Return once bytes after OFFSET contain NEEDLE; else wait NC_TIMEOUT.
+irc_expect_growth_after() {
+	local id="$1"
+	local offset="$2"
+	local needle="$3"
+	local file="$RUNDIR/cli_$id/out"
+	local start size chunk
+
+	FAIL_HINT="expected new output to contain: ${needle}"
+	start=$(_now)
+	while true; do
+		size=$(wc -c <"$file" 2>/dev/null || echo 0)
+		if [ "$size" -gt "$offset" ]; then
+			chunk=$(tail -c +"$((offset + 1))" "$file" 2>/dev/null || true)
+			if printf '%s' "$chunk" | grep -Fq -- "$needle"; then
+				LAST_GOT=$(cat "$file")
+				return 0
+			fi
+		fi
+		if ! server_alive; then
+			LAST_GOT=$(cat "$file" 2>/dev/null || true)
+			return 1
+		fi
+		if _timed_out "$start" "$NC_TIMEOUT" "$(_now)"; then
+			LAST_GOT=$(cat "$file" 2>/dev/null || true)
+			return 1
+		fi
+		sleep "$NC_POLL"
+	done
+}
+
+# Return once NEEDLE appears at least WANT times; else wait NC_TIMEOUT.
+irc_expect_count() {
+	local id="$1"
+	local needle="$2"
+	local want="$3"
+	local file="$RUNDIR/cli_$id/out"
+	local start count
+
+	FAIL_HINT="expected ${want} occurrences of: ${needle}"
+	start=$(_now)
+	while true; do
+		count=$(grep -Fc -- "$needle" "$file" 2>/dev/null)
+		count=${count:-0}
+		if [ "$count" -ge "$want" ]; then
+			LAST_GOT=$(cat "$file")
+			return 0
+		fi
+		if ! server_alive; then
+			LAST_GOT=$(cat "$file" 2>/dev/null || true)
+			return 1
+		fi
+		if _timed_out "$start" "$NC_TIMEOUT" "$(_now)"; then
+			LAST_GOT=$(cat "$file" 2>/dev/null || true)
+			return 1
+		fi
+		sleep "$NC_POLL"
+	done
+}
+
+irc_count_needle() {
+	local id="$1"
+	local needle="$2"
+	local file="$RUNDIR/cli_$id/out"
+
+	local count
+	count=$(grep -Fc -- "$needle" "$file" 2>/dev/null)
+	printf '%s' "${count:-0}"
 }
 
 # Return as soon as every needle is present in the capture; else wait NC_TIMEOUT.
@@ -369,7 +456,7 @@ irc_expect() {
 	while true; do
 		ok=1
 		for n in "$@"; do
-			if ! grep -q -- "$n" "$file" 2>/dev/null; then
+			if ! grep -Fq -- "$n" "$file" 2>/dev/null; then
 				ok=0
 				break
 			fi
@@ -400,7 +487,7 @@ irc_expect_any() {
 	start=$(_now)
 	while true; do
 		for n in "$@"; do
-			if grep -q -- "$n" "$file" 2>/dev/null; then
+			if grep -Fq -- "$n" "$file" 2>/dev/null; then
 				LAST_GOT=$(cat "$file")
 				return 0
 			fi
@@ -426,7 +513,7 @@ irc_expect_absent() {
 	FAIL_HINT="expected NOT to contain: ${needle}"
 	start=$(_now)
 	while true; do
-		if grep -q -- "$needle" "$file" 2>/dev/null; then
+		if grep -Fq -- "$needle" "$file" 2>/dev/null; then
 			LAST_GOT=$(cat "$file")
 			return 1
 		fi

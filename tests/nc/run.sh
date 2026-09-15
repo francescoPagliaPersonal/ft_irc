@@ -34,8 +34,8 @@ on_exit() {
 trap on_int INT
 trap on_exit EXIT
 
-printf '%bnc live suite%b  %s:%s  bin=%s\n' \
-	"$(cb "$C_WINTER_BLUE")" "$(cb "$C_RESET")" "$HOST" "$PORT" "$BIN"
+printf '%bnc live suite%b  %s:%s  srv=%s  bin=%s\n' \
+	"$(cb "$C_WINTER_BLUE")" "$(cb "$C_RESET")" "$HOST" "$PORT" "$SRVNAME" "$BIN"
 
 if ! start_server; then
 	printf '%bfailed to start server%b\n' "$(cb "$C_AUTUMN_RED")" "$(cb "$C_RESET")"

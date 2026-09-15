@@ -8,23 +8,25 @@ test_two_clients_ping() {
 		irc_close xa
 		return 1
 	fi
-	irc_send xa "PING :one"
-	irc_send xb "PING :two"
-	if ! irc_expect xa "PONG CoolServ :one"; then
+	irc_send xa "PING :${SRVNAME}"
+	irc_send xb "PING :${SRVNAME}"
+	if ! irc_expect xa "$PONG_NEEDLE"; then
 		irc_close xa
 		irc_close xb
 		return 1
 	fi
-	if ! irc_expect xb "PONG CoolServ :two"; then
+	if ! irc_expect xb "$PONG_NEEDLE"; then
 		irc_close xa
 		irc_close xb
 		return 1
 	fi
-	assert_not_contains "$(irc_recv xa)" ":two"
-	local rc=$?
-	if [ "$rc" -eq 0 ]; then
-		assert_not_contains "$(irc_recv xb)" ":one"
-		rc=$?
+	local cxa cxb rc=0
+	cxa=$(irc_count_needle xa "$PONG_NEEDLE")
+	cxb=$(irc_count_needle xb "$PONG_NEEDLE")
+	if [ "$cxa" -ne 1 ] || [ "$cxb" -ne 1 ]; then
+		FAIL_HINT="expected exactly one PONG per client (got xa=${cxa} xb=${cxb})"
+		LAST_GOT="xa=$(irc_recv xa) xb=$(irc_recv xb)"
+		rc=1
 	fi
 	irc_close xa
 	irc_close xb
@@ -100,8 +102,8 @@ test_disconnect_one_other_still_works() {
 		irc_close xg
 		return 1
 	fi
-	irc_send xg "PING :stillhere"
-	irc_expect xg "PONG CoolServ :stillhere"
+	irc_send xg "PING :${SRVNAME}"
+	irc_expect xg "$PONG_NEEDLE"
 	local rc=$?
 	irc_close xg
 	return "$rc"

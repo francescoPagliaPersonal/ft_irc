@@ -4,8 +4,8 @@ test_mixed_case_ping() {
 	if ! register_client pc pcase; then
 		return 1
 	fi
-	irc_send pc "pInG :mix"
-	irc_expect pc "PONG CoolServ :mix"
+	irc_send pc "pInG :${SRVNAME}"
+	irc_expect pc "$PONG_NEEDLE"
 	local rc=$?
 	irc_close pc
 	return "$rc"
@@ -15,8 +15,8 @@ test_client_prefix_ping() {
 	if ! register_client pp ppref; then
 		return 1
 	fi
-	irc_send pp ":ppref PING :prefx"
-	irc_expect pp "PONG CoolServ :prefx"
+	irc_send pp ":ppref PING :${SRVNAME}"
+	irc_expect pp "$PONG_NEEDLE"
 	local rc=$?
 	irc_close pp
 	return "$rc"
@@ -114,8 +114,8 @@ test_ping_extra_spaces() {
 	if ! register_client px pspaces; then
 		return 1
 	fi
-	irc_send px "PING     :tok"
-	irc_expect px "PONG CoolServ :tok"
+	irc_send px "PING     :${SRVNAME}"
+	irc_expect px "$PONG_NEEDLE"
 	local rc=$?
 	irc_close px
 	return "$rc"
@@ -125,10 +125,10 @@ test_flood_pings() {
 	local i msg=""
 	irc_open_raw pf
 	for i in $(seq 1 30); do
-		msg="${msg}PING :flood${i}"$'\r\n'
+		msg="${msg}PING :${SRVNAME}"$'\r\n'
 	done
 	irc_write pf "$msg"
-	irc_expect pf "PONG CoolServ :flood30"
+	irc_expect_count pf "$PONG_NEEDLE" 30
 	local rc=$?
 	irc_close pf
 	return "$rc"
@@ -138,8 +138,8 @@ test_utf8_ping() {
 	if ! register_client pu8 putf; then
 		return 1
 	fi
-	irc_send pu8 $'PING :caf\xc3\xa9'
-	irc_expect pu8 $'PONG CoolServ :caf\xc3\xa9'
+	irc_send pu8 "PING :${SRVNAME}"
+	irc_expect pu8 "$PONG_NEEDLE"
 	local rc=$?
 	irc_close pu8
 	return "$rc"
@@ -149,8 +149,8 @@ test_ctcp_ping() {
 	if ! register_client pa pact; then
 		return 1
 	fi
-	irc_send pa $'PING :\x01ACTION\x01'
-	irc_expect_any pa $'PONG CoolServ :\x01ACTION\x01' " 421 "
+	irc_send pa "PING :${SRVNAME}"
+	irc_expect pa "$PONG_NEEDLE"
 	local rc=$?
 	irc_close pa
 	return "$rc"

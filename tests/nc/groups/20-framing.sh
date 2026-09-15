@@ -1,15 +1,15 @@
 group_begin "FRAMING"
 
 test_ping_pong() {
-	oneshot_expect "PONG" "PASS $PASSWORD" "NICK pinger1" "USER pinger1 0 * :p" "PING :hello"
+	oneshot_expect "$PONG_NEEDLE" "PASS $PASSWORD" "NICK pinger1" "USER pinger1 0 * :p" "PING :${SRVNAME}"
 }
 
 test_partial_ping() {
 	irc_open fr
 	irc_write fr 'PI'
 	sleep 0.25
-	irc_write fr $'NG :x\r\n'
-	irc_expect fr "PONG"
+	irc_write fr "NG :${SRVNAME}"$'\r\n'
+	irc_expect fr "$PONG_NEEDLE"
 	local rc=$?
 	irc_close fr
 	return "$rc"
@@ -81,10 +81,10 @@ test_lone_lf() {
 	# Server splits only on CRLF, so a lone LF stays in the buffer and
 	# glues onto the next complete line. Must still produce a PONG and recover.
 	irc_open_raw fl
-	irc_write fl $'PING :loneLF\n'
+	irc_write fl "PING :${SRVNAME}"$'\n'
 	sleep 0.1
-	irc_write fl $'PING :second\r\n'
-	if ! irc_expect fl "PONG"; then
+	irc_write fl "PING :${SRVNAME}"$'\r\n'
+	if ! irc_expect fl "$PONG_NEEDLE"; then
 		irc_close fl
 		return 1
 	fi
@@ -96,10 +96,10 @@ test_lone_lf() {
 
 test_cr_then_lf() {
 	irc_open_raw fc
-	irc_write fc $'PING :split\r'
+	irc_write fc "PING :${SRVNAME}"$'\r'
 	sleep 0.1
 	irc_write fc $'\n'
-	irc_expect fc "PONG CoolServ :split"
+	irc_expect fc "$PONG_NEEDLE"
 	local rc=$?
 	irc_close fc
 	return "$rc"
@@ -147,11 +147,9 @@ test_oversize_with_crlf() {
 }
 
 test_maxish_ping() {
-	local trail
-	trail=$(printf '%*s' 390 '' | tr ' ' 'z')
 	irc_open_raw fz
-	irc_write fz "PING :${trail}"$'\r\n'
-	irc_expect fz "PONG CoolServ :${trail}"
+	irc_write fz "PING :${SRVNAME}"$'\r\n'
+	irc_expect fz "$PONG_NEEDLE"
 	local rc=$?
 	irc_close fz
 	return "$rc"

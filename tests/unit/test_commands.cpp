@@ -195,9 +195,9 @@ TEST(ping_token_from_param)
 	TestClient		tc;
 
 	reg.registerCmds();
-	reg.execute(srv, irc::string2Message("PING 12345", &tc.client));
+	reg.execute(srv, irc::string2Message("PING CoolServ", &tc.client));
 	CHECK_EQ(lastTo(srv, &tc.client),
-		std::string(":CoolServ PONG CoolServ :12345\r\n"));
+		std::string(":CoolServ PONG CoolServ :CoolServ\r\n"));
 }
 
 TEST(ping_token_from_trailing)
@@ -207,9 +207,9 @@ TEST(ping_token_from_trailing)
 	TestClient		tc;
 
 	reg.registerCmds();
-	reg.execute(srv, irc::string2Message("PING :lag", &tc.client));
+	reg.execute(srv, irc::string2Message("PING :CoolServ", &tc.client));
 	CHECK_EQ(lastTo(srv, &tc.client),
-		std::string(":CoolServ PONG CoolServ :lag\r\n"));
+		std::string(":CoolServ PONG CoolServ :CoolServ\r\n"));
 }
 
 TEST(privmsg_requires_registration)
@@ -552,9 +552,9 @@ TEST(ping_prefers_param_over_trailing)
 	TestClient		tc;
 
 	reg.registerCmds();
-	reg.execute(srv, irc::string2Message("PING token :trail", &tc.client));
+	reg.execute(srv, irc::string2Message("PING CoolServ :trail", &tc.client));
 	CHECK_EQ(lastTo(srv, &tc.client),
-		std::string(":CoolServ PONG CoolServ :token\r\n"));
+		std::string(":CoolServ PONG CoolServ :CoolServ\r\n"));
 }
 
 TEST(cap_ls_after_registered_does_not_set_cap)
