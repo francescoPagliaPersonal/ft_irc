@@ -103,6 +103,7 @@ rfc cmd_topic(IServerCtrl&, const Message&);
 rfc cmd_kick(IServerCtrl&, const Message&);
 rfc cmd_part(IServerCtrl&, const Message&);
 rfc cmd_pong(IServerCtrl&, const Message&);
+rfc cmd_who(IServerCtrl&, const Message&);
 
 # ifdef BONUS
 
