@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 11:41:20 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/09/04 19:15:48 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/10 14:54:17 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,4 +88,9 @@ void CommandRegistry::registerCmds()
 	part->addPolicy(new AlreadyRegisteredPlcy(true));
 	part->addPolicy(new ArgsLimitPlcy(1, 2));
 	_commands[part->getName()] = part;
+
+	Command *pong = new Command("PONG", cmd_pong);
+	pong->addPolicy(new AlreadyRegisteredPlcy(true));
+	pong->addPolicy(new ArgsLimitPlcy(0, 1)); // TODO that max value... don't like it
+	_commands[pong->getName()] = pong;
 }
