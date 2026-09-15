@@ -1,13 +1,14 @@
 # ---------------------------------------------------------------------------- #
-# Makefile template v 3.1                                           2026-09-02 #
+# Makefile template v 3.1                                           2026-09-12 #
 # ---------------------------------------------------------------------------- #
 # Features:
 # - C, C++, and mixed projects (SRCLANG=auto|c|cpp|mixed)
 # - Compiler-generated dependency files (-MMD -MP)
 # - Multiple mode support (reg, asan, val)
 # - Only one mode per invocation allowed						 __(°)<
-# - Separate mandatory vs bonus part builds						 \_)_)
-# - Easy to use: make run/runb/asan/asanb/val/valb				~~~~~~
+# - Separate server (man) vs bot (bon) part builds				 \_)_)
+# - Server: all/run/asan/val  |  Bot: bonus/runb/asanb/valb/bot	~~~~~~
+# - Both: both/both-run/both-asan/both-val (server bg, bot fg)
 # - Supports nested source subdirectories
 # - Optional libft (pure C only)
 # ---------------------------------------------------------------------------- #
@@ -47,6 +48,7 @@ LFT_ROOT		:= lib/libft/
 
 # ----------------------------------------------------------------------------
 # arguments for executing the program in the various modes
+# server: $(PORT) $(PASSWORD)  |  bot: $(HOST) $(PORT) $(PASSWORD)
 PORT			:= 6669
 PASSWORD		:= 1o.0
 HOST			:= localhost

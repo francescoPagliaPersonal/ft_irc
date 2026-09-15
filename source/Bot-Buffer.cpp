@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Bot-Buffer.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/07 17:16:20 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/11 17:36:57 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/12 09:08:22 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ irc::epollret Bot::_sendFromBuffer()
 	else
 	{
 		_bufOUT = _bufOUT.substr(ret);
-		return (irc::RET_HASOUTPUT);
+		return (irc::RET_OK);
 	}
 }
 

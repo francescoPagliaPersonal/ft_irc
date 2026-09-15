@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Bot.cpp                                            :+:      :+:    :+:   */
+/*   Bot-Actions.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 08:12:43 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/11 16:58:17 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/12 15:35:01 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,15 @@
 #include <sys/epoll.h>
 #include <sys/socket.h>
 
+// -------------------------------------------------------------------------- //
+// PUBLIC ACTIONS
+// -------------------------------------------------------------------------- //
+
+void Bot::toggleMirror()
+{
+	_mirrorMsg = !_mirrorMsg;
+}
+
 void Bot::sendMessage(const std::string& msg)
 {
 	// (void) msg;
@@ -32,7 +41,7 @@ void Bot::sendMessage(const std::string& msg)
 }
 
 // -------------------------------------------------------------------------- //
-// ACTIONS
+// PRIVATE ACTIONS
 // -------------------------------------------------------------------------- //
 
 void Bot::_registerWith(const std::string& name)
@@ -51,19 +60,60 @@ void Bot::_joinChannel(const std::string& channel)
 	sendMessage("JOIN " + channel + CRLF);
 }
 
+void Bot::_lockAndSetTopic(const std::string& topic)
+{
+	sendMessage("MODE " + std::string(DEFAULT_CHANNEL) + " +t" + CRLF);
+	sendMessage("TOPIC " + std::string(DEFAULT_CHANNEL) + " :" + topic + CRLF);
+}
 
-// -------------------------------------------------------------------------- //
-// LEGACY TESTING FUNCTIONS
-// -------------------------------------------------------------------------- //
+// Mirrors any message that the bot receives via PRIVMSG
+void Bot::_mirrorMessage(const Message& msg)
+{
+	if (msg.params.empty())
+		return ;
+	// 1) Channel Replies
+	if (msg.params[0][0] == '#' || msg.params[0][0] == '&')
+		sendMessage(std::string("PRIVMSG ") + msg.params[0] + " :" + msg.trailing + CRLF );
+	// 2) Private Message Reply
+	else if (msg.params[0] == BOT_NAME)
+	{
+		if (msg.prefix.empty())
+			return ;
+		std::string sender = msg.prefix.substr(0, msg.prefix.find('!'));
+		sendMessage(std::string("PRIVMSG ") + sender + " :" + msg.trailing + CRLF );
+	}
+}
 
+void Bot::_processInvite(const Message& msg)
+{
+	if (msg.params.size() < 2)
+		return ;
+	if (msg.params[0] != BOT_NAME)
+		return ;
+	_joinChannel(msg.params[1]);
+}
 
+void Bot::_pong(const Message& msg)
+{
+	if (msg.params.empty())
+		return ;
+	if (msg.params[0] != BOT_NAME)
+		return ;
+	sendMessage("PONG " + std::string(BOT_NAME) + CRLF);
+}
 
-// void Bot::_spamUser(const std::string& nick)
-// {
-// 	_sendToServer("PRIVMSG " + nick + " :" + SPAM_MSG_42 + CRLF);
-// }
-
-// void Bot::_spamChannel(const std::string& channel)
-// {
-// 	_sendToServer("PRIVMSG " + channel + " :" + SPAM_MSG_CH + CRLF);
-// }
+void Bot::_welcomeUser(const Message& msg)
+{
+	if (msg.params.empty() || (msg.params[0][0] != '#' && msg.params[0][0] != '&'))
+		return ;
+	std::string user = msg.prefix.substr(0, msg.prefix.find('!'));
+	if (user == BOT_NAME)
+		return ;
+	std::string rpl = "PRIVMSG " + msg.params[0] + " :Hello " + user;
+	if (msg.params[0] == DEFAULT_CHANNEL)
+		rpl += ", you found the single source of truth!";
+	else
+		rpl += ", welcome to \'" + msg.params[0].substr(1) + "\'.";
+	rpl += CRLF;
+	sendMessage(rpl);
+}

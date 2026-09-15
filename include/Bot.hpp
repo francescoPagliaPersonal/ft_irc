@@ -6,28 +6,26 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 07:22:22 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/11 21:42:49 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/12 16:00:12 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BOT_HPP
 # define BOT_HPP
 
-#include "Channel.hpp"
+# include "Channel.hpp"
 # include "IBot.hpp"
 # include "Epoll.hpp"
 # include "irc.hpp"
 # include "Message.hpp"
+# include "CommandRegistry.hpp"
 
 # include <csignal>		// sig_atomic_t
 # include <string>
 # include <deque>
 
-# define BOT_NAME "Bot"
-# define SPAM_MSG_42 "42 is the answer to the Ultimate Question of Life, the Universe, and Everything."
-# define SPAM_MSG_CH "Have you tried turning it off and on again?"
-# define SPAM_USER "BugDetector"
 # define DEFAULT_CHANNEL "#ssot"
+# define DEFAULT_TOPIC "Single Source Of Truth :: request !help from the bot"
 # define CONN_DELAY 5		// default delay between retries
 # define CONN_MAX_RETRY 4	// max retries before delay is increased
 # define CONN_MAX_DELAY	300 // max delay between retries
@@ -43,6 +41,7 @@ class Bot : public IBot
 		~Bot();
 		void run();
 		void sendMessage(const std::string&);
+		void toggleMirror();
 	private:
 		// ----
 		int 			_fd;			// socket with connection to server
@@ -52,10 +51,11 @@ class Bot : public IBot
 		Epoll 			_epoll;
 		bool 			_hasConn;
 		bool			_joinedServer;
-		bool			_joinDefChan;
+		bool			_mirrorMsg;
 		std::string 	_bufIN;
 		std::string 	_bufOUT;
 		std::deque<Message>		_msgsQueue; // holds all incoming messages/loop
+		CommandRegistry			_cmdReg;	// command orchestrator
 		// ---- Signals
 		static volatile std::sig_atomic_t _keepRunning;
 		static void signalHandler(int);
@@ -74,9 +74,11 @@ class Bot : public IBot
 		// ---- Actions
 		void _registerWith(const std::string&);
 		void _joinChannel(const std::string&);
-		// ---- Legacy Actions
-		void _spamUser(const std::string&);
-		void _spamChannel(const std::string&);
+		void _lockAndSetTopic(const std::string&);
+		void _mirrorMessage(const Message&);
+		void _processInvite(const Message&);
+		void _pong(const Message&);
+		void _welcomeUser(const Message&);
 		// ----
 		Bot();
 		Bot(const Bot&);
