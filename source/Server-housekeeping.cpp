@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/03 11:38:33 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/11 15:19:48 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/15 15:52:25 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,17 +36,16 @@ void Server::_housekeeping()
 	if (std::difftime(now, lastPing) >= INTERVAL_PING)
 	{
 		// a) prepare timer for clients to skip
-		std::time_t minLast = now - INTERVAL_PING;
+		std::time_t inactivityThreshold = now - INTERVAL_PING;
 		if (DEBUG == debug::DETAILED)
-			std::cout << "[Server] Time to PING inactive clients,"
-				<< " last active before "
-				<< irc::timeAsStr(minLast) << " (now " 
-				<< irc::timeAsStr(now) << ")\n";
+			std::cout << "[Server] Current Time is " << irc::timeAsStr(now) 
+				<<". PINGing clients who's last activity was recorded before "
+				<< irc::timeAsStr(inactivityThreshold) << '\n';
 		// b) check all the clients
 		std::map<int, Client*>::iterator it;
 		for (it  = _clients.begin(); it != _clients.end(); it++)
 		{
-			_clientPingSkipRemove(it->second, minLast);
+			_clientPingSkipRemove(it->second, inactivityThreshold);
 		}
 		// c) remove clients that haven't responded and update ping time
 		_removeMarkedClients();
@@ -67,10 +66,10 @@ void Server::_removeMarkedClients()
 	}
 }
 
-void Server::_clientPingSkipRemove(Client* client, std::time_t minLast)
+void Server::_clientPingSkipRemove(Client* client, std::time_t inactivityThreshold)
 {
 	// 1) skip clients that have been active within the past interval
-	if (client->hasQuit() || client->getLastMsgTime() >= minLast)
+	if (client->hasQuit() || client->getLastMsgTime() >= inactivityThreshold)
 	{
 		if (DEBUG == debug::DETAILED)
 			std::cout << "\t FD " << client->getFD() << " last msg @ "
