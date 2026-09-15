@@ -36,6 +36,7 @@ void Response::init(const std::string &srv)
 	// _numInfo[irc::OK] = "";
 	// _numInfo[irc::UMODEIS] = "";
 	_numInfo[irc::AWAY] = ":I'm away.";
+	_numInfo[irc::ENDOFWHOIS] = ":End of /WHOIS list";
 	// _numInfo[irc::CHANNELMODEIS] = "";
 	// _numInfo[irc::CREATIONTIME] = "";
 	_numInfo[irc::NOTOPIC] = ":No topic is set";

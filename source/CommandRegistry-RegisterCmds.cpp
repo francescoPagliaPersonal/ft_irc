@@ -105,6 +105,12 @@ void CommandRegistry::registerCmds()
 	notice->addPolicy(new AlreadyRegisteredPlcy(true));
 	notice->addPolicy(new ArgsLimitPlcy(2, 2));
 	_commands[notice->getName()] = notice;
+
+	// No AlreadyRegisteredPlcy: irssi probes WHOIS during
+	// registration after a 433 nick collision.
+	Command	*whois = new Command("WHOIS", cmd_whois);
+	whois->addPolicy(new ArgsLimitPlcy(1, 2));
+	_commands[whois->getName()] = whois;
 }
 
 # else

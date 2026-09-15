@@ -54,7 +54,7 @@ SRC_CMDS = cmd_cap.cpp cmd_nick.cpp cmd_pass.cpp cmd_user.cpp cmd_ping.cpp\
 		   cmd_join.cpp cmd_privmsg.cpp cmd_invite.cpp cmd_quit.cpp\
 		   cmd_kick.cpp cmd_topic.cpp cmd_part.cpp cmd_pong.cpp\
 		   cmd_mode.cpp cmd_mode-response.cpp cmd_mode-handleChange.cpp\
-		   cmd_who.cpp cmd_notice.cpp
+		   cmd_who.cpp cmd_notice.cpp cmd_whois.cpp
 SRC_MAN   += $(addprefix $(DIR_CMDS),$(SRC_CMDS))
 
 # Policies
