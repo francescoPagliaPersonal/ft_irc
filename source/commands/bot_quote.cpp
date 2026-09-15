@@ -41,14 +41,14 @@ bool initQuotes(std::vector<std::string>& quotes)
 	quotes.push_back("Si fallor, sum. (St. Augustine, De Civitate Dei, Book XI, Ch. 26, 426 AD) If I am mistaken, I exist.");
 
 	// ---------- Italian ----------
-	quotes.push_back("La storia e sempre storia contemporanea. (Benedetto Croce, La storia come pensiero e come azione, 1938) History is always contemporary history.");
-	quotes.push_back("Il senso comune e un giudizio senz'alcuna riflessione. (Giambattista Vico, Scienza Nuova, 1725) Common sense is judgment without any reflection.");
+	quotes.push_back("La storia è sempre storia contemporanea. (Benedetto Croce, La storia come pensiero e come azione, 1938) History is always contemporary history.");
+	quotes.push_back("Il senso comune è un giudizio senz'alcuna riflessione. (Giambattista Vico, Scienza Nuova, 1725) Common sense is judgment without any reflection.");
 	quotes.push_back("Fatti non foste a viver come bruti, ma per seguir virtute e canoscenza. (Dante Alighieri, Inferno, Canto XXVI, vv. 119-120, c. 1314) You were not made to live like brutes, but to follow virtue and knowledge.");
 
 	// ---------- German ----------
-	quotes.push_back("Habe Mut, dich deines eigenen Verstandes zu bedienen! (Immanuel Kant, Beantwortung der Frage: Was ist Aufklaerung?, 1784) Have the courage to use your own understanding!");
-	quotes.push_back("Was mich nicht umbringt, macht mich stärker. (Friedrich Nietzsche, Goetzen-Daemmerung, 1888) What does not kill me makes me stronger.");
-	quotes.push_back("Was vernuenftig ist, das ist wirklich; und was wirklich ist, das ist vernuenftig. (G.W.F. Hegel, Grundlinien der Philosophie des Rechts, Preface, 1820) What is rational is actual; and what is actual is rational.");
+	quotes.push_back("Habe Mut, dich deines eigenen Verstandes zu bedienen! (Immanuel Kant, Beantwortung der Frage: Was ist Aufklärung?, 1784) Have the courage to use your own understanding!");
+	quotes.push_back("Was mich nicht umbringt, macht mich stärker. (Friedrich Nietzsche, Götzen-Dämmerung, 1888) What does not kill me makes me stronger.");
+	quotes.push_back("Was vernünftig ist, das ist wirklich; und was wirklich ist, das ist vernünftig. (G.W.F. Hegel, Grundlinien der Philosophie des Rechts, Preface, 1820) What is rational is actual; and what is actual is rational.");
 
 	// ---------- Chinese ----------
 	quotes.push_back("己所不欲，勿施于人。 (Confucius, Analects 15.24, c. 5th century BC) Do not impose on others what you yourself do not desire.");
