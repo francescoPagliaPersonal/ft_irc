@@ -95,6 +95,22 @@ void CommandRegistry::registerCmds()
 	pong->addPolicy(new AlreadyRegisteredPlcy(true));
 	pong->addPolicy(new ArgsLimitPlcy(0, 1)); // TODO that max value... don't like it
 	_commands[pong->getName()] = pong;
+
+	Command *who = new Command("WHO", cmd_who);
+	who->addPolicy(new AlreadyRegisteredPlcy(true));
+	who->addPolicy(new ArgsLimitPlcy(1, 1));
+	_commands[who->getName()] = who;
+
+	Command	*notice = new Command("NOTICE", cmd_notice);
+	notice->addPolicy(new AlreadyRegisteredPlcy(true));
+	notice->addPolicy(new ArgsLimitPlcy(2, 2));
+	_commands[notice->getName()] = notice;
+
+	// No AlreadyRegisteredPlcy: irssi probes WHOIS during
+	// registration after a 433 nick collision.
+	Command	*whois = new Command("WHOIS", cmd_whois);
+	whois->addPolicy(new ArgsLimitPlcy(1, 2));
+	_commands[whois->getName()] = whois;
 }
 
 # else

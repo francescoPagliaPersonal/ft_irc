@@ -36,6 +36,7 @@ void Response::init(const std::string &srv)
 	// _numInfo[irc::OK] = "";
 	// _numInfo[irc::UMODEIS] = "";
 	_numInfo[irc::AWAY] = ":I'm away.";
+	_numInfo[irc::ENDOFWHOIS] = ":End of /WHOIS list";
 	// _numInfo[irc::CHANNELMODEIS] = "";
 	// _numInfo[irc::CREATIONTIME] = "";
 	_numInfo[irc::NOTOPIC] = ":No topic is set";
@@ -44,6 +45,7 @@ void Response::init(const std::string &srv)
 	// _numInfo[irc::INVITING] = "";
 	// _numInfo[irc::NAMREPLY] = ":[prefix]<nick>{ [prefix]<nick>";
 	_numInfo[irc::ENDOFNAMES] = ":End of /NAMES list";
+	_numInfo[irc::ENDOFWHO] = ":End of /WHO list";
 	// _numInfo[irc::MOTD] = ":<line of the motd>";
 	// _numInfo[irc::MOTDSTART] = ":- <server> Message of the day -";
 	_numInfo[irc::ENDOFMOTD] = ":End of /MOTD command.";
