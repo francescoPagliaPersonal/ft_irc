@@ -234,6 +234,27 @@ TEST(join_empty_topic_notopic)
 	CHECK(!sentContains(srv, &bob.client, " 332 "));
 }
 
+TEST(join_existing_topic)
+{
+	CommandRegistry	reg;
+	FakeServer		srv;
+	TestClient		alice;
+	TestClient		bob;
+	Channel			*ch;
+
+	reg.registerCmds();
+	registerClient(srv, alice, "alice");
+	registerClient(srv, bob, "bob");
+	reg.execute(srv, irc::string2Message("JOIN #topic", &alice.client));
+	ch = srv.getChannelByTitle("#topic");
+	ch->setTopic("hello world");
+	srv.sent.clear();
+	reg.execute(srv, irc::string2Message("JOIN #topic", &bob.client));
+	CHECK(sentContains(srv, &bob.client, " 332 "));
+	CHECK(sentContains(srv, &bob.client, "hello world"));
+	CHECK(!sentContains(srv, &bob.client, " 331 "));
+}
+
 TEST(join_need_more_params)
 {
 	CommandRegistry	reg;

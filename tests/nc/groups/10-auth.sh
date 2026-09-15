@@ -104,6 +104,71 @@ test_pass_extra_spaces() {
 	oneshot_expect " 001 " "PASS    $PASSWORD" "NICK pspace" "USER pspace 0 * :x"
 }
 
+test_cap_handshake() {
+	irc_open ca
+	irc_send ca "CAP LS"
+	if ! irc_expect ca " CAP "; then
+		irc_close ca
+		return 1
+	fi
+	irc_send ca "PASS $PASSWORD"
+	irc_send ca "NICK capuser"
+	irc_send ca "USER capuser 0 * :Cap User"
+	sleep 0.5
+	if grep -Fq " 001 " "$RUNDIR/cli_ca/out" 2>/dev/null; then
+		FAIL_HINT="got 001 before CAP END"
+		LAST_GOT=$(irc_recv ca)
+		irc_close ca
+		return 1
+	fi
+	irc_send ca "CAP END"
+	irc_expect ca " 001 " " 375 " " 376 "
+	local rc=$?
+	irc_close ca
+	return "$rc"
+}
+
+test_nick_change_after_register() {
+	if ! register_client nc alice_nc; then
+		return 1
+	fi
+	if ! register_client nd bob_nc; then
+		irc_close nc
+		return 1
+	fi
+	irc_send nc "JOIN #nickch"
+	if ! irc_expect nc "JOIN #nickch"; then
+		irc_close nc
+		irc_close nd
+		return 1
+	fi
+	irc_send nd "JOIN #nickch"
+	if ! irc_expect nd "JOIN #nickch"; then
+		irc_close nc
+		irc_close nd
+		return 1
+	fi
+	irc_send nc "NICK alice2"
+	if ! irc_expect nc " NICK alice2"; then
+		irc_close nc
+		irc_close nd
+		return 1
+	fi
+	sleep 0.5
+	if grep -Fq " NICK alice2" "$RUNDIR/cli_nd/out" 2>/dev/null; then
+		FAIL_HINT="peer should not receive NICK (server notifies changer only)"
+		LAST_GOT=$(irc_recv nd)
+		irc_close nc
+		irc_close nd
+		return 1
+	fi
+	probe_alive nd nickchok
+	local rc=$?
+	irc_close nc
+	irc_close nd
+	return "$rc"
+}
+
 test "pass_ok" test_pass_ok
 test "pass_mismatch" test_pass_mismatch
 test "nick_in_use" test_nick_in_use
@@ -120,5 +185,7 @@ test "user_no_params" test_user_no_params
 test "user_too_many" test_user_too_many
 test "pass_trailing_only" test_pass_trailing_only
 test "pass_extra_spaces" test_pass_extra_spaces
+test "cap_handshake" test_cap_handshake
+test "nick_change_after_register" test_nick_change_after_register
 
 group_end

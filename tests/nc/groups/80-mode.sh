@@ -120,7 +120,13 @@ test_mode_o_give_take() {
 		return 1
 	fi
 	irc_send mh "MODE #mod4 +o bobm4"
-	irc_expect mi "MODE #mod4 +o bobm4"
+	if ! irc_expect mi "MODE #mod4 +o bobm4"; then
+		irc_close mh
+		irc_close mi
+		return 1
+	fi
+	irc_send mh "MODE #mod4 -o bobm4"
+	irc_expect mi "MODE #mod4 -o bobm4"
 	local rc=$?
 	irc_close mh
 	irc_close mi

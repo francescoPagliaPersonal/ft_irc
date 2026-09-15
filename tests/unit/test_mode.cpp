@@ -175,6 +175,57 @@ TEST(mode_give_operator)
 	CHECK(sentContains(srv, &bob.client, " MODE #chan +o bob"));
 }
 
+TEST(mode_take_operator)
+{
+	CommandRegistry	reg;
+	FakeServer		srv;
+	TestClient		alice;
+	TestClient		bob;
+
+	reg.registerCmds();
+	registerClient(srv, alice, "alice");
+	registerClient(srv, bob, "bob");
+	joinChannel(reg, srv, alice, "#chan");
+	joinChannel(reg, srv, bob, "#chan");
+	reg.execute(srv, irc::string2Message("MODE #chan +o bob", &alice.client));
+	srv.sent.clear();
+	reg.execute(srv, irc::string2Message("MODE #chan -o bob", &alice.client));
+	CHECK(!srv.getChannelByTitle("#chan")->isChanOp(&bob.client));
+	CHECK(sentContains(srv, &bob.client, " MODE #chan -o bob"));
+}
+
+TEST(mode_o_unknown_nick)
+{
+	CommandRegistry	reg;
+	FakeServer		srv;
+	TestClient		alice;
+
+	reg.registerCmds();
+	registerClient(srv, alice, "alice");
+	joinChannel(reg, srv, alice, "#chan");
+	srv.sent.clear();
+	reg.execute(srv, irc::string2Message("MODE #chan +o ghost", &alice.client));
+	CHECK_EQ(lastTo(srv, &alice.client),
+		std::string(":CoolServ 401 alice ghost :No such nick.\r\n"));
+}
+
+TEST(mode_o_not_on_channel)
+{
+	CommandRegistry	reg;
+	FakeServer		srv;
+	TestClient		alice;
+	TestClient		carol;
+
+	reg.registerCmds();
+	registerClient(srv, alice, "alice");
+	registerClient(srv, carol, "carol");
+	joinChannel(reg, srv, alice, "#chan");
+	srv.sent.clear();
+	reg.execute(srv, irc::string2Message("MODE #chan +o carol", &alice.client));
+	CHECK_EQ(lastTo(srv, &alice.client),
+		std::string(":CoolServ 441 alice carol #chan :They aren't on that channel.\r\n"));
+}
+
 TEST(mode_unknown_letter)
 {
 	CommandRegistry	reg;

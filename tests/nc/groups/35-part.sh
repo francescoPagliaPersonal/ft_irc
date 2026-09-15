@@ -54,8 +54,43 @@ test_part_not_on_channel() {
 		"PART #part442"
 }
 
+test_part_op_failover() {
+	if ! register_client pf alicepf; then
+		return 1
+	fi
+	if ! register_client pg bobpf; then
+		irc_close pf
+		return 1
+	fi
+	irc_send pf "JOIN #partfo"
+	if ! irc_expect pf " 353 " "@alicepf" " 366 "; then
+		irc_close pf
+		irc_close pg
+		return 1
+	fi
+	irc_send pg "JOIN #partfo"
+	if ! irc_expect pg "JOIN #partfo"; then
+		irc_close pf
+		irc_close pg
+		return 1
+	fi
+	irc_send pf "PART #partfo"
+	if ! irc_expect pg " PART #partfo"; then
+		irc_close pf
+		irc_close pg
+		return 1
+	fi
+	irc_send pg "MODE #partfo +i"
+	irc_expect pg "MODE #partfo +i"
+	local rc=$?
+	irc_close pf
+	irc_close pg
+	return "$rc"
+}
+
 test "part_leave" test_part_leave
 test "part_last_member" test_part_last_member
 test "part_not_on_channel" test_part_not_on_channel
+test "part_op_failover" test_part_op_failover
 
 group_end

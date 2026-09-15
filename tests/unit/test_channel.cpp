@@ -50,6 +50,22 @@ TEST(channel_membership_and_op)
 	CHECK(!ch.isMember(&tc.client));
 }
 
+TEST(channel_op_failover_when_last_op_leaves)
+{
+	TestClient	alice;
+	TestClient	bob;
+	Channel		ch("#test", "");
+
+	ch.addClient(&alice.client, US_OPERATOR);
+	ch.addClient(&bob.client, US_BASIC);
+	CHECK(ch.isChanOp(&alice.client));
+	CHECK(!ch.isChanOp(&bob.client));
+	ch.removeClient(&alice.client);
+	CHECK(ch.isMember(&bob.client));
+	CHECK(ch.isChanOp(&bob.client));
+	CHECK(!ch.isEmpty());
+}
+
 TEST(channel_password_match)
 {
 	Channel	ch("#keyed", "secret");

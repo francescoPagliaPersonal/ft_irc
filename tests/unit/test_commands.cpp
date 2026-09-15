@@ -484,12 +484,12 @@ TEST(nick_change_after_registration)
 	joinChannel(reg, srv, alice, "#chan");
 	joinChannel(reg, srv, bob, "#chan");
 	srv.sent.clear();
-	reg.execute(srv, irc::string2Message("NICK bob", &alice.client));
-	CHECK_EQ(alice.client.getNick(), std::string("bob"));
-	CHECK_EQ(lastTo(srv, &alice.client),
-		std::string(":alice!user@0.0.0.0 NICK bob\r\n"));
-	CHECK(sentContains(srv, &bob.client,
-		":alice!user@0.0.0.0 NICK bob\r\n"));
+	reg.execute(srv, irc::string2Message("NICK alice2", &alice.client));
+	CHECK_EQ(alice.client.getNick(), std::string("alice2"));
+	CHECK(sentContains(srv, &alice.client,
+		":alice!user@0.0.0.0 NICK alice2"));
+	CHECK(!sentContains(srv, &bob.client,
+		":alice!user@0.0.0.0 NICK alice2"));
 }
 
 TEST(nick_same_as_own_after_registration)
@@ -555,6 +555,71 @@ TEST(ping_prefers_param_over_trailing)
 	reg.execute(srv, irc::string2Message("PING CoolServ :trail", &tc.client));
 	CHECK_EQ(lastTo(srv, &tc.client),
 		std::string(":CoolServ PONG CoolServ :CoolServ\r\n"));
+}
+
+TEST(ping_wrong_server)
+{
+	CommandRegistry	reg;
+	FakeServer		srv;
+	TestClient		tc;
+
+	reg.registerCmds();
+	reg.execute(srv, irc::string2Message("PING nowhere", &tc.client));
+	CHECK_EQ(lastTo(srv, &tc.client),
+		std::string(":CoolServ 402 * nowhere :No such server.\r\n"));
+}
+
+TEST(pong_resets_ping_count)
+{
+	CommandRegistry	reg;
+	FakeServer		srv;
+	TestClient		tc;
+
+	reg.registerCmds();
+	registerClient(srv, tc, "alice");
+	tc.client.incrementPingCount();
+	tc.client.incrementPingCount();
+	reg.execute(srv, irc::string2Message("PONG alice", &tc.client));
+	CHECK_EQ(tc.client.getPingCount(), static_cast<irc::uint>(0));
+}
+
+TEST(pong_wrong_nick)
+{
+	CommandRegistry	reg;
+	FakeServer		srv;
+	TestClient		tc;
+
+	reg.registerCmds();
+	registerClient(srv, tc, "alice");
+	reg.execute(srv, irc::string2Message("PONG ghost", &tc.client));
+	CHECK_EQ(lastTo(srv, &tc.client),
+		std::string(":CoolServ 401 alice ghost :No such nick.\r\n"));
+}
+
+TEST(pong_no_origin)
+{
+	CommandRegistry	reg;
+	FakeServer		srv;
+	TestClient		tc;
+
+	reg.registerCmds();
+	registerClient(srv, tc, "alice");
+	reg.execute(srv, irc::string2Message("PONG", &tc.client));
+	CHECK_EQ(lastTo(srv, &tc.client),
+		std::string(":CoolServ 409 alice :No origin specified.\r\n"));
+}
+
+TEST(pong_wrong_trailing_nick)
+{
+	CommandRegistry	reg;
+	FakeServer		srv;
+	TestClient		tc;
+
+	reg.registerCmds();
+	registerClient(srv, tc, "alice");
+	reg.execute(srv, irc::string2Message("PONG :ghost", &tc.client));
+	CHECK_EQ(lastTo(srv, &tc.client),
+		std::string(":CoolServ 401 alice :No such nick.\r\n"));
 }
 
 TEST(cap_ls_after_registered_does_not_set_cap)
