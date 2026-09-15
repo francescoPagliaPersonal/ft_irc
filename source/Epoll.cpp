@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:58:17 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/08 11:38:20 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/11 22:00:35 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,29 @@ void Epoll::mod(int fd, eventflags eventFlags, Client* client) const
 	}
 }
 
+#ifdef BONUS
+// Change the set of events for the Bot on the server connection.
+void Epoll::mod(int fd, eventflags eventFlags) const
+{
+	struct epoll_event ev;
+
+	// 1) set up
+	std::memset(&ev, 0, sizeof(ev));
+	ev.events = eventFlags;
+	ev.data.fd = fd;
+	// 2) modify fd watchlist
+	errno = 0;
+	if (::epoll_ctl(_fd, EPOLL_CTL_MOD, fd, &ev) < 0)
+	{
+		// note: see notes of ::del
+		// any real failure will be caught by EPOLLHUP, EPOLLERR or housekeeping
+		// and the connection will be closed
+		std::cerr << "[Warning] Modifying epoll events for FD " << fd
+			<< " caused an error: " << std::strerror(errno) << std::endl;
+	}
+}
+#endif
+
 // Remove a FD from the epoll() watchlist.
 void Epoll::del(int fd) const
 {
@@ -129,6 +152,7 @@ void Epoll::del(int fd) const
 // Wait up to TIMEOUTMS for events and return the number of ready FDs.
 int Epoll::wait(struct epoll_event* ev, int maxEvents, int timeoutMS) const
 {
+	errno = 0;
 	int ready = ::epoll_wait(_fd, ev, maxEvents, timeoutMS);
 	if (ready == -1)
 	{

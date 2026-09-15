@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/24 17:48:24 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/01 17:48:17 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/15 16:01:25 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 # include <string>
 # include <vector>
+# include <ctime>
 
 // -------------------------------------------------------------------------- //
 
@@ -26,9 +27,12 @@ namespace irc
 	bool isNameCompliant(const std::string& );
 	std::vector<std::string> strSplit(std::string str, char ch, bool keepEmptyStr);
 	std::string chunkifyTrailing(const std::string & msgArgs, std::string msgTrailing);
+	std::string timeNowStr();
+	std::string timeAsStr(std::time_t);
 
 	typedef unsigned int		uint;
 	typedef unsigned char		uint8;
+	typedef unsigned short		uint16;
 	typedef unsigned long int	uint32;
 	
 	enum epollret 
@@ -36,7 +40,7 @@ namespace irc
 		RET_OK,
 		RET_EMPTY,
 		RET_CLOSE,
-		RET_HASOUTPUT,
+		RET_HASOUTPUT,	// FIXME this needs to go completely, redundant arming of EPOLLOUT, send must just RET_OK
 		RET_PARSEINPUT
 	};
 
@@ -64,7 +68,8 @@ namespace irc
 		YOUREOPER = 381,			// 381 RPL_YOUREOPER
 		// ERROR CODES				--------------------------------------------
 		NOSUCHNICK = 401,			// 401 ERR_NOSUCHNICK
-		NOSUCHCHANNEL = 403,		// 403 ERR_NOSUCHCHANNEL
+		NOSUCHSERVER,				// 402 ERR_NOSUCHSERVER
+		NOSUCHCHANNEL,				// 403 ERR_NOSUCHCHANNEL
 		CANNOTSENDTOCHAN,			// 404 ERR_CANNOTSENDTOCHAN
 		TOOMANYCHANNELS,			// 405 ERR_TOOMANYCHANNELS
 		NOORIGIN = 409,				// 409 ERR_NOORIGIN

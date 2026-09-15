@@ -51,6 +51,7 @@ void Response::init(const std::string &srv)
 
 	// ------ ERROR CODES ------------------------------------------------------
 	_numInfo[irc::NOSUCHNICK] = ":No such nick.";
+	_numInfo[irc::NOSUCHSERVER] = ":No such server.";
 	_numInfo[irc::NOSUCHCHANNEL] = ":No such channel.";
 	_numInfo[irc::CANNOTSENDTOCHAN] = ":Cannot send to channel.";
 	_numInfo[irc::TOOMANYCHANNELS] = ":You have joined too many channels.";
@@ -85,6 +86,7 @@ void Response::init(const std::string &srv)
 
 	// ------ SPECIAL TYPES ----------------------------------------------------
 	_numType[irc::NOSUCHNICK] = PARAM0;
+	_numType[irc::NOSUCHSERVER] = PARAM0;
 	_numType[irc::NOSUCHCHANNEL] = PARAM0;
 	_numType[irc::TOOMANYCHANNELS] = PARAM0;
 	_numType[irc::INVALIDCAPCMD] = PARAM0;

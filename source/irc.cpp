@@ -6,12 +6,14 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/21 11:27:30 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/24 18:36:02 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/11 13:16:31 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_irc.hpp"
 #include "irc.hpp"
+
+#include <ctime>
 
 void irc::allCaps(std::string & str) 
 {
@@ -97,3 +99,19 @@ std::string irc::chunkifyTrailing(const std::string & msgArgs, std::string msgTr
 
 	return response;
 }
+
+std::string irc::timeNowStr()
+{
+	std::time_t now = std::time(NULL);
+	char buffer[9];
+	std::strftime(buffer, sizeof(buffer), "%H:%M:%S", std::localtime(&now));
+	return (std::string (buffer));
+}
+
+std::string irc::timeAsStr(std::time_t aTime)
+{
+	char buffer[9];
+	std::strftime(buffer, sizeof(buffer), "%H:%M:%S", std::localtime(&aTime));
+	return (std::string (buffer));
+}
+

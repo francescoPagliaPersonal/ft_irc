@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 11:41:20 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/09/04 19:15:48 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/15 16:03:11 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 	example:
 		join->addPolicy(new AlreadyRegisteredPlcy(true));
 */
+
+#ifndef BONUS
 
 // Register all known commands with their policies.
 void CommandRegistry::registerCmds()
@@ -88,4 +90,28 @@ void CommandRegistry::registerCmds()
 	part->addPolicy(new AlreadyRegisteredPlcy(true));
 	part->addPolicy(new ArgsLimitPlcy(1, 2));
 	_commands[part->getName()] = part;
+
+	Command *pong = new Command("PONG", cmd_pong);
+	pong->addPolicy(new AlreadyRegisteredPlcy(true));
+	pong->addPolicy(new ArgsLimitPlcy(0, 1)); // TODO that max value... don't like it
+	_commands[pong->getName()] = pong;
 }
+
+# else
+
+void CommandRegistry::registerBotCmds()
+{
+	Command *help = new Command("!help", bot_help);
+	_commands[help->getName()] = help;
+
+	Command *spam = new Command("!spam", bot_spam);
+	_commands[spam->getName()] = spam;
+
+	Command *mirror = new Command("!mirror", bot_mirror);
+	_commands[mirror->getName()] = mirror;
+
+	Command *quote = new Command("!quote", bot_quote);
+	_commands[quote->getName()] = quote;
+}
+
+#endif

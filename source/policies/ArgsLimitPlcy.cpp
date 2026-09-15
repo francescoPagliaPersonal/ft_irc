@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/16 14:48:41 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/27 13:41:37 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/11 16:52:29 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,8 @@
 #include "irc.hpp"
 
 // Validate that MSG has between _min and _max arguments.
-rfc ArgsLimitPlcy::check(const Message & msg, IServerCtrl& srv) const
+rfc ArgsLimitPlcy::check(const Message & msg) const
 {
-	(void) srv;
 	int args = irc::argCount(msg);
 	if (args < _min)
 		return (irc::NEEDMOREPARAMS); // ERR_NEEDMOREPARAM

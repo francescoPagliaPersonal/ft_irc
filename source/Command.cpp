@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 18:07:43 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/30 10:04:59 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/11 22:14:13 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,22 @@
 // CUSTOM CTOR & DTOR
 // -------------------------------------------------------------------------- //
 
+#ifndef BONUS
 // Custom constructor to create a command with NAME and its handler FUNC.
 Command::Command(const std::string& name, command func)
 	: _name(name)
-	, _func(func)
 	, _policies()
+	, _func(func)
 {}
+# else
+// Custom construtor to create a command for the bot.
+Command::Command(const std::string& name, botcmd func)
+	: _name(name)
+	, _policies()
+	, _func(func)
+{}
+
+#endif
 
 // Free all attached policies.
 Command::~Command()
@@ -60,18 +70,30 @@ void Command::addPolicy(IPolicy* policy)
 	_policies.push_back(policy);
 }
 
+#ifdef BONUS
+
+// Execute the called bot command.
+void Command::execute(IBot& bot, const Message &msg, std::vector<std::string>& botcmds) const
+{
+	_func(bot, msg, botcmds);
+}
+
+# else
+
 // Check all policies against MSG, then run the command on SRV.
 rfc Command::execute(IServerCtrl& srv, const Message& msg) const
 {
 	// TODO ensure POLICY and COMMAND errors are in line with PROTOCOL CODES
 	for (size_t i = 0; i < _policies.size(); ++i)
 	{
-		rfc ret = _policies[i]->check(msg, srv);
+		rfc ret = _policies[i]->check(msg);
 		if (ret)
 			return (ret);
 	}
 	return (_func(srv, msg));
 }
+
+#endif
 
 // -------------------------------------------------------------------------- //
 // OCF
