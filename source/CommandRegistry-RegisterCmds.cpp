@@ -100,6 +100,11 @@ void CommandRegistry::registerCmds()
 	who->addPolicy(new AlreadyRegisteredPlcy(true));
 	who->addPolicy(new ArgsLimitPlcy(1, 1));
 	_commands[who->getName()] = who;
+
+	Command	*notice = new Command("NOTICE", cmd_notice);
+	notice->addPolicy(new AlreadyRegisteredPlcy(true));
+	notice->addPolicy(new ArgsLimitPlcy(2, 2));
+	_commands[notice->getName()] = notice;
 }
 
 # else
