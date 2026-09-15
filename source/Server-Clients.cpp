@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 16:27:31 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/11 15:08:07 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/15 15:28:16 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,8 +125,9 @@ void Server::_registerNewClient(int fd, const struct sockaddr_in& addr)
 	}
 	catch (const std::exception& e)
 	{
+		std::cerr << "[Server] Error while creating new client: " << e.what() << std::endl;
 		::close(fd);
-		throw; // TODO currently this is a hard shutdown; wants sth else
+		return ;
 	}
 	// register epoll fd
 	try
@@ -135,15 +136,16 @@ void Server::_registerNewClient(int fd, const struct sockaddr_in& addr)
 	}
 	catch (const std::exception& e)
 	{
+		std::cerr << "[Server] Error while registering new client: " << e.what() << std::endl;
 		delete tmp;
-		throw; // TODO currently this is a hard shutdown; wants sth else
+		return ;
 	}
 	_clients[fd] = tmp;
 	if (!_appendToIPrecords(tmp))
 	{
 		sendMessage(tmp, 
 				"ERROR: too many connection from IP " + tmp->getHost() + CRLF);
-		_addToRemove(tmp);
+		tmp->setQuit(true);
 		_epoll.mod(fd, EPOLL_FL_QUIT, tmp);
 		return ;	
 	}
