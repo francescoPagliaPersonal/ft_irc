@@ -41,10 +41,16 @@ rfc cmd_kick(IServerCtrl & srv, const Message & msg)
 							Response::buildNumeric(msg, irc::USERNOTINCHANNEL, users[i]));
 			continue ;
 		}
-		// based on the info given here: https://defs.ircdocs.horse/defs/chanmembers
-		// TODO: to be implemented after other PR are merged
-		// if (channel->isFounder(client2Kick))
-		// 	continue ;
+		// Founders carry US_FOUNDER (see Server::addToChannel); they
+		// cannot be kicked. Refuse with 482 so irssi shows an error.
+		if (channel->isFounder(client2Kick))
+		{
+			srv.sendMessage(sender,
+				Response::buildNumeric(msg, irc::CHANOPRIVSNEEDED,
+					channel->getTitle(),
+					"Cannot kick channel founder " + users[i]));
+			continue ;
+		}
 		std::string trailing = "must have done something wrong.";
 		if ((msg.flags & irc::MSG_HAS_TRAILING) == 0)
 			srv.broadcast(channel, Response::buildRegular(msg, msg.params[0] + " " + users[i], trailing));

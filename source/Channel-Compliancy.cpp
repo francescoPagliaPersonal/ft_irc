@@ -40,6 +40,16 @@ bool Channel::isMember(Client* client) const
 	return (it == _members.end() ? false : true);
 }
 
+bool Channel::isFounder(Client* client) const
+{
+	std::map<Client *, bitMask>::const_iterator it;
+
+	it = _members.find(client);
+	if (it == _members.end())
+		return (false);
+	return ((it->second & US_FOUNDER) != 0);
+}
+
 bool Channel::passwordMatch(const std::string & pw) const
 {
 	if (_password == pw)

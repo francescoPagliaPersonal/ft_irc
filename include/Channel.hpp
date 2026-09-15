@@ -91,6 +91,7 @@ class Channel
 
 		bool isMember(Client *) const;
 		bool isChanOp(Client *) const;
+		bool isFounder(Client *) const;
 		bool passwordMatch(const std::string & pw) const;
 		bool belowChannelLimit() const;
 		bool joinGranted(Client *) const;
