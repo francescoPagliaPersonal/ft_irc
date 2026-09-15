@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandRegistry-RegisterCmds.cpp                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 11:41:20 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/09/15 16:03:11 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/15 17:50:01 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,70 +30,70 @@
 void CommandRegistry::registerCmds()
 {
 	Command	*cap = new Command("CAP", cmd_cap);
-	cap->addPolicy(new ArgsLimitPlcy(1, 15));
+	cap->addPolicy(new ArgsLimitPlcy(1, 15, true));
 	_commands[cap->getName()] = cap;
 
 	Command	*pass = new Command("PASS", cmd_pass);
 	pass->addPolicy(new AlreadyRegisteredPlcy(false));
-	pass->addPolicy(new ArgsLimitPlcy(1, 1));
+	pass->addPolicy(new ArgsLimitPlcy(1, 1, true));
 	_commands[pass->getName()] = pass;
 
 	Command	*nick = new Command("NICK", cmd_nick);
-	nick->addPolicy(new ArgsLimitPlcy(1, 2));
+	nick->addPolicy(new ArgsLimitPlcy(1, 1, true));
 	_commands[nick->getName()] = nick;
 
 	Command	*user = new Command("USER", cmd_user);
 	user->addPolicy(new AlreadyRegisteredPlcy(false));
-	user->addPolicy(new ArgsLimitPlcy(4, 4));
+	user->addPolicy(new ArgsLimitPlcy(4, 4, false));
 	_commands[user->getName()] = user;
 
 	Command *ping = new Command("PING", cmd_ping);
-	ping->addPolicy(new ArgsLimitPlcy(1, 2)); // FIXME 409 ERR_NOORIGIN of no ARG given, not param error
+	ping->addPolicy(new ArgsLimitPlcy(1, 2, true)); // FIXME 409 ERR_NOORIGIN of no ARG given, not param error
 	_commands[ping->getName()] = ping;
 
 	Command *join = new Command("JOIN", cmd_join);
 	join->addPolicy(new AlreadyRegisteredPlcy(true));
-	join->addPolicy(new ArgsLimitPlcy(1, 2));
+	join->addPolicy(new ArgsLimitPlcy(1, 2, true));
 	_commands[join->getName()] = join;
 	
 	Command	*privmsg = new Command("PRIVMSG", cmd_privmsg);
 	privmsg->addPolicy(new AlreadyRegisteredPlcy(true));
-	privmsg->addPolicy(new ArgsLimitPlcy(2, 2));
+	privmsg->addPolicy(new ArgsLimitPlcy(2, 2, false));
 	_commands[privmsg->getName()] = privmsg;
 
 	Command	*invite = new Command("INVITE", cmd_invite);
 	invite->addPolicy(new AlreadyRegisteredPlcy(true));
-	invite->addPolicy(new ArgsLimitPlcy(2, 2));
+	invite->addPolicy(new ArgsLimitPlcy(2, 2, true));
 	_commands[invite->getName()] = invite;
 
 	Command *quit = new Command("QUIT", cmd_quit);
 	quit->addPolicy(new AlreadyRegisteredPlcy(true));
-	quit->addPolicy(new ArgsLimitPlcy(0, 1));
+	quit->addPolicy(new ArgsLimitPlcy(0, 1, false));
 	_commands[quit->getName()] = quit;
 
 	Command *mode = new Command("MODE", cmd_mode);
 	mode->addPolicy(new AlreadyRegisteredPlcy(true));
-	mode->addPolicy(new ArgsLimitPlcy(1, 9));
+	mode->addPolicy(new ArgsLimitPlcy(1, 9, true));
 	_commands[mode->getName()] = mode;
 
 	Command *topic = new Command("TOPIC", cmd_topic);
 	topic->addPolicy(new AlreadyRegisteredPlcy(true));
-	topic->addPolicy(new ArgsLimitPlcy(1, 2));
+	topic->addPolicy(new ArgsLimitPlcy(1, 2, true));
 	_commands[topic->getName()] = topic;
 	
 	Command *kick = new Command("KICK", cmd_kick);
 	kick->addPolicy(new AlreadyRegisteredPlcy(true));
-	kick->addPolicy(new ArgsLimitPlcy(2, 3));
+	kick->addPolicy(new ArgsLimitPlcy(2, 3, true));
 	_commands[kick->getName()] = kick;
 
 	Command *part = new Command("PART", cmd_part);
 	part->addPolicy(new AlreadyRegisteredPlcy(true));
-	part->addPolicy(new ArgsLimitPlcy(1, 2));
+	part->addPolicy(new ArgsLimitPlcy(1, 2, true));
 	_commands[part->getName()] = part;
 
 	Command *pong = new Command("PONG", cmd_pong);
 	pong->addPolicy(new AlreadyRegisteredPlcy(true));
-	pong->addPolicy(new ArgsLimitPlcy(0, 1)); // TODO that max value... don't like it
+	pong->addPolicy(new ArgsLimitPlcy(0, 1, false)); // TODO that max value... don't like it
 	_commands[pong->getName()] = pong;
 }
 
