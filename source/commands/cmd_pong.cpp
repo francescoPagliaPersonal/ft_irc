@@ -26,19 +26,9 @@ rfc cmd_pong(IServerCtrl& srv, const Message& msg)
 	//			  but this design is strict and requires a correct attribute
 	Client* client = msg.sender;
 
-	if (msg.flags & irc::MSG_HAS_PARAMS)
-	{
-		if (msg.params[0] != client->getNick())
-			return (irc::NOSUCHNICK);
-	}
-	else if (msg.flags & irc::MSG_HAS_TRAILING)
-	{
-		if (msg.trailing != client->getNick())
-		{
-			srv.sendMessage(client, Response::buildNumeric(msg, irc::NOSUCHNICK));
-			return (irc::OK);
-		} // HACK this triggers w/o params populated; i think we still have other param[0] dereferences when there could be no param
-	}
+
+	if (msg.params[0] != client->getNick())
+		return (irc::NOSUCHNICK);
 	else
 		return (irc::NOORIGIN);
 	// internal timer is updated by Server::_executeCommands

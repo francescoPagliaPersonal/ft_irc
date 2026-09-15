@@ -48,8 +48,8 @@ rfc cmd_part(IServerCtrl & srv, const Message & msg)
 			srv.sendMessage(client, reply);
 			continue;
 		}
-		if (msg.flags & irc::MSG_HAS_TRAILING)
-			reply = Response::buildRegular(msg, channels[i], msg.trailing);
+		if (msg.params.size() == 2)
+			reply = Response::buildRegular(msg, channels[i], msg.params[1]);
 		else
 			reply = Response::buildRegular(msg, channels[i]);
 		

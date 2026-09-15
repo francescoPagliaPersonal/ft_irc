@@ -55,10 +55,10 @@ rfc cmd_topic(IServerCtrl & srv, const Message & msg)
 	{
 		if (channel->getModes() & CH_TOPIC && !channel->isChanOp(client))
 			return irc::CHANOPRIVSNEEDED;
-		if (msg.trailing.empty())
+		if (msg.params[1].empty())
 			channel->setTopic("");
 		else
-			channel->setTopic(msg.trailing);
+			channel->setTopic(msg.params[1]);
 	}
 	
 	std::string reply;

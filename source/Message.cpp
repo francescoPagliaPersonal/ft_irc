@@ -38,7 +38,7 @@ int irc::argCount(const Message & msg)
 	size_t count = 0;
 	// count += (msg.flags & irc::MSG_HAS_PREFIX) != 0 ;
 	// count += (msg.flags & irc::MSG_HAS_COMMAND) != 0;
-	count += (msg.flags & irc::MSG_HAS_TRAILING) != 0;
+	// count += (msg.flags & irc::MSG_HAS_TRAILING) != 0;
 	count += msg.params.size();
 	return count;
 }
@@ -110,7 +110,10 @@ Message irc::string2Message(std::string str, Client *client)
 		msg.params.push_back(str.substr(0, end_pos));
 		str.erase(0, end_pos);
 	}
-	
+
+	if (msg.flags & irc::MSG_HAS_TRAILING)
+		msg.params.push_back(msg.trailing);
+
 	if (!msg.params.empty())
 		msg.flags |= irc::MSG_HAS_PARAMS;
 	
