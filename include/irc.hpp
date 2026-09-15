@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/24 17:48:24 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/15 16:48:08 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/15 22:19:25 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,9 +86,9 @@ namespace irc
 		USERONCHANNEL,				// 443 ERR_USERONCHANNEL
 		NOTREGISTERED = 451,		// 451 ERR_NOTREGISTERED
 		NEEDMOREPARAMS = 461,		// 461 ERR_NEEDMOREPARAMS
-		KEYSET = 467,				// 467 ERR_KEYSET
 		ALREADYREGISTERED,			// 462 ERR_ALREADYREGISTERED
 		PASSWDMISMATCH = 464,		// 464 ERR_PASSWDMISMATCH
+		KEYSET = 467,				// 467 ERR_KEYSET
 		CHANNELISFULL = 471,		// 471 ERR_CHANNELISFULL
 		UNKNOWNMODE,				// 472 ERR_UNKNOWNMODE
 		INVITEONLYCHAN,				// 473 ERR_INVITEONLYCHAN
