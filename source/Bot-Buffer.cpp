@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/07 17:16:20 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/12 09:08:22 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/15 16:08:14 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,9 @@ irc::epollret Bot::_receiveToBuffer()
 	ret = recv(_fd, buf, BUF_SIZE, 0);
 	if (ret <= 0)
 	{
-		std::cerr << "[Error] Receiving failed: "
-			<< errno << ", " << strerror(errno) << std::endl;
+		if (ret < 0)
+			std::cerr << "[Error] Receiving failed: "
+				<< errno << ", " << strerror(errno) << std::endl;
 		return (irc::RET_CLOSE);
 	}
 	buf[ret] = '\0';
