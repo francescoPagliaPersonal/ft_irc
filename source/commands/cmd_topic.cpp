@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 14:24:29 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/09/03 11:54:48 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/15 16:59:56 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,9 @@ rfc cmd_topic(IServerCtrl & srv, const Message & msg)
 {
 	
 	Client *client = msg.sender;
+	
+	if (msg.params.size() == 0)
+		return irc::NEEDMOREPARAMS;
 	Channel *channel = srv.getChannelByTitle(msg.params[0]);
 	
 	if (!channel)
