@@ -82,7 +82,7 @@ void Response::init(const std::string &srv)
 	// _numInfo[irc::UMODEUNKNOWNFLAG] = ":Unknown MODE flag.";
 	_numInfo[irc::UMODEUNKNOWNFLAG] = ":User MODE is not supported."; // custom
 	_numInfo[irc::USERSDONTMATCH] = ":Cant change mode for other users.";
-	_numInfo[irc::MANYPARAMS] = ":Too many parameter given";
+	_numInfo[irc::UNKNOWNERROR] = ":Too many parameters given.";
 
 	// ------ SPECIAL TYPES ----------------------------------------------------
 	_numType[irc::NOSUCHNICK] = PARAM0;
