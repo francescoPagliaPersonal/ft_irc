@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:52:36 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/08 11:56:38 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/11 12:14:50 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,9 @@ Client::Client(int fd, const sockaddr_in& addr)
 	, _address(addr)
 	, _host()
 	, _channels()
-	, _lastSpamTime(0)
+	, _lastMsgTime(std::time(NULL))
 	, _spamCount(0)
+	, _pingCount(0)
 {
 	char buf[INET_ADDRSTRLEN];
 	if (::inet_ntop(AF_INET, &_address.sin_addr, buf, sizeof(buf)) == NULL)

@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 16:32:42 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/28 08:48:11 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/10 14:29:16 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "Server.hpp"
 #include "irc.hpp"
 #include "Response.hpp"
+#include "Client.hpp"
 
 // -------------------------------------------------------------------------- //
 // INTERFACE -- COMMANDS
@@ -28,6 +29,7 @@
 void Server::_executeCommands()
 {
 	rfc numeric;
+	std::time_t now = time(NULL);
 	if (DEBUG && !_msgsQueue.empty())
 		std::cout << "[Info] Processing message queue with "
 			<< _msgsQueue.size() << " messages...\n";
@@ -40,7 +42,10 @@ void Server::_executeCommands()
 		if (numeric == irc::HASQUIT)
 			_prepareClientDisconnect(msg.sender);
 		else
+		{
+			msg.sender->setLastMsgTime(now);
 			_msgsQueue.pop_front();
+		}
 
 	}
 }
