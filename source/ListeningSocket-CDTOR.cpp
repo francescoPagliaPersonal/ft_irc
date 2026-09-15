@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/10 01:00:26 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/13 09:32:28 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/15 16:32:27 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,10 +99,19 @@ ListeningSocket::ListeningSocket(unsigned short port)
 	: _fd(-1)
 	, _port(port)
 {
-	_fd = _createNewSocket();
-	_bindAddrToFD();
-	_configureFD();
-	_setHostName();
+	try
+	{
+		_fd = _createNewSocket();
+		_bindAddrToFD();
+		_configureFD();
+		_setHostName();
+	}
+	catch (std::exception& e)
+	{
+		if (_fd != -1)
+			::close(_fd);
+		throw ;
+	}
 }
 
 // Close the listening socket's FD.
