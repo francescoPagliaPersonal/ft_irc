@@ -32,61 +32,56 @@ namespace
 
 TEST(args_limit_ok)
 {
-	FakeServer		srv;
 	TestClient		tc;
 	ArgsLimitPlcy	plcy(1, 1);
 	Message			msg = irc::string2Message("PASS secret", &tc.client);
 
-	CHECK_EQ(plcy.check(msg, srv), irc::OK);
+	CHECK_EQ(plcy.check(msg), irc::OK);
 }
 
 TEST(args_limit_too_few)
 {
-	FakeServer		srv;
 	TestClient		tc;
 	ArgsLimitPlcy	plcy(1, 1);
 	Message			msg = irc::string2Message("PASS", &tc.client);
 
-	CHECK_EQ(plcy.check(msg, srv), irc::NEEDMOREPARAMS);
+	CHECK_EQ(plcy.check(msg), irc::NEEDMOREPARAMS);
 }
 
 TEST(args_limit_too_many)
 {
-	FakeServer		srv;
 	TestClient		tc;
 	ArgsLimitPlcy	plcy(1, 1);
 	Message			msg = irc::string2Message("PASS a b", &tc.client);
 
-	CHECK_EQ(plcy.check(msg, srv), irc::MANYPARAMS);
+	CHECK_EQ(plcy.check(msg), irc::MANYPARAMS);
 }
 
 TEST(already_registered_requires_done)
 {
-	FakeServer				srv;
 	TestClient				tc;
 	AlreadyRegisteredPlcy	need_reg(true);
 	AlreadyRegisteredPlcy	need_unreg(false);
 
-	CHECK_EQ(need_reg.check(irc::string2Message("PRIVMSG x :y", &tc.client), srv),
+	CHECK_EQ(need_reg.check(irc::string2Message("PRIVMSG x :y", &tc.client)),
 		irc::NOTREGISTERED);
-	CHECK_EQ(need_unreg.check(irc::string2Message("PASS x", &tc.client), srv),
+	CHECK_EQ(need_unreg.check(irc::string2Message("PASS x", &tc.client)),
 		irc::OK);
 
 	tc.client.setRegistrationFlags(REG_DONE);
-	CHECK_EQ(need_reg.check(irc::string2Message("PRIVMSG x :y", &tc.client), srv),
+	CHECK_EQ(need_reg.check(irc::string2Message("PRIVMSG x :y", &tc.client)),
 		irc::OK);
-	CHECK_EQ(need_unreg.check(irc::string2Message("PASS x", &tc.client), srv),
+	CHECK_EQ(need_unreg.check(irc::string2Message("PASS x", &tc.client)),
 		irc::ALREADYREGISTERED);
 }
 
 TEST(already_registered_partial_is_not_done)
 {
-	FakeServer				srv;
 	TestClient				tc;
 	AlreadyRegisteredPlcy	need_reg(true);
 
 	tc.client.setRegistrationFlags(REG_PASSWD);
-	CHECK_EQ(need_reg.check(irc::string2Message("PRIVMSG x :y", &tc.client), srv),
+	CHECK_EQ(need_reg.check(irc::string2Message("PRIVMSG x :y", &tc.client)),
 		irc::NOTREGISTERED);
 }
 
@@ -108,14 +103,13 @@ TEST(command_policy_blocks_handler)
 
 TEST(args_limit_trailing_counts)
 {
-	FakeServer		srv;
 	TestClient		tc;
 	ArgsLimitPlcy	plcy(2, 2);
 	Message			ok = irc::string2Message("FOO dest :text", &tc.client);
 	Message			few = irc::string2Message("FOO :text", &tc.client);
 
-	CHECK_EQ(plcy.check(ok, srv), irc::OK);
-	CHECK_EQ(plcy.check(few, srv), irc::NEEDMOREPARAMS);
+	CHECK_EQ(plcy.check(ok), irc::OK);
+	CHECK_EQ(plcy.check(few), irc::NEEDMOREPARAMS);
 }
 
 TEST(command_registered_policy_blocks_before_args)
