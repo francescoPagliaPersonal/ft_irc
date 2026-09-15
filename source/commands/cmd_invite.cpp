@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_invite.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 16:10:11 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/29 22:58:36 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/15 17:52:58 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
