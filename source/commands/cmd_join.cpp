@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 14:24:29 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/27 13:20:23 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/16 11:55:49 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ rfc cmd_join(IServerCtrl & srv, const Message & msg)
 	
 	Client *client = msg.sender;
 	channels = irc::strSplit(msg.params[0], ',', false);
-	if (msg.params.size() == 2)
+	if (msg.params.size() == 2 && !(msg.flags & irc::MSG_HAS_TRAILING))
 		passwords = irc::strSplit(msg.params[1], ',', true);
 
 	for (size_t i = passwords.size(); i < channels.size(); ++i)
@@ -98,7 +98,7 @@ rfc cmd_join(IServerCtrl & srv, const Message & msg)
 			continue;
 		}
 		
-		std::string reply = Response::buildRegular(msg, channels[i]);
+		std::string reply = Response::buildRegular(msg, channels[i], "");
 		
 		Channel *channel = srv.getChannelByTitle(channels[i]);
 		

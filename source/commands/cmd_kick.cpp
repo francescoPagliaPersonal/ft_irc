@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/04 06:33:39 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/09/15 22:42:37 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/16 12:22:47 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ rfc cmd_kick(IServerCtrl & srv, const Message & msg)
 		// if (channel->isFounder(client2Kick))
 		// 	continue ;
 		std::string trailing = "must have done something wrong.";
-		if ((msg.flags & irc::MSG_HAS_TRAILING) == 0)
+		if (msg.argCount() >= 2 && !(msg.flags & irc::MSG_HAS_TRAILING))
 			srv.broadcast(channel, Response::buildRegular(msg, msg.params[0] + " " + users[i], trailing));
 		else
 			srv.broadcast(channel, Response::buildRegular(msg, msg.params[0] + " " + users[i]));

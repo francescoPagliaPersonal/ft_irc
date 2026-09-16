@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 16:57:46 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/09/02 12:33:46 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/16 12:15:37 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,14 @@ rfc cmd_mode(IServerCtrl& srv, const Message& msg)
 {
 	Command::Data data(srv, msg, msg.sender);
 	// param[0] is guaranteed to exist because of the policy
-	if (msg.params[0][0] == '#' || msg.params[0][0] == '&')
+	if (msg.flags & irc::MSG_HAS_TRAILING)
+	{
+		srv.sendMessage(msg.sender, Response::buildNumeric(msg, irc::UNKNOWNERROR,
+			"", "Trailing not allowed with MODE.")
+		);
+		return (irc::OK);
+	}
+	else if (msg.params[0][0] == '#' || msg.params[0][0] == '&')
 		return (handleChannelMode(data));
 	else if (msg.params[0] == data.client->getNick())
 		return (handleUserMode(data));

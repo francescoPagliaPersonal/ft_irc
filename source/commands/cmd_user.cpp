@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_user.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 13:54:12 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/27 13:16:20 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/16 10:17:37 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ rfc cmd_user(IServerCtrl & srv, const Message & msg)
 	if (!client->setRegistrationFlags(REG_USER))
 		return (irc::ALREADYREGISTERED);
 	client->setUserName(msg.params[0]);
-	client->setRealName(msg.trailing);
+	client->setRealName(msg.params[3]);
 	if (DEBUG == debug::DETAILED)
 		std::cout << "[FD " << client->getFD() 
 			<< "] UserName registration successfull.\n";
