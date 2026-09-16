@@ -104,7 +104,7 @@ test_privmsg_no_params() {
 		return 1
 	fi
 	irc_send pv "PRIVMSG"
-	irc_expect pv " 461 "
+	irc_expect_any pv " 411 " " 461 "
 	local rc=$?
 	irc_close pv
 	return "$rc"

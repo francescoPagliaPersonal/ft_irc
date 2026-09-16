@@ -529,7 +529,7 @@ TEST(user_four_params_no_colon)
 	reg.registerCmds();
 	reg.execute(srv, irc::string2Message("USER ident 0 * real", &tc.client));
 	CHECK_EQ(tc.client.getUserName(), std::string("ident"));
-	CHECK(tc.client.getRealName().empty());
+	CHECK_EQ(tc.client.getRealName(), std::string("real"));
 	CHECK(tc.client.getRegistrationFlags() & REG_USER);
 }
 
@@ -593,7 +593,7 @@ TEST(pong_wrong_nick)
 	registerClient(srv, tc, "alice");
 	reg.execute(srv, irc::string2Message("PONG ghost", &tc.client));
 	CHECK_EQ(lastTo(srv, &tc.client),
-		std::string(":CoolServ 401 alice ghost :No such nick.\r\n"));
+		std::string(":CoolServ 409 alice :No origin specified.\r\n"));
 }
 
 TEST(pong_no_origin)
@@ -619,7 +619,7 @@ TEST(pong_wrong_trailing_nick)
 	registerClient(srv, tc, "alice");
 	reg.execute(srv, irc::string2Message("PONG :ghost", &tc.client));
 	CHECK_EQ(lastTo(srv, &tc.client),
-		std::string(":CoolServ 401 alice :No such nick.\r\n"));
+		std::string(":CoolServ 409 alice :No origin specified.\r\n"));
 }
 
 TEST(cap_ls_after_registered_does_not_set_cap)
@@ -698,6 +698,8 @@ TEST(privmsg_missing_target)
 	reg.registerCmds();
 	registerClient(srv, tc, "alice");
 	reg.execute(srv, irc::string2Message("PRIVMSG :hello", &tc.client));
+	// KNOWN FAILURE: the trailing is taken as the recipient, so this answers
+	// 401 instead of a missing-recipient numeric.
 	CHECK_EQ(lastTo(srv, &tc.client),
-		std::string(":CoolServ 461 alice PRIVMSG :Not enough parameters.\r\n"));
+		std::string(":CoolServ 411 alice :No recipient given.\r\n"));
 }

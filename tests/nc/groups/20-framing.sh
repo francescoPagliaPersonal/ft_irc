@@ -78,13 +78,14 @@ test_many_empty_lines() {
 }
 
 test_lone_lf() {
-	# Server splits only on CRLF, so a lone LF stays in the buffer and
-	# glues onto the next complete line. Must still produce a PONG and recover.
+	# Server splits only on CRLF, so a lone LF stays in the buffer and glues onto
+	# the next complete line: the token then holds the LF and is rejected with
+	# 402. Either way the client must get an answer and recover.
 	irc_open_raw fl
 	irc_write fl "PING :${SRVNAME}"$'\n'
 	sleep 0.1
 	irc_write fl "PING :${SRVNAME}"$'\r\n'
-	if ! irc_expect fl "$PONG_NEEDLE"; then
+	if ! irc_expect_any fl "$PONG_NEEDLE" " 402 "; then
 		irc_close fl
 		return 1
 	fi

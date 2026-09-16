@@ -82,6 +82,7 @@ test_privmsg_no_text() {
 }
 
 test_privmsg_only_trailing() {
+	# KNOWN FAILURE: the trailing is taken as the recipient, so this answers 401.
 	if ! register_client pn2 alicepw2; then
 		return 1
 	fi

@@ -59,11 +59,13 @@ test_nick_no_param() {
 }
 
 test_nick_trailing_only() {
-	# Policy counts trailing as an arg; handler reads params[0] — crash candidate.
+	# The trailing is a regular param, so the nick is accepted and registration
+	# completes silently until USER arrives.
 	irc_open nt
 	irc_send nt "PASS $PASSWORD"
 	irc_send nt "NICK :ntrail"
-	irc_expect_any nt " 432 " " 001 " " 461 " " 431 "
+	irc_send nt "USER ntrail 0 * :x"
+	irc_expect nt " 001 " "ntrail"
 	local rc=$?
 	irc_close nt
 	return "$rc"
