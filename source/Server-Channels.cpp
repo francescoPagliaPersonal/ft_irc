@@ -6,13 +6,14 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 13:55:04 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/16 14:40:58 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/16 18:42:45 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_irc.hpp"
 #include "Server.hpp"
 #include "Channel.hpp"
+#include "Response.hpp"
 #include <cstddef>
 
 // -------------------------------------------------------------------------- //
@@ -26,13 +27,20 @@ Channel* Server::getChannelByTitle(std::string title) const
 }
 
 // Remove CLIENT from CHANNEL, delete empty CHANNEL, export members to CONTACTS.
+// Announce an automatic operator promotion so clients (irssi) update their UI.
 void Server::removeClientFromChannel(Client* client, Channel& channel, std::set<Client*>* contacts)
 {
-	channel.removeClient(client);
+	Client* promoted = channel.removeClient(client);
 	if (channel.isEmpty())
 		_deleteChannel(&channel);
 	else if (contacts)
 		channel.pushMembersToSet(contacts);
+	if (promoted != NULL)
+	{
+		broadcast(&channel, ":" + Response::getServerName()
+			+ " MODE " + channel.getTitle()
+			+ " +o " + promoted->getNick() + CRLF);
+	}
 	client->removeChannel((&channel));
 }
 
