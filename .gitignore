@@ -1,7 +1,13 @@
 ircserv
 ircbot
 en.subject.*
-docs/
+docs/*
+
+# Documentation
+!docs/architecture.md
+!docs/server.md
+!docs/bot.md
+!docs/IRC-ArchitectureFlow.v001.svg
 
 # Prerequisites
 *.d
