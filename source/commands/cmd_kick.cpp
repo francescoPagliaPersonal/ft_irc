@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/04 06:33:39 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/09/16 10:22:26 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/16 11:14:50 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,7 @@ rfc cmd_kick(IServerCtrl & srv, const Message & msg)
 			srv.broadcast(channel, Response::buildRegular(msg, msg.params[0] + " " + users[i], trailing));
 		else
 			srv.broadcast(channel, Response::buildRegular(msg, msg.params[0] + " " + users[i]));
-		client2Kick->removeChannel(channel);
-		channel->removeClient(client2Kick);
+		srv.removeClientFromChannel(client2Kick, *channel, NULL);
 	}
 
 	return irc::OK;
