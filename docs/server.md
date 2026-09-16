@@ -163,6 +163,7 @@ Once `PASS`, `NICK`, and `USER` have been verified and `CAP END` is processed, r
   - Delivers direct private message to the designated nickname.
 - **RFC Compliance**: Large trailing messages are automatically split into valid 512-byte chunks (`chunkifyTrailing`).
 - **Errors**: `411 ERR_NORECIPIENT`, `412 ERR_NOTEXTTOSEND`, `401 ERR_NOSUCHNICK`, `403 ERR_NOSUCHCHANNEL`.
+- **Bonus (file transfer)**: Trailing text is forwarded as-is, including CTCP delimiters (`0x01`). That is how clients negotiate DCC file transfers; see [File Transfer](file-transfer.md).
 
 ---
 

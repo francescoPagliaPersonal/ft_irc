@@ -11,6 +11,7 @@ A lightweight, non-blocking IRC (Internet Relay Chat) server in C++98 with an ev
 - [Description](#description)
 - [Instructions](#instructions)
 - [Server (`ircserv`)](#server-ircserv)
+- [Bonus: File Transfer (DCC / CTCP)](#bonus-file-transfer-dcc--ctcp)
 - [Bonus: Bot (`ircbot`)](#bonus-bot-ircbot)
 - [Architecture Overview](#architecture-overview)
 - [Limitations](#limitations)
@@ -26,7 +27,10 @@ The server (`ircserv`) supports multiple simultaneous clients through epoll-base
 
 ![FT IRC high level Architecture flow diagram](./docs/IRC-ArchitectureFlow.v001.svg "High level Architecture flow diagram")
 
-The project also features a separate event-driven IRC bot (`ircbot`) as a bonus component, supporting interactive channel utilities and automated actions.
+The project also covers the subject bonus features:
+
+- **file transfer** (DCC negotiated through CTCP inside `PRIVMSG`, with the file itself never transiting the server)
+- separate event-driven IRC **bot** (`ircbot`) with interactive channel utilities and automated actions
 
 ---
 
@@ -169,6 +173,16 @@ For command syntax, parameters, error responses, and policy mechanics, see the [
 
 ---
 
+## Bonus: File Transfer (DCC / CTCP)
+
+File transfer is a bonus of the IRC protocol, not a dedicated server command. Modern clients negotiate a **Direct Client-to-Client (DCC)** session using **CTCP** payloads wrapped in ordinary `PRIVMSG` messages. The server only forwards that handshake (filename, IP, port); afterwards the two clients exchange the file over their own TCP connection and `ircserv` is out of the loop.
+
+A correctly implemented `PRIVMSG` path is therefore sufficient to handle file transfer. CTCP is also used for other client features such as `/me` (`ACTION`), version queries, and latency pings.
+
+For the handshake format, what the server does and does not do, and how to try it with `irssi`, see the [File Transfer Documentation](docs/file-transfer.md).
+
+---
+
 ## Bonus: Bot (`ircbot`)
 
 The bonus executable `ircbot` is a separate client program designed to automate channel administration and interact with users.
@@ -231,6 +245,8 @@ For complete architectural details, lifecycle diagrams, and design trade-offs, s
 - [Modern IRC Client Protocol](https://modern.ircdocs.horse/) – Current IRC protocol specification and numeric reply standard
 - [IRCv3 Specifications](https://ircv3.net/) – IRCv3 working group extensions (CAP negotiation)
 - [IRC Help Security Guidelines](https://www.irchelp.org/security/) – IRC network security considerations
+- [CTCP Specification](https://modern.ircdocs.horse/ctcp.html) – Client-To-Client Protocol (`ACTION`, `PING`, `VERSION`, `DCC`, …)
+- [DCC Protocol](https://www.irchelp.org/protocol/dccspec.html) – Direct Client-to-Client connections for chat and file transfer
 
 ### System & C++ References
 
@@ -241,7 +257,7 @@ For complete architectural details, lifecycle diagrams, and design trade-offs, s
 
 In compliance with 42 curriculum documentation standards, artificial intelligence was utilized as follows:
 
-- **Documentation & Structuring**: AI was used to draft, reorganize, and refine this README and the satellite documentation files in `docs/` (command reference, bot reference, architecture migration).
+- **Documentation & Structuring**: AI was used to draft, reorganize, and refine this README and the satellite documentation files in `docs/` (command reference, bot reference, file transfer, architecture).
 - **Protocol & Standard Reference**: AI served as an interactive query reference for RFC numeric reply codes, modern client handshake behaviors (specifically `irssi` connection flows), and standard C++98 library semantics.
 - **Testing & Test Suites**: AI was used to build a testing suite around unit tests and automated `nc` (netcat) tests to validate socket handling, parsing, and edge cases (maintained on dedicated development branches and not merged into `main`).
 

@@ -8,6 +8,7 @@ docs/*
 !docs/server.md
 !docs/bot.md
 !docs/IRC-ArchitectureFlow.v001.svg
+!docs/file-transfer.md
 
 # Prerequisites
 *.d
