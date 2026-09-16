@@ -23,10 +23,7 @@ rfc cmd_ping(IServerCtrl& srv, const Message& msg)
 	Client *client = msg.sender;
 	
 	std::string token;
-	if (!msg.params.empty())
-		token = msg.params[0];
-	else
-		token = msg.trailing;
+	token = msg.params[0];
 	std::string srvName = Response::getServerName();
 	if (token != srvName)
 		return (irc::NOSUCHSERVER);

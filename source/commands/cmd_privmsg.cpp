@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 15:31:28 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/03 13:05:46 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/16 10:50:12 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,6 @@
 rfc cmd_privmsg(IServerCtrl& srv, const Message& msg)
 {
 	Client* sender = msg.sender;
-	// TODO do we want proper return codes ie. 401, 411,412 ERR_NOTEXTTOSEND
-	// TODO argument policy currently prevents a missing recipient
-	// TODO neither return has a message yet
 	if (!(msg.flags & irc::MSG_HAS_PARAMS))
 		return (irc::NORECIPIENT);
 	if (!(msg.flags & irc::MSG_HAS_TRAILING))

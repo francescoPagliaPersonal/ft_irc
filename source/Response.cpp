@@ -82,7 +82,7 @@ void Response::init(const std::string &srv)
 	// _numInfo[irc::UMODEUNKNOWNFLAG] = ":Unknown MODE flag.";
 	_numInfo[irc::UMODEUNKNOWNFLAG] = ":User MODE is not supported."; // custom
 	_numInfo[irc::USERSDONTMATCH] = ":Cant change mode for other users.";
-	_numInfo[irc::MANYPARAMS] = ":Too many parameter given";
+	_numInfo[irc::UNKNOWNERROR] = ":Too many parameters given.";
 
 	// ------ SPECIAL TYPES ----------------------------------------------------
 	_numType[irc::NOSUCHNICK] = PARAM0;
@@ -94,6 +94,7 @@ void Response::init(const std::string &srv)
 	_numType[irc::NICKNAMEINUSE] = PARAM0;
 	_numType[irc::USERONCHANNEL] = PARAM0;
 	_numType[irc::NOTONCHANNEL] = PARAM0;
+	_numType[irc::NOTOPIC] = PARAM0;
 	_numType[irc::CHANOPRIVSNEEDED] = PARAM0;
 	_numType[irc::UNKNOWNCOMMAND] = COMMAND;
 	_numType[irc::NEEDMOREPARAMS] = COMMAND;
@@ -214,7 +215,7 @@ std::string	Response::buildNumeric(const Message& msg, irc::rfc code, const std:
 
 /*
 	Build a string in the form:
-	:msg.sender->getID() COMMAND args :msg.trailing
+	:msg.sender->getID() COMMAND args :msg.getTrailing()
 	The response is split in 512 bytes if needed.
 */
 std::string	Response::buildRegular(const Message& msg, const std::string & args)
@@ -225,10 +226,10 @@ std::string	Response::buildRegular(const Message& msg, const std::string & args)
 	// append custom args, then default trailing
 	if (!args.empty())
 		reply += " " + args;
-	if (!msg.trailing.empty())
+	if (!msg.getTrailing().empty())
 	{
 		reply += " :";
-		reply = irc::chunkifyTrailing(reply, msg.trailing);
+		reply = irc::chunkifyTrailing(reply, msg.getTrailing());
 	}
 	else
 		reply.append(CRLF);
@@ -269,8 +270,8 @@ std::string	Response::buildError(const Message& msg,
 		throw std::logic_error("We must give a reason and origin of the Error.");
 	reply.append(" :" + reason + ": (");
 	reply.append(client->getUserName() + "@" + client->getHost() + ")");
-	if (!msg.trailing.empty())
-		reply.append(" [" + origin + ": "+ msg.trailing + "]");
+	if (!msg.getTrailing().empty())
+		reply.append(" [" + origin + ": "+ msg.getTrailing() + "]");
 	reply.append(CRLF);
 	return (reply);
 }

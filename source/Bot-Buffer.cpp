@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Bot-Buffer.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/07 17:16:20 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/15 16:08:14 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/16 10:43:51 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ namespace
 				std::cout << '|';
 			std::cout << msgs.params[j];
 		}
-		std::cout << "} trailing {" << msgs.trailing << "}\n";
+		std::cout << "} trailing {" << msgs.getTrailing() << "}\n";
 		i++;
 	}
 

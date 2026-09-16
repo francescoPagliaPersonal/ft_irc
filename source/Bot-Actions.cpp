@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Bot-Actions.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 08:12:43 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/12 15:35:01 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/16 10:18:34 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,14 +73,14 @@ void Bot::_mirrorMessage(const Message& msg)
 		return ;
 	// 1) Channel Replies
 	if (msg.params[0][0] == '#' || msg.params[0][0] == '&')
-		sendMessage(std::string("PRIVMSG ") + msg.params[0] + " :" + msg.trailing + CRLF );
+		sendMessage(std::string("PRIVMSG ") + msg.params[0] + " :" + msg.getTrailing() + CRLF );
 	// 2) Private Message Reply
 	else if (msg.params[0] == BOT_NAME)
 	{
 		if (msg.prefix.empty())
 			return ;
 		std::string sender = msg.prefix.substr(0, msg.prefix.find('!'));
-		sendMessage(std::string("PRIVMSG ") + sender + " :" + msg.trailing + CRLF );
+		sendMessage(std::string("PRIVMSG ") + sender + " :" + msg.getTrailing() + CRLF );
 	}
 }
 

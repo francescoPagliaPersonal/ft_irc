@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server-Channels.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 13:55:04 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/02 17:21:58 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/15 22:41:42 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void Server::removeClientFromChannel(Client* client, Channel& channel, std::set<
 	channel.removeClient(client);
 	if (channel.isEmpty())
 		_deleteChannel(&channel);
-	else
+	else if (contacts)
 		channel.pushMembersToSet(contacts);
 	client->removeChannel((&channel));
 }

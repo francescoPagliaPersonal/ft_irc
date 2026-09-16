@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Bot-ExecuteMessages.cpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/12 14:52:56 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/12 15:21:41 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/16 10:18:16 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void Bot::_executeMessages()
 	{
 		Message& msg = _msgsQueue.front();
 		// 1) extract custom commands and args from trailing
-		std::vector<std::string> botcmds = irc::strSplit(msg.trailing, ' ', false);
+		std::vector<std::string> botcmds = irc::strSplit(msg.getTrailing(), ' ', false);
 		// 2) evaluate and execute custom commands
 		if (!_cmdReg.execute(*this, msg, botcmds))
 		{
