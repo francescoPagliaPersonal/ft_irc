@@ -70,6 +70,12 @@ both-val:	MODE := val
 both-val:	both
 	$(EXEC_BOTH_VALG)
 
+tests:		MODE := val
+tests:		PART := man
+tests:		build
+	@$(MAKE) -C tests/unit build MODE=val
+	$(TESTS_MENU)
+
 print:
 	@printf "$(C_SAKURA_BLOSSOM)"
 	@printf '%s\n' '---BUILDING---'
@@ -145,4 +151,4 @@ norm:
 		run runb asan asanb val valb bot \
 		both both-run both-asan both-val \
 		print build libft norm \
-		nc chat
+		nc chat tests
