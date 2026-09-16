@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/29 23:04:12 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/02 12:37:35 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/16 14:30:44 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,6 @@ void sendChannelModes(Command::Data& data)
 		Response::buildNumeric(data.msg, irc::CHANNELMODEIS,
 			reply + pw, limit.str())
 	);
-	// TODO decide if we want to store timestamp or create; MODE can return it
 }
 
 // Send 472 ERR_UNKNOWNMODE for the unknown letter C.

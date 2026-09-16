@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/11 12:06:37 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/02 14:20:01 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/16 14:43:46 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 // has already be done by the constructor.
 void Server::run()
 {
-	struct epoll_event ev[MAX_EVENTS]; // TODO do we need to zero that one?
+	struct epoll_event ev[MAX_EVENTS]; 
 
 	while (_isAlive)
 	{

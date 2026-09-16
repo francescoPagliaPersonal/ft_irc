@@ -207,7 +207,6 @@ std::string	Response::buildNumeric(const Message& msg, irc::rfc code, const std:
 	// SPECIAL: append custom ARGS
 	if (!trail.empty())
 		reply.append(" :" + trail);
-	// TODO else " :" needed w/o trail?
 	// finish
 	reply.append(CRLF);
 	return (reply);

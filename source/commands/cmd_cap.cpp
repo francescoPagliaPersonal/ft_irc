@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 13:54:12 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/27 13:43:26 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/16 14:29:44 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@
 // Handle the CAP command; currently a stub to advance the handshake.
 rfc cmd_cap(IServerCtrl & srv, const Message & msg)
 {
-	// TODO need more content? currently is empty stub to advance handshake
 	std::string srvName = Response::getServerName();
 	
 	Client *client = msg.sender;

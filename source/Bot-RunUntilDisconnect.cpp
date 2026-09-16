@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 09:28:34 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/12 15:25:55 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/16 14:31:48 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ void Bot::_runUntilDisconnect()
 			case irc::RET_PARSEINPUT:
 				_processInputBuffer();
 				break;
-			default: ; // HACK because there is still HASOUTPUT present in header
 		}
 		// 6) custom commands and internal actions
 		_executeMessages();

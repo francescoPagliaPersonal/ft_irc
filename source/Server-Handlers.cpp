@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 22:58:08 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/16 13:51:26 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/16 14:43:36 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,11 @@ void Server::_handleListenEvent()
 		// 2) check for max clients
 		if (_clients.size() >= _maxClients)
 		{
-			// TODO: fix message after we set the server name globaly.
+			// FIXME if we want to reply, this needs to wait one more epoll loop
+			// but this needs some mechanic to do so! hasquit perhaps?
 			std::string reply = "ERROR: too many connection. ";
 			send(newFD, reply.c_str(), reply.size(), 0);
-			::close(newFD); // TODO info msg
+			::close(newFD);
 			continue ;
 		}
 		// 3) register new client
