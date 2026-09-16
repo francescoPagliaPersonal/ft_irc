@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 13:55:04 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/15 22:41:42 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/16 14:40:58 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ void Server::_deleteChannel(Channel* channel)
 // Lookup a channel by name and return its pointer, or NULL if not found.
 Channel* Server::_getChannel(const std::string& mapKey) const
 {
-	// TODO is this safe enough? this function should only be called when we know the channel exists...
 	std::map<std::string, Channel*>::const_iterator it;
 
 	it = _channels.find(mapKey);

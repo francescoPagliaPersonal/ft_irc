@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 22:58:08 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/13 10:39:11 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/16 16:37:47 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,10 @@ void Server::_handleListenEvent()
 		// 2) check for max clients
 		if (_clients.size() >= _maxClients)
 		{
-			// TODO: fix message after we set the server name globaly.
-			std::string reply = "ERROR: too many connection. ";
-			send(newFD, reply.c_str(), reply.size(), 0);
-			::close(newFD); // TODO info msg
+			// cannot send a reply due to subject constrains
+			// std::string reply = "ERROR: too many connection. ";
+			// send(newFD, reply.c_str(), reply.size(), 0);
+			::close(newFD);
 			continue ;
 		}
 		// 3) register new client
@@ -64,10 +64,6 @@ void Server::_handleClientEvent(epoll_event& ev)
 			break;
 		case irc::RET_CLOSE: // this is a forceful disconnect, never a QUIT
 			_addToRemove(client);
-			break;
-		case irc::RET_HASOUTPUT:
-			// FIXME this is redundant, is it not?
-			_epoll.mod(client->getFD(), EPOLL_FL_DEFAULT | EPOLLOUT, client);
 			break;
 		case irc::RET_PARSEINPUT: // builds the interneal message array
 			if (_processInputBuffer(client) == irc::RET_CLOSE)

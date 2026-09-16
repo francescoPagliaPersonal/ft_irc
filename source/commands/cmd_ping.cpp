@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/16 20:13:56 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/11 18:34:46 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/16 15:28:57 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ rfc cmd_ping(IServerCtrl& srv, const Message& msg)
 	Client *client = msg.sender;
 	
 	std::string token;
+	if (msg.params.empty())
+		return (irc::NOORIGIN);
 	token = msg.params[0];
 	std::string srvName = Response::getServerName();
 	if (token != srvName)

@@ -5,11 +5,10 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/08/26 10:51:34 by fpaglia          #+#    #+#             */
-/*   Updated: 2026/08/26 15:51:42 by mweghofe         ###   ########.fr       */
+/*   Created: 2026/08/26 10:51:34 by fpaglia           #+#    #+#             */
+/*   Updated: 2026/09/16 17:15:31 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "Response.hpp"
 #include "ft_irc.hpp"
@@ -207,7 +206,6 @@ std::string	Response::buildNumeric(const Message& msg, irc::rfc code, const std:
 	// SPECIAL: append custom ARGS
 	if (!trail.empty())
 		reply.append(" :" + trail);
-	// TODO else " :" needed w/o trail?
 	// finish
 	reply.append(CRLF);
 	return (reply);
@@ -265,9 +263,12 @@ std::string	Response::buildError(const Message& msg,
 {
 	std::string reply("ERROR");
 	Client* client = msg.sender;
-	// HACK protection for us
 	if (reason.empty() || origin.empty())
-		throw std::logic_error("We must give a reason and origin of the Error.");
+	{
+		reply.append(" :NOTDEFINED: (" + client->getUserName() + "@" + client->getHost() + ")");
+		reply.append(CRLF);
+		return (reply);
+	}
 	reply.append(" :" + reason + ": (");
 	reply.append(client->getUserName() + "@" + client->getHost() + ")");
 	if (!msg.getTrailing().empty())

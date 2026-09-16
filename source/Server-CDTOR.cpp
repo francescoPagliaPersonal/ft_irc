@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/10 00:45:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/08 11:54:37 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/16 16:36:47 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,11 @@ namespace {
 		if (rlm.rlim_cur - RESERVED_FDS < MIN_CLIENTS)
 			throw std::runtime_error("Error not enough socket to run an IRC server.");
 		// calculate max FDs: either system limit OR our max allowed
-		irc::uint maxFD = rlm.rlim_cur - RESERVED_FDS - 1;
+		//   this first line is for if we would send a reply to a client,
+		//   if we cannot accept another connection anymore (too many clients)
+		//   but subject rules prevent this => no send() w/o EPOLLOUT
+		// irc::uint maxFD = rlm.rlim_cur - RESERVED_FDS - 1;
+		irc::uint maxFD = rlm.rlim_cur - RESERVED_FDS;
 		maxFD = maxFD < MAX_CLIENTS ? maxFD : MAX_CLIENTS;
 		if (DEBUG)
 			std::cout << "[Info] current FD limit: " << rlm.rlim_cur << "\n"
@@ -66,10 +70,7 @@ Server::Server(int port, std::string pw)
 {
 	_epoll.add(_listener.getFD(), EPOLLIN);
 	_captureSignals();
-	//TODO: replace server hard coded label with official name.
 	Response::init(_listener.getHostName());
-	// Client class
-	// CommandDispatch class
 	_cmdReg.registerCmds();
 	_startTime = std::time(NULL);
 	std::string ip = retrieveServerAddress();

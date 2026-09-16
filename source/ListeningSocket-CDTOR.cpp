@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ListeningSocket-CDTOR.cpp                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/10 01:00:26 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/16 14:59:15 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/16 16:46:25 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int ListeningSocket::_createNewSocket()
 		throw std::runtime_error(
 			std::string("Error on getprotobyname(): ") + std::strerror(errno));
 	// 1) open a new socket
-	fd = ::socket(AF_INET, SOCK_STREAM, pe->p_proto); // TODO use 0 or pe?
+	fd = ::socket(AF_INET, SOCK_STREAM, pe->p_proto);
 	if (fd < 0)
 		throw std::runtime_error(
 			std::string("Error on socket(): ") + std::strerror(errno));

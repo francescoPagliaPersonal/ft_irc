@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 16:32:42 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/10 14:29:16 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/16 14:41:26 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ void Server::_executeCommands()
 	while (!_msgsQueue.empty())
 	{
 		Message& msg = _msgsQueue.front();
-		// TODO ensure POLICY and COMMAND errors are in line with PROTOCOL CODES
 		numeric = _cmdReg.execute(*this, msg);
 		if (numeric == irc::HASQUIT)
 			_prepareClientDisconnect(msg.sender);

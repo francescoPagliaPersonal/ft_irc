@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 17:02:24 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/08 11:43:20 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/16 13:52:10 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ irc::epollret Client::sendFromBuffer()
 	{
 		_bufOUT = _bufOUT.substr(ret);
 		std::cout << '[' << __FUNCTION__ << "] kernel buffer doesn't have enough space.\n";
-		return (irc::RET_HASOUTPUT);
+		return (irc::RET_OK);
 	}
 }
 
