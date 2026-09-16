@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/24 10:48:00 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/31 09:29:58 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/16 13:03:07 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ TEST(message_nick_simple)
 	CHECK_EQ(msg.command, std::string("NICK"));
 	CHECK_EQ(msg.params.size(), 1u);
 	CHECK_EQ(msg.params[0], std::string("alice"));
-	CHECK_EQ(irc::argCount(msg), 1);
+	CHECK_EQ(msg.argCount(), 1);
 }
 
 TEST(message_privmsg_trailing)
@@ -43,8 +43,8 @@ TEST(message_privmsg_trailing)
 	CHECK_EQ(msg.command, std::string("PRIVMSG"));
 	CHECK_EQ(msg.params.size(), 1u);
 	CHECK_EQ(msg.params[0], std::string("bob"));
-	CHECK_EQ(msg.trailing, std::string("hello there"));
-	CHECK_EQ(irc::argCount(msg), 2);
+	CHECK_EQ(msg.getTrailing(), std::string("hello there"));
+	CHECK_EQ(msg.argCount(), 2);
 }
 
 TEST(message_trims_spaces)
@@ -67,7 +67,7 @@ TEST(message_empty_has_no_command)
 	CHECK_EQ(spaces.flags, 0);
 	CHECK(!(empty.flags & irc::MSG_HAS_COMMAND));
 	CHECK(!(spaces.flags & irc::MSG_HAS_COMMAND));
-	CHECK_EQ(irc::argCount(empty), 0);
+	CHECK_EQ(empty.argCount(), 0);
 }
 
 TEST(message_prefix_and_command)
@@ -102,8 +102,8 @@ TEST(message_empty_trailing_is_flagged)
 
 	CHECK(msg.flags & irc::MSG_HAS_PARAMS);
 	CHECK(msg.flags & irc::MSG_HAS_TRAILING);
-	CHECK(msg.trailing.empty());
-	CHECK_EQ(irc::argCount(msg), 2);
+	CHECK(msg.getTrailing().empty());
+	CHECK_EQ(msg.argCount(), 2);
 }
 
 TEST(message_colon_inside_param_is_not_trailing)
@@ -123,7 +123,7 @@ TEST(message_trailing_keeps_inner_colon)
 	Message		msg = irc::string2Message("PRIVMSG bob :hello :world", &tc.client);
 
 	CHECK(msg.flags & irc::MSG_HAS_TRAILING);
-	CHECK_EQ(msg.trailing, std::string("hello :world"));
+	CHECK_EQ(msg.getTrailing(), std::string("hello :world"));
 }
 
 TEST(message_command_case_folded)
@@ -146,7 +146,7 @@ TEST(message_several_params)
 	CHECK_EQ(msg.params[0], std::string("#c"));
 	CHECK_EQ(msg.params[1], std::string("+o"));
 	CHECK_EQ(msg.params[2], std::string("bob"));
-	CHECK_EQ(irc::argCount(msg), 3);
+	CHECK_EQ(msg.argCount(), 3);
 }
 
 TEST(message_user_four_args)
@@ -159,8 +159,8 @@ TEST(message_user_four_args)
 	CHECK_EQ(msg.params[0], std::string("ident"));
 	CHECK_EQ(msg.params[1], std::string("0"));
 	CHECK_EQ(msg.params[2], std::string("*"));
-	CHECK_EQ(msg.trailing, std::string("real name"));
-	CHECK_EQ(irc::argCount(msg), 4);
+	CHECK_EQ(msg.getTrailing(), std::string("real name"));
+	CHECK_EQ(msg.argCount(), 4);
 }
 
 TEST(message_argcount_trailing_only)
@@ -170,8 +170,8 @@ TEST(message_argcount_trailing_only)
 
 	CHECK(msg.flags & irc::MSG_HAS_TRAILING);
 	CHECK(!(msg.flags & irc::MSG_HAS_PARAMS));
-	CHECK_EQ(msg.trailing, std::string("lag"));
-	CHECK_EQ(irc::argCount(msg), 1);
+	CHECK_EQ(msg.getTrailing(), std::string("lag"));
+	CHECK_EQ(msg.argCount(), 1);
 }
 
 TEST(message_command_only)
@@ -183,7 +183,7 @@ TEST(message_command_only)
 	CHECK(!(msg.flags & irc::MSG_HAS_PARAMS));
 	CHECK(!(msg.flags & irc::MSG_HAS_TRAILING));
 	CHECK_EQ(msg.command, std::string("PING"));
-	CHECK_EQ(irc::argCount(msg), 0);
+	CHECK_EQ(msg.argCount(), 0);
 }
 
 TEST(message_prefix_and_trailing)
@@ -198,8 +198,8 @@ TEST(message_prefix_and_trailing)
 	CHECK_EQ(msg.command, std::string("PRIVMSG"));
 	CHECK_EQ(msg.params.size(), 1u);
 	CHECK_EQ(msg.params[0], std::string("dest"));
-	CHECK_EQ(msg.trailing, std::string("hi there"));
-	CHECK_EQ(irc::argCount(msg), 2);
+	CHECK_EQ(msg.getTrailing(), std::string("hi there"));
+	CHECK_EQ(msg.argCount(), 2);
 }
 
 TEST(message_param_and_trailing_both_count)
@@ -209,6 +209,6 @@ TEST(message_param_and_trailing_both_count)
 
 	CHECK_EQ(msg.params.size(), 1u);
 	CHECK_EQ(msg.params[0], std::string("token"));
-	CHECK_EQ(msg.trailing, std::string("trail"));
-	CHECK_EQ(irc::argCount(msg), 2);
+	CHECK_EQ(msg.getTrailing(), std::string("trail"));
+	CHECK_EQ(msg.argCount(), 2);
 }
