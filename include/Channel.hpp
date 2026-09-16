@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/13 10:19:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/02 14:06:52 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/16 15:07:28 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ class Channel
 		bitMask		getModes() const;
 		std::map<Client*, bitMask>	getMembersMap() const;
 		void pushMembersToSet(std::set<Client *> *) const;
+		bool isFounder(Client*) const;
 		
 		// ---- set
 		void setTopic(const std::string&);
