@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_pong.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/10 14:07:51 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/15 15:37:16 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/16 11:42:53 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ rfc cmd_pong(IServerCtrl& srv, const Message& msg)
 	Client* client = msg.sender;
 
 
-	if (msg.params[0] != client->getNick())
+	if (msg.argCount() == 0 || msg.params[0] != client->getNick())
 		return (irc::NOORIGIN);
 	// internal timer is updated by Server::_executeCommands
 	client->resetPingCount();
