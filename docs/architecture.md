@@ -146,6 +146,7 @@ The server maintains state via dedicated entities with clear lifecycle boundarie
   - Maintains a map of members to permission bitmasks (`US_BASIC`, `US_OPERATOR`).
   - Tracks channel modes (`CH_INVITE`, `CH_TOPIC`, `CH_PASSWORD`, `CH_LIMIT`).
   - Maintains invite whitelists and current user limits.
+  - Automatically reassign channel operator rights if last operator leaves the channel.
   - Automatically destroyed when the last user leaves.
 - **IP Registry (`_IPrecords`)**:
   - Tracks client instances by originating IP address.
