@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandRegistry-RegisterCmds.cpp                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 11:41:20 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/09/16 10:48:01 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/16 12:43:57 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ void CommandRegistry::registerCmds()
 
 	Command *pong = new Command("PONG", cmd_pong);
 	pong->addPolicy(new AlreadyRegisteredPlcy(true));
-	pong->addPolicy(new ArgsLimitPlcy(0, 1)); // TODO that max value... don't like it
+	pong->addPolicy(new ArgsLimitPlcy(0, 2)); // TODO that max value... don't like it
 	_commands[pong->getName()] = pong;
 }
 
