@@ -216,7 +216,7 @@ For complete architectural details, lifecycle diagrams, and design trade-offs, s
 - **Transport security**: Plaintext TCP/IP (no SSL/TLS).
 - **Network scope**: IPv4 only; no server-to-server IRC daemon mesh (per 42 subject requirements).
 - **Capability negotiation**: Limited to IRCv3 `CAP LS` and `CAP END` handshake compatibility.
-- **Maximum clients**: Defaults to 50,000 clients (configurable via `MAX_CLIENTS`).
+- **Maximum clients**: Defaults to the available ulimit for file descriptor with a cap to 50.000 users.
 
 ---
 
