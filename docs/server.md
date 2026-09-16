@@ -92,7 +92,8 @@ Once `PASS`, `NICK`, and `USER` have been verified and `CAP END` is processed, r
 #### `USER <username> <hostname> <servername> :<realname>`
 - **Description**: Specifies client username, hostname, servername, and realname trailing string.
 - **Policy**: Must be sent before registration is complete (`AlreadyRegisteredPlcy(false)`). Requires 4 arguments.
-- **Errors**: `462 ERR_ALREADYREGISTERED`, `461 ERR_NEEDMOREPARAMS`.
+- **Constraints**: Length of <username> and <realname> are capped at 32 characters. Cannot contain whitespace or ` .,*?!@`. Cannot start with `$`, `:`, `~`, `&`, `#`, `@`, `%`, `+`.
+- **Errors**: `462 ERR_ALREADYREGISTERED`, `461 ERR_NEEDMOREPARAMS`. additionally `400 ERR_UNKNOWNERROR` used for non conform names
 
 #### `CAP <subcommand> [<args>]`
 - **Description**: Handles IRCv3 client capability queries.
@@ -111,7 +112,7 @@ Once `PASS`, `NICK`, and `USER` have been verified and `CAP END` is processed, r
 #### `JOIN <channels> [<keys>]`
 - **Description**: Joins one or more channels (comma-separated list).
 - **Parameters**: Channel names must start with `#` or `&`, length 4 to 32 characters, valid charset `[A-Za-z0-9_-]`. Keys correspond to channels set with `+k`.
-- **Behavior**: If the channel does not exist, it is created and the creator is automatically granted channel operator status (`+o`).
+- **Behavior**: If the channel does not exist, it is created with the relative password if presented and the creator is automatically granted channel operator status (`+o`).
 - **Replies**: Channel join broadcast, `332 RPL_TOPIC` (or `331 RPL_NOTOPIC`), `353 RPL_NAMREPLY`, `366 RPL_ENDOFNAMES`.
 - **Errors**: `403 ERR_NOSUCHCHANNEL`, `405 ERR_TOOMANYCHANNELS`, `471 ERR_CHANNELISFULL`, `473 ERR_INVITEONLYCHAN`, `475 ERR_BADCHANNELKEY`.
 
