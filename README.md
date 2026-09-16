@@ -1,153 +1,263 @@
-# ft_irc
 _This project has been created as part of the 42 curriculum by fpaglia, mweghofe._
 
-## Description
-**ft_irc** is a lightweight, **non-blocking IRC (Internet Relay Chat) server** implementation written in the **C++98 standard**. 
-The project was developed as part of the 42 school curriculum to demonstrate architectural capabilities, deep understanding of network programming, the IRC protocol, and concurrent event handling.
+# ft_irc
 
-The server supports multiple simultaneous clients through epoll-based I/O multiplexing, implementing the core features of the IRC protocol as defined in RFC 1459 and RFC 2812. It handles client registration, channel management, user messaging, and channel operator privileges with a clean, extensible architecture.
+A lightweight, non-blocking IRC (Internet Relay Chat) server in C++98 with an event-driven bot client.
+
+---
+
+## Contents
+
+- [Description](#description)
+- [Instructions](#instructions)
+  - [Prerequisites](#prerequisites)
+  - [Compilation](#compilation)
+  - [Execution](#execution)
+  - [Connecting to the Server](#connecting-to-the-server)
+  - [Makefile Targets](#makefile-targets)
+- [Server (`ircserv`)](#server-ircserv)
+  - [Registered Commands](#registered-commands)
+  - [Channel Modes](#channel-modes)
+  - [Operational Rules & Limits](#operational-rules--limits)
+  - [Detailed Server Documentation](docs/server.md)
+- [Bonus: Bot (`ircbot`)](#bonus-bot-ircbot)
+  - [Bot Capabilities](#bot-capabilities)
+  - [Bot Commands](#bot-commands)
+  - [Detailed Bot Documentation](docs/bot.md)
+- [Architecture Overview](#architecture-overview)
+  - [Full Architecture Document](docs/architecture.md)
+- [Limitations](#limitations)
+- [Resources](#resources)
+  - [IRC Protocol References](#irc-protocol-references)
+  - [System & C++ References](#system--c-references)
+  - [AI Usage Disclosure](#ai-usage-disclosure)
+
+---
+
+## Description
+
+**ft_irc** is a lightweight, **non-blocking IRC (Internet Relay Chat) server** implementation written in the **C++98 standard**. The project was developed as part of the 42 school curriculum to demonstrate architectural capabilities, deep understanding of network programming, the IRC protocol, and concurrent event handling.
+
+The server (`ircserv`) supports multiple simultaneous clients through epoll-based I/O multiplexing, implementing the core features of the IRC protocol as defined in RFC 1459 and RFC 2812, while considering the draft for IRCv3. It is build on a clean, extensible architecture and manages the complete client lifecycle: authentication, nickname/username registration, channel management, operator privilege delegation, and direct/broadcast messaging.
 
 ![FT IRC high level Architecture flow diagram](./docs/IRC-ArchitectureFlow.v001.svg "High level Architecture flow diagram")
 
-### Key Features
-* Non-blocking I/O using epoll for efficient client handling
-* Full registration flow with PASS, NICK, USER commands and CAP negotiation
-* Channel management with join, part, invite, kick, and topic operations
-* Channel modes: invite-only (+i), topic restrictions (+t), password (+k), user limit (+l), operator privileges (+o)
-* Private messaging and channel broadcasting
-* IP-based connection limiting to prevent abuse
-* Command policies for validation and permission checking
-* RFC-compliant numeric replies and error messages
-* Graceful signal handling (SIGINT, SIGTERM, SIGPIPE)
+The project also features a separate event-driven IRC bot (`ircbot`) as a bonus component, supporting interactive channel utilities and automated actions.
+
+---
 
 ## Instructions
+
 ### Prerequisites
-* C++ compiler with C++98 standard support (or later)
-* Linux operating system (epoll is Linux-specific)
-* make build system
+
+- **OS**: Linux (epoll is Linux-specific)
+- **Compiler**: the project was developed using `clang++`version 12.0.1
+- **Build tool**: GNU `make`
+- **Reference IRC Client**: `irssi` (recommended) or `netcat` (`nc`)
 
 ### Compilation
+
+Build the mandatory server (`ircserv`):
 ```bash
 make
 ```
 
-### Installation
-No installation is required. The executable ircserv is generated in the project root directory.
+Build the bonus bot (`ircbot`):
+```bash
+make bonus
+```
+
+Build both executables:
+```bash
+make both
+```
+
+> **Note**: The build system enforces **one Make goal per invocation** (e.g. run `make clean && make`, not `make clean all`).
 
 ### Execution
+
+#### 1. Server (`ircserv`)
 ```bash
 ./ircserv <port> <password>
 ```
-Parameters:
-* port: Port number between 1024 and 65535
-* password: Connection password (minimum 4 characters, must contain letters, numbers, and special characters)
+- `<port>`: Port number between `1024` and `65535` (e.g. `6669`).
+- `<password>`: Connection password. Must be at least **4 characters long** and include at least **one letter**, **one number**, and **one special character** (e.g. `1o.0`).
+
+#### 2. Bot (`ircbot`)
+```bash
+./ircbot <server_ip_or_host> <port> <password>
+```
+- `<server_ip_or_host>`: Target IRC server hostname or IPv4 address (e.g. `127.0.0.1` or `localhost`).
+- `<port>`: Target server port (e.g. `6669`).
+- `<password>`: Server connection password (e.g. `1o.0`).
 
 ### Connecting to the Server
-Using irssi:
 
+#### Using the Reference Client (`irssi`)
+
+Connect directly from the command line:
 ```bash
-# Local connection
-irssi -c localhost -p <port> -w <password>
-
-# Remote connection
-irssi -c <server_ip> -p <port> -w <password>
-```
-From within irssi:
-
-```bash
-/connect localhost <port> <password>
-/connect <server_ip> <port> <password>
+irssi -c localhost -p 6669 -w 1o.0 -n mynick
 ```
 
-Using netcat:
-
-```bash
-nc -C localhost <port>
-# Then send IRC commands manually (see Resources)
-Example Session
-text
-PASS mypassword
-NICK john
-USER john 0 * :John Doe
-JOIN #welcome
-PRIVMSG #welcome :Hello everyone!
-TOPIC #welcome :Welcome to the channel
-MODE #welcome +i                            // Make channel invite-only
-INVITE jane #welcome                        // Invite jane to the channel
-KICK #welcome spammer                       // Kick a user from the channel
-QUIT :Goodbye!
+Or from within an active `irssi` session:
+```text
+/connect localhost 6669 1o.0
 ```
 
-## Resources
-### IRC Protocol Documentation
-* [Keywords usage](https://datatracker.ietf.org/doc/html/rfc2119)
-* [IRCv3 consortium](https://ircv3.net/) – Modern IRC extensions and specifications
-* [RFC Internet relay protocol](https://datatracker.ietf.org/doc/html/rfc1459) – Internet Relay Chat Protocol (original specification)
-* [RFC client specification](https://datatracker.ietf.org/doc/html/rfc2812) – Internet Relay Chat: Client Protocol (updated specification)
-* [Modern IRC client protocol](https://modern.ircdocs.horse/) – Comprehensive, up-to-date documentation of the IRC protocol
-* [Security concerns](https://www.irchelp.org/security/) – Security guidelines and best practices
+#### Using `netcat` (`nc`)
 
+Netcat connects with raw TCP and requires explicit CRLF (`\r\n`) line endings (`-C` flag):
+```bash
+nc -C 127.0.0.1 6669
+```
 
-### Development Tools & References
-* epoll(7) – Linux man page for epoll I/O event notification
-* [cppreference](https://cppreference.com) - c++ manual
+Example valid registration and chat flow:
+```text
+PASS 1o.0
+NICK alice
+USER alice 0 * :Alice Wonderland
+JOIN #lobby
+PRIVMSG #lobby :Hello from netcat!
+PART #lobby :Stepping out
+QUIT :Bye!
+```
 
+### Makefile Targets
 
-### AI Usage Disclosure
-AI assistance was used in the following areas of this project:
-* Documentation: This README was initiated and further polished with AI assistance.
-* Learning Resource: AI served as an interactive reference for IRC protocol details and C++ best practices.
+The Makefile includes dedicated convenience targets with preset defaults (`PORT=6669`, `PASSWORD=1o.0`, `HOST=localhost`, `NICK=BugDetector`):
 
-Project-specific implementation decisions were made independently, including:
-* Architecture design (IServerCtrl interface, Command patterns, Policies)
-* Channel mode handling and channel operator privilege management
-* Buffer management and message parsing logic
-* Epoll event loop structure and client lifecycle management
+| Target | Description |
+|---|---|
+| `all` / `build` | Compile `ircserv` in release mode |
+| `bonus` | Compile `ircbot` in release mode |
+| `run` | Build and run `ircserv` in the foreground |
+| `runb` / `bot` | Build and run `ircbot` in the foreground |
+| `both` | Compile both `ircserv` and `ircbot` |
+| `both-run` | Launch `ircserv` in background and `ircbot` in foreground |
+| `chat` | Launch `irssi` client connected to local preset |
+| `nc` | Launch raw `netcat` session |
+| `asan` / `asanb` | Build with AddressSanitizer (`-fsanitize=address -g3`) |
+| `val` / `valb` | Run with Valgrind leak and file-descriptor checks |
+| `both-val` | Run both server and bot under Valgrind |
+| `clean` / `fclean` / `re` | Standard 42 cleaning and rebuild rules |
 
-## Key Architectural Choices
-Our ft_irc server is built upon a modular, event-driven architecture that prioritizes performance, maintainability, and protocol compliance. The design revolves around several key architectural decisions that shape the system's behavior and structure.
+---
 
-### Event-Driven Core with Non-Blocking I/O
-At the heart of the server lies an epoll-based event loop that efficiently manages hundreds of concurrent client connections without resorting to multithreading. This single-threaded, event-driven approach eliminates synchronization overhead while maintaining responsive behavior through non-blocking socket operations. The Epoll class serves as a lightweight wrapper around the Linux epoll API, providing event notification that minimizes unnecessary system calls.
+## Server (`ircserv`)
 
-### Interface-Driven Design
-The IServerCtrl interface acts as the central contract between components, decoupling command execution from server implementation details. This abstraction allows the Command system and policies to interact with the server without tight coupling, enabling easier testing and future extensibility. The interface encapsulates all core server operations—client management, channel manipulation, message broadcasting, and registration flow—into a clean API.
+The server manages non-blocking network I/O through a single `epoll` instance, parsing and executing commands according to RFC 1459 / RFC 2812.
 
-### Command Pattern with Policy Composition
-Commands are implemented using the Command pattern, where each IRC command (NICK, JOIN, PRIVMSG, etc.) is encapsulated as a Command object with an associated handler function. What makes this architecture particularly powerful is the policy composition system: commands can be decorated with multiple IPolicy objects (argument limits, registration requirements, permission checks) that are evaluated before command execution. This separation of concerns allows for declarative validation rules without cluttering command logic.
+### Registered Commands
 
-### Message Processing Pipeline
-The server implements a clean message pipeline:
-1. Raw bytes are received into per-client input buffers
-2. Complete IRC messages are parsed into structured Message objects
-3. Messages are enqueued for processing
-4. The command registry looks up and executes the appropriate handler
-5. Responses are generated through the Response class and buffered for output
+All core commands are registered through a policy-checked command registry:
 
-This pipeline decouples network I/O from protocol logic, allowing the event loop to handle data reception while commands are processed in batches.
+- **Connection & Registration**: `PASS`, `NICK`, `USER`, `CAP` (handshake stub for `LS` and `END`), `QUIT`
+- **Channel Operations**: `JOIN`, `PART`, `TOPIC`, `INVITE`, `KICK`, `MODE`
+- **Messaging**: `PRIVMSG` (supports channels `#`/`&` and private users, comma-separated targets)
+- **Liveness**: `PING`, `PONG`
 
-### Channel and Client State Management
-Clients and channels are managed through dedicated classes with clear responsibilities:
-* Client handles connection state, registration flags, buffering, and channel membership
-* Channel manages modes, members, operator privileges, and channel-specific data
+### Channel Modes
 
-The server maintains maps of both entities, with channels keyed by case-insensitive normalized titles to ensure RFC compliance. The IP-based connection limiting system tracks client IPs to prevent abuse, with a maximum of five connections per IP address.
+Supported channel modes (`MODE <#channel> {[+|-]|o|i|t|k|l} [<args>]`):
 
-### Response Generation and Protocol Compliance
-The Response class centralizes all RFC-compliant reply formatting, supporting both numeric and regular message formats. This centralization ensures consistency across commands and simplifies error handling through semi-automatic numeric replies. The system includes support for message chunking to respect the 512-byte IRC message limit.
+- `+i` / `-i`: Invite-only channel flag
+- `+t` / `-t`: Topic change restricted to channel operators
+- `+k` / `-k`: Set or remove channel key (password)
+- `+o` / `-o`: Grant or revoke channel operator status
+- `+l` / `-l`: Set or remove maximum user limit
 
-### Memory and Resource Management
-The architecture employs RAII principles with careful attention to ownership semantics:
+User MODE requests (`MODE <nick> +i`) return a compatibility reply (`221 UMODEIS`) so reference clients such as `irssi` can complete registration without errors.
 
-* The server owns clients and channels, managing their lifecycle
-* Commands and policies are owned by the registry
-* Epoll watchlists are automatically cleaned up through destructors
-* Signals are handled gracefully to ensure proper shutdown
+### Operational Rules & Limits
 
+- **I/O Model**: Strict single-threaded non-blocking `epoll` multiplexing; no `fork()`
+- **Nickname validation**: Max 32 characters, no whitespace or punctuation (` .,*?!@`), cannot begin with `$`, `:`, `~`, `&`, `#`, `@`, `%`, `+`
+- **Channel naming**: Must begin with `#` or `&`, length between 4 and 32 characters, alphanumeric characters plus `-` and `_`
+- **Channel join limit**: Maximum 3 concurrent channels per client
+- **Abuse prevention**: Maximum 5 concurrent connections per IP address
+- **Spam prevention**: Disconnects clients exceeding 42 messages within 2 seconds
+- **Heartbeat & Inactivity**: Periodic `PING` every 90 seconds; disconnects after unanswered ping
+- **Message chunking**: Formats outgoing messages within the 512-byte RFC limit
+
+For command syntax, parameters, error responses, and policy mechanics, see the [Server Documentation](docs/server.md).
+
+---
+
+## Bonus: Bot (`ircbot`)
+
+The bonus executable `ircbot` is a separate client program designed to automate channel administration and interact with users.
+
+### Bot Capabilities
+
+- **Automatic Channel Setup**: Automatically registers on the server with nickname `Bot`, joins its home channel (`#ssot` — Single Source Of Truth), restricts topic modification (`+t`), and sets an informational topic.
+- **Resilient Connection**: Connects using non-blocking sockets and `epoll`, automatically reconnecting with exponential backoff if the server goes down.
+- **Auto-Welcome**: Greets users when they join channels where the bot resides.
+- **Invite Handling**: Joins channels automatically when invited by users (`INVITE Bot #channel`).
+- **Ping/Pong Handling**: Responds to server `PING` requests to maintain an active session.
+- **Duplicate Prevention**: Gracefully stops if nickname `Bot` is already occupied (`433 ERR_NICKNAMEINUSE`).
+
+### Bot Commands
+
+Users trigger bot features via channel messages or private queries (`PRIVMSG`):
+
+| Command | Usage | Description |
+|---|---|---|
+| `!help` | `!help` | Prints available commands and help overview |
+| `!quote` | `!quote` | Returns a philosophical quote from 30 multilingual entries |
+| `!mirror` | `!mirror` | Toggles message mirroring on or off |
+| `!spam` | `!spam [<target>]` | Sends repeated messages (12x) to channel or specified user |
+
+For full command details, arguments, and execution flows, see the [Bot Documentation](docs/bot.md).
+
+---
+
+## Architecture Overview
+
+The system architecture separates protocol abstractions from low-level networking:
+
+- **`Epoll` abstraction**: Encapsulates Linux kernel event notification.
+- **`IServerCtrl` interface**: Decouples the command execution subsystem from internal server state.
+- **Command & Policy pattern**: Every command couples a handler with reusable policy guards (`AlreadyRegisteredPlcy`, `ArgsLimitPlcy`).
+- **Input/Output Buffering**: Per-client dynamic buffers manage partial TCP segments, CRLF packet aggregation, and outbound backpressure.
+- **Shared abstractions**: The bonus `ircbot` reuses the server's `Epoll`, `Message`, and `CommandRegistry` core for consistent event handling.
+
+For complete architectural details, lifecycle diagrams, and design trade-offs, see the [Architecture Document](docs/architecture.md).
+
+---
 
 ## Limitations
-* The server has no persistent storage (channels and users are not saved between restarts)
-* No SSL/TLS encryption
-* Limited to IPv4
-* Maximum 50,000 clients (configurable)
-* Minimal CAP negotiation (only LS/END support)
+
+- **Volatile storage**: In-memory state only; channels and registrations reset upon server restart.
+- **Transport security**: Plaintext TCP/IP (no SSL/TLS).
+- **Network scope**: IPv4 only; no server-to-server IRC daemon mesh (per 42 subject requirements).
+- **Capability negotiation**: Limited to IRCv3 `CAP LS` and `CAP END` handshake compatibility.
+- **Maximum clients**: Defaults to 50,000 clients (configurable via `MAX_CLIENTS`).
+
+---
+
+## Resources
+
+### IRC Protocol References
+
+- [RFC 1459](https://datatracker.ietf.org/doc/html/rfc1459) – Internet Relay Chat Protocol (original specification)
+- [RFC 2812](https://datatracker.ietf.org/doc/html/rfc2812) – Internet Relay Chat: Client Protocol
+- [RFC 2119](https://datatracker.ietf.org/doc/html/rfc2119) – Key words for use in RFCs to Indicate Requirement Levels
+- [Modern IRC Client Protocol](https://modern.ircdocs.horse/) – Current IRC protocol specification and numeric reply standard
+- [IRCv3 Specifications](https://ircv3.net/) – IRCv3 working group extensions (CAP negotiation)
+- [IRC Help Security Guidelines](https://www.irchelp.org/security/) – IRC network security considerations
+
+### System & C++ References
+
+- `epoll(7)` – Linux kernel I/O event notification facility
+- [cppreference.com](https://en.cppreference.com/) – C++ language and standard library reference (C++98)
+
+### AI Usage Disclosure
+
+In compliance with 42 curriculum documentation standards, artificial intelligence was utilized as follows:
+
+- **Documentation & Structuring**: AI was used to draft, reorganize, and refine this README and the satellite documentation files in `docs/` (command reference, bot reference, architecture migration).
+- **Protocol & Standard Reference**: AI served as an interactive query reference for RFC numeric reply codes, modern client handshake behaviors (specifically `irssi` connection flows), and standard C++98 library semantics.
+- **Testing & Test Suites**: AI was used to build a testing suite around unit tests and automated `nc` (netcat) tests to validate socket handling, parsing, and edge cases (maintained on dedicated development branches and not merged into `main`).
+
+All architectural design decisions (interface-driven command model, policy composition, client/channel lifecycle, buffer aggregation, and epoll integration) were authored, reviewed, and validated independently.
