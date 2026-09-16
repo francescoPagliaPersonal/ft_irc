@@ -10,27 +10,11 @@ A lightweight, non-blocking IRC (Internet Relay Chat) server in C++98 with an ev
 
 - [Description](#description)
 - [Instructions](#instructions)
-  - [Prerequisites](#prerequisites)
-  - [Compilation](#compilation)
-  - [Execution](#execution)
-  - [Connecting to the Server](#connecting-to-the-server)
-  - [Makefile Targets](#makefile-targets)
 - [Server (`ircserv`)](#server-ircserv)
-  - [Registered Commands](#registered-commands)
-  - [Channel Modes](#channel-modes)
-  - [Operational Rules & Limits](#operational-rules--limits)
-  - [Detailed Server Documentation](docs/server.md)
 - [Bonus: Bot (`ircbot`)](#bonus-bot-ircbot)
-  - [Bot Capabilities](#bot-capabilities)
-  - [Bot Commands](#bot-commands)
-  - [Detailed Bot Documentation](docs/bot.md)
 - [Architecture Overview](#architecture-overview)
-  - [Full Architecture Document](docs/architecture.md)
 - [Limitations](#limitations)
 - [Resources](#resources)
-  - [IRC Protocol References](#irc-protocol-references)
-  - [System & C++ References](#system--c-references)
-  - [AI Usage Disclosure](#ai-usage-disclosure)
 
 ---
 
