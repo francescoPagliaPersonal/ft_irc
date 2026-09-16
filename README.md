@@ -164,6 +164,7 @@ User MODE requests (`MODE <nick> +i`) return a compatibility reply (`221 UMODEIS
 - **Heartbeat & Inactivity**: Periodic `PING` every 90 seconds; disconnects after unanswered ping
 - **Message chunking**: Formats outgoing messages within the 512-byte RFC limit
 
+Limits can be customized via the preprocessor directives defined in `ft_irc.hpp`.\
 For command syntax, parameters, error responses, and policy mechanics, see the [Server Documentation](docs/server.md).
 
 ---
