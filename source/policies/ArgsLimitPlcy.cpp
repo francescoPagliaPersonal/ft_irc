@@ -22,6 +22,6 @@ rfc ArgsLimitPlcy::check(const Message & msg) const
 	// TODO needed? i couldn't find an official numeric for that
 	// there only seems to be a 15 params rule for the msg, which might be a parsing case, not an execution one
 	else if (args > _max)
-		return irc::MANYPARAMS; // ERR_TOOMANYPARAM
+		return irc::UNKNOWNERROR; // ERR_TOOMANYPARAM
 	return (irc::OK);
 }
