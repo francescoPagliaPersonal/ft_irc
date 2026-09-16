@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/10 01:00:26 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/16 14:29:08 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/16 16:46:25 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,7 @@ void ListeningSocket::_configureFD()
 			std::string("Error on listen(): ") + std::strerror(errno));
 	
 	// 5) configure socketfd as non-blocking
-	int flags = ::fcntl(_fd, F_GETFL, 0);
-	if (flags < 0 || ::fcntl(_fd, F_SETFL, flags | O_NONBLOCK) < 0)
+	if (::fcntl(_fd, F_SETFL, O_NONBLOCK) < 0)
 		throw std::runtime_error(
 			std::string("Error on fcntl(): ") + std::strerror(errno));
 }

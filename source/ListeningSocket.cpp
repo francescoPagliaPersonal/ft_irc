@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ListeningSocket.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:55:20 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/13 12:59:39 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/16 14:58:54 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,7 @@ int ListeningSocket::acceptConnection(struct sockaddr_in& ipAddr) const
 	if (newFD < 0)
 		return (ACCEPT_NONE);
 	// 2) make the FD non-blocking
-	int flags = ::fcntl(newFD, F_GETFL, 0);
-	if (flags < 0 || ::fcntl(newFD, F_SETFL, flags | O_NONBLOCK) < 0)
+	if (::fcntl(newFD, F_SETFL, O_NONBLOCK) < 0)
 	{
 		_errorOnAcceptConnection(ipAddr);
 		::close(newFD);
