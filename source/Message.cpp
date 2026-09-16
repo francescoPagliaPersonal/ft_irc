@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Message.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 09:01:01 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/09/16 10:52:52 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/16 12:34:47 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,11 @@ Message irc::string2Message(std::string str, Client *client)
 			str.erase(0, end);
 			msg.flags |= irc::MSG_HAS_PREFIX;
 		}
-		if (str.empty()) 
+		if (str.empty())
+		{
+			msg.flags = 0;
 			return msg;
+		}
 	}
 	
 	// Extract trailing if the patter is " :" must have a space infront
@@ -93,7 +96,10 @@ Message irc::string2Message(std::string str, Client *client)
 	clear_leading_char(str, ' ');
 	
 	if (str.empty())
+	{
+		msg.flags = 0;
 		return msg;
+	}
 	// Extract command
 	std::string::size_type pos = str.find_first_of(' ');
 	if (pos)
