@@ -75,29 +75,28 @@ This target starts `ircserv 6669 1o.0` as a background process, waits 0.3 second
 ```mermaid
 flowchart TD
   start([ircbot]) --> connect["TCP connect, non-blocking"]
-  connect -->|unreachable| backoff["Exponential backoff"]
-  backoff --> connect
+  connect <-->|unreachable| backoff["Exponential backoff"]
 
   connect -->|connected| register["NICK / USER / PASS"]
   register --> epoll["epoll_wait"]
 
+  drop --> connect
+  epoll -->|HUP or ERR| drop["Close FD, clear buffers"]
   epoll -->|EPOLLIN| inBuf["Input buffer"]
   epoll -->|EPOLLOUT| outBuf["Output buffer"]
-  epoll -->|HUP or ERR| drop["Close FD, clear buffers"]
-  drop --> connect
 
   inBuf --> parse["Split CRLF, parse Message"]
   parse --> queue["Message queue"]
   queue --> exec{"Dispatch"}
 
-  exec -->|"001 welcome"| home["JOIN #ssot, MODE +t, TOPIC"]
-  exec -->|"433 nick in use"| halt([Graceful stop])
   exec -->|"!help !quote !mirror !spam"| cmds["CommandRegistry"]
+  exec -->|"001 welcome"| home["JOIN #ssot, MODE +t, TOPIC"]
   exec -->|"JOIN / INVITE / PING / PRIVMSG"| auto["Greet, auto-join, PONG, mirror"]
+  exec -->|"433 nick in use"| halt([Graceful stop])
 
   home --> outBuf
-  cmds --> outBuf
   auto --> outBuf
+  cmds --> outBuf
 ```
 
 ### Non-Blocking Epoll Core
