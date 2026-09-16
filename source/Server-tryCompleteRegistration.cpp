@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 13:19:17 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/16 14:44:46 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/16 14:59:24 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void buildWelcomeMessage(std::stringstream& ss, Client* client, const std::strin
 	ss	<< " :The server was started on " << time  << '.' << CRLF;
 		// this is the mode info line: o is SERVER operator, itkol are channel MODE
 	build00line(ss, irc::MYINFO, nick);
-	ss	<< " " + srvName + " ft_irc-v202608 o itkol" << CRLF;
+	ss	<< " " + srvName + " ft_irc-v202608 itkol" << CRLF;
 }
 
 void buildMotdLine(std::stringstream& ss, const std::string& nick, const std::string& msg)
