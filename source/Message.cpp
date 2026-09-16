@@ -6,12 +6,13 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 09:01:01 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/09/04 10:26:49 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/16 10:52:52 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Message.hpp"
 #include "ft_irc.hpp"
+#include "irc.hpp"
 #include <cctype>
 #include <cstddef>
 #include <stdexcept>
@@ -32,15 +33,16 @@ namespace  {
 
 }
 
-// Count the total number of parameters and trailing part of MSG.
-int irc::argCount(const Message & msg)
+irc::uint	Message::argCount() const
 {
-	size_t count = 0;
-	// count += (msg.flags & irc::MSG_HAS_PREFIX) != 0 ;
-	// count += (msg.flags & irc::MSG_HAS_COMMAND) != 0;
-	// count += (msg.flags & irc::MSG_HAS_TRAILING) != 0;
-	count += msg.params.size();
-	return count;
+	return params.size();
+}
+
+std::string	Message::getTrailing() const
+{
+	if (flags & irc::MSG_HAS_TRAILING)
+		return params.back();
+	return "";
 }
 
 // Parse STR into a Message struct for CLIENT, setting its flags accordingly.
@@ -49,6 +51,8 @@ Message irc::string2Message(std::string str, Client *client)
 	Message msg;
 	msg.flags = 0;
 	msg.sender = client;
+
+	std::string tmpTrail;
 	
 	// Clear spaces at beggining
 	// if the message is empty is returned as is and the flags will say so!
@@ -79,7 +83,7 @@ Message irc::string2Message(std::string str, Client *client)
 	std::string::size_type trailing_pos = str.find(" :");
 	if (trailing_pos != std::string::npos) 
 	{
-		msg.trailing = str.substr(trailing_pos + 2);
+		tmpTrail = str.substr(trailing_pos + 2);
 		str.erase(trailing_pos);
 		clear_trailing_char(str, ' ');
 
@@ -112,7 +116,7 @@ Message irc::string2Message(std::string str, Client *client)
 	}
 
 	if (msg.flags & irc::MSG_HAS_TRAILING)
-		msg.params.push_back(msg.trailing);
+		msg.params.push_back(tmpTrail);
 
 	if (!msg.params.empty())
 		msg.flags |= irc::MSG_HAS_PARAMS;

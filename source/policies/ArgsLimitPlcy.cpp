@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ArgsLimitPlcy.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/16 14:48:41 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/11 16:52:29 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/16 10:26:03 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 // Validate that MSG has between _min and _max arguments.
 rfc ArgsLimitPlcy::check(const Message & msg) const
 {
-	int args = irc::argCount(msg);
+	int args = msg.argCount();
 	if (args < _min)
 		return (irc::NEEDMOREPARAMS); // ERR_NEEDMOREPARAM
 	// TODO needed? i couldn't find an official numeric for that

@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 14:24:29 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/09/03 11:54:48 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/16 10:24:23 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,12 @@ rfc cmd_topic(IServerCtrl & srv, const Message & msg)
 	if (!channel->isMember(client))
 		return irc::NOTONCHANNEL;
 	
-	if (irc::argCount(msg) == 1 && !(msg.flags & irc::MSG_HAS_TRAILING))
+	if (msg.argCount() == 1)
 	{
 		if (channel->getTopic().empty())
 			return irc::NOTOPIC;
 	}
-	else if (irc::argCount(msg) == 2)
+	else if (msg.argCount() == 2)
 	{
 		if (channel->getModes() & CH_TOPIC && !channel->isChanOp(client))
 			return irc::CHANOPRIVSNEEDED;
