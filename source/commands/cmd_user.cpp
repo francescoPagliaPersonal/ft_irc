@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 13:54:12 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/09/16 10:17:37 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/16 14:54:16 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,21 +15,34 @@
 #include "IServerCtrl.hpp"
 #include "Client.hpp"
 #include "irc.hpp"
+#include "Response.hpp"
 
 // Set the client's user name and real name, and mark USER registration.
 rfc cmd_user(IServerCtrl & srv, const Message & msg)
 {
-	// TODO: this is just a quick proof of concept more complex UserName evaluation 
-	// should be carried out (against the whole server).
-	// TODO also need charset validation?
 	
 	Client *client = msg.sender;
 	(void) srv;
 	
 	if (!client->setRegistrationFlags(REG_USER))
 		return (irc::ALREADYREGISTERED);
-	client->setUserName(msg.params[0]);
-	client->setRealName(msg.params[3]);
+	// do not accept the user if user or real name are not compliant with the generic rules
+	if (!irc::isNameCompliant(msg.params[0]))
+	{
+		srv.sendMessage(msg.sender, Response::buildNumeric(msg, irc::UNKNOWNERROR,
+			"", "User Name not compliant.")
+		);
+		return (irc::OK);
+	}
+	if (!irc::isNameCompliant(msg.params[3]))
+		{
+		srv.sendMessage(msg.sender, Response::buildNumeric(msg, irc::UNKNOWNERROR,
+			"", "Real Name not compliant.")
+		);
+		return (irc::OK);
+	}
+	client->setUserName(msg.params[0].substr(0, MAX_NICKLEN));
+	client->setRealName(msg.params[3].substr(0, MAX_NICKLEN));
 	if (DEBUG == debug::DETAILED)
 		std::cout << "[FD " << client->getFD() 
 			<< "] UserName registration successfull.\n";
