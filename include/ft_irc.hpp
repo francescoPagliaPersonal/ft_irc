@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:25:38 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/16 14:29:36 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/16 16:37:55 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 /* We consider to resever in the program at least 5 FDs following this criteria:
  * 0 1 2 stdio
  * 3 server listener
- * 4 reserved client to return closing event without impacting the server.
+ * 4 epoll instance
  */
 # define SERVER_NAME "irc.CoolServ.42"
 # define RESERVED_FDS 5
