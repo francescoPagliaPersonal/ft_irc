@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CommandRegistry-RegisterCmds.cpp                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 11:41:20 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/09/15 16:03:11 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/16 10:48:01 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void CommandRegistry::registerCmds()
 	
 	Command	*privmsg = new Command("PRIVMSG", cmd_privmsg);
 	privmsg->addPolicy(new AlreadyRegisteredPlcy(true));
-	privmsg->addPolicy(new ArgsLimitPlcy(2, 2));
+	privmsg->addPolicy(new ArgsLimitPlcy(0, 2));
 	_commands[privmsg->getName()] = privmsg;
 
 	Command	*invite = new Command("INVITE", cmd_invite);
