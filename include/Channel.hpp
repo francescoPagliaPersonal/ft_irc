@@ -85,7 +85,7 @@ class Channel
 		void removeLimit();
 		void setInvite(bool);
 		void setTopicFlag(bool);
-		bool setOperator(bool, Client*);
+		bool setOperator(bool, Client*, Client*);
 
 		static bool isTitleCompliant(const std::string& channel);
 		static std::string title2key(std::string);

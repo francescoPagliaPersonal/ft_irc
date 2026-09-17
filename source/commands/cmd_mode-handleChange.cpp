@@ -131,7 +131,7 @@ bool handleModeChange(Command::Data& data, bool switcher, char c, std::size_t* i
 				);
 				break ;
 			}
-			bool changed = data.channel->setOperator(switcher, op);
+			bool changed = data.channel->setOperator(switcher, op, data.msg.sender);
 			if (changed)
 			{
 				modeOP = true;
@@ -140,6 +140,11 @@ bool handleModeChange(Command::Data& data, bool switcher, char c, std::size_t* i
 				else if (!switcher)
 					data.modeChOPrem.push_back(op->getNick());
 			}
+			else if (data.channel->isFounder(op))
+				data.srv.sendMessage(data.client,
+					Response::buildNumeric(data.msg, irc::UNKNOWNERROR,
+						data.channel->getTitle(),
+						"Cannot deop channel founder " + op->getNick()));
 			break ;
 		}
 

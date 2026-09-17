@@ -79,7 +79,7 @@ void Channel::setTopicFlag(bool switcher)
 	The caller guarantees, that CLIENT IS on the channel.
 	(irc::USERNOTINCHANNEL already triggered before.
 */
-bool Channel::setOperator(bool switcher, Client* client)
+bool Channel::setOperator(bool switcher, Client* client , Client* sender)
 {
 	std::map<Client*, bitMask>::iterator it;
 	it = _members.find(client);
@@ -93,8 +93,10 @@ bool Channel::setOperator(bool switcher, Client* client)
 		else
 			return (false);
 	}
-	else if (it->second & US_OPERATOR)
+	else if (it->second & US_OPERATOR )
 	{
+		if ((it->second & US_FOUNDER) && client != sender)
+			return (false);
 		it->second &= ~US_OPERATOR;
 		--_chanOps;
 	}
