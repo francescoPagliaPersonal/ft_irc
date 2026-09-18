@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_irc.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:25:38 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/18 12:14:41 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/18 13:14:30 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,8 @@
 # define SPAM_TRHESHOLD_TIME 2.0
 # define INTERVAL_PING 90
 # define MAX_UNANSWERED_PING 1
-
+# define FORBIDDEN_NAME_CHAR " .,*?!@"
+# define FORBIDDEN_REALNAME_CHAR ".,*?!@"
 # ifndef DEBUG
 #  define DEBUG 0
 # endif
