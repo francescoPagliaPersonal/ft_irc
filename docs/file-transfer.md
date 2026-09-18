@@ -59,16 +59,18 @@ Queries usually travel in `PRIVMSG`. Some clients put CTCP *replies* in `NOTICE`
 DCC uses one CTCP message as a handshake, then leaves IRC entirely.
 
 ```mermaid
+%%{init: {'themeCSS': '.actor-line { stroke-dasharray: 15,5; stroke: #404040; }' }}%%
 sequenceDiagram
   participant A as Client A (sender)
   participant S as ircserv
   participant B as Client B (receiver)
 
-  A->>S: PRIVMSG B :\x01DCC SEND file ip port size\x01
-  S->>B: :A!~user@host PRIVMSG B :\x01DCC SEND file ip port size\x01
+  A->>S: PRIVMSG B :\x01DCC SEND ...
+  S->>B: :A!~user@host PRIVMSG B :\x01DCC SEND ...
   Note over S: Handshake forwarded. Server is done.
-  B->>A: Direct TCP connect to ip:port
-  A->>B: Raw file bytes
+  Note over A,B: ── direct P2P, no server ──
+  B-->>A: Direct TCP connect to ip:port
+  A-->>B: Raw file bytes
 ```
 
 ### File transfer (`DCC SEND`)
