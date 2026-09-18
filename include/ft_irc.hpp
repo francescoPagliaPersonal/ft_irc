@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:25:38 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/18 11:43:00 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/18 12:14:41 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@
 # define CRLF "\r\n"
 # define COL_GREEN "\033[32m"
 # define COL_CYAN "\033[36m"
+# define COL_YELLOW "\033[33m"
 # define COL_RESET "\033[0m"
 # define COL_GRAY "\033[90m"
 # define MSG_MAX_LENGTH 512

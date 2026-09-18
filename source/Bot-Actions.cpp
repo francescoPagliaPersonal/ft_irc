@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 08:12:43 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/18 11:56:08 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/18 12:19:40 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void Bot::sendMessage(const std::string& msg)
 	_bufOUT.append(msg);
 	if (DEBUG)
 		std::cout << "[Bot] Appending to output buffer:\n"
-				  << COL_GRAY << msg << COL_RESET << std::flush;
+				  << COL_YELLOW << msg << COL_RESET << std::flush;
 }
 
 // -------------------------------------------------------------------------- //

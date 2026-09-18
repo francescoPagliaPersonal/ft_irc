@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 17:02:24 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/18 11:56:51 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/18 12:19:48 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,5 +121,5 @@ void	Client::putReply2Buff(const std::string& str)
 	_bufOUT.append(str);
 	if (DEBUG)
 		std::cout << "[FD " << _fd << "] Appending to output buffer:\n"
-		<< COL_GRAY << str << COL_RESET << std::flush;
+		<< COL_YELLOW << str << COL_RESET << std::flush;
 }
