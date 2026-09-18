@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/10 00:45:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/16 16:36:47 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/18 11:08:21 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 
 namespace {
 	std::string retrieveServerAddress();
-	void printNetworkUsageInfo(const std::string&, int, const std::string&);
+	void printNetworkUsageInfo(const std::string&, int, const std::string&, const std::string&);
 
 	irc::uint32 getFDLimit()
 	{
@@ -74,7 +74,7 @@ Server::Server(int port, std::string pw)
 	_cmdReg.registerCmds();
 	_startTime = std::time(NULL);
 	std::string ip = retrieveServerAddress();
-	printNetworkUsageInfo(ip, port, pw);
+	printNetworkUsageInfo(ip, port, pw, _listener.getHostName());
 }
 
 Server::~Server()
@@ -131,9 +131,10 @@ std::string retrieveServerAddress()
 }
 
 // Print welcome message with instructions.
-void printNetworkUsageInfo(const std::string& ip, int port, const std::string& pw)
+void printNetworkUsageInfo(const std::string& ip, int port, const std::string& pw, const std::string& host)
 {
-	std::cout << "[Info] Server address: " << ip << ':' << port << '\n';
+	std::cout << "[Info] Server address: " << ip << ':' << port << '\n'
+			  << "                       " << host << ':' << port << '\n';
 	std::cout << "[Info] Connect with irssi from terminal\n" << COL_CYAN
 			  << "       locally:  " << COL_RESET << "irssi -c localhost"
 			  << " -p " << port << " -w " << pw << '\n' << COL_GREEN
