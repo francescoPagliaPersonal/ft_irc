@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Bot-Buffer.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/07 17:16:20 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/16 10:43:51 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/18 11:32:54 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ namespace
 	// Print received message on one line.
 	void printMessageOneLine(const Message& msgs, size_t i)
 	{
-		std::cout << "[Debug] Msg #" << i
+		std::cout << "[Bot] Msg #" << i
 			<< " prefix {"<< msgs.prefix 
 			<< "} command {"<< msgs.command
 			<< "} params {" ;

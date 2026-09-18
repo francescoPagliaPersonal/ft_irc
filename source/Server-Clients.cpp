@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 16:27:31 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/16 14:41:18 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/18 11:30:25 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void Server::sendMessage(Client* client, const std::string& str) const
 	{
 		_addToRemove(client);
 		if (DEBUG >= debug::DETAILED)
-			std::cout << "[Info] Client '" << client->getNick()
+			std::cout << "[Server] Client '" << client->getNick()
 					  << "' (FD " << client->getFD() << ") will be disconnected"
 					  << " due to a full outgoing buffer.\n";
 	}
@@ -76,8 +76,8 @@ bool Server::_appendToIPrecords(Client* client)
 	_IPrecords[IPV4].push_back(client);
 	if (DEBUG)
 	{
-		std::cout << "\n[HOST " << IPV4 << "]"
-			<< " A new host has been recorded.\n" << std::endl;
+		std::cout << "[Server] (" << irc::timeNowStr() << ')'
+				  << " Recorded a new host: " << IPV4 << '\n';
 	}
 	return true;
 }
@@ -107,8 +107,9 @@ void Server::_removeFromIPrecords(Client* client)
 		_IPrecords.erase(ip);
 		if (DEBUG)
 		{
-			std::cout << "\n[HOST " << client->getHost() << "]"
-				<< " Has been removed from the server.\n" << std::endl;
+			std::cout << "[Server] (" << irc::timeNowStr() << ')'
+					  << " All connections from " << client->getHost()
+					  << " closed, removing host.\n";
 		}
 	}
 		
@@ -149,15 +150,15 @@ void Server::_registerNewClient(int fd, const struct sockaddr_in& addr)
 		_epoll.mod(fd, EPOLL_FL_QUIT, tmp);
 		return ;	
 	}
-	std::cout << "[Info] New connection from " << tmp->getHost()
-			<< " accepted at FD " << fd << " (" << irc::timeNowStr() << ").\n";
+	std::cout << "[Server] (" << irc::timeNowStr() << ") New connection from "
+			<< tmp->getHost() << " accepted at FD " << fd << ".\n";
 }
 // Remove a client and deregister FD.
 void Server::_deleteClient(Client* client)
 {
-	std::cout << "[Info] Connection to " << client->getHost()
-			  << " is being closed on FD " << client->getFD()
-			  << " (" << irc::timeNowStr() << ").\n";
+	std::cout << "[Server] (" << irc::timeNowStr() << ')'
+			  << " Connection to " << client->getHost()
+			  << " is being closed on FD " << client->getFD() << ".\n";
 	std::set<Client*> contacts;
 	if (!client->hasQuit())
 	{

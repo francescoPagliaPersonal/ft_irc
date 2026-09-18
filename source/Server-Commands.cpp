@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 16:32:42 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/16 14:41:26 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/18 11:09:45 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void Server::_executeCommands()
 	rfc numeric;
 	std::time_t now = time(NULL);
 	if (DEBUG && !_msgsQueue.empty())
-		std::cout << "[Info] Processing message queue with "
+		std::cout << "[Server] Processing message queue with "
 			<< _msgsQueue.size() << " messages...\n";
 	// process every command in the message queue
 	while (!_msgsQueue.empty())
