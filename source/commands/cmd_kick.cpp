@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/04 06:33:39 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/09/16 18:28:10 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/18 10:08:20 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ rfc cmd_kick(IServerCtrl & srv, const Message & msg)
 		if (channel->isFounder(client2Kick))
 		{
 			srv.sendMessage(sender,
-				Response::buildNumeric(msg, irc::UNKNOWNERROR,
+				Response::buildNumeric(msg, irc::CHANOPRIVSNEEDED,
 					channel->getTitle(),
 					"Cannot kick channel founder " + users[i]));
 			continue ;
