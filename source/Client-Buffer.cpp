@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 17:02:24 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/16 13:52:10 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/18 12:19:48 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,8 @@ irc::epollret Client::receiveToBuffer()
 	// thus the usual EAGAIN cannot happen. any other error is a problem.
 	if (ret == -1)
 	{
-		if (DEBUG)
-			std::cerr << "[Error] FD " << _fd << " recv(): "
-				<< errno << ", " << strerror(errno) << std::endl;
+		std::cerr << "[Error] FD " << _fd << " recv(): "
+			<< errno << ", " << strerror(errno) << std::endl;
 		return (irc::RET_CLOSE);
 	}
 	else if (ret == 0) // client disconnected
@@ -95,9 +94,8 @@ irc::epollret Client::sendFromBuffer()
 	// thus the usual EAGAIN cannot happen. any other error is a problem.
 	if (ret < 0)
 	{
-		if (DEBUG)
-			std::cerr << "[Error] FD " << _fd << " send(): "
-				<< errno << ", " << strerror(errno) << std::endl;
+		std::cerr << "[Error] FD " << _fd << " send(): "
+			<< errno << ", " << strerror(errno) << std::endl;
 		return (irc::RET_CLOSE);
 	}
 	if (ret == static_cast<ssize_t>(_bufOUT.size()))
@@ -122,5 +120,6 @@ void	Client::putReply2Buff(const std::string& str)
 	
 	_bufOUT.append(str);
 	if (DEBUG)
-		std::cout << "[FD " << _fd << "] Appending to output buffer:\n" << str;
+		std::cout << "[FD " << _fd << "] Appending to output buffer:\n"
+		<< COL_YELLOW << str << COL_RESET << std::flush;
 }

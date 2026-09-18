@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server-procInputBuffer.cpp                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 10:05:02 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/09/16 10:27:07 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/18 12:17:04 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ namespace {
 
 	void printMessageOneLine(const Message& msgs, size_t i)
 	{
-		std::cout << "[FD " << msgs.sender->getFD() << "] Msg #" << i
+		std::cout << COL_GRAY << "[FD " << msgs.sender->getFD() << "] Msg #" << i
 			<< " prefix {"<< msgs.prefix 
 			<< "} command {"<< msgs.command
 			<< "} params {" ;
@@ -48,7 +48,7 @@ namespace {
 				std::cout << '|';
 			std::cout << msgs.params[j];
 		}
-		std::cout << "} trailing {" << msgs.getTrailing() << "}\n";
+		std::cout << "} trailing {" << msgs.getTrailing() << '}' << COL_RESET << '\n';
 		i++;
 	}
 }

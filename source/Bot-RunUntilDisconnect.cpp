@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 09:28:34 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/16 14:31:48 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/18 12:22:35 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void Bot::_runUntilDisconnect()
 				break;
 			case irc::RET_CLOSE:
 				_hasConn = false;
-				std::cout << "[Bot] Connection to server lost.\n";
+				std::cout << "[Bot] (" << irc::timeNowStr() << ") Connection to server lost.\n";
 				break;
 			case irc::RET_PARSEINPUT:
 				_processInputBuffer();
