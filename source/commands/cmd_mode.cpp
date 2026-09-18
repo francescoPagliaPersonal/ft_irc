@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_mode.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 16:57:46 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/09/18 08:37:26 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/18 10:26:50 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,7 +149,7 @@ void processModeRequests(Command::Data& data)
 			modeOP = helper::handleModeChange(data, switcher, modes[n], &argsPos);
 	}
 	// -- enforce op promotion if there is no operator left after MODE
-	Client* promoted = data.channel->ensureChanOp();
+	Client* promoted = data.channel->promoteIfNoChanOp();
 	if (promoted != NULL)
 	{
 		modeOP = true;

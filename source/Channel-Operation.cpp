@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel-Operation.cpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 17:13:52 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/18 08:38:19 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/18 10:26:50 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void Channel::addClient(Client* client, bitMask privileges = 0)
 }
 
 // Promote the first remaining member when the channel has no operator.
-Client* Channel::ensureChanOp()
+Client* Channel::promoteIfNoChanOp()
 {
 	if (_members.empty() || _chanOps != 0)
 		return (NULL);
@@ -49,7 +49,7 @@ Client* Channel::removeClient(Client* client)
 	if (member->second & US_OPERATOR)
 		--_chanOps;
 	_members.erase(client);
-	return (ensureChanOp());
+	return (promoteIfNoChanOp());
 }
 
 // Check if the channel has no members left.

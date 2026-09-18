@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/13 10:19:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/18 08:37:30 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/18 10:26:50 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ class Channel
 		// ---- operation
 		void addClient(Client*, bitMask);
 		Client* removeClient(Client*);
-		Client* ensureChanOp();
+		Client* promoteIfNoChanOp();
 		bool isEmpty() const;
 		// ---- get
 		std::string getTitle() const;		// used in debug & test functions
