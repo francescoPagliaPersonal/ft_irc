@@ -173,16 +173,6 @@ For command syntax, parameters, error responses, and policy mechanics, see the [
 
 ---
 
-## Bonus: File Transfer (DCC / CTCP)
-
-File transfer is a bonus of the IRC protocol, not a dedicated server command. Modern clients negotiate a **Direct Client-to-Client (DCC)** session using **CTCP** payloads wrapped in ordinary `PRIVMSG` messages. The server only forwards that handshake (filename, IP, port); afterwards the two clients exchange the file over their own TCP connection and `ircserv` is out of the loop.
-
-A correctly implemented `PRIVMSG` path is therefore sufficient to handle file transfer. CTCP is also used for other client features such as `/me` (`ACTION`), version queries, and latency pings.
-
-For the handshake format, what the server does and does not do, and how to try it with `irssi`, see the [File Transfer Documentation](docs/file-transfer.md).
-
----
-
 ## Bonus: Bot (`ircbot`)
 
 The bonus executable `ircbot` is a separate client program designed to automate channel administration and interact with users.
@@ -208,6 +198,16 @@ Users trigger bot features via channel messages or private queries (`PRIVMSG`):
 | `!spam` | `!spam [<target>]` | Sends repeated messages (12x) to channel or specified user |
 
 For full command details, arguments, and execution flows, see the [Bot Documentation](docs/bot.md).
+
+---
+
+## Bonus: File Transfer (DCC / CTCP)
+
+File transfer is a bonus of the IRC protocol, not a dedicated server command. Modern clients negotiate a **Direct Client-to-Client (DCC)** session using **CTCP** payloads wrapped in ordinary `PRIVMSG` messages. The server only forwards that handshake (filename, IP, port); afterwards the two clients exchange the file over their own TCP connection and `ircserv` is out of the loop.
+
+A correctly implemented `PRIVMSG` path is therefore sufficient to handle file transfer. CTCP is also used for other client features such as `/me` (`ACTION`), version queries, and latency pings.
+
+For the handshake format, what the server does and does not do, and how to try it with `irssi`, see the [File Transfer Documentation](docs/file-transfer.md).
 
 ---
 
