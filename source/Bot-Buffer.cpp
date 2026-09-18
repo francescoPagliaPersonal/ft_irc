@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/07 17:16:20 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/18 11:32:54 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/18 11:52:37 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,7 @@ void Bot::_processInputBuffer()
 	{
 		Message tmp = irc::string2Message(rawStrs[i], NULL);
 		_msgsQueue.push_back(tmp);
-		if (DEBUG) 
+		if (DEBUG == debug::DETAILED) 
 			printMessageOneLine(tmp, i + 1);
 	}
 }
