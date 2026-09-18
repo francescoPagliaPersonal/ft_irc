@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   irc.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/24 17:48:24 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/16 13:50:20 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/18 13:11:43 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 namespace irc
 {
 	void allCaps(std::string & str);
-	bool isNameCompliant(const std::string& );
+	bool isNameCompliant(const std::string&, std::string);
 	std::vector<std::string> strSplit(std::string str, char ch, bool keepEmptyStr);
 	std::string chunkifyTrailing(const std::string & msgArgs, std::string msgTrailing);
 	std::string timeNowStr();

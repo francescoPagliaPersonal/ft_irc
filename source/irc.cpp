@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   irc.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/21 11:27:30 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/09/16 14:47:42 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/18 13:19:30 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,13 @@ void irc::allCaps(std::string & str)
 }
 
 // Validates NICK and channel PASSWORD.
-bool irc::isNameCompliant(const std::string & word)
+bool irc::isNameCompliant(const std::string & word, std::string forbiddenChars)
 {
-	std::string mustNotContain(" .,*?!@");
 	std::string mustNotStartWith("$:~&#@%+");
 	
 	if (word.size() > MAX_NICKLEN)
 		return false;
-	if (!(word.find_first_of(mustNotContain) == std::string::npos))
+	if (!(word.find_first_of(forbiddenChars) == std::string::npos))
 		return false;
 	if (mustNotStartWith.find_first_of(word[0]) != std::string::npos)
 		return false;
