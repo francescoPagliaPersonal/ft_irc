@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 16:27:31 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/18 11:30:25 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/18 11:39:40 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,8 +183,6 @@ void Server::_deleteClient(Client* client)
 // Disconnects a client: remove all pending msgs, channels then client itself.
 void Server::_prepareClientDisconnect(Client* client)
 {
-	std::cout << "[Warning] Client removal requested for FD " << client->getFD()
-		<< ". Verify implementation.\n";
 	_removeMsgsFrom(client);
 	_epoll.mod(client->getFD(), EPOLL_FL_QUIT, client);
 }
