@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 16:57:46 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/09/16 12:15:37 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/18 08:37:26 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,13 @@ void processModeRequests(Command::Data& data)
 			helper::sendUnknownMode(data, modes[n]);
 		else
 			modeOP = helper::handleModeChange(data, switcher, modes[n], &argsPos);
+	}
+	// -- enforce op promotion if there is no operator left after MODE
+	Client* promoted = data.channel->ensureChanOp();
+	if (promoted != NULL)
+	{
+		modeOP = true;
+		data.modeChOPadd.push_back(promoted->getNick());
 	}
 	// 3) build the reply string on a successful mode change
 	reply = helper::buildReply(data, modeOP, modesSet);
