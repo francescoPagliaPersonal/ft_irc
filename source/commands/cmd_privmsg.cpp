@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_privmsg.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/19 15:31:28 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/16 10:50:12 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/18 13:01:49 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ rfc cmd_privmsg(IServerCtrl& srv, const Message& msg)
 {
 	Client* sender = msg.sender;
 	if (!(msg.flags & irc::MSG_HAS_PARAMS))
+		return (irc::NORECIPIENT);
+	if (msg.params.size() == 1 && msg.flags & irc::MSG_HAS_TRAILING)
 		return (irc::NORECIPIENT);
 	if (!(msg.flags & irc::MSG_HAS_TRAILING))
 		return (irc::NOTEXTTOSEND);
