@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_mode-handleChange.cpp                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/29 23:12:59 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/02 12:35:46 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/18 10:40:14 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ namespace
 				data.client,
 				Response::buildNumeric(
 					data.msg,
-					// TODO ?? IRCv3 offers 696 + mode specific message
 					irc::NEEDMOREPARAMS,
 					data.msg.command + " " + data.channel->getTitle())
 			);
@@ -130,6 +129,14 @@ bool handleModeChange(Command::Data& data, bool switcher, char c, std::size_t* i
 					Response::buildNumeric(data.msg, irc::USERNOTINCHANNEL,
 						data.msg.params[*iParams] + " " + data.channel->getTitle())
 				);
+				break ;
+			}
+			else if (!switcher && data.channel->isFounder(op) && op != data.msg.sender)
+			{
+				data.srv.sendMessage(data.client,
+					Response::buildNumeric(data.msg, irc::CHANOPRIVSNEEDED,
+						data.channel->getTitle(),
+						"Cannot deop channel founder " + op->getNick()));
 				break ;
 			}
 			bool changed = data.channel->setOperator(switcher, op);

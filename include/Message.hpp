@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Message.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 17:38:21 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/16 10:50:59 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/16 15:43:57 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 // Structure to separate data according to IRC's RFC protocol.
 struct Message
 {
-	unsigned char				flags;						
+	irc::uint8					flags;						
 	std::string					prefix;
 	std::string					command;
 	std::vector<std::string>	params;

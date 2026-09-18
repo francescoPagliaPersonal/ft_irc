@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/13 10:19:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/02 14:06:52 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/18 10:31:26 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,8 @@ class Channel
 		// ----
 		// ---- operation
 		void addClient(Client*, bitMask);
-		void removeClient(Client*);
+		Client* removeClient(Client*);
+		Client* promoteIfNoChanOp();
 		bool isEmpty() const;
 		// ---- get
 		std::string getTitle() const;		// used in debug & test functions
@@ -75,6 +76,7 @@ class Channel
 		bitMask		getModes() const;
 		std::map<Client*, bitMask>	getMembersMap() const;
 		void pushMembersToSet(std::set<Client *> *) const;
+		bool isFounder(Client*) const;
 		
 		// ---- set
 		void setTopic(const std::string&);

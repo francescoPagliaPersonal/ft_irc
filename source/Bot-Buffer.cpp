@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Bot-Buffer.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/07 17:16:20 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/16 10:43:51 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/18 12:19:04 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ namespace
 	// Print received message on one line.
 	void printMessageOneLine(const Message& msgs, size_t i)
 	{
-		std::cout << "[Debug] Msg #" << i
+		std::cout << COL_GRAY << "[Bot] Msg #" << i
 			<< " prefix {"<< msgs.prefix 
 			<< "} command {"<< msgs.command
 			<< "} params {" ;
@@ -61,7 +61,7 @@ namespace
 				std::cout << '|';
 			std::cout << msgs.params[j];
 		}
-		std::cout << "} trailing {" << msgs.getTrailing() << "}\n";
+		std::cout << "} trailing {" << msgs.getTrailing() << '}' << COL_RESET << '\n';
 		i++;
 	}
 
@@ -142,7 +142,7 @@ void Bot::_processInputBuffer()
 	{
 		Message tmp = irc::string2Message(rawStrs[i], NULL);
 		_msgsQueue.push_back(tmp);
-		if (DEBUG) 
+		if (DEBUG == debug::DETAILED) 
 			printMessageOneLine(tmp, i + 1);
 	}
 }

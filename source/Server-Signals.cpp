@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 16:36:55 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/08/17 16:37:20 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/16 14:44:26 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void Server::signalHandler(int)
 }
 
 // Configures and registers signal and signal handlers.
-void Server::_captureSignals() // TODO this uses <signal.h> not <csignal>! is okay, but make sure what to use
+void Server::_captureSignals()
 {
 	struct sigaction sa;
 	std::memset(&sa, 0, sizeof(sa));

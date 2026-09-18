@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/08 13:46:16 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/11 21:18:10 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/18 12:07:27 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,7 @@ namespace  {
 	{
 		errno = 0;
 		// configure socketfd as non-blocking
-		int flags = ::fcntl(fd, F_GETFL, 0);
-		if (flags < 0 || ::fcntl(fd, F_SETFL, flags | O_NONBLOCK) < 0)
+		if (::fcntl(fd, F_SETFL, O_NONBLOCK) < 0)
 			throw std::runtime_error(
 				std::string("Error on fcntl(): ")
 					+ std::strerror(errno));
@@ -38,7 +37,8 @@ int Bot::_connectWithRetry(int delaySeconds)
 {
     for (int attempt = 0; _keepRunning && attempt < CONN_MAX_RETRY; ++attempt)
     {
-		std::cout << "[Bot] Attempting connection to server...\n";
+		std::cout << "[Bot] (" << irc::timeNowStr()
+				  << ") Attempting connection to server...\n";
         int fd = ::socket(AF_INET, SOCK_STREAM, 0);
         if (fd < 0)
             throw std::runtime_error(std::string("socket: ") + std::strerror(errno));

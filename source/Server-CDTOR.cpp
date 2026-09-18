@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/10 00:45:35 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/08 11:54:37 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/18 12:02:31 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 
 namespace {
 	std::string retrieveServerAddress();
-	void printNetworkUsageInfo(const std::string&, int, const std::string&);
+	void printNetworkUsageInfo(const std::string&, int, const std::string&, const std::string&);
 
 	irc::uint32 getFDLimit()
 	{
@@ -39,7 +39,11 @@ namespace {
 		if (rlm.rlim_cur - RESERVED_FDS < MIN_CLIENTS)
 			throw std::runtime_error("Error not enough socket to run an IRC server.");
 		// calculate max FDs: either system limit OR our max allowed
-		irc::uint maxFD = rlm.rlim_cur - RESERVED_FDS - 1;
+		//   this first line is for if we would send a reply to a client,
+		//   if we cannot accept another connection anymore (too many clients)
+		//   but subject rules prevent this => no send() w/o EPOLLOUT
+		// irc::uint maxFD = rlm.rlim_cur - RESERVED_FDS - 1;
+		irc::uint maxFD = rlm.rlim_cur - RESERVED_FDS;
 		maxFD = maxFD < MAX_CLIENTS ? maxFD : MAX_CLIENTS;
 		if (DEBUG)
 			std::cout << "[Info] current FD limit: " << rlm.rlim_cur << "\n"
@@ -66,14 +70,11 @@ Server::Server(int port, std::string pw)
 {
 	_epoll.add(_listener.getFD(), EPOLLIN);
 	_captureSignals();
-	//TODO: replace server hard coded label with official name.
 	Response::init(_listener.getHostName());
-	// Client class
-	// CommandDispatch class
 	_cmdReg.registerCmds();
 	_startTime = std::time(NULL);
 	std::string ip = retrieveServerAddress();
-	printNetworkUsageInfo(ip, port, pw);
+	printNetworkUsageInfo(ip, port, pw, _listener.getHostName());
 }
 
 Server::~Server()
@@ -82,6 +83,7 @@ Server::~Server()
 		_deleteClient(_clients.begin()->second);
 	while (!_channels.empty())
 		_deleteChannel(_channels.begin()->second);
+	std::cout << "[Server] (" << irc::timeNowStr() << ") Shutting down.\n";
 }
 
 // -------------------------------------------------------------------------- //
@@ -130,9 +132,10 @@ std::string retrieveServerAddress()
 }
 
 // Print welcome message with instructions.
-void printNetworkUsageInfo(const std::string& ip, int port, const std::string& pw)
+void printNetworkUsageInfo(const std::string& ip, int port, const std::string& pw, const std::string& host)
 {
-	std::cout << "[Info] Server address: " << ip << ':' << port << '\n';
+	std::cout << "[Info] Server address: " << ip << ':' << port << '\n'
+			  << "                       " << host << ':' << port << '\n';
 	std::cout << "[Info] Connect with irssi from terminal\n" << COL_CYAN
 			  << "       locally:  " << COL_RESET << "irssi -c localhost"
 			  << " -p " << port << " -w " << pw << '\n' << COL_GREEN

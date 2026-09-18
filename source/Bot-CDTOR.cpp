@@ -6,13 +6,15 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 08:20:34 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/12 09:45:08 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/18 12:05:04 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Bot.hpp"
 #include "irc.hpp"
 #include "CommandRegistry.hpp"
+
+#include <iostream>
 
 #include <stdexcept>
 
@@ -36,4 +38,5 @@ Bot::Bot(const irc::uint server,
 Bot::~Bot()
 {
 	::close(_fd);
+	std::cout << "[Bot] (" << irc::timeNowStr() << ") Shutting down.\n";
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Bot-Actions.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
+/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 08:12:43 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/16 10:18:34 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/18 12:19:40 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ void Bot::sendMessage(const std::string& msg)
 		_epoll.mod(_fd, EPOLL_FL_DEFAULT | EPOLLOUT, NULL);
 	_bufOUT.append(msg);
 	if (DEBUG)
-		std::cout << "[Bot] Appending to output buffer:\n" << msg;
+		std::cout << "[Bot] Appending to output buffer:\n"
+				  << COL_YELLOW << msg << COL_RESET << std::flush;
 }
 
 // -------------------------------------------------------------------------- //

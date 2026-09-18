@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 11:41:20 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/09/16 12:43:57 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/16 15:37:41 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void CommandRegistry::registerCmds()
 	_commands[user->getName()] = user;
 
 	Command *ping = new Command("PING", cmd_ping);
-	ping->addPolicy(new ArgsLimitPlcy(1, 2)); // FIXME 409 ERR_NOORIGIN of no ARG given, not param error
+	ping->addPolicy(new ArgsLimitPlcy(0, 2)); // allows two so '<sth> :<sth>' at least passes
 	_commands[ping->getName()] = ping;
 
 	Command *join = new Command("JOIN", cmd_join);
@@ -93,7 +93,7 @@ void CommandRegistry::registerCmds()
 
 	Command *pong = new Command("PONG", cmd_pong);
 	pong->addPolicy(new AlreadyRegisteredPlcy(true));
-	pong->addPolicy(new ArgsLimitPlcy(0, 2)); // TODO that max value... don't like it
+	pong->addPolicy(new ArgsLimitPlcy(0, 2)); // allows two so '<sth> :<sth>' at least passes
 	_commands[pong->getName()] = pong;
 }
 

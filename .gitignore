@@ -1,10 +1,17 @@
 ircserv
 ircbot
 en.subject.*
-docs/
+docs/*
 .cursor/
 test_irc
 tests/nc/.run/
+
+# Documentation
+!docs/architecture.md
+!docs/server.md
+!docs/bot.md
+!docs/IRC-ArchitectureFlow.v001.svg
+!docs/file-transfer.md
 
 # Prerequisites
 *.d

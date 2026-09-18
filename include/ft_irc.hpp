@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/09 14:25:38 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/11 15:23:27 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/18 12:14:41 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 /* We consider to resever in the program at least 5 FDs following this criteria:
  * 0 1 2 stdio
  * 3 server listener
- * 4 reserved client to return closing event without impacting the server.
+ * 4 epoll instance
  */
 # define SERVER_NAME "irc.CoolServ.42"
 # define RESERVED_FDS 5
@@ -33,7 +33,9 @@
 # define CRLF "\r\n"
 # define COL_GREEN "\033[32m"
 # define COL_CYAN "\033[36m"
+# define COL_YELLOW "\033[33m"
 # define COL_RESET "\033[0m"
+# define COL_GRAY "\033[90m"
 # define MSG_MAX_LENGTH 512
 # define MIN_TRAIL_LENGTH 32
 # define MAX_NICKLEN 32
@@ -49,7 +51,7 @@
 # define MAX_UNANSWERED_PING 1
 
 # ifndef DEBUG
-#  define DEBUG 0 // TODO set this to zero later and ctl via makefile
+#  define DEBUG 0
 # endif
 
 // -------------------------------------------------------------------------- //

@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/17 17:13:02 by mweghofe          #+#    #+#             */
-/*   Updated: 2026/09/02 12:21:16 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/16 18:39:24 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,22 +74,30 @@ void Channel::setTopicFlag(bool switcher)
 		_modes &= ~CH_TOPIC;
 }
 
+/*
+	Toggle operator flag on a member CLIENT of the current channel.
+	The caller guarantees, that CLIENT IS on the channel.
+	(irc::USERNOTINCHANNEL already triggered before.
+*/
 bool Channel::setOperator(bool switcher, Client* client)
 {
 	std::map<Client*, bitMask>::iterator it;
 	it = _members.find(client);
-	// TODO this could be removed, if outside check remains
-	// if (it == _members.end())
-	// 	return (false);
 	if (switcher)
 	{
 		if (!(it->second & US_OPERATOR))
+		{
 			it->second |= US_OPERATOR;
+			++_chanOps;
+		}
 		else
 			return (false);
 	}
 	else if (it->second & US_OPERATOR)
+	{
 		it->second &= ~US_OPERATOR;
+		--_chanOps;
+	}
 	else
 		return (false);
 	return (true);
