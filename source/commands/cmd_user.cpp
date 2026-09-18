@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 13:54:12 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/09/16 14:54:16 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/18 13:14:59 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,14 @@ rfc cmd_user(IServerCtrl & srv, const Message & msg)
 	if (!client->setRegistrationFlags(REG_USER))
 		return (irc::ALREADYREGISTERED);
 	// do not accept the user if user or real name are not compliant with the generic rules
-	if (!irc::isNameCompliant(msg.params[0]))
+	if (!irc::isNameCompliant(msg.params[0], FORBIDDEN_NAME_CHAR))
 	{
 		srv.sendMessage(msg.sender, Response::buildNumeric(msg, irc::UNKNOWNERROR,
 			"", "User Name not compliant.")
 		);
 		return (irc::OK);
 	}
-	if (!irc::isNameCompliant(msg.params[3]))
+	if (!irc::isNameCompliant(msg.params[3], FORBIDDEN_REALNAME_CHAR))
 		{
 		srv.sendMessage(msg.sender, Response::buildNumeric(msg, irc::UNKNOWNERROR,
 			"", "Real Name not compliant.")

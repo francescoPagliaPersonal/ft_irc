@@ -6,7 +6,7 @@
 /*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/21 13:14:43 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/08/26 14:20:29 by fpaglia          ###   ########.fr       */
+/*   Updated: 2026/09/18 13:13:12 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ rfc Server::addToChannel(Client* client,
 		return irc::TOOMANYCHANNELS;
 	if (!Channel::isTitleCompliant(title))
 		return irc::BADCHANMASK;
-	if (!irc::isNameCompliant(pw))
+	if (!irc::isNameCompliant(pw, FORBIDDEN_NAME_CHAR))
 		return irc::BADCHANNELKEY;
 	
 	std::string mapKey = Channel::title2key(title);

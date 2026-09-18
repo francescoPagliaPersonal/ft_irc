@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_nick.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: fpaglia <fpaglia@student.42vienna.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 13:54:12 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/09/16 14:31:10 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/18 13:13:23 by fpaglia          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ rfc cmd_nick(IServerCtrl & srv, const Message & msg)
 		return (irc::NONICKNAMEGIVEN);
 	
 	std::string newNick = msg.params[0];
-	if (!irc::isNameCompliant(newNick))
+	if (!irc::isNameCompliant(newNick, FORBIDDEN_NAME_CHAR))
 		return (irc::ERRONEUSNICKNAME);
 	
 	Client *hasThisNick = srv.findClientByNick(newNick);
