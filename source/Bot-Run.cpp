@@ -6,7 +6,7 @@
 /*   By: mweghofe <mweghofe@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/11 17:04:38 by fpaglia           #+#    #+#             */
-/*   Updated: 2026/09/18 12:00:24 by mweghofe         ###   ########.fr       */
+/*   Updated: 2026/09/18 12:05:33 by mweghofe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ void Bot::run()
 			secDelay = secDelay <= CONN_MAX_DELAY ? secDelay * 2 : secDelay;
 			continue ;	
 		}
-		std::cout << "[Bot] Connection to server established (FD " << _fd << ").\n";
+		std::cout << "[Bot] (" << irc::timeNowStr()
+				  << ") Connection to server established (FD " << _fd << ").\n";
 		// stay alive main loop: register, join, epoll events
 		_runUntilDisconnect();
 		// clean up a lost connection, before attempting to reconnect
